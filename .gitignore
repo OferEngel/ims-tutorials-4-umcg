@@ -5,6 +5,6 @@
 .RCheck/
 
 *.key
-*lesson.html
+*.html
 *lesson_files/
 rsconnect/

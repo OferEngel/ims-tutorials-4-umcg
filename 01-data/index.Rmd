@@ -3,11 +3,15 @@ title: "Introduction to data"
 output: html_document
 ---
 
+<meta http-equiv='cache-control' content='no-cache'> 
+<meta http-equiv='expires' content='0'> 
+<meta http-equiv='pragma' content='no-cache'>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg-openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
+<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg-openintro-hex-v01.png" alt="Tutorial illustration" width="250" height="300">
 
 ## Tutorial description
 
