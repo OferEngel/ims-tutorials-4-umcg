@@ -41,7 +41,7 @@ In this tutorial, we focus on steps 1 and 2 of this process.
 
 ## Lessons
 
-### 1 - [Language of data](`r glue("{shiny_url}ims-01-data-01/")`)
+### 1 - [Language of data](`r glue("{shiny_url}01-01-lesson/")`)
 
 * Load data from the textbook companion package
 * Introduce data frames and tidy data
@@ -52,7 +52,7 @@ In this tutorial, we focus on steps 1 and 2 of this process.
   * Combine levels of categorical
   * Create new variable based on two existing variables (e.g. BMI)
 
-### 2 - [Types of studies](`r glue("{shiny_url}ims-01-data-02/")`)
+### 2 - [Types of studies](`r glue("{shiny_url}01-02-lesson/")`)
 
 
 * Define observational studies and experiments
@@ -61,7 +61,7 @@ In this tutorial, we focus on steps 1 and 2 of this process.
   * Use R to make a contingency table
   * `group_by()` third variable and make table again to demonstrate Simpson's paradox
 
-### 3 - [Sampling strategies and experimental design](`r glue("{shiny_url}ims-01-data-03/")`)
+### 3 - [Sampling strategies and experimental design](`r glue("{shiny_url}01-03-lesson/")`)
 
 * Define simple random sample, stratified sample, cluster sample, multistage sample
 * Use R to obtain SRS and stratified sample
@@ -74,8 +74,16 @@ In this tutorial, we focus on steps 1 and 2 of this process.
 * Use R to do random assignment and random assignment after blocking
 	* `slice_sample()`
 	* `group_by()` |>  `slice_sample()`
+	
+	
+### 4 - [Measures of Central Tendency and Spread](`r glue("{shiny_url}centrality-spread/")`)
 
-### 4 - [Case study](`r glue("{shiny_url}ims-01-data-04/")`)
+* Distinguish between measures of central tendency and their significance
+* Distinguish between measures of spread and their significance
+* Recognize the most important features of the normal distribution
+	
+
+### 5 - [Case study](`r glue("{shiny_url}01-04-lesson/")`)
 
 * Apply terminology, principles, and R code learned in this tutorial to a case study
 
@@ -83,9 +91,7 @@ In this tutorial, we focus on steps 1 and 2 of this process.
 
 <!-- <img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/mine.png" alt="Mine Çetinkaya-Rundel" width="150" height="150"> -->
 
-### Instructor: Mine Çetinkaya-Rundel
-
-#### University of Edinburgh, Duke University, RStudio
+#### Instructor: Mine Çetinkaya-Rundel
 
 Mine Çetinkaya-Rundel is Associate Professor of the Practice position at the Department of Statistical Science at Duke University and Data Scientist and Professional Educator at RStudio.
 Mine's work focuses on innovation in statistics and data science pedagogy, with an emphasis on computing, reproducible research, student-centered learning, and open-source education as well as pedagogical approaches for enhancing retention of women and under-represented minorities in STEM.

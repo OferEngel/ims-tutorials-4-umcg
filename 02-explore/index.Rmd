@@ -1,9 +1,24 @@
 ---
 title: "Exploratory data analysis"
 output: html_document
+params:
+  shiny_url: "https://oferengel-posit.shinyapps.io/"
 ---
 
-<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
+<meta http-equiv='cache-control' content='no-cache'> 
+<meta http-equiv='expires' content='0'> 
+<meta http-equiv='pragma' content='no-cache'>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(glue)
+# shiny_url <-  "https://oferengel-posit.shinyapps.io/ims-01-data-02/"
+shiny_url <- params$shiny_url
+```
+
+<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg-openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
+
+
 
 ## Tutorial description
 
@@ -22,7 +37,7 @@ By the end of the tutorial, you'll be able to answer these questions and more, w
 
 ## Lessons
 
-### 1 - [Visualizing categorical data](https://openintro.shinyapps.io/ims-02-explore-01/)
+### 1 - [Visualizing categorical data](`r glue("{shiny_url}02-01-lesson/")`)
 
 Creating graphical and numerical summaries of two categorical variables, primarily using two R packages: ggplot2 and dplyr.
 
@@ -41,7 +56,7 @@ Creating graphical and numerical summaries of two categorical variables, primari
     * data integrity check for levels
   * Pie chart
 
-### 2 - [Visualizing numerical data](https://openintro.shinyapps.io/ims-02-explore-02/)
+### 2 - [Visualizing numerical data](`r glue("{shiny_url}02-02-lesson")`)
 
 Learn useful statistics for describing distributions of data.
 
@@ -58,7 +73,7 @@ Learn useful statistics for describing distributions of data.
 * Boxplot
 * outlier detection
 
-### 3 - [Summarizing with statistics](https://openintro.shinyapps.io/ims-02-explore-03/)
+### 3 - [Summarizing with statistics](`r glue("{shiny_url}02-03-lesson")`)
 
 Statistics for describing distributions of data.
 
@@ -68,7 +83,7 @@ Statistics for describing distributions of data.
 * Unusual observations
 * Transformations: Logarithm and sqrt to reduce skew in graphics and ease comparisons.
 
-### 4 - [Case study](https://openintro.shinyapps.io/ims-02-explore-04/)
+### 4 - [Case study](`r glue("{shiny_url}02-04-lesson")`)
 
 Apply what you've learned to explore and summarize a real world dataset in this case study of email spam.
 
@@ -77,12 +92,6 @@ Apply what you've learned to explore and summarize a real world dataset in this 
 * Unwin, Anthony. *Graphical Data Analysis with R*.
 * Velleman, Paul and Hoaglin, David. *Exploratory Data Analysis*.
 
-## Instructor
-
-<img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/andrew.png" alt="Andrew Bray" width="150" height="150">
-
-### Andrew Bray
-
-#### Reed College
+#### Instructor: Andrew Bray
 
 Andrew Bray is an Assistant Professor of Statistics at Reed College and lover of all things statistics and R.

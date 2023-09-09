@@ -797,12 +797,12 @@ What's next?
 
 `r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
 
-<!-- ## Submit -->
+## Submit
 
-```{r, echo=FALSE, context="server", eval = FALSE}
+```{r, echo=FALSE, context="server"}
 encoder_logic()
 ```
 
-```{r encode, echo=FALSE, eval=FALSE}
+```{r encode, echo=FALSE}
 learnrhash::encoder_ui(ui_before = hash_encoder_ui)
 ```

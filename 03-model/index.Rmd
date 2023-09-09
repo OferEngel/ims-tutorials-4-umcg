@@ -1,15 +1,19 @@
 ---
 title: "Regression modeling"
 output: html_document
+params:
+  shiny_url: "https://oferengel-posit.shinyapps.io/"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(glue)
+# shiny_url <-  "https://oferengel-posit.shinyapps.io/ims-01-data-02/"
+shiny_url <- params$shiny_url
 ```
 
-<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
+<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg-openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
 
-## Tutorial description
 
 Ultimately, data analysis is about understanding relationships among variables. Exploring data with multiple variables requires new, more complex tools, but enables a richer set of comparisons. In this tutorial, you will learn how to describe relationships between two numerical quantities. You will characterize these relationships graphically, in the form of summary statistics, and through simple linear regression models.
 
@@ -29,7 +33,7 @@ In this tutorial you'll also take your skills with simple linear regression to t
 
 ## Lessons
 
-### 1 - [Visualizing two variables](https://openintro.shinyapps.io/ims-03-model-01/)
+### 1 - [Visualizing two variables](`r glue("{shiny_url}03-01-lesson/")`)
 
 * Explore [bivariate relationships](https://en.wikipedia.org/wiki/Bivariate_analysis) graphically
 * Characterize bivariate relationships
@@ -37,20 +41,20 @@ In this tutorial you'll also take your skills with simple linear regression to t
 * Discuss transformations
 * Identify [outliers](https://en.wikipedia.org/wiki/Outlier)
 
-### 2 - [Correlation](https://openintro.shinyapps.io/ims-03-model-02/)
+### 2 - [Correlation](`r glue("{shiny_url}03-02-lesson/")`)
 
 * Quantify the strength of a linear relationship
 * Compute and interpret Pearson Product-Moment [correlation](https://en.wikipedia.org/wiki/Correlation_and_dependence)
 * Identify spurious correlations
 
-### 3 - [Simple linear regression](https://openintro.shinyapps.io/ims-03-model-03/)
+### 3 - [Simple linear regression](`r glue("{shiny_url}03-03-lesson/")`)
 
 * Visualize a simple linear model as "best fit" line
 * Conceptualize simple [linear regression](https://en.wikipedia.org/wiki/Linear_regression)
 * Fit and describe simple linear regression models
 * Internalize [regression to the mean](https://en.wikipedia.org/wiki/Regression_toward_the_mean)
 
-### 4 - [Interpreting regression models](https://openintro.shinyapps.io/ims-03-model-04/)
+### 4 - [Interpreting regression models](`r glue("{shiny_url}03-04-lesson/")`)
 
 * Interpret the meaning of coefficients in a regression model
 * Understand the impact of units and scales
@@ -58,49 +62,49 @@ In this tutorial you'll also take your skills with simple linear regression to t
 * Make predictions from regression models
 * Overlay a regression model on a scatterplot
 
-### 5 - [Model fit](https://openintro.shinyapps.io/ims-03-model-05/)
+### 5 - [Model fit](`r glue("{shiny_url}03-05-lesson/")`)
 
 * Assess the quality of fit of a regression model
 * Interpret [$R^2$](https://en.wikipedia.org/wiki/Coefficient_of_determination)
 * Measure [leverage](https://en.wikipedia.org/wiki/Leverage_(statistics)) and influence
 * Identify and attend to outliers
 
-### 6 - [Parallel slopes](https://openintro.shinyapps.io/ims-03-model-06/)
+### 6 - [Parallel slopes](`r glue("{shiny_url}03-06-lesson/")`)
 
 * Visualize, fit, and interpret a parallel slopes model, which has one numeric and one categorical explanatory variable
 * Describe a model in three different ways: mathematically, graphically, and through R syntax
 
-### 7 - [Evaluating and extending parallel slopes model](https://openintro.shinyapps.io/ims-03-model-07/)
+### 7 - [Evaluating and extending parallel slopes model](`r glue("{shiny_url}03-07-lesson/")`)
 
 * Assess and interpret model fit
 * Compute residuals and predictions
 * Fit and interpret interaction models
 * Recognize [Simpson's paradox](https://en.wikipedia.org/wiki/Simpson%27s_paradox)
 
-### 8 - [Multiple regression](https://openintro.shinyapps.io/ims-03-model-08/)
+### 8 - [Multiple regression](`r glue("{shiny_url}03-08-lesson/")`)
 
 * Visualize, fit, and interpret a multiple regression model with two numeric explanatory variables
 * Visualize, fit, and interpret a parallel planes model with two numeric explanatory variables and a categorical variable
 * Fit and interpret multiple regression models in higher dimensions
 * Understand and identify [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity)
 
-### 9 - [Logistic regression](https://openintro.shinyapps.io/ims-03-model-09/)
+### 9 - [Logistic regression](`r glue("{shiny_url}03-09-lesson/")`)
 
 * Visualize, fit, and interpret logistic regression models
 * Interpret coefficients on three different scales
 * Make predictions from a logistic regression model
 
-### 10 - [Case study: Italian restaurants in NYC](https://openintro.shinyapps.io/ims-03-model-10/)
+### 10 - [Case study: Italian restaurants in NYC](`r glue("{shiny_url}03-10-lesson/")`)
 
 * Explore the relationship between price and the quality of food, service, and decor for Italian restaurants in [New York City](https://en.wikipedia.org/wiki/New_York_City)
 
-## Instructor
+#### Instructor: Benjamin S. Baumer (Smith College)
 
-<img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/ben.png" alt="Ben Baumer" width="150" height="150">
+<!-- <img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/ben.png" alt="Ben Baumer" width="150" height="150"> -->
 
-### Benjamin S. Baumer
+<!-- ### Benjamin S. Baumer -->
 
-#### Smith College
+<!-- #### Smith College -->
 
 [Benjamin S. Baumer](http://www.science.smith.edu/~bbaumer) is an [associate professor](https://www.smith.edu/academics/faculty/ben-baumer) in the [Statistical & Data Sciences](http://www.smith.edu/academics/statistics) program at Smith College. He has been a practicing data scientist since 2004, when he became the first full-time statistical analyst for the [New York Mets](http://www.nymets.com/). Ben is a co-author of [*The Sabermetric Revolution*](http://www.upenn.edu/pennpress/book/15168.html), [*Modern Data Science with R*](http://mdsr-book.github.io/index.html), and the second edition of [*Analyzing Baseball Data with R*](https://www.crcpress.com/Analyzing-Baseball-Data-with-R-Second-Edition/Marchi-Albert-Baumer/p/book/9780815353515). He received his Ph.D. in Mathematics from the [City University of New York](http://gc.cuny.edu) in 2012, and is accredited as a professional statistician by the [American Statistical Association](http://www.amstat.org/). His research interests include sports analytics, data science, statistics and data science education, statistical computing, and network science. 
 
