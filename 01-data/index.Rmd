@@ -1,6 +1,8 @@
 ---
 title: "Introduction to data"
 output: html_document
+params:
+  shiny_url: "https://oferengel-posit.shinyapps.io/"
 ---
 
 <meta http-equiv='cache-control' content='no-cache'> 
@@ -9,6 +11,9 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(glue)
+# shiny_url <-  "https://oferengel-posit.shinyapps.io/ims-01-data-02/"
+shiny_url <- params$shiny_url
 ```
 
 <img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg-openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
@@ -36,7 +41,7 @@ In this tutorial, we focus on steps 1 and 2 of this process.
 
 ## Lessons
 
-### 1 - [Language of data](https://openintro.shinyapps.io/ims-01-data-01/)
+### 1 - [Language of data](`r glue("{shiny_url}ims-01-data-01/")`)
 
 * Load data from the textbook companion package
 * Introduce data frames and tidy data
@@ -47,7 +52,7 @@ In this tutorial, we focus on steps 1 and 2 of this process.
   * Combine levels of categorical
   * Create new variable based on two existing variables (e.g. BMI)
 
-### 2 - [Types of studies](https://openintro.shinyapps.io/ims-01-data-02/)
+### 2 - [Types of studies](`r glue("{shiny_url}ims-01-data-02/")`)
 
 
 * Define observational studies and experiments
@@ -56,7 +61,7 @@ In this tutorial, we focus on steps 1 and 2 of this process.
   * Use R to make a contingency table
   * `group_by()` third variable and make table again to demonstrate Simpson's paradox
 
-### 3 - [Sampling strategies and experimental design](https://openintro.shinyapps.io/ims-01-data-03/)
+### 3 - [Sampling strategies and experimental design](`r glue("{shiny_url}ims-01-data-03/")`)
 
 * Define simple random sample, stratified sample, cluster sample, multistage sample
 * Use R to obtain SRS and stratified sample
@@ -70,15 +75,15 @@ In this tutorial, we focus on steps 1 and 2 of this process.
 	* `slice_sample()`
 	* `group_by()` |>  `slice_sample()`
 
-### 4 - [Case study](https://openintro.shinyapps.io/ims-01-data-04/)
+### 4 - [Case study](`r glue("{shiny_url}ims-01-data-04/")`)
 
 * Apply terminology, principles, and R code learned in this tutorial to a case study
 
-## Instructor
+<!-- ## Instructor -->
 
-<img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/mine.png" alt="Mine Çetinkaya-Rundel" width="150" height="150">
+<!-- <img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/mine.png" alt="Mine Çetinkaya-Rundel" width="150" height="150"> -->
 
-### Mine Çetinkaya-Rundel
+### Instructor: Mine Çetinkaya-Rundel
 
 #### University of Edinburgh, Duke University, RStudio
 

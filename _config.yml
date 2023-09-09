@@ -1,7 +1,7 @@
 title: Introduction to Modern Statistics Tutorials (UMCG FORK)
-description: UMCG fork of the interactive tutorials supporting the textbook OpenIntro::Introduction to Modern Statistics Tutorials.
+description: UMCG fork of the interactive tutorials of OpenIntro::Introduction to Modern Statistics.
 logo: logo/umcg-openintro-hex.png
-show_downloads: true
+show_downloads: false
 theme: jekyll-theme-minimal
 plugins:
   - jemoji

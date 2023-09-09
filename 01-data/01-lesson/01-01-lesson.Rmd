@@ -12,8 +12,11 @@ library(learnr)
 library(tidyverse)
 library(openintro)
 library(emo)
+library(glue)
 
+gradethis::gradethis_setup(pass.praise = TRUE, fail.encourage = TRUE)
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
 
 # Setup for in some exercise chunks
 hsb2_public <- hsb2 |> 
