@@ -1,6 +1,6 @@
-title: Introduction to Modern Statistics Tutorials
-description: Interactive tutorials developed with the learnr package supporting the textbook OpenIntro::Introduction to Modern Statistics Tutorials. 
-logo: logo/openintro-hex.png
+title: Introduction to Modern Statistics Tutorials (UMCG FORK)
+description: UMCG fork of the interactive tutorials supporting the textbook OpenIntro::Introduction to Modern Statistics Tutorials.
+logo: logo/umcg-openintro-hex.png
 show_downloads: true
 theme: jekyll-theme-minimal
 plugins:

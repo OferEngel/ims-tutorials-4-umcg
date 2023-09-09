@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.RCheck/
 
 *.key
 *lesson.html
