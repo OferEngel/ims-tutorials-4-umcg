@@ -36,7 +36,7 @@ The originial tutorials were forked and adapted by [Ofer Engel](https://www.rug.
 
 ### Instructors and authors
 
-#### Mine Çetinkaya-Rundel
+#### Mine Çetinkaya-Rundel (Uni Edinburgh, Duke University, RStudio)
 
 Mine Çetinkaya-Rundel is Associate Professor of the Practice position at the Department of Statistical Science at Duke University and Data Scientist and Professional Educator at RStudio.
 Mine's work focuses on innovation in statistics and data science pedagogy, with an emphasis on computing, reproducible research, student-centered learning, and open-source education as well as pedagogical approaches for enhancing retention of women and under-represented minorities in STEM.
@@ -44,3 +44,31 @@ Mine works on integrating computation into the undergraduate statistics curricul
 She also organizes [ASA DataFest](https://ww2.amstat.org/education/datafest/), an annual two-day competition in which teams of undergraduate students work to reveal insights into a rich and complex dataset.
 Mine has been working on the [OpenIntro](openintro.org) project since its founding and as part of this project she co-authored four open-source introductory statistics textbooks (including this one!).
 She is also the creator and maintainer of [datasciencebox.org](https://datasciencebox.org/) and she teaches the popular Statistics with R MOOC on Coursera.
+
+
+#### Instructor: Andrew Bray
+
+Andrew Bray is an Assistant Professor of Statistics at Reed College and lover of all things statistics and R.
+
+
+#### Instructor: Benjamin S. Baumer (Smith College)
+
+<!-- <img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/ben.png" alt="Ben Baumer" width="150" height="150"> -->
+
+<!-- ### Benjamin S. Baumer -->
+
+<!-- #### Smith College -->
+
+[Benjamin S. Baumer](http://www.science.smith.edu/~bbaumer) is an [associate professor](https://www.smith.edu/academics/faculty/ben-baumer) in the [Statistical & Data Sciences](http://www.smith.edu/academics/statistics) program at Smith College. He has been a practicing data scientist since 2004, when he became the first full-time statistical analyst for the [New York Mets](http://www.nymets.com/). Ben is a co-author of [*The Sabermetric Revolution*](http://www.upenn.edu/pennpress/book/15168.html), [*Modern Data Science with R*](http://mdsr-book.github.io/index.html), and the second edition of [*Analyzing Baseball Data with R*](https://www.crcpress.com/Analyzing-Baseball-Data-with-R-Second-Edition/Marchi-Albert-Baumer/p/book/9780815353515). He received his Ph.D. in Mathematics from the [City University of New York](http://gc.cuny.edu) in 2012, and is accredited as a professional statistician by the [American Statistical Association](http://www.amstat.org/). His research interests include sports analytics, data science, statistics and data science education, statistical computing, and network science. 
+
+Ben won the [Waller Education Award](https://www.amstat.org/ASA/Your-Career/Awards/Waller-Awards.aspx) from the ASA Section on Statistics and Data Science Education, and the [Significant Contributor Award](https://community.amstat.org/sis/aboutus/honorees) from the ASA Section on Statistics in Sports in 2019. He shared the [2016 Contemporary Baseball Analysis Award](http://sabr.org/latest/baumer-brudnicki-mcmurray-win-2016-sabr-analytics-conference-research-awards) from the Society for American Baseball Research. Currently, Ben is the primary investigator on a three-year, nine-institution, $1.2 million [award from the National Science Foundation](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1924017&HistoricalAwards=false) for workforce development under the [Data Science Corps program](https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=505536). 
+
+
+#### Jo Hardin (Pomona College)
+
+Jo Hardin is Professor of Mathematics and Statistics at Pomona College.
+She collaborates with molecular biologists to create novel statistical methods for analyzing high throughput data.
+She has also worked extensively in statistics and data science education, facilitating modern curricula for higher education instructors.
+She was a co-author on the [2014 ASA Curriculum Guidelines for Undergraduate Programs in Statistical Science](https://www.amstat.org/asa/education/Curriculum-Guidelines-for-Undergraduate-Programs-in-Statistical-Science.aspx), and she writes on the blog [teachdatascience.com](https://teachdatascience.com/).
+The best part of her job is collaborating with undergraduate students.
+In her spare time, she loves reading, running, and breeding tortoises.

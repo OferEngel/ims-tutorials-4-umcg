@@ -84,6 +84,12 @@ In this tutorial, we focus on steps 1 and 2 of this process.
 
 <!-- <img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/mine.png" alt="Mine Çetinkaya-Rundel" width="150" height="150"> -->
 
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
 #### Instructor: Mine Çetinkaya-Rundel
 
 Mine Çetinkaya-Rundel is Associate Professor of the Practice position at the Department of Statistical Science at Duke University and Data Scientist and Professional Educator at RStudio.

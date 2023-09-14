@@ -33,7 +33,7 @@ In this tutorial you'll also take your skills with simple linear regression to t
 
 ## Lessons
 
-### 1 - Visualizing two variables
+### 1 - [Visualizing two variables](`r glue("{shiny_url}03-01-lesson/")`)
 
 * Explore [bivariate relationships](https://en.wikipedia.org/wiki/Bivariate_analysis) graphically
 * Characterize bivariate relationships
@@ -41,20 +41,20 @@ In this tutorial you'll also take your skills with simple linear regression to t
 * Discuss transformations
 * Identify [outliers](https://en.wikipedia.org/wiki/Outlier)
 
-### 2 - Correlation
+### 2 - [Correlation](`r glue("{shiny_url}03-02-lesson/")`)
 
 * Quantify the strength of a linear relationship
 * Compute and interpret Pearson Product-Moment [correlation](https://en.wikipedia.org/wiki/Correlation_and_dependence)
 * Identify spurious correlations
 
-### 3 - Simple linear regression
+### 3 - [Simple linear regression](`r glue("{shiny_url}03-03-lesson/")`)
 
 * Visualize a simple linear model as "best fit" line
 * Conceptualize simple [linear regression](https://en.wikipedia.org/wiki/Linear_regression)
 * Fit and describe simple linear regression models
 * Internalize [regression to the mean](https://en.wikipedia.org/wiki/Regression_toward_the_mean)
 
-### 4 - Interpreting regression models
+### 4 - [Interpreting regression models](`r glue("{shiny_url}03-04-lesson/")`)
 
 * Interpret the meaning of coefficients in a regression model
 * Understand the impact of units and scales
@@ -62,39 +62,39 @@ In this tutorial you'll also take your skills with simple linear regression to t
 * Make predictions from regression models
 * Overlay a regression model on a scatterplot
 
-### 5 - Model fit
+### 5 - [Model fit](`r glue("{shiny_url}03-05-lesson/")`)
 
 * Assess the quality of fit of a regression model
 * Interpret [$R^2$](https://en.wikipedia.org/wiki/Coefficient_of_determination)
 * Measure [leverage](https://en.wikipedia.org/wiki/Leverage_(statistics)) and influence
 * Identify and attend to outliers
 
-### 6 - Parallel slopes
+### 6 - [Parallel slopes](`r glue("{shiny_url}03-06-lesson/")`)
 
 * Visualize, fit, and interpret a parallel slopes model, which has one numeric and one categorical explanatory variable
 * Describe a model in three different ways: mathematically, graphically, and through R syntax
 
-### 7 - Evaluating and extending parallel slopes model
+### 7 - [Evaluating and extending parallel slopes model](`r glue("{shiny_url}03-07-lesson/")`)
 
 * Assess and interpret model fit
 * Compute residuals and predictions
 * Fit and interpret interaction models
 * Recognize [Simpson's paradox](https://en.wikipedia.org/wiki/Simpson%27s_paradox)
 
-### 8 - Multiple regression
+### 8 - [Multiple regression](`r glue("{shiny_url}03-08-lesson/")`)
 
 * Visualize, fit, and interpret a multiple regression model with two numeric explanatory variables
 * Visualize, fit, and interpret a parallel planes model with two numeric explanatory variables and a categorical variable
 * Fit and interpret multiple regression models in higher dimensions
 * Understand and identify [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity)
 
-### 9 - Logistic regression
+### 9 - [Logistic regression](`r glue("{shiny_url}03-09-lesson/")`)
 
 * Visualize, fit, and interpret logistic regression models
 * Interpret coefficients on three different scales
 * Make predictions from a logistic regression model
 
-### 10 - Case study: Italian restaurants in NYC
+### 10 - [Case study: Italian restaurants in NYC](`r glue("{shiny_url}03-10-lesson/")`)
 
 * Explore the relationship between price and the quality of food, service, and decor for Italian restaurants in [New York City](https://en.wikipedia.org/wiki/New_York_City)
 
@@ -103,6 +103,7 @@ In this tutorial you'll also take your skills with simple linear regression to t
 <br/>
 <br/>
 <br/>
+
 
 #### Benjamin S. Baumer (Smith College)
 
