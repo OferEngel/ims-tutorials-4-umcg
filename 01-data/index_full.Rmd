@@ -75,6 +75,13 @@ In this tutorial, we focus on steps 1 and 2 of this process.
 	* `slice_sample()`
 	* `group_by()` |>  `slice_sample()`
 	
+	
+### 4 - [Measures of Central Tendency and Spread](`r glue("{shiny_url}01-centrality-spread/")`)
+
+* Distinguish between measures of central tendency and their significance
+* Distinguish between measures of spread and their significance
+* Recognize the most important features of the normal distribution
+	
 
 ### 5 - [Case study](`r glue("{shiny_url}01-04-lesson/")`)
 

@@ -83,7 +83,15 @@ Statistics for describing distributions of data.
 * Unusual observations
 * Transformations: Logarithm and sqrt to reduce skew in graphics and ease comparisons.
 
-### 4 - [Case study](`r glue("{shiny_url}02-04-lesson")`)
+	
+### 4 - [Measures of Central Tendency and Spread](`r glue("{shiny_url}01-centrality-spread/")`)
+
+* Distinguish between measures of central tendency and their significance
+* Distinguish between measures of spread and their significance
+* Recognize the most important features of the normal distribution
+	
+
+### 5 - [Case study](`r glue("{shiny_url}02-04-lesson")`)
 
 Apply what you've learned to explore and summarize a real world dataset in this case study of email spam.
 

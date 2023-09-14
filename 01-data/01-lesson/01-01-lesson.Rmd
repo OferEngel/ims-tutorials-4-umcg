@@ -13,6 +13,7 @@ library(tidyverse)
 library(openintro)
 library(emo)
 library(glue)
+shiny_url <- "https://oferengel-posit.shinyapps.io/"
 
 gradethis::gradethis_setup(pass.praise = TRUE, fail.encourage = TRUE)
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
@@ -787,13 +788,15 @@ What's next?
 
 `r emo::ji("spiral_notepad")` [Tutorial 1: Introduction to data](https://oferengel.github.io/ims-tutorials-4-umcg/01-data/)
 
-`r emo::ji("one")` [Tutorial 1 - Lesson 1: Language of data](https://oferengel.shinyapps.io/ims-01-data-01/)
+`r emo::ji("one")` [Tutorial 1 - Lesson 1: Language of data](`r glue("{shiny_url}01-01-lesson/")`)
 
-`r emo::ji("two")` [Tutorial 1 - Lesson 2: Types of studies](https://openintro.shinyapps.io/ims-01-data-02/)
+`r emo::ji("two")` [Tutorial 1 - Lesson 2: Types of studies](`r glue("{shiny_url}01-02-lesson/")`)
 
-`r emo::ji("three")` [Tutorial 1 - Lesson 3: Sampling strategies and Experimental design](https://openintro.shinyapps.io/ims-01-data-03/)
+`r emo::ji("three")` [Tutorial 1 - Lesson 3: Sampling strategies and Experimental design](`r glue("{shiny_url}01-03-lesson/")`)
 
-`r emo::ji("four")` [Tutorial 1 - Lesson 4: Case study](https://openintro.shinyapps.io/ims-01-data-04/)
+`r emo::ji("four")` [Tutorial 1 - Lesson 4: Centrality and spread](`r glue("{shiny_url}01-04-lesson/")`)
+
+`r emo::ji("four")` [Tutorial 1 - Lesson 5: Case study](`r glue("{shiny_url}01-04-lesson/")`)
 
 `r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
 

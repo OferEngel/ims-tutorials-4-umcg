@@ -9,7 +9,7 @@ runtime: shiny_prerendered
 tutorial:
   id: "UMCG/centrality-spread"
   version: 1.0
-description: "Introduction to measures of centrality and measures of spread. Estimated time: 45 minutes."
+description: "Introduction to measures of centrality, measures of spread and the normal distribution. Estimated time: 45 minutes."
 estimated_time: "00:45"
 glossary:
   sources:
@@ -31,6 +31,7 @@ taught:
 library(learnr)
 library(gradethis)
 library(glue)
+shiny_url <- "https://oferengel-posit.shinyapps.io/"
 
 gradethis::gradethis_setup(pass.praise = TRUE, fail.encourage = TRUE)
 
@@ -904,7 +905,7 @@ quiz(caption = "",
     answer("The wealth of people around the world"), 
     answer("Time to radioactive decay"),
     answer("The winning number in a lottery"),
-    correct = "Standardized tests scores are designed to be normally distributed. Most test-takers score around the average, with fewer scoring at the extremes.<br/><br/>Much of the world's wealth is concentrated disproportionately in the  hands of few people, implying that extreme values of wealth are more common than what you would expect in a normal distributoin.<br/><br/>Time to radioactive decay is not normally distributed because there is a real possibility of rare, long periods of time before decay events occur. In contrast, the normal distribution makes it practically impossible to observe rare events.<br/><br/>The winning number in a lottery is usually a random choice where every number is equally likely to be the winning number. This is a uniform distribution and not a normal one.",
+    correct = "Standardized tests scores are designed to be normally distributed. Most test-takers score around the average, with fewer scoring at the extremes.<br/><br/>Much of the world's wealth is concentrated disproportionately in the  hands of few people, implying that extreme values of wealth are more common than what you would expect in a normal distributoin.<br/><br/>Depending on the radionuclide, the process of radioactive decay could be fast or could take a very long time – radioactive half-lives can range from milliseconds to hours, days, sometimes millions of years. There is no 'typical range' of time associated with radio-active decay unlike the 'typical range' of body temperature we see in the human body, for example.<br/><br/>The winning number in a lottery is usually a random choice where every number is equally likely to be the winning number. This is a uniform distribution and not a normal one.",
     allow_retry = TRUE, 
     random_answer_order = FALSE
   )
@@ -1102,6 +1103,27 @@ Measures of central tendency and measures of spread are numbers that give us a s
 -   The normal distribution is a common approximation for the distribution of data in large range of disciplines and applications. If you know that your data is (approximately) normally distributed and you have an estimation of its mean and standard deviation, you would know that your data has a typical, central range of values that are commonly observed, that extreme values are highly improbable and that the distribution is single peaked and symmetric. Moreover, you would be able to calculate the probability to observing values at any range.
 
 
+## Congratulations!
+
+You have successfully completed Lesson 4 in Tutorial 1: Introduction to data. If you need to generate a hash for submission, click "Next Topic".
+
+What's next?
+
+`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://oferengel.github.io/ims-tutorials-4-umcg/)
+
+`r emo::ji("spiral_notepad")` [Tutorial 1: Introduction to data](https://oferengel.github.io/ims-tutorials-4-umcg/01-data/)
+
+`r emo::ji("one")` [Tutorial 1 - Lesson 1: Language of data](`r glue("{shiny_url}01-01-lesson/")`)
+
+`r emo::ji("two")` [Tutorial 1 - Lesson 2: Types of studies](`r glue("{shiny_url}01-02-lesson/")`)
+
+`r emo::ji("three")` [Tutorial 1 - Lesson 3: Sampling strategies and Experimental design](`r glue("{shiny_url}01-03-lesson/")`)
+
+`r emo::ji("four")` [Tutorial 1 - Lesson 4: Centrality and spread](`r glue("{shiny_url}01-centrality-spread-lesson/")`)
+
+`r emo::ji("four")` [Tutorial 1 - Lesson 5: Case study](`r glue("{shiny_url}01-04-lesson/")`)
+
+`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
 
 ## Submit
 
@@ -1112,4 +1134,5 @@ encoder_logic()
 ```{r encode, echo=FALSE}
 learnrhash::encoder_ui(ui_before = hash_encoder_ui)
 ```
+
 
