@@ -1,0 +1,87 @@
+---
+title: "Analysis of Palmer Penguins"
+author: Your favorite colleague
+output: html_document
+tutorial:
+  id: "rmarkdown_intro/rmarkdown-survey"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(palmerpenguins)
+```
+
+## Exploring the data
+
+The `penguins` data set comes from the palmerpenguins package. We can examine the it below. This data set has `nrow(penguins)` rows.
+
+```{r}
+penguins
+```
+
+### Removing missing values
+
+The data set has some observations with missing values for body mass. We will filter those out below.
+
+```{r}
+filter(penguins, !is.na(body_mass_g))
+```
+
+
+## Penguin bills
+
+In this section of the report, we'll examine characteristics of penguin bills by species. Let's focus on only the columns of the data set that we'll need. The table of the subsetted data is shown below:
+
+```{r echo=FALSE}
+species_bills <- select(penguins, species, contains("bill"))
+species_bills
+```
+
+
+### Visualization
+
+Let's examine the data with a plot. We will continue to focus on the relationship between bill length and bill depth. 
+
+```{r}
+library(ggplot2)
+ggplot(
+  data = species_bills,
+  mapping = aes(x = bill_length_mm, y = bill_depth_mm, color = species)
+) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(
+    title = "Within species, longer bills are deeper",
+    x = "Bill length (mm)",
+    y = "Bill depth (mm)"
+  )
+```
+
+
+We display the distribution of the penguin bill length below.
+
+```{r plot1, message=FALSE, warning=FALSE}
+ggplot(
+  data = species_bills,
+  mapping = aes(x = bill_length_mm)
+) +
+  geom_histogram() + 
+  theme_minimal() +
+  labs(
+    x = "Bill length (mm)"
+  )
+```
+
+## Appendix
+
+Additional materials can be found below.
+
+### Raw data
+
+The raw data set containing additional variables for the penguins studied, is displayed below.
+
+```{r plot1-display}
+penguins_raw
+```
+

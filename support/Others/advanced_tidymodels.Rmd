@@ -1,0 +1,109 @@
+---
+author: Ofer
+output: html
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| setup
+
+# Install the packages for the workshop
+pkgs <- 
+  c("bonsai", "doParallel", "embed", "finetune", "lightgbm", "lme4",
+    "plumber", "probably", "ranger", "rpart", "rpart.plot", "rules",
+    "splines2", "stacks", "textrecipes", "tidymodels", "vetiver", "remotes")
+
+# install.packages(pkgs, dependencies = TRUE)
+```
+
+## Hotel data
+
+```{r}
+library(tidymodels)
+
+# Max's usual settings: 
+tidymodels_prefer()
+theme_set(theme_bw())
+options(
+  pillar.advice = FALSE, 
+  pillar.min_title_chars = Inf
+)
+
+set.seed(295)
+hotel_rates <- 
+  hotel_rates %>% 
+  sample_n(5000) %>% 
+  arrange(arrival_date) %>% 
+  select(-arrival_date) %>% 
+  mutate(
+    company = factor(as.character(company)),
+    country = factor(as.character(country)),
+    agent = factor(as.character(agent))
+  )
+
+hotel_rates %>% 
+  ggplot(aes(avg_price_per_room)) + geom_density()
+
+set.seed(4028)
+hotel_split <- initial_split(hotel_rates, strata = avg_price_per_room)
+
+hotel_train <- training(hotel_split)
+hotel_test <- testing(hotel_split)
+
+
+set.seed(472)
+hotel_rs <- vfold_cv(hotel_train, strata = avg_price_per_room)
+hotel_rs
+```
+
+Start recipes
+
+```{r}
+hotel_indicators <-
+  recipe(avg_price_per_room ~ ., data = hotel_train) %>% 
+  step_YeoJohnson(lead_time) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_zv(all_predictors()) %>% 
+  step_spline_natural(arrival_date_num, deg_free = 10)
+
+hotel_indicators_naive <-
+  recipe(avg_price_per_room ~ ., data = hotel_train) %>% 
+  # step_YeoJohnson(lead_time) %>%
+  step_dummy(all_nominal_predictors())  %>%
+  # step_zv(all_predictors()) %>% 
+  step_spline_natural(arrival_date_num, deg_free = 10)
+
+
+
+summary(hotel_rec) 
+```
+
+Using a workflow
+
+```{r}
+set.seed(9)
+reg_metrics <- metric_set(mae, rsq)
+hotel_lm_wflow <-
+  workflow() %>%
+  add_recipe(hotel_indicators) %>%
+  add_model(linear_reg())
+
+hotel_lm_wflow_naive <-
+  workflow() %>%
+  add_recipe(hotel_indicators_naive) %>%
+  add_model(linear_reg())
+ 
+ctrl <- control_resamples(save_pred = TRUE)
+hotel_lm_res <-
+  hotel_lm_wflow %>%
+  fit_resamples(hotel_rs, control = ctrl, metrics = reg_metrics)
+
+hotel_lm_res_naive <-
+  hotel_lm_wflow_naive %>%
+  fit_resamples(hotel_rs, control = ctrl, metrics = reg_metrics)
+
+collect_metrics(hotel_lm_res)
+collect_metrics(hotel_lm_res_naive)
+
+```

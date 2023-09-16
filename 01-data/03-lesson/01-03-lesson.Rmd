@@ -13,17 +13,20 @@ library(learnr)
 library(usdata)
 library(tidyverse)
 library(emo)
+library(glue)
+shiny_url <- "https://oferengel-posit.shinyapps.io/"
 
+gradethis::gradethis_setup(pass.praise = TRUE, fail.encourage = TRUE)
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 # Used in some exercises
 load("data/us_regions.RData")
 
-county_noDC <- county |>
+county <- county |>
   filter(state != "District of Columbia") |>
   droplevels()
 
-county_srs <- county_noDC |>
+county_srs <- county |>
   slice_sample(n = 150)
 
 # Hash generation helpers
@@ -165,7 +168,10 @@ A consulting company is planning a pilot study on marketing in Boston. They iden
 
 ```{r quiz-sampling-strategies-determine-wich}
 quiz(
-  question("What sampling strategy has this company used?", correct = "Nice! Let's continue to the next exercise.", allow_retry = TRUE,
+  question(
+    "What sampling strategy has this company used?", 
+    correct = "Nice! Let's continue to the next exercise.", 
+    allow_retry = TRUE,
     answer("Simple random sample", message = "Try again. The company is dividing the Boston area by zip code."),
     answer("Stratified sample", correct = TRUE),
     answer("Cluster sample", message = "Hmm, not quite. The company isn't sampling all the houses in each zip code."), 
@@ -181,7 +187,9 @@ Students living in this district generally attend a school in their neighbourhoo
 
 ```{r quiz-sampling-strategies-choose-worst}
 quiz(
-  question("Which approach would likely be the **least effective** for selecting the schools where the survey will be conducted?", correct = "Nice job! This sampling strategy would be a bad idea because each neighborhood has a unique socioeconomic status. A good study would collect information about every neighborhood.", allow_retry = TRUE,
+  question("Which approach would likely be the **least effective** for selecting the schools where the survey will be conducted?", 
+           correct = "Nice job! This sampling strategy would be a bad idea because each neighborhood has a unique socioeconomic status. A good study would collect information about every neighborhood.", 
+           allow_retry = TRUE,
     answer("Simple random sample", message = "Incorrect!"),
     answer("Stratified sampling, where each stratum is a neighborhood", message = "Try again. Remember, the socioeconomic status of each neighborhood is unique."), 
     answer("Cluster sampling, where each cluster is a neighborhood", correct = TRUE) ), 
@@ -205,16 +213,15 @@ library(tidyverse)
 
 Next we'll work with the `county` data from the usdata package.
 
-This data frame contains data from counties in all 50 states plus the District of Columbia, or DC, as it's commonly referred to. Since DC is not a state by definition, we'll first remove it from the dataset. We can do this with the `filter()` function that you learned about earlier in these tutorials.
+This data frame contains data from counties in all 50 states in the United States. 
 
-That is, we will create a new data frame, called `county_noDC` that `filter()`s out the observation where state is DC. Notice that to filter DC out of the data frame we are using `!=`. You can think of the `!` as negating what comes after it. Here, the `!` negates the `=` sign, meaning we want the `state` to **not** be equal to the District of Columbia. 
+-   You can observe the `county` dataset by uncommenting the first line in the following code (remove the first hashtag `#`). 
+-   You can view the dataset's meta-data by uncommenting the second line (remove the second hashtag `#`).  
 
-We'll also `droplevels()` for good measure, so that the level District of Columbia is removed completely from the data frame.
 
 ```{r remove-dc, exercise=TRUE}
-county_noDC <- county |>
-  filter(state != "District of Columbia") |>
-  droplevels()
+# county
+# glimpse(county)
 ```
 
 ### Simple random sample
@@ -223,35 +230,62 @@ Suppose our limited resources require that we collect data from only _150_ of th
 
 One option is to take a simple random sample. We will use the `slice_sample()` function in dplyr (a package included in the tidyverse) to do this.
 
-We start with the `county_noDC` data frame and pipe it into the `slice_sample()` function, setting the size (`n`) argument to 150. We will call the data frame containing this simple random sample *`county_srs`*.
+We start with the `county` data frame and pipe it into the `slice_sample()` function, setting the size (`n`) argument to 150. With the following code chunk, try the following: 
+
+-   Run as it is, and observe the results.
+-   Pipe the result into a `glimpse` function. Notice the difference between the results!
 
 ```{r random-sample, exercise=TRUE}
 # Simple random sample of 150 counties
-county_srs <- county_noDC |>
+county |>
   slice_sample(n = 150)
 
-# Glimpse
-glimpse(county_srs)
 ```
+
+```{r random-sample-solution}
+# Simple random sample of 150 counties
+county |>
+  slice_sample(n = 150) |>
+  glimpse()
+
+```
+
+###
+
+
+
 
 A quick `glimpse()` shows that there are indeed _150_ observations in this data frame. Note that your sample will look different than someone else's sample, even though you're running the exact same code. We are taking a random sample here, so your sample will be different than mine, just by random chance. However, the sample size should be the same since that is something we specified in the `slice_sample()` function.
 
-### SRS state distribution
+### State distribution in a simple random sample
 
-If our goal was to take a sample of any 150 counties, we have accomplished this goal. However, if we wanted to obtain equal numbers of counties from each state (that is, three counties per state) a simple random sample won't ensure that.
+If our goal was to take a random sample of any 150 counties from the entire USA, we have accomplished our goal. But a random sample can take more counties from certain states and fewer from other. In other words, we may get a different number of counties from different states.
 
 We can confirm this by counting the number of counties per state. 
-
-To do so we will start with the `county_srs` data frame: first group these data by state, then count the number of observations per state.
+To do so we group our data by state, then count the number of observations per state.
 
 ```{r random-sample3, exercise=TRUE}
 # State distribution of SRS counties
-county_srs |>
+county |>
+  slice_sample(n = 150) |>
   group_by(state) |>
   count()
 ```
 
-The resulting output shows that this sampling approach yielded data from less than _50_ states and the number of counties sampled varies from state to state.
+
+```{r q-group-by}
+question("What is the function of `group_by` in the code above? Try to remove it and run the code to see what happens.", 
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+    answer("`group_by` tells the `count` function to count the number of states separately for each county", message = "Try again. Remember that each state consists of multiple counties."), 
+    answer("`group_by` tells the `count` function to count the number of all the counties in our sample", message = "Try again. Try removing the third line from the code above and running it again."), 
+    answer("`group_by` tells the `count` function to count the number of counties separately for each state", correct = TRUE), 
+    answer("Removing the `group_by` clause tells the `count` function to count the number of all the counties  in our sample", correct = TRUE))
+```
+
+
+
+The resulting output shows that this sampling approach yielded data from less than _50_ states, some states are over-represented in our sample and some are under represented. The number of counties sampled varies from state to state.
 
 If we instead want to sample three counties per state to make up our sample of 150 counties, we should use stratified sampling.
 
@@ -259,17 +293,29 @@ If we instead want to sample three counties per state to make up our sample of 1
 
 The code looks very similar to how we selected the simple random sample, except that *before* sampling we __first__ group by state and __then sample__ three observations per group.
 
-A quick glimpse at the resulting data frame confirms that we indeed have _150_ observations in this sample.
+A quick glimpse at the resulting data frame confirms that we indeed have _150_ observations in this sample. In the following code do the following: 
+
+-   Run it as is, checking how many counties you have from each state.
+-   Pipe the results into the `count(___)` clause to count the number of counties sampled in each state (you will need to remove the `#` hash signs)
 
 ```{r stratified-sample, exercise=TRUE}
 # Stratified sample of 150 counties, each state is a stratum
-county_str <- county_noDC |>
+county |>
   group_by(state) |>
-  slice_sample(n = 3)
-
-# Glimpse
-glimpse(county_str)
+  slice_sample(n = 3) # |>
+# count(___)
 ```
+
+```{r stratified-sample-solution}
+# Stratified sample of 150 counties, each state is a stratum
+county |>
+  group_by(state) |>
+  slice_sample(n = 3) |> 
+  count(state)
+```
+
+We can now see that from every state we have sampled exactly three counties.  
+
 
 Now it's your turn to take a sample!
 
@@ -277,71 +323,86 @@ Now it's your turn to take a sample!
 
 Suppose we want to collect some data from a sample of eight states. A list of all states and the region they belong to (Northeast, Midwest, South, West) are given in the `us_regions` data frame.
 
-The dplyr package and `us_regions` data frame have been loaded.
+The dplyr package and `us_regions` data frame have been loaded. Use the code below to `glimpse` to the structure of this dataset.
 
-- Use simple random sampling to select eight states from `us_regions`. Save this sample in a data frame called `states_srs`.
 
-- Count the number of states from each region in your sample.
+```{r us_regions, exercise=TRUE}
+# Simple random sample: states_srs
+glimpse(___)
+```
+
+
+```{r us_regions_solution}
+# Simple random sample: states_srs
+glimpse(us_regions)
+```
+
+###
+
+You can see that the dataset `us_regions` has only two columns:
+
+-   `state` is the name of the state
+-   `region` the region to which the state belongs
+
+We now want to use simple random sampling to select eight states from `us_regions`. Because it is a random sample (and not stratified sampling), we don't expect regions to be represented equally!
 
 ```{r simple-random-sample, exercise=TRUE}
 # Simple random sample: states_srs
-states_srs <- ___ |>
-  ___
-
-# Count states by region
-states_srs |>
-  ___(___)
+us_regions |>
+  slice_sample(___) |>
+  count(___)
 ```
 
 ```{r simple-random-sample-solution}
 # Simple random sample
-states_srs <- us_regions |>
-  slice_sample(n = 8)
-
-# Count states by region
-states_srs |>
+us_regions |>
+  slice_sample(n = 8) |>
   count(region)
 ```
+
+
+
 
 ### Exercise: Stratified sample in R
 
 In the previous exercise, we took a simple random sample of eight states. However, we did not have any control over how many states from each region got sampled. The goal of stratified sampling in this context is to have control over the number of states sampled from each region. Our goal for this exercise is to sample an equal number of states from each region.
 
-The dplyr package has been loaded and `us_regions` is still available in your workspace.
+```{r q-stratifying-howto}
+question("What do we need to do in order to make sure two states are chosen from each region?", 
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+    answer("Use a `group_by(region)` clause before sampling", correct = TRUE, message = "This will sample the groups (regions) rather than the counties."),
+    answer("Use a `group_by(region)` clause after sampling", correct = TRUE, message = "This will sample the same number of counties from each region")
+)
+```
+
+###
+
 
 For this exercise you should use stratified sampling to select a total of eight states, two from each stratum, where each stratum is a region of the country. We can break this down into three steps: 
 
 1. group the dataset by region (using `group_by()`) 
-2. sample two states from each region (using `slice_sample()`)
-3. save the sample in a new data frame called `states_str` (using `<-` -- the assignment arrow).
-
-
-Once you've collected your sample, count the number of states from each region 
-in your sample to confirm that each region is represented equally in your sample.
+2. sample two states from each region (using `slice_sample(n=2)`)
+3. count the number of states from each region in your sample to confirm that each region is represented equally in your sample.
 
 ```{r stratified-sample4, exercise=TRUE}
 # Stratified sample
-states_str <- ___ |>
+us_regions |>
   group_by(___) |>
-  slice_sample(___)
+  slice_sample(___) |> 
+  count(___)
 
-# Use the states_str data to count states by region
-___ |>
-  ___
 ```
 
 ```{r stratified-sample4-solution}
 # Stratified sample
-states_str <- us_regions |>
+us_regions |>
   group_by(region) |>
-  slice_sample(n = 2)
-
-# Count states by region
-states_str |>
+  slice_sample(n = 2) |> 
   count(region)
 ```
 
-### Exercise: Compare SRS vs. stratified sample
+### Exercise: Compare random sampling to stratified sampling
 
 
 ```{r quiz-compare-SRS-stratified-sample}
@@ -434,17 +495,19 @@ If you need to generate a hash for submission, click "Next Topic".
 
 What's next?
 
-`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://openintrostat.github.io/ims-tutorials/)
+`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://oferengel.github.io/ims-tutorials-4-umcg/)
 
-`r emo::ji("spiral_notepad")` [Tutorial 1: Introduction to data](https://openintrostat.github.io/ims-tutorials/01-data/)
+`r emo::ji("spiral_notepad")` [Tutorial 1: Introduction to data](https://oferengel.github.io/ims-tutorials-4-umcg/01-data/)
 
-`r emo::ji("one")` [Tutorial 1 - Lesson 1: Language of data](https://openintro.shinyapps.io/ims-01-data-01/)
+`r emo::ji("one")` [Tutorial 1 - Lesson 1: Language of data](`r glue("{shiny_url}01-01-lesson/")`)
 
-`r emo::ji("two")` [Tutorial 1 - Lesson 2: Types of studies](https://openintro.shinyapps.io/ims-01-data-02/)
+`r emo::ji("two")` [Tutorial 1 - Lesson 2: Types of studies](`r glue("{shiny_url}01-02-lesson/")`)
 
-`r emo::ji("three")` [Tutorial 1 - Lesson 3: Sampling strategies and Experimental design](https://openintro.shinyapps.io/ims-01-data-03/)
+`r emo::ji("three")` [Tutorial 1 - Lesson 3: Sampling strategies and Experimental design](`r glue("{shiny_url}01-03-lesson/")`)
 
-`r emo::ji("four")` [Tutorial 1 - Lesson 4: Case study](https://openintro.shinyapps.io/ims-01-data-04/)
+`r emo::ji("four")` [Tutorial 1 - Lesson 4: Centrality and spread](`r glue("{shiny_url}01-04-lesson/")`)
+
+`r emo::ji("four")` [Tutorial 1 - Lesson 5: Case study](`r glue("{shiny_url}01-04-lesson/")`)
 
 `r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
 
@@ -452,7 +515,7 @@ What's next?
 
 ## Submit
 
-```{r, echo=FALSE, context="server"}
+```{r encoder, echo=FALSE, context="server"}
 encoder_logic()
 ```
 

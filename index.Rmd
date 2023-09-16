@@ -34,7 +34,6 @@ The originial tutorials were forked and adapted by [Ofer Engel](https://www.rug.
 
 <!-- <img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/mine.png" alt="Mine Çetinkaya-Rundel" width="150" height="150"> -->
 
-### Instructors and authors
 
 #### Mine Çetinkaya-Rundel (Uni Edinburgh, Duke University, RStudio)
 
@@ -46,7 +45,7 @@ Mine has been working on the [OpenIntro](openintro.org) project since its foundi
 She is also the creator and maintainer of [datasciencebox.org](https://datasciencebox.org/) and she teaches the popular Statistics with R MOOC on Coursera.
 
 
-#### Instructor: Andrew Bray
+#### Andrew Bray (Reed College)
 
 Andrew Bray is an Assistant Professor of Statistics at Reed College and lover of all things statistics and R.
 

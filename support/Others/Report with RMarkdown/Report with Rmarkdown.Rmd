@@ -1,0 +1,651 @@
+---
+title: "Report with R Markdown"
+output:
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+tutorial:
+  id: "rmarkdown_intro/rmarkdown-survey"
+  version: 1.0
+  uses_ide: true
+description: ""
+required: null
+taught: null
+mentioned: null
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(learnr)
+library(gradethis)
+library(sortable)
+library(emo)
+library(palmerpenguins)
+library(gt)
+
+# The ID to look for in the student document
+options(tutorial.id = "rmarkdown_intro/rmarkdown-survey")
+```
+
+## Create R Markdown reports
+
+### 
+
+In this tutorial you will learn how to transform an R Markdown file into a polished report. 
+
+R Markdown files tell a complete story of your analysis with text, code, and metadata -- and they do so in a reproducible way. We cover the essentials here.
+
+Specifically, you will learn to:
+
+1.  Knit your R Markdown file
+2.  Use markdown for text formatting
+3.  Customize the code and results visible to your report's audience
+4.  Format the output style of your report
+
+### Getting started
+
+Before continuing, I recommend that you:
+
+1. Navigate to the Files pane in the lower right hand corner of the IDE. **Click on the blue R Project icon** in the toolbar of the Files pane. This will ensure we are both starting from the same folder as you follow along with me.
+
+    ![](images/rproj.png){.shadow width="100px" style="margin: 0 auto;"}
+    
+:::tip
+R Markdown is a package that you don't need to explicitly install or load. The RStudio IDE does this automatically when needed, so we can begin using it right away.
+:::
+
+We're ready to begin!
+
+## Knit your report
+
+### Open a new R Markdown document
+
+Let's open a fresh R Markdown document. **Follow along with me to create a new untitled R Markdown document**:
+
+```{r echo = FALSE, out.width = "100%", out.extra = "class='shadow'" }
+knitr::include_graphics("images/open.gif")
+```
+
+::: tip
+Remember you can expand the width of this tutorial by dragging the sidebar divider to the right if the images appear too small.
+:::
+
+### `r emo::ji("yarn")` Knit to HTML
+
+Click the Knit icon in the toolbar. It is circled below. (Save your file if prompted. I'm saving mine as "`my-file.Rmd`".)
+
+```{r echo = FALSE, out.width = "100%"}
+knitr::include_graphics("images/knit.jpg")
+```
+
+Give it a try! What happens?
+
+```{r knit-what-happens, echo = FALSE}
+learnr::question("What happens after clicking Knit?",
+  answer("A new file is created. It is a polished-looking version of your R Markdown file's contents.", correct = TRUE),
+  answer("Your R Markdown file was published on the internet.", correct = FALSE), 
+  correct = "This new file opens up automatically in a new window. Go ahead and close it now.",
+  allow_retry = TRUE,
+  try_again = "Not quite. A new file is created, but it is only available to you.",
+  random_answer_order = TRUE
+)
+```
+
+### What happened?
+
+After knitting, a new file is created. **Check your Files pane** in the RStudio IDE, which appears in the bottom right of your screen. Can you identify the new file?
+
+```{r label, echo = FALSE}
+learnr::question("Look at your Files pane. Which do you think is the new file you created after clicking Knit?",
+  answer("The file that has the extension '.html'", correct = TRUE),
+  answer("There is no new file in my Files pane.", correct = FALSE, message = "There is! Knit your document again, and check which of your Files has the most recent 'Modified' timestamp."), 
+  answer("A copy of the .Rmd file was created.", correct = FALSE, message = "Knitting does not create a new R Markdown file. Knitting uses an R Markdown file as the *source* for making a fancy new file of a different file format."),
+  correct = "You created a new file called an HTML file. This new file contains the text, code, and code output from your R Markdown document. You can view it by opening up this file in a web browser-- its contents look grand!",
+  allow_retry = TRUE,
+  try_again = "Knitting generates a new file from the contents of your R Markdown document. Try to identify it again.", 
+  random_answer_order = TRUE
+)
+```
+
+### Knitting to HTML
+
+The process of creating this polished-looking report is called 'knitting'. And you have just knitted your R Markdown document to the HTML output format. Every time you click knit, this new HTML file is remade from scratch using the contents of your R Markdown document.
+
+You can view the polished-report by opening up the HTML file in a web browser, but R typically opens it up automatically in a new window immediately after you knit.
+
+```{r echo = FALSE, out.width = "70%", out.extra = "class='shadow'" }
+knitr::include_graphics("images/files-pane.png")
+```
+
+### 
+
+:::fyi
+The HTML file is the default output format, but other output formats are possible too:
+
+```{r echo = FALSE, out.width = "100%", out.extra = "class='shadow'"}
+knitr::include_graphics("images/other-outputs.gif")
+```
+
+*Note:* For PDF output, you may need to install the tinytex package and then run `tinytex::install_tinytex()` before knitting.
+:::
+
+## Report reproducibly
+
+### 
+
+Whenever you knit, R Markdown runs all of your code from the top to the bottom of your document using a clean slate (i.e. a new R session) to make the polished report.
+
+```{r reproducible, echo = FALSE}
+learnr::question("What are the benefits of generating a polished report from a 'clean slate'?",
+  answer("You are forced to document all the essential steps of your analysis in the R Markdown document.", correct = TRUE),
+  answer("It encourages you to rely on code you've run in your console.", correct = FALSE, message = "R Markdown knitting actually *prevents* you from doing this -- and that's good! Referencing an object that exists only in your local R session (and not in the R Markdown code) will hinder efforts to reproduce your report in the future."), 
+  answer("R produces an error if any code references any packages or objects that were not loaded or created in the R Markdown document.", correct = TRUE),
+  correct = "These are key to making R Markdown an important tool for reproducible analysis and reporting.",
+  try_again = "There are two correct answers. See if you can identify them.", 
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### 
+
+By design, this process forces you -- the author of the report -- to document every part of your analysis, making it easy for your colleagues (or your future self!) to reproduce and confirm your results.
+
+For example, if any part of your code references something that is not documented in the R Markdown file, you will get an error message when you try to knit!
+
+::: tip
+While you analyze your data, you should knit your report early and often to ensure that you are not forgetting to document key parts of your code.
+:::
+
+### 
+
+Imagine you receive a draft of report from your colleague. In it, he explores data from the palmerpenguins package using a dplyr function.
+
+Click the button below to download the report.
+
+Let's check out this file. **Locate the file in your RStudio IDE and knit the document.**
+
+### 
+
+Hmm...when you try to knit his report you get an error:
+
+```{r, error=TRUE, echo=FALSE}
+filter(penguins, !is.na(body_mass_g))
+```
+
+**Inspect the document. What might be wrong? Can you fix it?**
+
+```{r no-library, echo = FALSE}
+learnr::question("Identify the error. Then if possible, fix it and knit again.",
+  answer("He has not loaded the right data set.", correct = FALSE),
+  answer("You are using a different version of the R Markdown package than your colleague.", correct = FALSE),
+  answer("He has a typo in his `filter()` statement.", correct = FALSE), 
+  answer("He uses a function from a package that has not been loaded in the R Markdown document.", correct = TRUE, message = "`filter()` comes from the dplyr package, but this package has not been loaded in the R Markdown document. Load the missing package in the `setup` chunk near the top of the document."),
+  correct = "Whoops, looks like your colleague's report is not reproducible as is. The error message is a bit misleading, but this is a common error to see when knitting. If there's not an obvious typo, ask yourself if all packages have been loaded in the `.Rmd` file.",
+  try_again = "Give it another shot. What might your colleague have forgotten to include?",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### 
+
+We'll continue to work with your colleague's report throughout this tutorial.
+
+Now that you know how knitting helps keep your workflow reproducible, let's discuss how you can format and customize R markdown reports.
+
+## Write with markdown
+
+### 
+
+The "markdown" in R Markdown refers to a set of symbols, like `#` and `*`, that you can use to format plain text in your file. When you knit, markdown generates the formatted text as headers, bolded text, etc., in the rendered report.
+
+**Consider the two documents you have knit so far. What does the markdown symbol `#` do to plain text?**
+
+```{r md-header, echo = FALSE}
+learnr::question("The markdown symbol `#` will...",
+  answer("Italicize the text", correct = FALSE),
+  answer("Format the text as a header", correct = TRUE), 
+  answer("Allow you to insert a link to a website", correct = FALSE),
+  incorrect = "Knit one of your documents and pay attention to the text with a `#` in front of it.",
+  correct = "Yes, `#` is used to create headers. The more `#` you add, the lower in the hierarchy the header will be.",
+  allow_retry = FALSE,
+  random_answer_order = TRUE
+)
+```
+
+### `r emo::ji("hash")` Headers
+
+You can turn plain text into a header by starting the line with hashtag symbols `#` and a space.
+
+When you write
+
+```{code}
+# Level 1 Header
+
+## Level 2 Header
+
+### Level 3 Header
+```
+
+R Markdown will turn it into:
+
+![](images/header1.png){.shadow width="300px" style="margin-left: 15px; margin-bottom: 15px;"}
+
+:::warning
+The line immediately above headers must be empty in order this to work. Don't forget to include a space after the <code># </code> either!
+:::
+
+### 
+
+To see what other markdown formatting you can apply, go to the **Markdown Quick Reference** by going to the *Help* menu in the RStudio IDE.
+
+![](images/quick-ref.png){.shadow style="width:100%;max-width:500px; margin-bottom: 15px;"}
+
+### 
+
+This will pull up a guide in the *Help* tab of the RStudio file pane.
+
+![](images/quick-ref1.png){.shadow style="width:100%;max-width:500px; margin-bottom: 15px;"}
+
+::: fyi
+Markdown is not unique to R Markdown. Many other markdown-aware programs exist, including popular messaging platforms like Slack, Microsoft Teams, and WhatsApp, to name a few.
+:::
+
+### 
+
+Use the Markdown Quick Reference to answer the next question.
+
+```{r rmd-quick-ref, echo = FALSE}
+learnr::question('What markdown would be necessary to create a link that reads "Search here" and takes you to the page `https://www.google.com`?',
+  answer("`(Search here[https://www.google.com])`", correct = FALSE),
+  answer("`![Search here](https://www.google.com)`", correct = FALSE), 
+  answer("`[Search here](https://www.google.com)`", correct = TRUE),
+  incorrect = "Take a closer look.",
+  correct = "Yes, this is how you insert links into the knitted reports.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### Inline code
+
+Return to your colleague's knitted penguin report. **How did your colleague get the name of the data set to appear in code font?**
+
+> The `penguins` data set comes from the palmerpenguins package.
+
+```{r rmd-inline, echo = FALSE}
+learnr::question("What markdown formatting is used to style regular text in a code font?", 
+  answer("Surround the text in single quotes.", correct = FALSE, message = "They may look like single quotes, but they're actually a different symbol."),
+  answer("No markdown is necessary. R Markdown recognizes that this text is a code-related word and formats it automatically.", correct = FALSE), 
+  answer('Surround the text in backticks `` ` ` ``.', correct = TRUE, message = "The backtick symbol is found on the left-top of a US or UK layout keyboard, next to the 1 key."),
+  try_again = "Take a closer look.",
+  correct = "We call this inline code.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### Inline R code
+
+Your colleague's report contains another sentence with inline code. This time it appears to be R code:
+
+> This data set has `nrow(penguins)` rows.
+
+**Insert an `r` immediately after the first backtick (so that it looks like the text below) and re-knit the report.** What do you see?
+
+> This data set has `` `r "\u0060r nrow(penguins)\u0060"` `` rows.
+
+```{r r-inline, echo = FALSE}
+learnr::question("What is the effect of `` `r  ` ``?",
+  answer("An `r` appears in the knitted report.", correct = FALSE),
+  answer("The inline code is replaced by a code chunk.", correct = FALSE), 
+  answer("The R code within the backticks is evaluated.", correct = TRUE),
+  correct = "The knitted report shows the result of the evaluated inline R code.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### Takeaway {.takeaway}
+
+You can use markdown to format plain text to insert things like:
+
+* ` # Headers`  
+* `[links](https://example.com)`  
+*  `` `Inline code` ``, using a leading `` `r `` when you want to evaluate inline R code
+
+...and other elements in your document. 
+
+The Markdown Quick Reference under the Help menu of the RStudio IDE is a good reminder of your options.
+
+
+## Customize code and results
+
+### 
+
+R Markdown lets you customize your report's code and results, too. Let's continue with your colleague's penguin report to see how.
+
+**Click the button below to add the next section your colleague's penguin report.** It adds a code chunk that subsets a part of the data.
+
+
+Then...
+
+### 
+
+**Knit your colleague's report again** and inspect the output. There's something strange about this last code chunk. Can you spot what it is?
+
+```{r discover-chunk-options, echo = FALSE}
+learnr::question("What is unusual about this last code chunk?",
+  answer("This code chunk produces a silent error.", correct = FALSE),
+  answer("At the top of this code chunk, there is some additional text in `{}`.", correct = TRUE), 
+  answer("The knitted report shows the output from this code chunk, but it does not display the code that produced this output.", correct = TRUE),
+  try_again = "There are two correct answers.",
+  correct = "Bingo! You've discovered what we call 'code chunk options'.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### 
+
+Code chunk options tell R Markdown how to handle a chunk when the report is knit.
+
+```{r echo-false, echo = FALSE}
+learnr::question("What does the code chunk option `echo=FALSE` do?",
+  answer("Hides the code, but shows its results.", correct = TRUE),
+  answer("Prevents the code from being run, so no results are displayed.", correct = FALSE, message = "This is actually what the code chunk options `eval=FALSE` does."), 
+  answer("Runs the code silently in the background and hides its output.", correct = FALSE, message = "This is actually what the code chunk option `include=FALSE` does."),
+  correct = "By default, R Markdown will display all the code in your knitted report. `echo=FALSE` is a common option to override this. Use it whenever the reader of your report will be more interested in the results of your code than the code itself.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### Code chunk options {.takeaway}
+
+There are many different options you can add to a code chunk to customize your report's output. Here are a few of the most useful:
+
+| Chunk option       | Effect in knitted report                                                                                                  |
+|---------------|---------------------------------------------------------|
+| `echo=FALSE`       | Hides code but displays results.                                                                                          |
+| `eval=FALSE`       | Prevents the code from being run, so no results are displayed.                                                            |
+| `include=FALSE`    | Runs the code, but hides the code and the results. (Common for code chunks that load packages.)                           |
+| `warning=FALSE`    | Suppresses warning messages.                                                                                              |
+| `message=FALSE`    | Suppresses other, non-warning messages.                                                                                   |
+| `error=TRUE`       | Allows the report to knit, even if the code in the code chunk produces an error.                                          |
+| `out.width="100%"` | Rescales the output (plot or image) to take up only the specified width. Can also be specified in pixels, e.g. `"300px"`. |
+
+### 
+
+You can find these and other code chunk options in the [R Markdown cheat sheet](https://posit.co/resources/cheatsheets/){target="_blank" rel="noopener noreferrer"}, under the section "Embed Code with knitr".
+
+[![](images/rmd-cheatsheet.png)](https://raw.githubusercontent.com/rstudio/cheatsheets/main/rmarkdown.pdf){.shadow style="width:100%; max-width:500px;margin-bottom: 15px;"}
+
+
+::: fyi
+knitr is the name of one of the built-in packages that works with R Markdown under the hood to knit your report. All of the code chunk options that are available fall under this package. You can learn more about the knitr package [here](https://yihui.org/knitr/options/){target="_blank" rel="noopener noreferrer"}.
+:::
+
+### 
+
+Use the table introduced above to help your colleague with the next section of the penguin report. **Click the button below to add the new section, and then knit the report again.**
+
+
+Your colleague has added a plot and is wondering how to show the plot but hide the code and any additional output that this code chunk generates.
+
+### 
+
+What can be added to the last code chunk so that only the plot (i.e. no code nor non-plot output is shown)? **Select all that apply and then fix the report and re-knit to confirm your answer.**
+
+```{r multiple-chunk-options, echo = FALSE}
+learnr::question("Which of the following code chunk options should be added to acheive the desired output?",
+  answer("`echo=FALSE`", correct = TRUE),
+  answer("`error=TRUE`", correct = FALSE), 
+  answer("`message=FALSE`", correct = TRUE),
+  answer("`warning=FALSE`", correct = TRUE),
+  try_again = "There are three correct answers.",
+  correct = "All three of these should be added to suppress the code, warning, and message output from the plot. The order that they are added does not matter. <br> <br> Make these changes in the penguin report and re-knit.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+::: tip
+Multiple options can be applied to the same chunk by separating them with a comma. For example:
+
+```` markdown
+`r ''````{r echo = FALSE, out.width="50%", error=TRUE}
+
+```
+````
+:::
+
+### `r emo::ji("gear")` The setup chunk
+
+The first chunk in an R Markdown document typically has a label: `setup`.
+
+```{r q1, echo = FALSE}
+learnr::question(
+  "Does your colleague's penguin document have a setup chunk?",
+  answer("Yes", correct = TRUE),
+  answer("No"), 
+  message = "The first chunk in a document is labelled 'setup', which means that the IDE will give it special treatment."
+)
+```
+
+::: fyi
+You can choose to give other chunks in the R Markdown document a label, but each label must be unique. This can help you keep a long document organized.
+:::
+
+### 
+
+```` markdown
+`r ''````{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(palmerpenguins)
+library(dplyr)
+```
+````
+
+The setup chunk is special. By giving it the label `setup`, the RStudio IDE will execute its contents in the background before *any* other chunk in the document is run.
+
+This makes the setup chunk the best place to put content that many other chunks depend on.
+
+::: fyi
+You'll often see a line like this in a setup chunk: `knitr::opts_chunk$set()`. This is a way to apply global chunks options for the entire R Markdown document. You can learn more about this in [Ch. 11 Chunk Options of the R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/chunk-options.html#chunk-options){target="_blank" rel="noopener noreferrer"}.
+:::
+
+### 
+
+```{r setup-best-practice, echo = FALSE}
+learnr::question("What kind of content would be well-suited for being placed in the setup chunk? Select all that apply.",
+  answer("Reading in the original data set.", correct = TRUE),
+  answer("Global chunk options.", correct = TRUE), 
+  answer("Loading packages with `library()`.", correct = TRUE),
+  answer("Creating visualizations.", correct = FALSE),
+  correct = "It is a best practice to include these in the setup chunk so that it 'sets up' all other chunks in the document to run smoothly.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE, 
+  try_again = "There are three correct options."
+)
+```
+
+### 
+
+Your colleague continues to work on the penguin report and has added some more code chunks.
+
+**Click the button below to add the new section, and then knit report again.**
+
+
+Then...
+
+### 
+
+You encounter an error when trying to knit the updated report:
+
+```{code}
+Error in parse_block(g[-1], g[1], params.src, markdown_mode) : 
+  Duplicate chunk label 'plot1', which has been used for the chunk:
+ggplot(
+  data = species_bills,
+  mapping = aes(x = bill_length_mm)
+) +
+  geom_histogram() + 
+  theme_minimal() +
+  labs(
+    x = "Bill length (mm)"
+  )
+Calls: <Anonymous> ... process_file -> split_file -> lapply -> FUN -> parse_block
+Execution halted
+```
+
+**Select the answer choice that identifies the problem, and then fix the error in the report.**
+
+```{r dupe-names, echo = FALSE}
+learnr::question("What is causing this knitting error?",
+  answer("There is a typo in the code chunk formatting that causes a parsing issue.", correct = FALSE),
+  answer("The file containing the raw data set was not read in.", correct = FALSE, message = "In this case the raw data set is already a part of the palmerpenguins package, which has been loaded."), 
+  answer("Two code chunks in this document have the same label.", correct = TRUE, message = "All chunk labels in the same R Markdown document must be unique."),
+  correct = "This error commonly occurs when users copy and paste from existing code chunks. You can change or remove the label of the second code chunk to fix the problem.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+
+## Format with metadata
+
+### 
+
+You've learned about text and code in R Markdown documents. Now, it's time to learn about its metadata. Every R Markdown document can begin with an optional header that contains metadata:
+
+```{r echo = FALSE, out.width = "90%", out.extra = "class='shadow'"}
+knitr::include_graphics("images/meet_rmd.jpg")
+```
+
+### 
+
+The metadata is the part of the document that gives R Markdown the instructions for how to build and display the R Markdown report.
+
+```{r fences, echo = FALSE}
+learnr::question("Take a guess. What denotes the location of the metadata in an R Markdown document?",
+  answer("Any content above the setup chunk.", correct = FALSE),
+  answer("The first 7 lines of code are reserved for document metadata.", correct = FALSE, message="The R Markdown metadata can be as long or short as it needs to be. There is not line number minimum or maximum."), 
+  answer("Anything within the sets of three hypens `---`.", correct = TRUE, message="These are called code fences."),
+  correct = "You can customize the way your report looks and feels by adding to or modifying the metadata. There are many options.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### 
+
+The metadata in between the two lines (`---`) are written in a format called **YAML** (rhymes with "camel").
+
+You can edit the YAML metadata just like you edit the body of the R Markdown document. Next, let's change the YAML metadata of your colleague's report.
+
+::: fyi
+YAML stands for "YAML Ain't Markup Language"), and each of its lines consists of *keys* and *values* separated by colons `:`. Key is a fancy word for the variable name that controls a particular document option.
+:::
+
+### Customize HTML output
+
+**Edit the YAML metadata so that it looks like mine below.** I have added two YAML options that will customize the HTML output. Be careful -- YAML is fussy about indentation and spacing, so be mindful that your code looks just like mine below.
+
+``` yaml
+---
+title: "Analysis of Palmer Penguins"
+author: Your favorite colleague
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+tutorial:
+  id: "rmarkdown_intro/rmarkdown-survey"
+---
+```
+
+::: tip
+The indentation of a line means that it is a sub-option of the unindented option above it.
+:::
+
+:::fyi
+The last two lines of this YAML header (i.e. "`tutorial:` and `id:`) are specific to Academy. We can ignore these. You won't have this in R Markdown documents that you create from scratch.
+:::
+
+### 
+
+Now that you have added new YAML sub-options, **knit your colleague's report once more**.
+
+```{r toc, echo = FALSE}
+learnr::question("What affect did `toc: true` and `toc_float: true` have on the penguin report?",
+  answer("The allow the report to knit even if there are errors in the code.", correct = FALSE),
+  answer("They add a new theme to the document.", correct = FALSE), 
+  answer("They create a floating table of contents in the knitting report.", correct = TRUE, message="It remains visible as you scroll through the rest of your report. Cool, huh?"),
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### 
+
+Adding a table of contents with those YAML sub-options is a feature of having `output:` set to `html_document`.
+
+`html_document` has many other fun sub-options that can be applied. Reader-friendly examples of many of these can be found in Section 3.1 of [*R Markdown: The Definitive Guide*](https://bookdown.org/yihui/rmarkdown/html-document.html){target="_blank" rel="noopener noreferrer"}.
+
+For an exhaustive list of HTML document sub-options, look up `html_document`'s help page: `?rmarkdown::html_document`.
+
+### Takeaway {.takeaway}
+
+Of special note are the following HTML document options, which can all be used indented under `html_document:`
+
+```{r echo=FALSE}
+html_opts <- 
+  tibble::tribble(
+  ~`HTML sub-option`,  ~Description,
+  "`theme:`", 
+  "Changes font and document colors. Choose from `default`, `cerulean`, `journal`, `flatly`, `darkly`, `readable`, `spacelab`, `united`, `cosmo`, `lumen`, `paper`, `sandstone`, `simplex`, or `yeti`. <br><br> **Example:** `theme: flatly`",
+  "`df_print:`",  
+  "Controls the table style used to display a printed data frame. Choose from `paged` (interactive and clickable), `kable` (static but richly-formatted), `default` (console output), `tibble` (console output using tibble-style printing). <br><br> **Example:** `df_print: paged`",
+  "`code_folding:`",  
+  "Allows code chunks to be toggled by the reader in the knitted report. `hide` collapses the toggle; `show` expands it. <br><br> **Example:** `code_folding: hide`",
+  "`code_download:`", 
+  "Creates a dropdown menu with the option to download the source R Markdown file. <br> <br> **Example:** `code_download: true`")
+
+html_opts %>% 
+  gt::gt() %>% 
+  gt::fmt_markdown(columns = everything()) %>% 
+  gt::tab_options(
+    table.font.size = pct(75)
+  )
+```
+
+```{r df-print-question, echo=FALSE}
+learnr::question("Which of the following lines of code would you include to your YAML header to get tables that are interactive?",
+  answer("`theme: flatly`", correct = FALSE),
+  answer("`df_print: paged`", correct = TRUE),
+  answer("`code_folding: hide`", correct = FALSE),
+  answer("`code_download: true`", correct = FALSE),
+  correct = "To get interactive tables in your R Markdown document, you would include the line `df_print: paged` in your YAML header under `html_document`.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+### 
+
+That brings us to the end of this tutorial! 
+
+You've learned the basics of reporting with R Markdown. You can now:
+
+* Keep your analysis reproducible by knitting early and often
+* Format plain text with markdown to produce customized text styling
+* Tailor the display of code, results, or both with chunk options
+* Customize the appearance and settings of your report with YAML metadata
+
+
+Happy knitting!
+
+

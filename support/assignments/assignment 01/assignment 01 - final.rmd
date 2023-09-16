@@ -1,0 +1,123 @@
+---
+title: "CPE - Med Stat: Assignment 01"
+author: "Your name here"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: flatly
+    df_print: paged
+editor: visual
+editor_options:
+  chunk_output_type: console
+---
+
+In this tutorial, you will learn how to:
+
+-   Practice using RMarkdown to create neat and reproducible reports
+-   Load libraries into the R environment so you can use them in your code chunks
+-   Load a dataset and inspect it in the environment panel
+-   Create a `table 1` of your dataset
+
+## Practice using RMarkdown
+
+Change the YAML using the documentation for [HTML features](https://bookdown.org/yihui/rmarkdown/html-document.html) to include
+
+-   floating table of contents (toc)
+-   paged table printing
+-   a flatly theme (see section 3.1.4 in the documentation)
+
+Use inline formatting to create
+
+-   Hyperlinks. For example, you can find documentation to the use of HTML inline formatting [here](https://rmarkdown.rstudio.com/lesson-8.html) and [here](https://bookdown.org/yihui/rmarkdown/html-document.html).
+-   Text written in **Bold font**
+-   Third level section headers
+-   Unordered list items
+-   Text marked as `inline code` using `backticks`
+-   The use of blockquotes
+
+## Coding in R
+
+The chunk below is our setup chunk. This is where we load our libraries (in this case, we are loading `tidyverse` and `table1`). We can also dataset our dataset from the file which you can find in a folder called "data".
+
+```{r setup, include=FALSE}
+
+# Please remove the hashtags in the two lines below
+# library(tidyverse)
+# library(table1)
+library(tidyverse)
+library(table1)
+# setwd("C:/Users/Ofer/OneDrive - UMCG/Teaching/Statistics UMCG/CPE - Medical statistics/Projects/CPE_RM_MS/Assignments/01 Intro")
+
+# Uncomment the line below and add stuff
+load(file = "data/nhanes.Rdata")
+
+```
+
+Running the chunk above will introduce a dataset into your environment.
+
+The dataset is a random sample from the [National Health and Nutrition Examination Survey (NHANES)](https://www.cdc.gov/nchs/nhanes/about_nhanes.htm), a survey designed to "assess the health and nutritional status of adults and children in the United States."
+
+The variables in this dataset include:
+
+-   `sbp`: the systolic blood pressure
+-   `dbp`: the diastolic blood pressure
+-   `age` age in years
+-   `sex` sex assigned at birth
+-   `income` an indicator for the income class
+-   `smoker` an indicator of participant's smoking status
+
+Use [chunk options](https://rmarkdown.rstudio.com/lesson-3.html) to prevent the code from showing in your final report.
+
+> Display the contents of the dataset by typing `nhanes` in the code chunk below
+
+```{r display-nhanes, echo=FALSE}
+# Write your code here
+nhanes
+```
+
+> Generate a summary of the dataset (use the function `summary`)
+
+```{r summary-nhanes, echo=FALSE}
+summary(nhanes)
+```
+
+> Use [inline code](https://rmarkdown.rstudio.com/lesson-4.html) to print out the total number of variables and the number of observed units in our dataset.
+
+**Answer:** The number of variables in our data-set is `r ncol(nhanes)` and the number of observed units is `r nrow(nhanes)`
+
+## Create `Table 1`
+
+In most published articles, there is a "Table 1" containing descriptive statistics for the sample. This may include, for example, the mean and standard deviation for continuous variables, the frequency and proportion for categorical variables, and perhaps also the number of missing values.
+
+The brute force method of creating such a table would be to compute each statistic for each variable of interest and then copy and paste the results into a table. But an easier way is to use the functions from the `table1` package. Please use the documentation provided in [this link](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html) to create the table below.
+
+```{r table-1, echo=FALSE}
+
+label(nhanes$sex)       <- "Sex"
+label(nhanes$age)       <- "Age"
+label(nhanes$sbp)     <- "Systolic blood pressure"
+label(nhanes$dbp)     <- "Diastolic blood pressure"
+
+units(nhanes$age) <- "years"
+units(nhanes$sbp) <- "mm/Hg"
+units(nhanes$dbp) <- "mm/Hg"
+
+
+caption  <- "National Health and Nutrition Examination Study"
+
+
+table1(~sbp + dbp + age + sex + income | smoker, data = nhanes, topclass="Rtable1-zebra", 
+       caption = caption)
+```
+
+## An extension
+
+Extend the work by adding your own creative spin on what you've learned in this lab. For instance, you can create a new table1 or count the number of distinct values of the income variable using the `count` function. You may add a new variable using the `mutate` function and display it in a table. Just be creative!
+
+```{r extension, echo=FALSE}
+# Write your code for the extension here
+
+```
