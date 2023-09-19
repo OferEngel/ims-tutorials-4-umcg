@@ -1,0 +1,42 @@
+---
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r footer-setup}
+library(glue)
+shiny_url <- "https://oferengel-posit.shinyapps.io/"
+
+```
+
+
+What's next?
+
+`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://oferengel.github.io/ims-tutorials-4-umcg/)
+
+`r emo::ji("spiral_notepad")` [Tutorial 1: Introduction to data](https://oferengel.github.io/ims-tutorials-4-umcg/01-data/)
+
+`r emo::ji("one")` [Tutorial 1 - Lesson 1: Language of data](`r glue("{shiny_url}01-01-lesson/")`)
+
+`r emo::ji("two")` [Tutorial 1 - Lesson 2: Types of studies](`r glue("{shiny_url}01-02-lesson/")`)
+
+`r emo::ji("three")` [Tutorial 1 - Lesson 3: Sampling strategies and Experimental design](`r glue("{shiny_url}01-03-lesson/")`)
+
+`r emo::ji("four")` [Tutorial 1 - Lesson 4: Case study](`r glue("{shiny_url}01-04-lesson/")`)
+
+`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
+
+
+## Submit
+
+```{r encoder, echo=FALSE, context="server"}
+encoder_logic()
+```
+
+```{r encode, echo=FALSE}
+learnrhash::encoder_ui(ui_before = hash_encoder_ui)
+```
+

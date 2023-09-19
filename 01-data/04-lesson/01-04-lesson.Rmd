@@ -313,33 +313,8 @@ You now know how to get started with data analysis! In this tutorial you have le
 
 We hope you enjoyed the tutorial and that the topics we discussed in this tutorial motivated you to learn more data analysis and statistics. What we covered in this tutorial is just the tip of the iceberg, so we hope you decide to dive deeper to learn more.
 
-What's next?
 
+```{r, child="../01-data-footer.rmd"}
 
-`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://oferengel.github.io/ims-tutorials-4-umcg/)
-
-`r emo::ji("spiral_notepad")` [Tutorial 1: Introduction to data](https://oferengel.github.io/ims-tutorials-4-umcg/01-data/)
-
-`r emo::ji("one")` [Tutorial 1 - Lesson 1: Language of data](`r glue("{shiny_url}01-01-lesson/")`)
-
-`r emo::ji("two")` [Tutorial 1 - Lesson 2: Types of studies](`r glue("{shiny_url}01-02-lesson/")`)
-
-`r emo::ji("three")` [Tutorial 1 - Lesson 3: Sampling strategies and Experimental design](`r glue("{shiny_url}01-03-lesson/")`)
-
-`r emo::ji("four")` [Tutorial 1 - Lesson 4: Centrality and spread](`r glue("{shiny_url}01-04-lesson/")`)
-
-`r emo::ji("four")` [Tutorial 1 - Lesson 5: Case study](`r glue("{shiny_url}01-04-lesson/")`)
-
-`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
-
-
-
-## Submit
-
-```{r, echo=FALSE, context="server"}
-encoder_logic()
 ```
 
-```{r encode, echo=FALSE}
-learnrhash::encoder_ui(ui_before = hash_encoder_ui)
-```

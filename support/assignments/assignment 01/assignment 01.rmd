@@ -4,6 +4,8 @@ author: "Your name(s) here"
 output: html_document
 ---
 
+Before you start the tutorial, please check out this web site and watch the video in it: https://rmarkdown.rstudio.com/lesson-1.html 
+
 In this tutorial, you will learn how to:
 
 Practice using RMarkdown to create neat and reproducible reports
