@@ -13,7 +13,7 @@ params:
 <style>
 .column-left{
   float: left;
-  width: 80%;
+  width: 75%;
   text-align: left;
 }
 .column-right{
@@ -43,9 +43,10 @@ params:
 
 .column-right-text-center{
   float: right;
-  width: 20%;
+  width: 25%;
   text-align: center;
   font-size: 16px;
+  margin: 10px 10px 10px 10px;
 }
 
 .RUsers {
@@ -72,25 +73,16 @@ library(glue)
 shiny_url <- params$shiny_url
 ```
 
-
-
-<div class="column-right-text-center">
-
-```{r course-structure, fig.width=2}
-knitr::include_graphics("images/sperman.gif")
-```
-
+<div style="float: right; margin: 0px 0px 20px 20px">
+<img  src="images/sperman.gif" alt="Tutorial illustration" width="80%" height="80%">
+<br/><br/>
 $\mathbb{S}$ stands for STATISTICS
-
 </div>
 
-<div class="column-left">
 
 Practical knowledge of statistics is a fundamental skill for medical research. The recent growth of Big Data Applications and Data Science only enhances the need for practical working knowledge of statistical analysis, helping you  understand your own data as well as the analyses performed by others.
 
-</div>
 
-<div class="column-full">
 
 This course is designed to be a gentle introduction to the practice of solving problems in biostatistics and epidemiology in a data driven manner. The course assumes no prior programming/coding experience. It is designed to provide the tools you need to progress according to your interest and in your time as much as possible. 
 Succeeding in this course will be able to:
@@ -128,7 +120,6 @@ The following tutorials are due on the Tuesday, a day before our first weekly se
 
 All the labs can be found using [this link](https://posit.cloud/spaces/405625/join?access_code=j28ql511ZhH6WJAwNCNqoytYH5kqFhkFqALLvJQ2).
 
-</div>
 
 
 ### Acknowledgements
