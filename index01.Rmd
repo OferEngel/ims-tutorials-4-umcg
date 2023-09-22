@@ -1,0 +1,102 @@
+---
+title: "Medical Statistics - Resources"
+output: html_document
+params:
+  shiny_url: "https://oferengel-posit.shinyapps.io/"
+---
+
+<meta http-equiv='cache-control' content='no-cache'> 
+<meta http-equiv='expires' content='0'> 
+<meta http-equiv='pragma' content='no-cache'>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(glue)
+# shiny_url <-  "https://oferengel-posit.shinyapps.io/ims-01-data-02/"
+shiny_url <- params$shiny_url
+```
+
+<img style="float: right; margin: 0px 0px 20px 20px" src="logo/umcg-openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
+
+
+### Preparation readings and videos
+
+You will find all the readings and lectures in your the [Perusall course home](https://app.perusall.com/courses/cpe-medical-statistics).  
+
+### Tutorials
+
+The following tutorials are due on the Tuesday, a day before our first weekly sessions.  
+
+-   [Week 1: Introduction to data](01-data/) - **deadline 03-Oct-23**
+-   Week 2: Exploratory data analysis - **deadline 10-Oct-23**
+-   Week 3: Simple linear least square regression **deadline 17-Oct-23**
+-   Week 4: Multiple linear least square regression part I  **deadline 24-Oct-23**
+-   Week 5: Multiple linear least square regression part II  **deadline 31-Oct-23**
+-   Week 6: Generalized linear models **deadline 07-Nov-23**
+-   Week 7: Probability and models with a continuous outcome **deadline 14-Nov-23**
+-   Week 8: Models with a binary outcome **deadline 21-Nov-23**
+-   Week 9: Survival analysis and review **deadline 28-Nov-23**
+
+
+### Labs
+
+All the labs can be found using [this link](https://posit.cloud/spaces/405625/join?access_code=j28ql511ZhH6WJAwNCNqoytYH5kqFhkFqALLvJQ2).
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+### Acknowledgements
+
+Learnr tutorials supporting [OpenIntro::Introduction to Modern Statistics](https://openintro-ims.netlify.app/).
+Each tutorial corresponds to one part of the book and is comprised of multiple lessons for a total of 35 lessons that cover the entire content of the book.
+
+The originial tutorials were forked and adapted by [Ofer Engel](https://www.rug.nl/cf/university-college-fryslan/about-ucf/dr-ofer-engel?lang=en), the original tutorial content has been developed by [Mine Çetinkaya-Rundel](https://github.com/mine-cetinkaya-rundel), [Jo Hardin](https://github.com/hardin47), [Ben Baumer](https://github.com/beanumber), and [Andrew Bray](https://github.com/andrewpbray) and implemented in learnr with the help of [Yanina Bellini Saibene](https://github.com/yabellini), [Florencia D’Andrea](https://github.com/flor14), [Roxana Noelia Villafañe](https://github.com/data-datum), and [Allison Theobold](https://github.com/atheobold).
+
+<!-- ## Instructor -->
+
+<!-- <img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/mine.png" alt="Mine Çetinkaya-Rundel" width="150" height="150"> -->
+
+
+#### Mine Çetinkaya-Rundel (Uni Edinburgh, Duke University, RStudio)
+
+Mine Çetinkaya-Rundel is Associate Professor of the Practice position at the Department of Statistical Science at Duke University and Data Scientist and Professional Educator at RStudio.
+Mine's work focuses on innovation in statistics and data science pedagogy, with an emphasis on computing, reproducible research, student-centered learning, and open-source education as well as pedagogical approaches for enhancing retention of women and under-represented minorities in STEM.
+Mine works on integrating computation into the undergraduate statistics curriculum, using reproducible research methodologies and analysis of real and complex datasets.
+She also organizes [ASA DataFest](https://ww2.amstat.org/education/datafest/), an annual two-day competition in which teams of undergraduate students work to reveal insights into a rich and complex dataset.
+Mine has been working on the [OpenIntro](openintro.org) project since its founding and as part of this project she co-authored four open-source introductory statistics textbooks (including this one!).
+She is also the creator and maintainer of [datasciencebox.org](https://datasciencebox.org/) and she teaches the popular Statistics with R MOOC on Coursera.
+
+
+#### Andrew Bray (Reed College)
+
+Andrew Bray is an Assistant Professor of Statistics at Reed College and lover of all things statistics and R.
+
+
+#### Instructor: Benjamin S. Baumer (Smith College)
+
+<!-- <img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/ben.png" alt="Ben Baumer" width="150" height="150"> -->
+
+<!-- ### Benjamin S. Baumer -->
+
+<!-- #### Smith College -->
+
+[Benjamin S. Baumer](http://www.science.smith.edu/~bbaumer) is an [associate professor](https://www.smith.edu/academics/faculty/ben-baumer) in the [Statistical & Data Sciences](http://www.smith.edu/academics/statistics) program at Smith College. He has been a practicing data scientist since 2004, when he became the first full-time statistical analyst for the [New York Mets](http://www.nymets.com/). Ben is a co-author of [*The Sabermetric Revolution*](http://www.upenn.edu/pennpress/book/15168.html), [*Modern Data Science with R*](http://mdsr-book.github.io/index.html), and the second edition of [*Analyzing Baseball Data with R*](https://www.crcpress.com/Analyzing-Baseball-Data-with-R-Second-Edition/Marchi-Albert-Baumer/p/book/9780815353515). He received his Ph.D. in Mathematics from the [City University of New York](http://gc.cuny.edu) in 2012, and is accredited as a professional statistician by the [American Statistical Association](http://www.amstat.org/). His research interests include sports analytics, data science, statistics and data science education, statistical computing, and network science. 
+
+Ben won the [Waller Education Award](https://www.amstat.org/ASA/Your-Career/Awards/Waller-Awards.aspx) from the ASA Section on Statistics and Data Science Education, and the [Significant Contributor Award](https://community.amstat.org/sis/aboutus/honorees) from the ASA Section on Statistics in Sports in 2019. He shared the [2016 Contemporary Baseball Analysis Award](http://sabr.org/latest/baumer-brudnicki-mcmurray-win-2016-sabr-analytics-conference-research-awards) from the Society for American Baseball Research. Currently, Ben is the primary investigator on a three-year, nine-institution, $1.2 million [award from the National Science Foundation](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1924017&HistoricalAwards=false) for workforce development under the [Data Science Corps program](https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=505536). 
+
+
+#### Jo Hardin (Pomona College)
+
+Jo Hardin is Professor of Mathematics and Statistics at Pomona College.
+She collaborates with molecular biologists to create novel statistical methods for analyzing high throughput data.
+She has also worked extensively in statistics and data science education, facilitating modern curricula for higher education instructors.
+She was a co-author on the [2014 ASA Curriculum Guidelines for Undergraduate Programs in Statistical Science](https://www.amstat.org/asa/education/Curriculum-Guidelines-for-Undergraduate-Programs-in-Statistical-Science.aspx), and she writes on the blog [teachdatascience.com](https://teachdatascience.com/).
+The best part of her job is collaborating with undergraduate students.
+In her spare time, she loves reading, running, and breeding tortoises.
