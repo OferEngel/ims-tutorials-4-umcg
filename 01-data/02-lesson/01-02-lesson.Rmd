@@ -1,5 +1,5 @@
 ---
-title: "Introduction to data: 2 - Types of Studies"
+title: "1.2 Types of Studies"
 output: 
   learnr::tutorial:
     progressive: true
@@ -89,7 +89,7 @@ encoder_logic <- function(strip_output = FALSE) {
 }
 
 hash_encoder_ui <- {
-  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID?"), renderText({
+  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID (Gebruikersnaam  s-/p-nummer)?"), renderText({
     input$caption
   }), )
 }
@@ -258,11 +258,11 @@ quiz(
 
 ###
 
-The data presents a puzzling situation: the average person in the sample appears to fair better if they do take the drug (only 18.3% heart attack) than if they do not take the drug (21.7% heart attack). But if we look at the male and female subgroups, their members tend to fair worse on average when taking the drug, on average.
+The data presents a puzzling situation: If we look at the male and female subgroups, their members tend to fair worse when taking the drug, on average. But if we look overall, the average person in the sample appears to fair better if they do take the drug (only 18.3% heart attack) than if they do not take the drug (21.7% heart attack). 
 
 Based on these data, would you advise the drug to be approved? Probably not!
 
-Often when one mentions "a relationship between variables" we think of a relationship between just two variables, say a so called explanatory variable (aka predictor e.g., taking the drug yes/no), and response variable (aka outcome, e.g., health outcomes).
+To understand what is going on here, consider the "relationship between the variables." Often, we think of a relationship between just two variables. In this example, one variable is whether a person takes the drug yes or no (this is the predictor or the explanatory variable). A second variable is the health outcomes (aka outcome or response variable).
 
 However, truly understanding the relationship between these two variables might require considering other potentially related variables as well (in this case, the sex of the subjects). If we don't, we might find ourselves in a *Simpson's paradox*. So, what is Simpson's paradox?
 
@@ -318,9 +318,8 @@ We'll explore Simpson's paradox further with another dataset, which comes from a
 | Male   | 1198     | 1493     |
 | Female | 557      | 1278     |
 
-> Note: At the time of this study, gender and sexual identities were not given distinct names. Instead, it was common for a survey to ask for your "gender" and then provide you with the options of "male" and "female." Today, we better understand how an individual's gender and sexual identities are different pieces of who they are. To learn more about inclusive language surrounding gender and sexual identities see the [gender unicorn](https://transstudent.org/gender/).
+> Note: At the time of this study, gender and sexual identities were not given distinct names. Instead, it was common for a survey to ask for your "gender" and then provide you with the options of "male" and "female."
 
-Let's get started.
 
 ### Number of males and females admitted
 
@@ -342,217 +341,189 @@ ucb_admit |>
   count(Gender, Admit)
 ```
 
-### Proportion of males admitted overall
+### Replace counts with proportions 
 
-Next we'll calculate the proportion of males and proportion of females admitted, by creating a new variable, called `prop` (short for proportion) based on the counts calculated in the previous exercise and using the `mutate()` function.
+Next we'll calculate the proportion of males and proportion of females admitted, by creating a new variable, called `prop` (short for proportion) based on the counts calculated in the previous exercise and using the `mutate()` function. Proportions for each row of the data frame we created in the previous exercise can be calculated as `n / sum(n)`. 
 
-Proportions for each row of the data frame we created in the previous exercise can be calculated as `n / sum(n)`. However, it is important to note that since we are interested in the proportion of students admitted within each gender, we need for the data to be grouped by gender, so that `sum(n)` will be calculated for males and females separately. Luckily, the `group_by()` function can do this grouping for us!
+
+```{r prop-admit, exercise=TRUE}
+ucb_admit |> 
+  count(___, ___) |>
+  # Create new variable
+  mutate(prop = ___ / ___) 
+
+```
+
+```{r prop-admit-hint-1}
+ucb_admit |> 
+  count(Gender, Admit) |>
+  # Group by Gender
+  mutate(prop = ___ / ___) |>
+  
+```
+
+```{r prop-admit-solution}
+ucb_admit |> 
+  count(Gender, Admit) |>
+  # Create new variable
+  mutate(prop = n / sum(n))
+
+```
+
+For each group, we now have their proportion out of all applications. The proportions are 26.4%, 32.9%, 12.3% and 28.2%. These proportions add up to 100%.  
+
+However, we are interested in the proportion of students admitted within each gender, not the proportion out of all applicants. To do this, we first need to group the data by gender, so that `sum(n)` will be calculated for males and females separately. Luckily, the `group_by()` function can do this grouping for us!
 
 The `group_by()` function takes as arguments the column names of the **categorical** variables for which you want to perform grouped operations. We add this grouping into our data wrangling pipeline, by inserting a `group_by()` statement before we perform our subsequent tasks. For example, we could have found the same admission table as before, if we first grouped the data based on `Gender`, and then counted how many students were admitted and rejected. This process would look like this:
-
-```{r grouped-count-male, exercise = TRUE}
-ucb_admit |> 
-  group_by(Gender) |> 
-  count(Admit)
-```
-
-```{r quiz-group-by}
-question("In the code chunk above, what does the `group_by` clause actually do? What would happen if your remove the `group_by` clause? ", allow_retry = TRUE, random_answer_order = TRUE,
-    answer("The `group_by` does nothing, removing it from the code changes nothing.", message = "Nope, try again!"),
-    answer("The `group_by` tells the `count` to show the admission rate separately for each group (Females and Males).", correct = TRUE),
-    answer("Removing the `group_by` clause, the `count` to show the admission rate for the entire university.", correct = TRUE),
-    answer("The `group_by` tells the `count` to show the admission rate for the entire university.", message = "Nope, try again!")
-)
-```
-
-Now, use this new function and your knowledge of creating new variables and filtering observations to calculate the proportion of males and proportion of females admitted. Note, the table of counts of gender and admission status you found earlier is available as `ucb_admission_counts`.
-
-To accomplish this task you will need to take the following steps:
-
-1.  Use `group_by()` to group the data by gender.
-2.  Use `mutate()` to create a new variable named`prop`, calculated as the proportion of males and females admitted. Remember, proportions for each row of the data frame we create can be calculated as `n / sum(n)`!
-3.  Use `filter()` to keep the data only for those who were admitted so that the resulting data frame only contains the proportions of males and females who were admitted.
 
 Then answer the following question: *Which gender had a higher admission rate, male or female?*
 
 ```{r gender-male, exercise=TRUE}
-ucb_admission_counts |>
-  # Group by gender
+ucb_admit |> 
+  count(Gender, Admit) |>
+  # Group by Gender
   ___(___) |>
   # Create new variable
-  mutate(prop = ___ / ___) |>
-  # Filter for admitted
-  ___(___ == "___")
+  mutate(prop = ___ / ___) 
 ```
 
 ```{r gender-male-hint-1}
-ucb_admission_counts |>
-  # Group by gender
+ucb_admit |> 
+  count(Gender, Admit) |>
+  # Group by Gender
   group_by(Gender) |>
   # Create new variable
-  mutate(prop = ___ / ___) |>
-  # Filter for admitted
-  ___(___ == "___")
-```
-
-```{r gender-male-hint-2}
-ucb_admission_counts |>
-  # Group by gender
-  group_by(Gender) |>
-  # Create new variable
-  mutate(prop = n / sum(n)) |>
-  # Filter for admitted
-  ___(___ == "___")
-```
-
-```{r gender-male-hint-3}
-ucb_admission_counts |>
-  # Group by gender
-  group_by(Gender) |>
-  # Create new variable
-  mutate(prop = n / sum(n)) |>
-  # Filter for admitted
-  filter(Admit == "Admitted")
+  mutate(prop = ___ / ___) 
 ```
 
 ```{r gender-male-solution}
-ucb_admission_counts |>
+ucb_admit |> 
+  count(Gender, Admit) |>
   # Group by gender
   group_by(Gender) |>
   # Create new variable
-  mutate(prop = n / sum(n)) |>
-  # Filter for admitted
-  filter(Admit == "Admitted")
+  mutate(prop = n / sum(n)) 
 ```
 
-### Proportion of males admitted for each department
+We can see from this result that the rate of admission among males was about 44.5%, whereas the rate among females was only 30.4%.
 
-Finally we'll make a table similar to the one we constructed earlier, except we'll first group the data by department. The goal is to compare the proportions of male students admitted across departments.
 
-Proportions for each row of the data frame we create can be calculated as `n / sum(n)`. Note that since the data are grouped by department **and** gender, `sum(n)` will be calculated for males and females separately **for each department**.
+### Proportion admitted for each department
 
-```{r prepare-gender2}
-ucb_admission_counts <- ucb_admit |>
-  # Counts by department, then gender, then admission status
-  count(Dept, Gender, Admit)
-```
+Finally we'll make a similar table to the one we constructed earlier, except we'll first group the data by department. The goal is to compare the proportions of male  and female students admitted across departments.
 
-First, let's make a new object named `ucb_admission_counts` to store the `count()`s of `ucb_admit` by department, gender, and admission status. In this case, it doesn't matter what order you place `Dept`, `Gender`, or `Admit` inside of `count()`!
+As before, proportions for each row of the data frame is calculated as `n / sum(n)`. Note that since the data are grouped by department **and** gender, `sum(n)` will be calculated for males and females separately **for each department**.
 
-```{r gender-male2, exercise=TRUE, exercise.setup="prepare-gender2"}
-ucb_admission_counts <- ucb_admit |>
+First, let's count how many students were admitted to the university, and divide by department, gender, and admission status. In this case, it doesn't matter what order you place `Dept`, `Gender`, or `Admit` inside of `count()`!
+
+```{r gender-male2, exercise=TRUE}
+ucb_admit |>
   # Counts by department, gender, and admission status
   ___(___, ___, ___)
 
-# See the result
-ucb_admission_counts
 ```
 
 ```{r gender-male2-solution}
-ucb_admission_counts <- ucb_admit |>
+ucb_admit |>
   # Counts by department, then gender, then admission status
   count(Dept, Gender, Admit)
 
-# See the result
-ucb_admission_counts
 ```
 
-Next, create a table with the proportions of male students admitted across departments, using the following steps:
+Next, calculate the proportions of male  and female students admitted across departments, using the following steps:
 
-1.  Use `group_by()` to group the `ucb_admission_counts` first by department then by gender.
+1.  Use `group_by()` to group first by department then by gender.
 2.  Use `mutate()` to add a new column named `prop`, which is the ratio of those admitted or rejected by department and gender. Remember the calculation you used previously for row proportions!
-3.  Use `filter()` to filter the rows for those who are males **and** those who were admitted. To "join" our filters we insert a comma between the filters we are interested (e.g. `filter(grade == "middle school", class == "Music"))`).
+3.  Use `filter()` to keep the data for those who were admitted so that the resulting data frame only contains the proportions of males and females who were admitted.
 
-```{r gender-male3, exercise=TRUE, exercise.setup="prepare-gender2"}
- ucb_admission_counts  |>
-  # Group by department, then gender
-  ___(___, ___) |>
-  # Create new variable
-  ___(prop = ___) |>
-  # Filter for male and admitted
-  ___(___, ___)
+
+```{r gender-male3, exercise=TRUE}
+ucb_admit |>
+  # Count by Department, then Gender, then Admit status
+  count(___, ___, ___) |>
+  # Group by the department and the gender
+  group_by(___, ___) |>
+  # Create new proportion variable
+  mutate(prop = ___) |>  
+  # filter for Admit=="Admitted"
+  filter(___)
 ```
+
 
 ```{r gender-male3-hint-1}
- ucb_admission_counts  |>
-  # Group by department, then gender
-  group_by(Dept, Gender) |>
-  # Create new variable
-  ___(prop = ___) |>
-  # Filter for male and admitted
-  ___(___, ___)
+ucb_admit |>
+  # Count by Department, then Gender, then Admit status
+  count(Dept, Gender, ___) |>
+  # Group by the department and the gender
+  group_by(___, ___) |>
+  # Create new proportion variable
+  mutate(prop = ___) |>  
+  # filter for Admit=="Admitted"
+  filter(___)
 ```
 
+
 ```{r gender-male3-hint-2}
- ucb_admission_counts  |>
-  # Group by department, then gender
-  group_by(Dept, Gender) |>
-  # Create new variable
-  mutate(prop = n / sum(n)) |>
-  # Filter for male and admitted
-  ___(___, ___)
+ucb_admit |>
+  # Count by Department, then Gender, then Admit status
+  count(Dept, Gender, Admit) |>
+  # Group by the department and the gender
+  group_by(___, ___) |>
+  # Create new proportion variable
+  mutate(prop = ___) |>  
+  # filter for Admit=="Admitted"
+  filter(___)
 ```
 
 ```{r gender-male3-hint-3}
- ucb_admission_counts  |>
-  # Group by department, then gender
+ucb_admit |>
+  # Count by Department, then Gender, then Admit status
+  count(Dept, Gender, Admit) |>
+  # Group by the department and the gender
   group_by(Dept, Gender) |>
-  # Create new variable
-  mutate(prop = n / sum(n)) |>
-  # Filter for male and admitted
-  filter(Gender == "Male", ___)
-```
-
-```{r gender-male3-hint-4}
- ucb_admission_counts  |>
-  # Group by department, then gender
-  group_by(Dept, Gender) |>
-  # Create new variable
-  mutate(prop = n / sum(n)) |>
-  # Filter for male and admitted
-  filter(Gender == "Male", Admit == "Admitted")
+  # Create new proportion variable
+  mutate(prop = ___) |>  
+  # filter for Admit=="Admitted"
+  filter(___)
 ```
 
 ```{r gender-male3-solution}
-ucb_admission_counts  |>
-  # Group by department, then gender
+ucb_admit |>
+  # Count by Department, then Gender, then Admit status
+  count(Dept, Gender, Admit) |>
+  # Group by the department and the gender
   group_by(Dept, Gender) |>
-  # Create new variable
-  mutate(prop = n / sum(n)) |>
-  # Filter for male and admitted
-  filter(Gender == "Male", Admit == "Admitted")
+  # Create new proportion variable
+  mutate(prop = n / sum(n)) |>  
+  # filter for Admit=="Admitted"
+  filter(Admit=="Admitted")
+
 ```
 
-### Admission rates for males across departments
-
-```{r prepare-gender3}
-perc_admit_by_dept <- ucb_admit |>
-  # Group by department, then gender
-  group_by(Dept, Gender) |>
-  # Table of counts of admission status and gender and department
-  count(Admit) |>
-  # Create new variable
-  mutate(prop = n / sum(n)) |>
-  # Filter for male and admitted
-  filter(Admit == "Admitted")
-```
 
 ```{r quiz-gender}
 quiz(
-  question("Which of the following best describes the relationship between admission status and gender?", correct = "Correct! Let's recap what we've learned in the next section.", allow_retry = TRUE,random_answer_order = TRUE,
-    answer("Within most departments, female applicants are more likely to be admitted.", correct = TRUE),
-    answer("Within most departments, male applicants are more likely to be admitted.", message = "That doesn't seem right."),
-    answer("Within most departments, male and female applicants are equally likely to be admitted.", message = "Try again!")
-), caption = "")
+  question("From the table above, which departments admit more than 50% of their candidates?", allow_retry = TRUE,
+    answer("Department A.", correct = TRUE),
+    answer("Department B.", correct = TRUE),
+    answer("Department C.", message = "Try again!"),
+    answer("Department D.", message = "Try again!"),
+    answer("Department E.", message = "Try again!"),
+    answer("Department F.", message = "Try again!")
+    ), 
+  question("Which departments admit a larger share of their female applicants than of their male applicants?", allow_retry = TRUE,
+    answer("Department A.", correct = TRUE),
+    answer("Department B.", correct = TRUE),
+    answer("Department C.", message = "Try again!"),
+    answer("Department D.", correct = TRUE),
+    answer("Department E.", message = "Try again!"),
+    answer("Department F.", correct = TRUE)
+    ), 
+  caption = "")
 ```
 
-The question above can be answered by rerunning the the above code without the filter 'Gender == "Male" '. The result of this updated analysis is available in your workspace as perc_admit_by_dept. Please inspect this table to answer the question
-
-```{r gender-male4, exercise=TRUE, exercise.setup="prepare-gender3"}
 
 
-
-```
 
 ### Recap: Simpson's paradox
 

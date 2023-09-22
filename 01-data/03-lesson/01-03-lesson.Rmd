@@ -5,7 +5,6 @@ output:
     progressive: true
     allow_skip: true
 runtime: shiny_prerendered
-
 ---
 
 ```{r setup, include=FALSE}
@@ -99,7 +98,6 @@ hash_encoder_ui <- {
 }
 ```
 
-
 ## Sampling strategies
 
 In this section, we discuss why and how to sample data.
@@ -107,7 +105,7 @@ In this section, we discuss why and how to sample data.
 In the previous lesson, when we defined observational studies and experiments, we mentioned working with samples from the population. But why do we sample in the first place? Why not try to collect data from the entire population of interest? Well, you could try, that is, try to take a census, but it isn't easy.
 
 ```{r quiz-why-not-census}
-question_checkbox("Why not take a census?", 
+question_checkbox("Why would a sample be preferable to a census?", 
          allow_retry = TRUE, 
          random_answer_order = TRUE,
          answer("Cost-Effectiveness and Time Efficiency: Conducting a census involves collecting data from an entire population, which can be time-consuming and expensive. Sampling, on the other hand, involves collecting data from a smaller subset of the population, which is generally more cost-effective.", correct = TRUE), 
@@ -118,17 +116,6 @@ question_checkbox("Why not take a census?",
          )
 
 ```
-
-
-### Why not take a census?
-
-First, taking a census requires a lot more resources than collecting data from a sample of the population.
-
-Second, certain individuals in your population might be hard to locate or collect data from. If these individuals that are missed in the census are different from those in the rest of the population, the census data will be biased. For example, in the US census, undocumented immigrants are often not recorded properly since they tend to be reluctant to fill out census forms with the concern that this information could be shared with immigration. However, these individuals might have characteristics different than the rest of the population and hence, not getting information from them might result in unreliable data from geographical regions with high concentrations of undocumented immigrants.
-
-Lastly, populations are constantly changing. Even if you do have the required resources and manage to collect data from everyone in the population, tomorrow your population will be different and so the hard work required to collect such data may not pay off.
-
-If you think about it, sampling is actually quite natural.
 
 ### Sampling is natural
 
@@ -146,92 +133,69 @@ On the other hand, if you first stir the soup thoroughly before you taste, your 
 
 Sampling data is a bit different than sampling soup though. So next, we'll introduce a few commonly used sampling methods: simple random sampling, stratified sampling, cluster sampling, and multistage sampling.
 
-### Simple random sample
++---------------------------------------------------------------------+---------------------------------------------------------------------+
+| ![Random sample](images/random-sample.png){width="100%"}\           | ![Cluster sampling](images/cluster-sample.png){width="100%"}\       |
+| Random sampling                                                     | Cluster sampling                                                    |
++---------------------------------------------------------------------+---------------------------------------------------------------------+
+| ![Stratified sampling](images/stratified-sample.png){width="100%"}\ | ![Multistage sampling](images/multistage-sample.png){width="100%"}\ |
+| Stratified sampling                                                 | Multistage sampling                                                 |
++---------------------------------------------------------------------+---------------------------------------------------------------------+
 
-In simple random sampling, we randomly select cases from the population, such that each case is equally likely to be selected. This is similar to randomly drawing names from a hat.
-
-![](images/random-sample.png){width="70%"}
-
-### Stratified sample
-
-In stratified sampling, we first divide the population into homogeneous groups, called strata, and then we randomly sample from within each stratum. For example, if we wanted to make sure that people from low, medium, and high socioeconomic status are equally represented in a study, we would first divide our population into three groups as such and then sample from within each group.
-
-![](images/stratified-sample.png){width="70%"}
-
-
-### Cluster sample
-
-In cluster sampling, we divide the population into clusters, randomly sample a few clusters, and then sample all observations within these clusters. The clusters, unlike strata in stratified sampling, are heterogeneous within themselves and each cluster is similar to the others, such that we can get away with sampling from just a few of the clusters.
-
-![](images/cluster-sample.png){width="70%"}
-
-
-### Multistage sample
-
-Multistage sampling adds another step to cluster sampling. Just like in cluster sampling, we divide the population into clusters, randomly sample a few clusters, and then we randomly sample observations from within those clusters.
-
-![](images/multistage-sample.png){width="70%"}
-
-Cluster and multistage sampling are often used for economical reasons. For example, one might divide a city into geographic regions that are on average similar to each other and then sample randomly from a few randomly picked regions in order to avoid traveling to all regions.
-
-Time to put these concepts into practice!
-
-### Sampling strategies, determine which
-
-A consulting company is planning a pilot study on marketing in Boston. They identify the zip codes that make up the greater Boston area, then sample 50 randomly selected addresses from each zip code and mail a coupon to these addresses. They then track whether the coupon was used in the following month.
-
-```{r quiz-sampling-strategies-determine-wich}
+```{r quiz-sampling}
 quiz(
-  question(
-    "What sampling strategy has this company used?", 
-    correct = "Nice! Let's continue to the next exercise.", 
-    allow_retry = TRUE,
-    answer("Simple random sample", message = "Try again. The company is dividing the Boston area by zip code."),
-    answer("Stratified sample", correct = TRUE),
-    answer("Cluster sample", message = "Hmm, not quite. The company isn't sampling all the houses in each zip code."), 
-    answer("Multistage sample", message = "Not quite! The company is sampling 50 addresses from each zip code.") ), 
+  question("Randomly select cases from the population, such that each case is equally likely to be selected.", allow_retry = TRUE,
+           random_answer_order = TRUE,
+    answer("Random sampling", correct = TRUE),
+    answer("Stratified sampling"),
+    answer("Cluster sampling", message = "Try again!"),
+    answer("Multistage sampling", message = "Try again!")
+    ),
+  question("First divide the population into homogeneous groups (aka strata), and then sample randomly from within each stratum. For example, if we wanted to make sure that people from low, medium, and high socioeconomic status are equally represented in a study, we would first divide our population into three groups and then sample from within each group.", allow_retry = TRUE,
+           random_answer_order = TRUE,
+    answer("Random sampling"),
+    answer("Stratified sampling", correct = TRUE),
+    answer("Cluster sampling", message = "Try again!"),
+    answer("Multistage sampling", message = "Try again!")
+    ),
+  question("We divide the population into heterogenous groups (aka clusters), randomly choose a few clusters, and then sample all observations within these clusters", allow_retry = TRUE,
+           random_answer_order = TRUE,
+    answer("Random sampling"),
+    answer("Stratified sampling"),
+    answer("Cluster sampling", correct = TRUE),
+    answer("Multistage sampling", message = "Try again!")
+    ),
+  question("Divide the population into (heterogenous) clusters, randomly sample a few clusters, and then we randomly sample observations from within those clusters. For example, one might divide a city into geographic regions that are on average similar to one other and then sample randomly from a few randomly picked regions in order to avoid traveling to all regions.", allow_retry = TRUE,
+           random_answer_order = TRUE,
+    answer("Random sampling"),
+    answer("Stratified sampling"),
+    answer("Cluster sampling"),
+    answer("Multistage sampling", correct = TRUE)
+    ),
   caption = "")
+
 ```
 
-### Sampling strategies, choose worst
-
-A school district has requested a survey be conducted on the socioeconomic status of their students. Their budget only allows them to conduct the survey in some of the schools, hence they need to first sample a few schools. 
-
-Students living in this district generally attend a school in their neighbourhood. The district is broken into many distinct and unique neighbourhoods, some including large single-family homes and others with only low-income housing. 
-
-```{r quiz-sampling-strategies-choose-worst}
-quiz(
-  question("Which approach would likely be the **least effective** for selecting the schools where the survey will be conducted?", 
-           correct = "Nice job! This sampling strategy would be a bad idea because each neighborhood has a unique socioeconomic status. A good study would collect information about every neighborhood.", 
-           allow_retry = TRUE,
-    answer("Simple random sample", message = "Incorrect!"),
-    answer("Stratified sampling, where each stratum is a neighborhood", message = "Try again. Remember, the socioeconomic status of each neighborhood is unique."), 
-    answer("Cluster sampling, where each cluster is a neighborhood", correct = TRUE) ), 
-  caption = "")
-```
+Cluster and multistage sampling are often used for economical reasons.
 
 ## Sampling in R
 
-In this section, we'll practice sampling in R.
-
-Suppose we want to collect data from counties in the United States, but we do not have the resources to obtain these data from all counties. Conveniently, however, we do have a list of all counties. This is publicly available information and is contained in the `county` dataset in the **usdata** package. You can read more about the data [here](https://openintrostat.github.io/usdata/reference/county.html). 
+Suppose we want to collect data from counties in the United States, but we do not have the resources to obtain these data from all counties. Conveniently, however, we do have a list of all counties. This is publicly available information and is contained in the `county` dataset in the **usdata** package. You can read more about the data [here](https://openintrostat.github.io/usdata/reference/county.html).
 
 ### Setup
 
 So, let's start by loading the necessary packages with the `library()` function. We need the **usdata** package for the relevant data frame and the **tidyverse** package for the sampling and grouping functions we'll introduce shortly.
 
-```{r load-packages, exercise=TRUE}
+```{r load-packages, echo=TRUE}
 library(usdata)
 library(tidyverse)
 ```
 
 Next we'll work with the `county` data from the usdata package.
 
-This data frame contains data from counties in all 50 states in the United States. 
+This data frame contains data from counties in all 50 states in the United States.
 
--   You can observe the `county` dataset by uncommenting the first line in the following code (remove the first hashtag `#`). 
--   You can view the dataset's meta-data by uncommenting the second line (remove the second hashtag `#`).  
-
+-   You can observe the `county` dataset by uncommenting the first line in the following code (remove the first hashtag `#`).
+-   You can view the dataset's meta-data by uncommenting the second line (remove the second hashtag `#`).
 
 ```{r remove-dc, exercise=TRUE}
 # county
@@ -240,11 +204,11 @@ This data frame contains data from counties in all 50 states in the United State
 
 ### Simple random sample
 
-Suppose our limited resources require that we collect data from only _150_ of the over _3000_ counties in the United States.
+Suppose our limited resources require that we collect data from only *150* of the over *3000* counties in the United States.
 
 One option is to take a simple random sample. We will use the `slice_sample()` function in dplyr (a package included in the tidyverse) to do this.
 
-We start with the `county` data frame and pipe it into the `slice_sample()` function, setting the size (`n`) argument to 150. With the following code chunk, try the following: 
+We start with the `county` data frame and pipe it into the `slice_sample()` function, setting the size (`n`) argument to 150. With the following code chunk, try the following:
 
 -   Run as it is, and observe the results.
 -   Pipe the result into a `glimpse` function. Notice the difference between the results!
@@ -264,19 +228,15 @@ county |>
 
 ```
 
-###
+### 
 
-
-
-
-A quick `glimpse()` shows that there are indeed _150_ observations in this data frame. Note that your sample will look different than someone else's sample, even though you're running the exact same code. We are taking a random sample here, so your sample will be different than mine, just by random chance. However, the sample size should be the same since that is something we specified in the `slice_sample()` function.
+A quick `glimpse()` shows that there are indeed *150* observations in this data frame. Note that your sample will look different than someone else's sample, even though you're running the exact same code. We are taking a random sample here, so your sample will be different than mine, just by random chance. However, the sample size should be the same since that is something we specified in the `slice_sample()` function.
 
 ### State distribution in a simple random sample
 
 If our goal was to take a random sample of any 150 counties from the entire USA, we have accomplished our goal. But a random sample can take more counties from certain states and fewer from other. In other words, we may get a different number of counties from different states.
 
-We can confirm this by counting the number of counties per state. 
-To do so we group our data by state, then count the number of observations per state.
+We can confirm this by counting the number of counties per state. To do so we group our data by state, then count the number of observations per state.
 
 ```{r random-sample3, exercise=TRUE}
 # State distribution of SRS counties
@@ -285,7 +245,6 @@ county |>
   group_by(state) |>
   count()
 ```
-
 
 ```{r q-group-by}
 question("What is the function of `group_by` in the code above? Try to remove it and run the code to see what happens.", 
@@ -297,17 +256,15 @@ question("What is the function of `group_by` in the code above? Try to remove it
     answer("Removing the `group_by` clause tells the `count` function to count the number of all the counties  in our sample", correct = TRUE))
 ```
 
-
-
-The resulting output shows that this sampling approach yielded data from less than _50_ states, some states are over-represented in our sample and some are under represented. The number of counties sampled varies from state to state.
+The resulting output shows that this sampling approach yielded data from less than *50* states, some states are over-represented in our sample and some are under represented. The number of counties sampled varies from state to state.
 
 If we instead want to sample three counties per state to make up our sample of 150 counties, we should use stratified sampling.
 
 ### Stratified sample
 
-The code looks very similar to how we selected the simple random sample, except that *before* sampling we __first__ group by state and __then sample__ three observations per group.
+The code looks very similar to how we selected the simple random sample, except that *before* sampling we **first** group by state and **then sample** three observations per group.
 
-A quick glimpse at the resulting data frame confirms that we indeed have _150_ observations in this sample. In the following code do the following: 
+A quick glimpse at the resulting data frame confirms that we indeed have *150* observations in this sample. In the following code do the following:
 
 -   Run it as is, checking how many counties you have from each state.
 -   Pipe the results into the `count(___)` clause to count the number of counties sampled in each state (you will need to remove the `#` hash signs)
@@ -328,8 +285,7 @@ county |>
   count(state)
 ```
 
-We can now see that from every state we have sampled exactly three counties.  
-
+We can now see that from every state we have sampled exactly three counties.
 
 Now it's your turn to take a sample!
 
@@ -339,19 +295,17 @@ Suppose we want to collect some data from a sample of eight states. A list of al
 
 The dplyr package and `us_regions` data frame have been loaded. Use the code below to `glimpse` to the structure of this dataset.
 
-
 ```{r us_regions, exercise=TRUE}
 # Simple random sample: states_srs
 glimpse(___)
 ```
-
 
 ```{r us_regions_solution}
 # Simple random sample: states_srs
 glimpse(us_regions)
 ```
 
-###
+### 
 
 You can see that the dataset `us_regions` has only two columns:
 
@@ -374,9 +328,6 @@ us_regions |>
   count(region)
 ```
 
-
-
-
 ### Exercise: Stratified sample in R
 
 In the previous exercise, we took a simple random sample of eight states. However, we did not have any control over how many states from each region got sampled. The goal of stratified sampling in this context is to have control over the number of states sampled from each region. Our goal for this exercise is to sample an equal number of states from each region.
@@ -390,14 +341,13 @@ question("What do we need to do in order to make sure two states are chosen from
 )
 ```
 
-###
+### 
 
+For this exercise you should use stratified sampling to select a total of eight states, two from each stratum, where each stratum is a region of the country. We can break this down into three steps:
 
-For this exercise you should use stratified sampling to select a total of eight states, two from each stratum, where each stratum is a region of the country. We can break this down into three steps: 
-
-1. group the dataset by region (using `group_by()`) 
-2. sample two states from each region (using `slice_sample(n=2)`)
-3. count the number of states from each region in your sample to confirm that each region is represented equally in your sample.
+1.  group the dataset by region (using `group_by()`)
+2.  sample two states from each region (using `slice_sample(n=2)`)
+3.  count the number of states from each region in your sample to confirm that each region is represented equally in your sample.
 
 ```{r stratified-sample4, exercise=TRUE}
 # Stratified sample
@@ -418,7 +368,6 @@ us_regions |>
 
 ### Exercise: Compare random sampling to stratified sampling
 
-
 ```{r quiz-compare-SRS-stratified-sample}
 quiz(
   question("Which method you implemented, simple random sampling or stratified sampling, ensured an equal number of states from each region?", correct = "Super! Simple random sampling would result in different amounts of data being sampled from each state.", allow_retry = TRUE,
@@ -428,7 +377,7 @@ quiz(
 
 ## Principles of experimental design
 
-In this section, we discuss principles of experimental design: _control, randomize, replicate, and block_.
+In this section, we discuss principles of experimental design: *control, randomize, replicate, and block*.
 
 To **control** means to compare the treatment of interest to a control group.
 
@@ -442,7 +391,6 @@ Let's discuss blocking a bit more.
 
 ### Design a study, with blocking
 
-
 We would like to design an experiment to investigate whether students learn the R language better in a traditional lecture based course or using an interactive online learning platform. Two courses that teach the exact same material are designed and the only difference between these courses is the method of delivery: traditional lecture or interactive online.
 
 We sample a group of students for our study that we will randomly assign to these two courses.
@@ -455,7 +403,7 @@ Then, we randomly assign individuals from each block into the two courses, ensur
 
 ![](images/blocking.png){width="50%"}
 
-In this experiment the _explanatory_ variable is the _course type_ lecture versus interactive online and the variable that we're _blocking_ for is _previous programming experience_.
+In this experiment the *explanatory* variable is the *course type* lecture versus interactive online and the variable that we're *blocking* for is *previous programming experience*.
 
 This way, if we find a difference in mastery of the R language between students in the two courses, we will be able to attribute it to the course type and can be assured that the difference isn't due to previous programming experience since both those with and without such experience were equally represented in the two treatment groups.
 
@@ -476,7 +424,7 @@ quiz(
 
 ### Experimental design terminology
 
-___ variables are conditions you can impose on the experimental units, while ___ variables are characteristics that the experimental units come with that you would like to control for.
+\_\_\_ variables are conditions you can impose on the experimental units, while \_\_\_ variables are characteristics that the experimental units come with that you would like to control for.
 
 ```{r quiz-experimental-desing-terminology}
 quiz(
@@ -489,7 +437,7 @@ quiz(
 
 ### Connect blocking and stratifying
 
-In random sampling, we use ___ to control for a variable. In random assignment, we use ___ to achieve the same goal.
+In random sampling, we use \_\_\_ to control for a variable. In random assignment, we use \_\_\_ to achieve the same goal.
 
 ```{r quiz-blocking-and-stratifying}
 quiz(
@@ -500,12 +448,9 @@ quiz(
     answer("confounding, blocking", message = "Try again!")), caption = "")
 ```
 
-
-
 ## Congratulations!
 
-You have successfully completed Lesson 3 in Tutorial 1: Introduction to data. 
-If you need to generate a hash for submission, click "Next Topic".
+You have successfully completed Lesson 3 in Tutorial 1: Introduction to data. If you need to generate a hash for submission, click "Next Topic".
 
 ```{r, child="../01-data-footer.rmd"}
 

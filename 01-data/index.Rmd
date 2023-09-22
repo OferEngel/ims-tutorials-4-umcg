@@ -60,21 +60,8 @@ In this tutorial, we focus on steps 1 and 2 of this process.
   * Use R to make a contingency table
   * `group_by()` third variable and make table again to demonstrate Simpson's paradox
 
-### 3 - [Sampling strategies and experimental design](`r glue("{shiny_url}01-03-lesson/")`)
 
-* Define simple random sample, stratified sample, cluster sample, multistage sample
-* Use R to obtain SRS and stratified sample
-	* `slice_sample()`
-	* `group_by()` |>  `slice_sample()`
-* Discuss benefits and drawbacks of choosing one sampling scheme over another
-* Identify the principles of experimental design 
-* Discuss the purpose of each principle
-* Use R to do random assignment and random assignment after blocking
-	* `slice_sample()`
-	* `group_by()` |>  `slice_sample()`
-	
-
-### 4 - [Case study](`r glue("{shiny_url}01-04-lesson/")`)
+### 3 - [Case study](`r glue("{shiny_url}01-04-lesson/")`)
 
 * Apply terminology, principles, and R code learned in this tutorial to a case study
 

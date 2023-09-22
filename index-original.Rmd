@@ -1,5 +1,5 @@
 ---
-title: "Medical Statistics - Resources"
+title: "Introduction to Modern Statistics Tutorials (UMCG FORK)"
 output: html_document
 params:
   shiny_url: "https://oferengel-posit.shinyapps.io/"
@@ -18,35 +18,15 @@ shiny_url <- params$shiny_url
 
 <img style="float: right; margin: 0px 0px 20px 20px" src="logo/umcg-openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
 
-
-### Preparation readings and videos
-
-
-
-### Tutorials
-
-The following tutorials are due on the Tuesday, a day before our first weekly sessions.  
-
--   [Week 1: Introduction to data](01-data/) - **deadline 03-Oct-23**
--   Week 2: Exploratory data analysis - **deadline 10-Oct-23**
--   Week 3: Simple linear least square regression **deadline 17-Oct-23**
--   Week 4: Multiple linear least square regression part I  **deadline 24-Oct-23**
--   Week 5: Multiple linear least square regression part II  **deadline 31-Oct-23**
--   Week 6: Generalized linear models **deadline 07-Nov-23**
--   Week 7: Probability and models with a continuous outcome **deadline 14-Nov-23**
--   Week 8: Models with a binary outcome **deadline 21-Nov-23**
--   Week 9: Survival analysis and review **deadline 28-Nov-23**
-
-
-### Labs
-
-All the labs can be found using [this link](https://posit.cloud/spaces/405625/join?access_code=j28ql511ZhH6WJAwNCNqoytYH5kqFhkFqALLvJQ2).
-
-
-### Acknowledgement
-
 Learnr tutorials supporting [OpenIntro::Introduction to Modern Statistics](https://openintro-ims.netlify.app/).
 Each tutorial corresponds to one part of the book and is comprised of multiple lessons for a total of 35 lessons that cover the entire content of the book.
+
+- [Tutorial 1. Introduction to data](01-data/)
+- [Tutorial 2. Exploratory data analysis](02-explore/)
+- [Tutorial 3. Regression modeling](03-model/)
+- [Tutorial 4. Foundations of inference](04-foundations/)
+- [Tutorial 5. Statistical inference](05-infer/)
+- [Tutorial 6. Inferential modeling](06-model-infer/)
 
 The originial tutorials were forked and adapted by [Ofer Engel](https://www.rug.nl/cf/university-college-fryslan/about-ucf/dr-ofer-engel?lang=en), the original tutorial content has been developed by [Mine Çetinkaya-Rundel](https://github.com/mine-cetinkaya-rundel), [Jo Hardin](https://github.com/hardin47), [Ben Baumer](https://github.com/beanumber), and [Andrew Bray](https://github.com/andrewpbray) and implemented in learnr with the help of [Yanina Bellini Saibene](https://github.com/yabellini), [Florencia D’Andrea](https://github.com/flor14), [Roxana Noelia Villafañe](https://github.com/data-datum), and [Allison Theobold](https://github.com/atheobold).
 

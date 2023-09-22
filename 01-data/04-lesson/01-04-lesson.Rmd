@@ -1,5 +1,5 @@
 ---
-title: "Introduction to data: 4 - Case study"
+title: "1.3 Case study"
 output: 
   learnr::tutorial:
     progressive: true
@@ -21,12 +21,22 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 # Used in some exercises
 # Recode cls_students as cls_type
 evals <- evals |>
-  mutate(cls_type = case_when(
-    cls_students <= 18                      ~ "small",
-    cls_students >= 19 & cls_students <= 59 ~ "midsize",
-    cls_students >= 60                      ~ "large"
-    )
-  )
+  # mutate(cls_type = case_when(
+  #   cls_students <= 18                      ~ "small",
+  #   cls_students >= 19 & cls_students <= 59 ~ "midsize",
+  #   cls_students >= 60                      ~ "large"
+  #   )
+  # ) |> 
+  select(course_id, 
+        prof_id, 
+        score, 
+        rank, 
+        ethnicity, 
+        gender, 
+        age, 
+        cls_perc_eval,
+        cls_students, 
+        bty_avg)
 
 # Hash generation helpers
 # Should ideally be loaded from the imstutorials package when it exists
@@ -92,7 +102,7 @@ encoder_logic <- function(strip_output = FALSE) {
 }
 
 hash_encoder_ui <- {
-  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID?"), renderText({
+  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID (Gebruikersnaam  s-/p-nummer)?"), renderText({
     input$caption
   }), )
 }
@@ -101,15 +111,15 @@ hash_encoder_ui <- {
 
 ## Case study
 
-In this last lesson of the tutorial, we will work on a case study, based on data from a study titled "Beauty in the Classroom".
+In this last lesson of the tutorial, we will work on a case study, based on data from a study titled "[Beauty in the Classroom](https://www.sciencedirect.com/science/article/abs/pii/S0272775704001165)".
 
-As you might know, many college courses conclude by giving students the opportunity to anonymously evaluate both the course and the instructor. However, the use of these student evaluations as an indicator of course quality and teaching effectiveness is often criticized because the measures may reflect the influence of non teaching related characteristics, such as the physical appearance of the instructor.
+ 
+College courses often conclude by giving students the opportunity to anonymously evaluate both the course and the instructor. The question that motivated this study was whether a teacher's attractiveness affects their anonymous evaluations.
 
 ![](images/evals-data.png){width="70%"}
 
-The data that we will be working with, which includes information on course evaluations as well as students' scoring of professors' physical attractiveness, was collected as part of a study conducted at University of Texas, Austin.
+The data in this case study consists of course evaluations as well as scoring of professors' physical attractiveness. The data was collected as part of a study conducted at University of Texas, Austin.
 
-In the following exercises, you will be asked to analyze these data with the eventual goal of investigating whether instructors who are viewed to be better looking receive higher instructional ratings. These exercises are designed to help you review the concepts and R syntax that you've learned in previous lessons of this tutorial.
 
 ## Exercise: Beauty in the classroom
 
@@ -121,12 +131,12 @@ Inspect the `evals` data frame using techniques you learned in previous lessons.
 
 Note that for the purposes of this analysis we have added an additional variable to the dataset, `cls_type`. This variable classifies classes as small, midsize, or large, depending on the number of students in the class. This was done using the following.
 
-```{r echo = TRUE}
-evals <- evals |>
+```{r echo = TRUE, eval=FALSE}
+evals |>
   mutate(cls_type = case_when(
-    cls_students <= 18                      ~ "small",
-    cls_students >= 19 & cls_students <= 59 ~ "midsize",
-    cls_students >= 60                      ~ "large"
+    cls_students <= 18 ~ "small",
+    cls_students <= 59 ~ "midsize",
+    cls_students >= 60 ~ "large"
     )
   )
 ```
@@ -151,18 +161,11 @@ quiz(
   question("What type of study is this?", correct = "How observant! It was an observational study.", allow_retry = TRUE,
     answer("Observational study", correct = TRUE),
     answer("Experiment", message = "Try again!")
-    ), caption = "")
-```
-
-### Sampling / experimental attributes
-
-```{r quiz-sampling-experimental-atributes}
-quiz(
-  question("The data from this study were gathered by ___.", correct = "Good!", allow_retry = TRUE,
-    answer("randomly sampling classes", correct = TRUE),
-    answer("randomly sampling students", message = "Try again!"),
-    answer("randomly assigning students to classes", message = "Nope!"),
-    answer("randomly assigning professors to students", message = "Incorrect!")
+    ), 
+  question("Each row (observation) in this data set represents _____.", correct = "Good!", allow_retry = TRUE,
+    answer("a class", correct = TRUE),
+    answer("a student", message = "Try again!"),
+    answer("a school", message = "Nope!")
     ), caption = "")
 ```
 
@@ -172,70 +175,51 @@ Let's take a closer look at each of the variables in the course evaluations data
 
 Remember that using the `glimpse()` function we can obtain a list of the variables and take a peek at the first few observations from each.
 
-```{r glimpse-evals, echo=TRUE}
+```{r glimpse-evals, exercise=TRUE}
+# Glimpse the data
+glimpse(___)
+```
+
+
+
+```{r glimpse-evals-solution}
 # Glimpse the data
 glimpse(evals)
 ```
+Besides two id columns, we have the following variables: 
 
-The first variable is the average evaluation score of the professor for a given course. Scores range between 1 and 5 with 1 being a poor evaluation and 5 being an excellent evaluation.
+-   `score` is the average evaluation score of the professor for a given course. Scores range between 1 and 5 with 1 being a poor evaluation and 5 being an excellent evaluation.
+-   The variables `rank`, `ethnicity`, `gender` and `age` are about the professor. Their rank (teaching faculty, tenure track, or tenured), Whether they are from a minority, whether they are male or female, and their age. 
+-   `cls_perc_eval` is the percent of students who completed the evaluations, number of students who completed the evaluations, 
+-   `cls_students` is the total number of students in the class, 
+-   `bty_avg` is the average attractiveness score of the professors in the sample. This was determined by six students who were provided photos of the professors to rate, 3 female students and 3 male students. In their scoring 1 indicates a low attractiveness score and 10 a high attractiveness score.
 
-We are also given the following additional information:
-
-* Whether the professor is a teaching faculty, tenure track faculty, or tenured faculty,
-* Whether they are from a minority group or not.
-* Whether they are male or female.
-* Whether the language of instruction at the university where they received their education was English or not.
-* The age of the professor.
-
-Additionally, we also have a series of variables on the attributes of the class the evaluations came from, such as, percent of students who completed the evaluations, number of students who completed the evaluations, and the total number of students in the class, as well as the level of the course, whether a single professor or multiple professors taught it, and whether the course was a single credit or multi-credit course
-
-The attractiveness score of the professors in the sample were determined by six students who were provided photos of the professors to rate. These students were comprised of 1 female student who is lower level, that is first year or sophomore, indicated with f1lower, two female students who are upper level, that is junior or senior, 1 male student who is lower level, and two male students who are upper level. In their scoring 1 indicates a low attractiveness score and 10 a high attractiveness score.
-
-The average of these scores for each professor is also given.
-
-These last two variables in the dataset are about the professors' photos: whether the professor was wearing a formal outfit and whether the picture was black and white or in color.
-
-Now that you are more familiar with the variables in the dataset, you will be asked to determine their types.
-
-### Identify variable types
-
-It's always useful to start your exploration of a dataset by identifying variable types. The results from this exercise will help you design appropriate visualizations and calculate useful summary statistics later in your analysis.
-
-#### Instruction
-
-- Explore the `evals` data once again with the following goals in mind: (1) Identify each variable as numerical or categorical. (2) If numerical, determine if it is discrete or continuous. (3) If categorical, determine if it is ordinal or not.
-
-- We've created a vector of variable names in the editor called `cat_vars`. To test your understanding of the data, remove the names of any variables that are *not* categorical.
-
-```{r inspect-variable-types, exercise=TRUE}
-# Inspect variable types
-
-
-# Remove non-factor variables from the vector below
-cat_vars <- c("score", "rank", "ethnicity", "gender", "language", "age",
-              "cls_students", "cls_level", "cls_profs", "cls_credits",
-              "bty_avg", "pic_outfit", "pic_color")
+```{r quiz-which-cat}
+question("Which of the variables are categorical?", allow_retry = TRUE,
+    answer("score"), 
+    answer("rank", correct = TRUE),
+    answer("ethnicity", correct = TRUE), 
+    answer("gender", correct = TRUE), 
+    answer("age"), 
+    answer("cls_perc_eval"), 
+    answer("cls_students"), 
+    answer("bty_avg")
+    )
 ```
 
-```{r inspect-variable-types-solution}
-# Inspect variable types
-glimpse(evals)
-
-# Remove non-factor variables from the vector below
-cat_vars <- c("rank", "ethnicity", "gender", "language",
-              "cls_level", "cls_profs", "cls_credits",
-              "pic_outfit", "pic_color")
-```
 
 ### Recode a variable
 
 The `cls_students` variable in `evals` tells you the number of students in the class. Suppose instead of the exact number of students, you're interested in whether the class is 
 
-* `"small"` (18 students or fewer), 
-* `"midsize"` (19 - 59 students), or 
-* `"large"` (60 students or more).
+*   `"small"` (18 students or fewer), 
+*   `"midsize"` (19 - 59 students), or 
+*   `"large"` (60 students or more).
 
-- Recode the `cls_students` variable into a new variable, `cls_type`, using `case_when()`. This new variable should have three levels  as  described above. Save the resulting data frame (with the new variable) as `evals`. 
+
+Recode the `cls_students` variable into a new variable, `cls_type`, using `case_when()`. This command is part of the tidyverse package. If you are unsure how to use the clause, try searching it on the web in combination with `tidyverse`.
+
+This new variable should have three levels  as  described above. Save the resulting data frame (with the new variable) as `evals`. 
 
 - *What type of variable is `cls_type`?*
 
@@ -243,12 +227,59 @@ The `cls_students` variable in `evals` tells you the number of students in the c
 # Recode cls_students as cls_type
 evals <- evals |>
   mutate(
-    ___ = case_when(
+    cls_type = case_when(
       ___ ~ "small",
       ___ ~ "midsize",
       ___ ~ "large"
     )
   )
+
+evals
+```
+
+
+
+```{r type-of-variable-hint-1}
+# Recode cls_students as cls_type
+evals <- evals |>
+  mutate(
+    cls_type = case_when(
+      cls_students <= ___ ~ "small",
+      ___ <= ___ ~ "midsize",
+      ___ >= ___ ~ "large"
+    )
+  )
+
+evals
+```
+
+
+```{r type-of-variable-hint-2}
+# Recode cls_students as cls_type
+evals <- evals |>
+  mutate(
+    cls_type = case_when(
+      cls_students <= 18 ~ "small",
+      ___ <= ___ ~ "midsize",
+      ___ >= ___ ~ "large"
+    )
+  )
+
+evals
+```
+
+```{r type-of-variable-hint-3}
+# Recode cls_students as cls_type
+evals <- evals |>
+  mutate(
+    cls_type = case_when(
+      cls_students <= 18 ~ "small",
+      cls_students <= 59 ~ "midsize",
+      ___ >= ___ ~ "large"
+    )
+  )
+
+evals
 ```
 
 ```{r type-of-variable-solution}
@@ -256,22 +287,41 @@ evals <- evals |>
 evals <- evals |>
   mutate(
     cls_type = case_when(
-      cls_students <= 18                      ~ "small",
-      cls_students >= 19 & cls_students <= 59 ~ "midsize",
-      cls_students >= 60                      ~ "large"
+      cls_students <= 18 ~ "small",
+      cls_students <= 59 ~ "midsize",
+      cls_students >= 60 ~ "large"
     )
   )
+
+evals
 ```
+
+```{r prepare_classtype, echo=FALSE, include=FALSE}
+# Recode cls_students as cls_type
+evals <- evals |>
+  mutate(
+    cls_type = case_when(
+      cls_students <= 18 ~ "small",
+      cls_students <= 59 ~ "midsize",
+      cls_students >= 60 ~ "large"
+    )
+  )
+
+evals
+```
+
+To see the `cls_type` variable, you will need to scroll to the right most column. The new variable is added at the very end of the dataset.
+
 
 ### Create a scatterplot
 
 The `bty_avg` variable shows the average beauty rating of the professor by the six students who were asked to rate the attractiveness of these faculty. The `score` variable shows the average professor evaluation score, with 1 being *very unsatisfactory* and 5 being *excellent*.
 
-- Use `ggplot()` to create a scatterplot displaying the relationship between these two variables. 
-
+-   Use `ggplot()` to create a scatterplot displaying the relationship between these two variables. 
+-   To create a scatter plot, add a `+ geom_point()` layer   
 - *How would you describe the relationship apparent in this visualization?*
 
-```{r create-scatterplot, exercise=TRUE}
+```{r create-scatterplot, exercise=TRUE,  exercise.setup="prepare_classtype"}
 # Scatterplot of score vs. bty_avg
 ___(evals, ___) +
   ___
@@ -283,15 +333,15 @@ ggplot(evals, aes(x = bty_avg, y = score)) +
   geom_point()
 ```
 
-### Create a scatterplot, with an added layer
+### Create a scatterplot, with an added aesthetic
 
 Suppose you are interested in evaluating how the relationship between a professor's attractiveness and their evaluation score varies across different class types (small, midsize, and large).
 
-- Recreate your visualization from the previous exercise, but this time color the points by class type.
+- Recreate your visualization from the previous exercise, but this time color the points by class type (you will need to map the `color` of the point to the variable `cls_type`)
 
 - *How would you describe the relationship apparent in this visualization?*
 
-```{r scatterplot-added-layer, exercise=TRUE}
+```{r scatterplot-added-layer, exercise=TRUE,  exercise.setup="prepare_classtype"}
 # Scatterplot of score vs. bty_avg colored by cls_type
 ___(evals, ___) +
   ___
