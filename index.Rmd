@@ -21,7 +21,7 @@ shiny_url <- params$shiny_url
 
 ### Preparation readings and videos
 
-
+You will find all the readings and lectures in your the [Perusall course home](https://app.perusall.com/courses/cpe-medical-statistics).  
 
 ### Tutorials
 
@@ -43,7 +43,16 @@ The following tutorials are due on the Tuesday, a day before our first weekly se
 All the labs can be found using [this link](https://posit.cloud/spaces/405625/join?access_code=j28ql511ZhH6WJAwNCNqoytYH5kqFhkFqALLvJQ2).
 
 
-### Acknowledgement
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+### Acknowledgements
 
 Learnr tutorials supporting [OpenIntro::Introduction to Modern Statistics](https://openintro-ims.netlify.app/).
 Each tutorial corresponds to one part of the book and is comprised of multiple lessons for a total of 35 lessons that cover the entire content of the book.
