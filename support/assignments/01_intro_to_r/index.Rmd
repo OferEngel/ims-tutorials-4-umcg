@@ -1,5 +1,5 @@
 ---
-title: "Introduction to R and RStudio"
+title: "Lab 1: Introduction to R and RStudio"
 output:
   html_document:
     css: ../lab.css
@@ -53,10 +53,7 @@ knitr::include_graphics("img/global-options.jpg")
 
 ### R Packages
 
-`R` is an open-source programming language, meaning that users can contribute packages that make our lives easier, and we can use them for free. For this lab, and many others in the future, we will use the following:
-
--   The **tidyverse** "umbrella" package which houses a suite of many different `R` packages: for data wrangling and data visualization
--   The **openintro** `R` package: for data and custom functions with the OpenIntro resources
+`R` is an open-source programming language, meaning that users can contribute packages that make our lives easier, and we can use them for free. For this lab we will use the **tidyverse** an "umbrella" package which houses a suite of many different `R` packages: for data wrangling and data visualization
 
 In the lower right hand corner click on the *Packages* tab. Type the name of each of these packages (tidyverse, openintro) into the search box to see if they have been installed. 
 
@@ -69,32 +66,37 @@ knitr::include_graphics("img/packages-tidy.jpg")
 
 ::: {#boxedtext}
 
-If one or both of these packages do not appear when you type in their name, install the missing package by copying and pasting or typing the following two lines of code into the console of your RStudio session. Be sure to press enter/return after each line of code.
+If your package does not appear when you type its name, you will need to install the missing package by typing the following line of code into the console of your RStudio session. Be sure to press enter/return after each line of code.
 
 ```{r install-packages, message = FALSE, eval = FALSE}
 install.packages("tidyverse")
-install.packages("openintro")
 ```
 
 :::
 
 
-You only need to *install* packages once, but you need to *load* them each time you relaunch RStudio. We load packages with the `library` function. Copy and paste or type the the following two lines in your console to load the tidyverse and openintro packages into your working environment.
+You only need to *install* packages once, but you need to *load* them each time you relaunch RStudio. We load packages with the `library` function. Type the the following line in your console to load the tidyverse package into your working environment.
 
-```{r load-packages, message = FALSE}
+```{r load-package, eval=FALSE}
 library(tidyverse)
-library(openintro)
 ```
 
-We are choosing to use the tidyverse package because it consists of a set of datasets and packages necessary for different aspects of working with data, anything from loading data to wrangling data to visualizing data to analyzing data. Additionally, these packages share common philosophies and are designed to work together. You can find more about the packages in the tidyverse at [tidyverse.org](http://tidyverse.org/).
+We are choosing to use the tidyverse package because it will help us with loading data, wrangling, visualizing and analyzing it. You can find more about the packages in the tidyverse at [tidyverse.org](http://tidyverse.org/).
 
 ### Creating a reproducible lab report
 
-We will be using R Markdown to create reproducible lab reports. 
+We will be using R Markdown to create reproducible lab reports. The file that we use to create the report has the extension `*.rmd`, and consists of three different parts: 
 
-Any code you want to keep in your report must be written in the RMarkdown file and not in the console, because the code in the console is not saved between sessions. 
+```{r img-Rmarkdown-parts, results='asis', echo=FALSE}
+knitr::include_graphics("img/Rmarkdown-file.jpg")
+```
 
-Potentially the most important feature of R Markdown files is that they allow for us to embed our `R` code within a written report. In an R Markdown file, `R` code appears in a gray box, which we call "code chunks." The R Markdown file knows that the gray box contains `R` code because it begins with three tick marks (\`\`\`), followed by two curly braces that contain a lowercase letter r ({r}). You've already seen this above!
+-   **The YAML:** This is the header of the file, and it includes the file's meta-data: information about the appearance of the final report. Go ahead and put your name(s) in the YAML in the appropriate place.
+-   **The Markdown:** This is the formatted text that goes into the report, and is like the text you would write in a word document, for example
+-   **The code chunks:** In an R Markdown file, `R` code appears in a gray box, which we call "code chunks." The R Markdown file knows that the gray box contains `R` code because it begins with three tick marks (\`\`\`), followed by two curly braces that contain a lowercase letter r ({r}). 
+
+
+Potentially the most important feature of R Markdown files is that they allow for us to embed our `R` code within a written report. 
 
 Instead of typing our `R` code into the console, we encourage you to type any code you want to save in the `R` code chunk associated with each problem. You can execute the `R` code you type in these code chunks similar to how you typed code into the console and pressed enter/return. Within the code chunk there are a few ways to execute lines of `R` code: 
 
