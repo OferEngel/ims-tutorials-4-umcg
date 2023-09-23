@@ -2,19 +2,19 @@
 title: "CPE - Med Stat: Assignment 01"
 author: "Your name here"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     toc: yes
     toc_float: yes
     theme: flatly
     df_print: paged
-  pdf_document:
-    toc: yes
 editor: visual
 editor_options:
   chunk_output_type: console
 ---
 
-Before you start the tutorial, please check out [this web site](https://rmarkdown.rstudio.com/lesson-1.html) and watch the video in it.  
+Before you start the tutorial, please check out [this web site](https://rmarkdown.rstudio.com/lesson-1.html) and watch the video in it.
 
 In this tutorial, you will learn how to:
 

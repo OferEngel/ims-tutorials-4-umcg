@@ -101,7 +101,7 @@ You will find all the readings and lectures in your the [Perusall course home](h
 
 ### Tutorials
 
-<img style="float: right; margin: 0px 0px 20px 20px" src="logo/umcg-openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
+<img style="float: right; margin: 0px 0px 20px 20px" src="logo/umcg.png" alt="Tutorial illustration" width="20%" height="20%">
 
 The following tutorials are due on the Tuesday, a day before our first weekly sessions.  
 
