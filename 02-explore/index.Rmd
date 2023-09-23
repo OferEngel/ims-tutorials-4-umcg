@@ -16,7 +16,7 @@ library(glue)
 shiny_url <- params$shiny_url
 ```
 
-<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg-openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
+<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg.png" alt="Tutorial illustration" width="20%" height="20%">
 
 
 
