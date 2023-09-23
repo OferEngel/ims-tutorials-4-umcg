@@ -16,7 +16,7 @@ library(glue)
 shiny_url <- params$shiny_url
 ```
 
-<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg-openintro-hex.png" alt="Tutorial illustration" width="250" height="300">
+<img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg.png" alt="Tutorial illustration" width="20%" height="20%">
 
 ## Tutorial description
 
@@ -65,21 +65,12 @@ In this tutorial, we focus on steps 1 and 2 of this process.
 
 * Apply terminology, principles, and R code learned in this tutorial to a case study
 
-<!-- ## Instructor -->
 
-<!-- <img style="float: left; margin: 0px 20px 20px 0px" src="../instructor-photos/mine.png" alt="Mine Çetinkaya-Rundel" width="150" height="150"> -->
 
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
+### Acknowledgements
 
-#### Instructor: Mine Çetinkaya-Rundel
+The tutorials in this course are adopted from the learnr tutorials supporting [OpenIntro::Introduction to Modern Statistics](https://openintro-ims.netlify.app/).
 
-Mine Çetinkaya-Rundel is Associate Professor of the Practice position at the Department of Statistical Science at Duke University and Data Scientist and Professional Educator at RStudio.
-Mine's work focuses on innovation in statistics and data science pedagogy, with an emphasis on computing, reproducible research, student-centered learning, and open-source education as well as pedagogical approaches for enhancing retention of women and under-represented minorities in STEM.
-Mine works on integrating computation into the undergraduate statistics curriculum, using reproducible research methodologies and analysis of real and complex datasets.
-She also organizes [ASA DataFest](https://ww2.amstat.org/education/datafest/), an annual two-day competition in which teams of undergraduate students work to reveal insights into a rich and complex dataset.
-Mine has been working on the [OpenIntro](openintro.org) project since its founding and as part of this project she co-authored four open-source introductory statistics textbooks (including this one!).
-She is also the creator and maintainer of [datasciencebox.org](https://datasciencebox.org/) and she teaches the popular Statistics with R MOOC on Coursera.
+
+The [original tutorials](https://openintrostat.github.io/ims-tutorials/) were forked and adapted by [Ofer Engel](https://www.rug.nl/cf/university-college-fryslan/about-ucf/dr-ofer-engel?lang=en), their content was developed by [Mine Çetinkaya-Rundel](https://github.com/mine-cetinkaya-rundel), [Jo Hardin](https://github.com/hardin47), [Ben Baumer](https://github.com/beanumber), and [Andrew Bray](https://github.com/andrewpbray) and implemented in learnr with the help of [Yanina Bellini Saibene](https://github.com/yabellini), [Florencia D’Andrea](https://github.com/flor14), [Roxana Noelia Villafañe](https://github.com/data-datum), and [Allison Theobold](https://github.com/atheobold).
+
