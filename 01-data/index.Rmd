@@ -33,7 +33,6 @@ In this tutorial, we focus on steps 1 and 2 of this process.
 
 * Load and view a dataset in R and distinguish between various variable types.
 * Classify a study as observational or experimental, and determine whether the study's results can be generalized to the population and whether they suggest correlation or causation between the variables studied.
-* Distinguish between various sampling strategies and recognize the benefits and drawbacks of choosing one strategy over another.
 * Identify the principles of experimental design and recognize their purposes.
 * Apply terminology and principles to a case study.
 

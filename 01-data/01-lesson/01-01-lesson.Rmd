@@ -161,29 +161,47 @@ library(openintro)
 
 ## Data in R
 
-In this lesson, we'll begin by introducing the terminology of datasets and data
-frames in R.
-
-One of the datasets that we will work with in this tutorial comes from the High
-School and Beyond Survey, which is a survey conducted on high school seniors by
-the National Center of Education Statistics.
+The first dataset we explore comes from the [High School and Beyond Survey](https://nces.ed.gov/surveys/hsb/),  a survey conducted on high school seniors by the National Center of Education Statistics.
 
 The data are organized in what we call a *data frame*, where each row represents
-an *observation* or a *case* and each column represents a *variable*. If you
-ever use spreadsheets, such as a Google sheet or Excel, this representation
-should be familiar to you.
+an *observation* or a *case* and each column represents a *variable*. 
 
-In this lesson we'll work with the High School and Beyond dataset, stored in the
-openintro package. The data are stored in a **data frame** called `hsb2`. You
-can read more about this dataset
-[here](http://openintrostat.github.io/openintro/reference/hsb2.html). Below is a
-preview of the dataset. You can use the arrow on the right hand side to scroll
-through the variables, and the numbers on the bottom to see different rows in
-the dataset.
+In this lesson we'll work with the High School and Beyond dataset, stored in the openintro package. The data are stored in a **data frame** called `hsb2`. You can read more about this dataset [here](http://openintrostat.github.io/openintro/reference/hsb2.html). 
 
-```{r print-hsb2}
+To preview the data, simply type `hsb2` into the code chunk below and press run code.
+
+
+
+```{r print-hsb2, exercise=TRUE}
+
+```
+
+
+```{r print-hsb2-solution}
 hsb2
 ```
+
+Use the arrow on the right hand side to scroll through the columns, and the numbers on the bottom to see different rows in the dataset. 
+
+```{r quiz-rows-columns}
+quiz(
+  caption="",
+  question("how many observations and how many variables are in the `hsb2` dataset? ", allow_retry = TRUE, random_answer_order = TRUE,
+    answer("200 variables", message = "Nope, try again!"),
+    answer("200 observations", correct = TRUE),
+    answer("11 variables", correct = TRUE),
+    answer("11 observations", message = "Nope, try again!")
+), 
+  question("What are the names of the last three variables in the dataset? ", allow_retry = TRUE, random_answer_order = TRUE,
+      answer("`id`, `gender`, `race`", message = "Nope, try using the arrow on the top right hand side to scroll through the columns"),
+      answer("`math`, `science` and `socst`", correct = TRUE),
+      answer(" `write`, `math` and `science`", message = "Nope, try using the arrow on the top right hand side to scroll through the columns"),
+      answer(" `race`, `ses` and `schtyp`", message = "Nope, try using the arrow on the top right hand side to scroll through the columns")
+  )
+)
+```
+
+
 
 ### Loading data into R
 
@@ -205,17 +223,6 @@ Data Science](https://r4ds.had.co.nz/data-import.html) by Grolemund and Wickham.
 ```{r img-tidy, echo=FALSE, out.width="80%"}
 knitr::include_graphics("images/tidydata_obs_var.jpg")
 ```
-
-
-```{r quiz-obs-vars}
-question("how many observations and how many variables are in the `hsb2` dataset? ", allow_retry = TRUE, random_answer_order = TRUE,
-    answer("200 variables", message = "Nope, try again!"),
-    answer("200 observations", correct = TRUE),
-    answer("11 variables", correct = TRUE),
-    answer("11 observations", message = "Nope, try again!")
-)
-```
-
 
 
 ### Take a peek

@@ -1,5 +1,5 @@
 ---
-title: "2.1 - Exploring categorical data"
+title: "Exploratory data analysis: 1 - Exploring categorical data"
 output: 
   learnr::tutorial:
     progressive: true

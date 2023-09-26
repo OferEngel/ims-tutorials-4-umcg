@@ -97,11 +97,21 @@ hash_encoder_ui <- {
 
 ## Observational studies and experiments
 
-In this lesson, we discuss two types of studies commonly used in scientific research: observational studies and experiments. In particular, we will outline how to identify them and what the type of study says about the scope of the inference we can make based on that study's results.
+Two types of studies commonly used in scientific research: observational studies and experiments. 
 
-In an *observational study*, researchers collect data in a way that does not directly interfere with how the data arise, in other words, they merely "observe". And based on an observational study we can only establish an association between the *explanatory* and *response* variables.
+```{r quiz-obs-exp}
+quiz(
+  question("In this type of study, researchers simply record what already exists without influencing the data they collect. They study the  association between the *explanatory* and *response* variables. What type of study is this?", allow_retry = TRUE, random_answer_order = TRUE,
+    answer("Observational study", correct = TRUE),
+    answer("Experiment", message = "Try again!")
+), 
+  question("In this type of study, researchers randomly assign subjects to various treatments and can therefore establish causal connections between the *explanatory* and *response* variables. What type of study is this?", allow_retry = TRUE, random_answer_order = TRUE,
+    answer("Experiment", correct = TRUE),
+    answer("Observational study", message = "Try again!")
+), 
+caption = "")
+```
 
-In an *experiment*, on the other hand, researchers randomly assign subjects to various treatments and can therefore establish causal connections between the *explanatory* and *response* variables.
 
 Suppose we want to evaluate the relationship between using screens at bedtime such as a computer, tablet, or phone and attention span during the day. We can design this study as an observational study or as an experiment.
 
@@ -117,9 +127,9 @@ At the end, we compare the attention spans of the two groups.
 
 ![](images/design-experiment.png){width="70%"}
 
-Based on the observational study, even if we find a difference between the average attention span of these two groups of people, we can't attribute this difference solely to using screens because there may be other variables that we didn't control for in this study that contribute to the observed difference. For example, people who use screens at night might also be using screens for longer time periods during the day and their attention span might be affected by the daytime usage as well.
+Based on the observational study, even if we find a difference between the average attention span of these two groups of people, we can't attribute this difference solely to using screens because perhaps there is something else (perhaps a stressful job?) that causes them to use the screen at bedtime **and** causes them a shorter attention span. 
 
-However, in the experiment, such variables that might also contribute to the outcome, called confounding variables, are most likely represented equally in the two groups due to random assignment. Therefore, if we find a difference between the two averages, we can indeed make a causal statement attributing this difference to bedtime screen usage.
+This "something else" that contributes to the explanatory variable and to the outcome variable, is called confounding variables. In experiments, confounding variables are most likely represented equally in the two groups due to random assignment. Therefore, if we find a difference between the two averages, it cannot be due to the confounder and we can indeed make a causal statement attributing this difference to bedtime screen usage.
 
 Let's put these ideas into practice.
 
@@ -239,7 +249,7 @@ quiz(
 
 ## Simpson's paradox
 
-A new drug is offered to a group with risk of developing Coronary artery disease, and members of the group are followed for a number of years to see if they had an event. The results are shown in the table below.
+A new drug is offered to a group with risk of developing coronary artery disease, and members of the group are followed for a number of years to see their health outcomes. The results are shown in the table below.
 
 ![](images/simpson-drug.jpg){width="70%"}
 
@@ -247,18 +257,21 @@ A new drug is offered to a group with risk of developing Coronary artery disease
 quiz(
   caption = "",
   question(
-    "Based only on the information provided in the table, choose the correct statements:", allow_retry = TRUE, random_answer_order = TRUE, 
-    answer("Females taking the drug suffered worse health outcomes than females not taking the drug", correct = TRUE), 
-    answer("Males taking the drug suffered worse health outcomes than males not taking the drug", correct = TRUE), 
-    answer("Overall, those who took the drug suffered worse health outcomes than males not taking the drug"),
-    answer("Overall, males suffered worse health outcomes than females", correct = TRUE)
-    )
+    "Based only on the information provided in the table, choose the correct statements:", allow_retry = TRUE, random_answer_order = FALSE, 
+    answer("Each subject in the study is associated with three categorical variables: `sex` (male/female), `heart-attack` (yes/no) and `taking the drug` (yes/no)", correct = TRUE), 
+    answer("Among male participants, those who took the drug were less likely to get a heart attack than those who didn't"), 
+    answer("Among female participants, those who took the drug were more likely to get a heart attack than those who didn't", correct = TRUE),
+    answer("More females took the drug than males", correct = TRUE),
+    answer("Females are more prone to getting a heart attack than males"),
+    answer("A random person in this sample is more likely to have a heart attack if they took the drug"),
+    answer("The results of this trial seem to suggest that overall, taking the drug is associated with an increased rate of heart attack", correct = TRUE) 
+  )
 )
 ```
 
 ###
 
-The data presents a puzzling situation: If we look at the male and female subgroups, their members tend to fair worse when taking the drug, on average. But if we look overall, the average person in the sample appears to fair better if they do take the drug (only 18.3% heart attack) than if they do not take the drug (21.7% heart attack). 
+The data presents a puzzling situation: If we look at the male and female subgroups, their members tend to fair worse when taking the drug, on average. But if we look at the total numbers overall, the average person in the sample appears to fair better if they do take the drug (only 18.3% heart attack) than if they do not take the drug (21.7% heart attack). 
 
 Based on these data, would you advise the drug to be approved? Probably not!
 
@@ -370,7 +383,7 @@ ucb_admit |>
 
 ```
 
-For each group, we now have their proportion out of all applications. The proportions are 26.4%, 32.9%, 12.3% and 28.2%. These proportions add up to 100%.  
+For each group, we now have the proportion out of all applications. The proportions are 26.4% (proportion of admitted males), 32.9% (rejected males), 12.3% (admitted females) and 28.2% (rejected females). These proportions add up to 100%.  
 
 However, we are interested in the proportion of students admitted within each gender, not the proportion out of all applicants. To do this, we first need to group the data by gender, so that `sum(n)` will be calculated for males and females separately. Luckily, the `group_by()` function can do this grouping for us!
 
