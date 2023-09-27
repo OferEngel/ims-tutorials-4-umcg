@@ -97,7 +97,7 @@ hash_encoder_ui <- {
 
 ## Observational studies and experiments
 
-Two types of studies commonly used in scientific research: observational studies and experiments. 
+Two types of studies commonly used in scientific research: observational studies and experiments.
 
 ```{r quiz-obs-exp}
 quiz(
@@ -111,7 +111,6 @@ quiz(
 ), 
 caption = "")
 ```
-
 
 Suppose we want to evaluate the relationship between using screens at bedtime such as a computer, tablet, or phone and attention span during the day. We can design this study as an observational study or as an experiment.
 
@@ -127,7 +126,7 @@ At the end, we compare the attention spans of the two groups.
 
 ![](images/design-experiment.png){width="70%"}
 
-Based on the observational study, even if we find a difference between the average attention span of these two groups of people, we can't attribute this difference solely to using screens because perhaps there is something else (perhaps a stressful job?) that causes them to use the screen at bedtime **and** causes them a shorter attention span. 
+Based on the observational study, even if we find a difference between the average attention span of these two groups of people, we can't attribute this difference solely to using screens because perhaps there is something else (perhaps a stressful job?) that causes them to use the screen at bedtime **and** causes them a shorter attention span.
 
 This "something else" that contributes to the explanatory variable and to the outcome variable, is called confounding variables. In experiments, confounding variables are most likely represented equally in the two groups due to random assignment. Therefore, if we find a difference between the two averages, it cannot be due to the confounder and we can indeed make a causal statement attributing this difference to bedtime screen usage.
 
@@ -269,9 +268,9 @@ quiz(
 )
 ```
 
-###
+### 
 
-The data presents a puzzling situation: If we look at the male and female subgroups, their members tend to fair worse when taking the drug, on average. But if we look at the total numbers overall, the average person in the sample appears to fair better if they do take the drug (only 18.3% heart attack) than if they do not take the drug (21.7% heart attack). 
+The data presents a puzzling situation: If we look at the male and female subgroups, their members tend to fair worse when taking the drug, on average. But if we look at the total numbers overall, the average person in the sample appears to fair better if they do take the drug (only 18.3% heart attack) than if they do not take the drug (21.7% heart attack).
 
 Based on these data, would you advise the drug to be approved? Probably not!
 
@@ -299,7 +298,7 @@ quiz(
     answer("V2 is the explanatory and V1 is the outcome", correct = TRUE)
     ), 
   question(
-    "V1 - An animal's daily caloric intake<br/>V2 - The animal's body mass.", allow_retry = TRUE,
+    "In a herd of sheep, animals vary in terms of their: <br/>V1 - daily caloric intake<br/>V2 - Their body mass.", allow_retry = TRUE,
     answer("V1 is the explanatory and V2 is the outcome"), 
     answer("V2 is the explanatory and V1 is the outcome", correct = TRUE)
     )
@@ -322,9 +321,44 @@ Consider the eight dots in the scatter plot below (the points happen to fall on 
 
 ![](images/simpson-paradox-plot.png){width="50%"}
 
-We'll explore Simpson's paradox further with another dataset, which comes from a study carried out by the graduate Division of the University of California, Berkeley in the early 70's to evaluate whether there was a sex bias in graduate admissions. The data come from six departments. For confidentiality we'll call them A through F. The dataset contains information on whether the applicant identified as male or female, recorded as `Gender`, and whether they were admitted or rejected, recorded as `Admit`. First, we will evaluate whether the percentage of males admitted is indeed higher than females, overall. Next, we will calculate the same percentage for each individual department.
-
 ### Berkeley admission data
+
+We'll explore Simpson's paradox further with another dataset, which comes from a study carried out by the graduate Division of the University of California, Berkeley in the early 70's to evaluate whether there was a sex bias in graduate admissions. The data come from six departments. For confidentiality we'll call them A through F. The dataset contains information on whether the applicant identified as male or female, recorded as `Gender`, and whether they were admitted or rejected, recorded as `Admit`. 
+
+Use the code chunk below to explore the data-set `ucb_admit`. You can either type in the name of the data set and hit run code, or use `glimpse` to observe the results.
+
+
+```{r glimpse-ucb-admit, exercise=TRUE}
+
+```
+
+
+```{r glimpse-ucb-admit-solution}
+ucb_admit
+
+glimpse(ucb_admit)
+```
+
+
+```{r quiz-glimpse-ucb-admit}
+quiz(
+  caption = "",
+  question(
+    "Based only on the data set provided in the table, choose the correct statements:", allow_retry = TRUE, random_answer_order = TRUE, 
+    answer("The dataset consists of 4526 applicants.", correct = TRUE), 
+    answer("The dataset consists of 4526 students who were admitted to the University."),
+  answer("The dataset has three variables: `Admit`, `Gender`, `Dept`" , correct = TRUE),
+    answer("The dataset has three variables: `Gender`, `Male`, `Female`"),
+    answer("The dataset has three variables: `Admitted`, `Male`, `A`"),
+    answer("The dataset has four variables: the number of males and females admitted, the number of males and females rejected")
+
+  )
+)
+```
+
+
+First, we will evaluate whether the percentage of males admitted is indeed higher than females, overall. Next, we will calculate the same percentage for each individual department.
+
 
 | .      | Admitted | Rejected |
 |--------|----------|----------|
@@ -332,7 +366,6 @@ We'll explore Simpson's paradox further with another dataset, which comes from a
 | Female | 557      | 1278     |
 
 > Note: At the time of this study, gender and sexual identities were not given distinct names. Instead, it was common for a survey to ask for your "gender" and then provide you with the options of "male" and "female."
-
 
 ### Number of males and females admitted
 
@@ -354,10 +387,9 @@ ucb_admit |>
   count(Gender, Admit)
 ```
 
-### Replace counts with proportions 
+### Replace counts with proportions
 
-Next we'll calculate the proportion of males and proportion of females admitted, by creating a new variable, called `prop` (short for proportion) based on the counts calculated in the previous exercise and using the `mutate()` function. Proportions for each row of the data frame we created in the previous exercise can be calculated as `n / sum(n)`. 
-
+Next we'll calculate the proportion of males and proportion of females admitted, by creating a new variable, called `prop` (short for proportion) based on the counts calculated in the previous exercise and using the `mutate()` function. Proportions for each row of the data frame we created in the previous exercise can be calculated as `n / sum(n)`.
 
 ```{r prop-admit, exercise=TRUE}
 ucb_admit |> 
@@ -383,7 +415,7 @@ ucb_admit |>
 
 ```
 
-For each group, we now have the proportion out of all applications. The proportions are 26.4% (proportion of admitted males), 32.9% (rejected males), 12.3% (admitted females) and 28.2% (rejected females). These proportions add up to 100%.  
+For each group, we now have the proportion out of all applications. The proportions are 26.4% (proportion of admitted males), 32.9% (rejected males), 12.3% (admitted females) and 28.2% (rejected females). These proportions add up to 100%.
 
 However, we are interested in the proportion of students admitted within each gender, not the proportion out of all applicants. To do this, we first need to group the data by gender, so that `sum(n)` will be calculated for males and females separately. Luckily, the `group_by()` function can do this grouping for us!
 
@@ -420,10 +452,9 @@ ucb_admit |>
 
 We can see from this result that the rate of admission among males was about 44.5%, whereas the rate among females was only 30.4%.
 
-
 ### Proportion admitted for each department
 
-Finally we'll make a similar table to the one we constructed earlier, except we'll first group the data by department. The goal is to compare the proportions of male  and female students admitted across departments.
+Finally we'll make a similar table to the one we constructed earlier, except we'll first group the data by department. The goal is to compare the proportions of male and female students admitted across departments.
 
 As before, proportions for each row of the data frame is calculated as `n / sum(n)`. Note that since the data are grouped by department **and** gender, `sum(n)` will be calculated for males and females separately **for each department**.
 
@@ -443,12 +474,11 @@ ucb_admit |>
 
 ```
 
-Next, calculate the proportions of male  and female students admitted across departments, using the following steps:
+Next, calculate the proportions of male and female students admitted across departments, using the following steps:
 
 1.  Use `group_by()` to group first by department then by gender.
 2.  Use `mutate()` to add a new column named `prop`, which is the ratio of those admitted or rejected by department and gender. Remember the calculation you used previously for row proportions!
 3.  Use `filter()` to keep the data for those who were admitted so that the resulting data frame only contains the proportions of males and females who were admitted.
-
 
 ```{r gender-male3, exercise=TRUE}
 ucb_admit |>
@@ -462,7 +492,6 @@ ucb_admit |>
   filter(___)
 ```
 
-
 ```{r gender-male3-hint-1}
 ucb_admit |>
   # Count by Department, then Gender, then Admit status
@@ -474,7 +503,6 @@ ucb_admit |>
   # filter for Admit=="Admitted"
   filter(___)
 ```
-
 
 ```{r gender-male3-hint-2}
 ucb_admit |>
@@ -513,7 +541,6 @@ ucb_admit |>
 
 ```
 
-
 ```{r quiz-gender}
 quiz(
   question("From the table above, which departments admit more than 50% of their candidates?", allow_retry = TRUE,
@@ -534,9 +561,6 @@ quiz(
     ), 
   caption = "")
 ```
-
-
-
 
 ### Recap: Simpson's paradox
 
@@ -563,7 +587,6 @@ Note that we were only able to discover the contradictory finding once we incorp
 ## Congratulations!
 
 You have successfully completed Lesson 2 in Tutorial 1: Introduction to data. If you need to generate a hash for submission, click "Next Topic".
-
 
 ```{r footer-setup}
 library(glue)
@@ -600,4 +623,3 @@ After creating the hash, please copy it, navigate to [this form](https://forms.g
 ```{r img-submit, message=FALSE, warning=FALSE, fig.align='center', out.width="50%"}
 knitr::include_graphics("images/Submit-hash.jpg")
 ```
-

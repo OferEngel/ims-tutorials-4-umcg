@@ -601,7 +601,7 @@ email50 |>
 question("How did the filter influence the data set?", allow_retry = TRUE, random_answer_order = TRUE,
     answer("The filter reduced the number of observations from 50 to 7", correct = TRUE),
     answer("The filter reduced the number of observations from 21 to 7"),
-    answer("All emails in the filtered dataset have `big` numbers.")
+    answer("All emails in the filtered dataset have `big` numbers.", correct = TRUE)
 
 )
 ```
