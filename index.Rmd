@@ -108,7 +108,19 @@ The following tutorials are due on the Tuesday, a day before our first weekly se
 -   Week 8: Models with a binary outcome **deadline 21-Nov-23**
 -   Week 9: Survival analysis and review **deadline 28-Nov-23**
 
+### Labs 
 
+Only three labs are due for submission, but the rest will prepare you for them!
+
+-   [Week 1: Introduction to data](support/assignments/01_intro_to_r/) - 
+-   Week 2: Exploratory data analysis - 
+-   Week 3: Simple linear least square regression 
+-   Week 4: Multiple linear least square regression part I  **deadline 27-Oct-23**
+-   Week 5: Multiple linear least square regression part II  
+-   Week 6: Generalized linear models **deadline 10-Nov-23**
+-   Week 7: Probability and models with a continuous outcome 
+-   Week 8: Models with a binary outcome 
+-   Week 9: Survival analysis and review **deadline 6-Dec-23**
 
 
 ### Acknowledgements
