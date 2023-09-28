@@ -18,9 +18,13 @@ library(tidyverse)
 
 The goal of this lab is to introduce you to R and RStudio, which you'll be using throughout the course both to learn the statistical concepts discussed in the course and to analyze real data and come to informed conclusions. To clarify which is which: `R` is the name of the programming language itself and RStudio is a convenient interface for working with `R` .
 
-As the labs progress, you are encouraged to explore and experiment as much as you can! Before we get to that stage, however, you need to build some basic fluency in `R`. First, we will explore the fundamental building blocks of `R` and RStudio: the RStudio interface, reading in data, and basic commands for working with data in `R`.
+We will be using a cloud version of RStudio, to do this, follow the steps below: 
 
-Go ahead and launch RStudio. You should see a window that looks like the image shown below.
+-   Use this link to connect to [posit cloud](https://bit.ly/46plCeQ).
+-   Sign up with your RUG Google account
+-   Click on "Lab 01: Introduction to R and RStudio"
+
+You should see a window that looks like the image shown below.
 
 ```{r r-interface-2023, echo=FALSE, results="asis", out.width="80%"}
 knitr::include_graphics("img/r-interface-2023.jpg")
