@@ -1,0 +1,44 @@
+---
+title: "Lab Name"
+author: "Author Name"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    highlight: "pygments"
+    theme: "spacelab"
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: "show"
+    df_print: paged
+---
+
+```{r load-packages, message=FALSE}
+library(tidyverse)
+arbuthnot <- read_csv("data/arbuthnot.csv")
+```
+
+### Exercise 1
+
+Insert any text here.
+
+```{r code-ex1}
+# Insert code for Exercise 1 here
+arbuthnot$boys
+
+```
+
+### Exercise 2
+
+Insert any text here.
+
+```{r code-code-ex2}
+# Insert code for Exercise 1 here
+```
+
+### Exercise 3
+
+Insert any text here.
+
+```{r code-chunk-label3}
+# Insert code for Exercise 1 here
+```

@@ -19,6 +19,9 @@ library(kableExtra)
 library(tidyverse)
 library(emo)
 library(gt)
+library(gradethis)
+library(glue)
+gradethis::gradethis_setup(pass.praise = TRUE, fail.encourage = TRUE)
 
 knitr::opts_chunk$set(warning = FALSE,
                       message = FALSE,
@@ -100,8 +103,9 @@ encoder_logic <- function(strip_output = FALSE) {
   )
 }
 
+
 hash_encoder_ui <- {
-  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID?"), renderText({
+  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID (Gebruikersnaam  s-/p-nummer)?"), renderText({
     input$caption
   }), )
 }
@@ -205,6 +209,21 @@ ggplot(comics, aes(x = id, fill = align)) +
 
 Let's look carefully at how this is constructed: each colored bar segment actually corresponds to a count in our table, with the x-axis and the fill color indicating the category being plotted. Several things pop out, like the fact that there are very few characters whose identities are unknown (since it's nearly flat). The single largest bar segment corresponds to the most common category: characters with secret identities that are also bad. We can look across the identity types and realize that bad is not always the largest category. This indicates that there is indeed an association between alignment and identity.
 
+
+Finally, add `position = "dodge"` as an argument in your `geom_bar` function, and run the code to get another view of the bar chart!
+
+
+```{r formula4, exercise=TRUE}
+ggplot(comics, aes(x = id, fill = align)) +
+  geom_bar() 
+```
+
+
+```{r formula4-solution}
+ggplot(comics, aes(x = id, fill = align)) +
+  geom_bar(position = "dodge") 
+```
+
 That should be enough to get started. Now it's your turn to start exploring the data.
 
 ### Bar chart expectations
@@ -256,128 +275,23 @@ In this lesson you'll continue working with the `comics` dataset introduced prev
 Let's start by creating a contingency table, which is a useful way to represent the total counts of observations that fall into each combination of the levels of categorical variables. Make sure the contingency table has the different levels of `gender` in the rows, and the different levels of `align` in the columns. 
 
 ```{r ex1, exercise=TRUE}
-# Print the first rows of the data
-
-
-# Check levels of align
-comics |> 
-  distinct(___)
-
-# Check the levels of gender
-
 
 # Create a 2-way contingency table
-
+comics |> 
+  count(___, ___) |> 
+  pivot_wider(names_from = ___, values_from = ___)
 ```
 
-```{r ex1-hint-1}
-# Print the first rows of the data
-glimpse(comics)
-
-# Check levels of align
-comics |> 
-  distinct(___)
-
-# Check the levels of gender
 
 
-# Create a 2-way contingency table
-
-```
-
-```{r ex1-hint-2}
-# Print the first rows of the data
-glimpse(comics)
-
-# Check levels of align
-comics |> 
-  distinct(align)
-
-# Check the levels of gender
-comics |> 
-  distinct(gender)
-
-# Create a 2-way contingency table
-
-```
 
 ```{r ex1-solution}
-# Print the first rows of the data
-glimpse(comics)
-
-# Check levels of align
-comics |> 
-  distinct(align)
-
-# Check the levels of gender
-comics |> 
-  distinct(gender)
-
 # Create a 2-way contingency table
 comics |>
   count(align, gender) |> 
   pivot_wider(names_from = align, values_from = n)
 ```
 
-### Dropping levels
-
-The contingency table from the last exercise revealed that there are some levels that have very low counts. To simplify the analysis, it often helps to drop such levels from the dataframe.
-
-In R, this requires two steps: 
-
-1. filter out any rows with the levels that have very low counts
-2. remove these levels from the variable with `droplevels()`
-
-We are using the `droplevels()` function to eliminate any levels that have zero counts from a variable. 
-
-The contingency table from the last exercise is available in your workspace as `tab`. We'll use this table and the **dplyr** package to `filter()` levels with few observations from our dataframe, using the following steps:
-
-1. print `tab` to explore which level of `align` has the fewest total entries
-2. use `filter()` to filter out all rows of `comics` with that level
-3. use `droplevels()` to drop the unused levels from the dataframe 
-4. save the simplified dataset as `comics_filtered`
-5. check if the unused level of `align` is dropped
-
-
-```{r ex2-setup}
-tab <- comics |>
-  count(align, gender) |> 
-  pivot_wider(names_from = align, values_from = n)
-```
-
-```{r ex2, exercise=TRUE}
-# Print tab
-___
-
-# Remove align level
-comics_filtered <- ___ |>
-  ___(align != ___) |>
-  ___()
-
-# See the result
- comics_filtered |>
-   ___(align)
-
-```
-
-```{r ex2-solution}
-# Print tab
-tab
-
-# Remove align level
-comics_filtered <- comics |>
-  filter(align != "Reformed Criminals") |>
-  droplevels()
-
-# See the result
-comics_filtered |>
-  distinct(align)
-
-```
-
-```{r hsb2-mutate-num-char-cat-hint}
-"Remember, to filter out observations, the not equal to (`!=`) comparison comes in handy!"
-```
 
 
 ### Side-by-side barcharts
@@ -388,9 +302,8 @@ Here you'll construct two side-by-side barcharts of the `comics` data. This exer
 
 To create these plots, let's carry out the following steps:
 
-1. load the **ggplot2** package.
-2. create a side-by-side barchart with `align` on the x-axis, and `fill` the bars with the `gender` of the character  
-3. create another side-by-side barchart with `gender` on the x-axis, and `fill` the bars with the `align`ment of the character 
+1. create a side-by-side barchart with `align` on the x-axis, and `fill` the bars with the `gender` of the character  
+2. create another side-by-side barchart with `gender` on the x-axis, and `fill` the bars with the `align`ment of the character 
 
 ```{r ex3-setup}
 comics <- as_tibble(comics)
@@ -400,8 +313,6 @@ comics <- comics |>
 ```
 
 ```{r ex3, exercise=TRUE}
-# Load ggplot2
-
 # Create side-by-side barchart of alignment by gender
 ggplot(___, aes(x = ___, fill = ___)) + 
   geom_bar(___) 
@@ -412,22 +323,6 @@ ggplot(___, aes(x = ___, fill = ___)) +
 ```
 
 ```{r ex3-hint-1}
-# Load ggplot2
-library(ggplot2)
-
-# Create side-by-side barchart of alignment by gender
-ggplot(___, aes(x = ___, fill = ___)) + 
-  geom_bar(___) 
-
-# Create side-by-side barchart of gender by alignment
-ggplot(___, aes(x = ___, fill = ___)) + 
-  geom_bar(position = ___)
-```
-
-```{r ex3-hint-2}
-# Load ggplot2
-library(ggplot2)
-
 # Create side-by-side barchart of alignment by gender
 ggplot(comics, aes(x = align, fill = gender)) + 
   geom_bar(position = "dodge") 
@@ -438,9 +333,6 @@ ggplot(___, aes(x = ___, fill = ___)) +
 ```
 
 ```{r ex3-solution}
-# Load ggplot2
-library(ggplot2)
-
 # Create side-by-side barchart of alignment by gender
 ggplot(comics, aes(x = align, fill = gender)) + 
   geom_bar(position = "dodge") 
@@ -484,7 +376,7 @@ grid.arrange(p1, p2, ncol = 2)
 ```{r mc, echo=FALSE}
 question("Which of the following interpretations of the bar charts above is NOT valid?",
   answer("Among characters with `Neutral` alignment, males are the most common.", message = "Nope, not quite!"),
-  answer("In general, there is an association between gender and alignment."),
+  answer("In general, there is an association between gender and alignment (knowing someone's gender will give you information about their alignment)"),
   answer("Across all genders, `Bad` is the most common alignment.", correct = TRUE),
   answer("There are more male characters than female characters in this dataset.",  message = "Try again!"), 
   allow_retry = TRUE
@@ -567,6 +459,21 @@ comics |>
   )
 ```
 
+```{r quiz-condition-rows, echo=FALSE}
+question(
+  "By conditioning on `id` in the table above, we can infer the following:",
+    allow_retry = TRUE, random_answer_order = TRUE,
+  answer("Among public characters, the proportion of Good characters is the greatest", correct = TRUE, message="To compare between public characters we condition on `id`"),
+  answer("Among secret characters, the proportion of Neutral characters is the lowest", correct = TRUE, message="To compare between secret characters we condition on `id`"),
+  answer("Among Good characters, the proportion of Public characters is the greatest", correct = FALSE, message="To compare Good characters we need to condition on `align` and not on `id`"),
+  answer("Among neutral characters, the proportion of Secret characters is the lowest", correct = FALSE, message="To compare neutral characters we need to condition on `align` and not on `id`")
+)
+
+```
+
+
+
+
 To condition on the columns rather than the rows, we change the variable we are grouping. To condition on the columns, we `group_by()` the `align` variable. After conditioning on the columns, we now see that the columns sum to one. Also, we learn, for example, that the proportion of bad characters that are secret is around 63%.
 
 As the number of cells in these tables gets large, it becomes much easier to make sense of your data using graphics. The bar chart is still a good choice, but we're going to need to add some options.
@@ -598,6 +505,19 @@ comics |>
       columns = vars(Bad),
       rows = Bad >= .50)
   )
+```
+
+
+```{r quiz-condition-column, echo=FALSE}
+question(
+  "By conditioning on `align` in the previous table, we can infer the following:",
+    allow_retry = TRUE, random_answer_order = TRUE,
+  answer("Among public characters, the proportion of Neutral characters is the greatest", correct = FALSE, message="To compare between public characters we condition on `id`"),
+  answer("Among secret characters, the proportion of Neutral characters is the lowest", correct = FALSE, message="To compare between secret characters we condition on `id`"),
+  answer("Among Good characters, the proportion of Public characters is the greatest", correct = TRUE, message="To compare Good characters we need to condition on `align`"),
+  answer("Among neutral characters, the proportion of Unknown characters is the lowest", correct = TRUE, message="To compare neutral characters we need to condition on `align`")
+)
+
 ```
 
 </br>
@@ -662,7 +582,7 @@ ggplot(comics, aes(x = align, fill = id)) +
 
 ### Conditional proportions
 
-The following code generates tables of joint and conditional proportions, respectively. Go ahead and run it in the console:
+The following code generates tables of joint and conditional proportions, respectively. Go ahead and run it below:
 
 ```{r prob5-setup, echo = FALSE}
 comics <- comics |>
@@ -675,8 +595,8 @@ comics <- comics |>
 comics |> 
   count(align, gender) |> 
   mutate(prop = n / sum(n)) |> 
-  pivot_wider(id_cols = align, 
-              names_from = gender, values_from = prop)
+  pivot_wider(id_cols = gender, 
+              names_from = align, values_from = prop) 
 
 # Conditional on columns
 comics |> 
@@ -688,20 +608,65 @@ comics |>
 ```
 
 ```{r mccp5, echo=FALSE}
-question("Using the tables above, approximately what proportion of all female characters are good?",
-  answer("44%", message = "Nope, try again!"),
-  answer("1.3%", message = "Not quite!"),
-  answer("13%"),
-  answer("51%", correct = TRUE, message = "Nice! To answer this question, you needed to look at how `align` was distributed *within* each `gender`. That is, you wanted to *condition* on the `gender` variable."),
-  allow_retry = TRUE
+quiz(caption = "",
+    question("Using the tables above, approximately what proportion of all female characters are good?",
+    answer("13%"),
+    answer("34%", message = "Nope, try again!"),
+    answer("44%", message = "Nope, try again!"),
+    answer("51%", correct = TRUE, message = "Nice! To answer this question, you needed to look at how `align` was distributed *within* each `gender`. That is, you wanted to *condition* on the `gender` variable."),
+    answer("We cannot tell from the two tables", message = "Not quite!"),
+    allow_retry = TRUE
+  ),
+  question("Using the tables above, approximately what proportion of all characters are both good and female?",    
+    answer("13%", correct = TRUE, message = "Nice! To answer this question, you needed to look at the distribution of ALL the combinations. That is, you wanted the table with the joint distribution."),
+    answer("34%", message = "Nope, try again!"),
+    answer("44%", message = "Nope, try again!"),
+    answer("51%"),
+    answer("We cannot tell from the two tables", message = "Not quite!"),
+    allow_retry = TRUE
+  ), 
+  question("Using the tables above, approximately what proportion of good characters are female?",
+    answer("13%"),
+    answer("34%", message = "Nope, try again!"),
+    answer("44%", message = "Nope, try again!"),
+    answer("51%"),
+    answer("We cannot tell from the two tables", correct = TRUE, message = "Nice! To answer this question, you needed to look at how `gender` was distributed *within* each `align`. That is, you wanted to *condition* on the `align` variable."),
+    allow_retry = TRUE
+  )
+  
 )
 ```
 
-```{r mccp5-hint}
- "Take a look at the table that's conditional on gender!"
+###
+
+Use the code below to create a table that answers the following question: what proportion of good characters are female?
+
+```{r prob6, exercise = TRUE}
+# Conditional on columns
+comics |> 
+  count(align, gender) |> 
+  group_by(___) |> 
+  mutate(prop = n / sum(n)) |> 
+  pivot_wider(id_cols = gender, 
+              names_from = align, values_from = prop) 
 ```
 
-</br>
+Now you should be able to answer the question:
+
+```{r quiz-prob6, echo=FALSE}
+question("Using the table you just created, approximately what proportion of good characters are female?",
+    answer("34%", correct = TRUE, message = "Nice! To answer this question, you needed to look at how `gender` was distributed *within* each `align`. That is, you wanted to *condition* on the `align` variable."),
+    answer("44%", message = "Nope, try again!"),
+    answer("We cannot tell"),
+    answer("13%"),
+    answer("51%"),
+    allow_retry = TRUE
+  )
+```
+
+
+
+<br/>
 
 Bar charts can tell dramatically different stories depending on how we choose to represent the data (e.g. counts or proportions). Furthermore, if proportions are chosen, what the proportions are conditioned on can have a substantial impact on the relationships seen in the plot! To demonstrate this difference, in this exercise you'll construct two bar charts: one of counts and one of proportions.
 
@@ -771,7 +736,8 @@ table(comics$id, comics$align) |>
   row_spec(1, bold = T, background = "lightblue", color = "white") 
 ```
 
-**453 + 640 + 377 = 1470**
+
+
 
 ### Simple barchart
 
@@ -869,178 +835,6 @@ gridExtra::grid.arrange(plot1, plot2, nrow = 1, widths = c(6, 4))
 
 ```
 
-### Marginal barchart
-
-If you are interested in the distribution of alignment of *all* superheroes, it makes sense to construct a barchart for just that single variable.
-
-You can improve the interpretability of the plot, though, by implementing some sensible ordering. Superheroes that are `"Neutral"` show an alignment between `"Good"` and `"Bad"`, so it makes sense to put that bar in the middle. To do this, we first need to convert the `align` variable from a character (`chr`) to a factor (`fct`) data type.
-
-Luckily, R has a built-in `factor()` function specifically for these types of data type conversions. The `factor()` function has two main arguments: 
-
-1. the name of the variable you wish to convert to a factor 
-2. the levels of the factor (i.e. the order you want the levels to appear)
-
-**Note:** the `levels` of the variable must be enclosed in quotations, and they must be specified as a vector. We do this by using the concatenate (`c()`) function, which creates a vector from a list of items. 
-
-Converting a variable from a character to a factor looks something like this:
-
-```{r, eval = FALSE}
-comics |> 
-  mutate(gender = factor(id, 
-                         levels = c("Secret", "Public", "No Dual", "Unknown")
-                         )
-         )
-```
-
-To do this variable conversion we use the following steps:
-
-1. load in the `comics` data
-2. use the `mutate()` function to add the changed `align` variable
-3. use the `factor()` function to specify how the `align` variable will be changed
-4. save the updated dataset into a new dataframe, named `comics_updated`
-
-Once you've reordered the `align` variable, create a barchart of counts of the
-`align` variable.
-
-```{r ex5, exercise = TRUE}
-# Change the order of the levels in align
-comics_updated <- comics |> 
-  mutate(align = factor(___, 
-                       levels = c("___", "___", "___"))
-  )
-
-# Create plot of the updated align variable
-ggplot(___, aes(x = ___)) + 
-  geom_bar()
-```
-
-```{r ex5-hint-1}
-# Change the order of the levels in align
-comics_updated <- comics |> 
-  mutate(align = factor(align, 
-                       levels = c("___", "___", "___"))
-  )
-```
-
-```{r ex5-hint-2}
-# Change the order of the levels in align
-comics_updated <- comics |> 
-  mutate(align = factor(align, 
-                       levels = c("Good", "Neutral", "Bad"))
-  )
-
-# Create plot of align
-ggplot(___, aes(x = ___)) + 
-  geom_bar()
-```
-
-
-```{r ex5-solution}
-# Change the order of the levels in align
-comics_updated <- comics |> 
-  mutate(align = factor(align, 
-                       levels = c("Good", "Neutral", "Bad"))
-  )
-
-
-# Create plot of align
-ggplot(comics_updated, aes(x = align)) + 
-  geom_bar()
-```
-
-
-### Conditional barchart
-
-Now, if you want to break down the distribution of alignment based on gender, you're looking for conditional distributions.
-
-You could make these by creating multiple filtered datasets (one for each gender) or by faceting the plot of alignment based on gender. As a point of comparison, we've provided your plot of the marginal distribution of alignment from the last exercise.
-
-Create a barchart of `align` faceted by `gender`.
-
-```{r ex6-setup}
-comics_updated <- comics |> 
-  mutate(align = factor(align, 
-                       levels = c("Good", "Neutral", "Bad"))
-  )
-
-ggplot(comics_updated, aes(x = align)) + 
-  geom_bar()
-```
-
-```{r ex6, exercise = TRUE}
-# Plot of alignment broken down by gender
-ggplot(comics_updated, aes(x = ___)) + 
-  geom_bar() +
-  facet_wrap(~ ___)
-```
-
-```{r ex6-hint}
-# Specify align as the x aesthetic, then facet by gender within facet_wrap().
-```
-
-```{r ex6-solution}
-# Specify align as the x aesthetic, then facet by gender within facet_wrap().
-
-ggplot(comics_updated, aes(x = align)) + 
-  geom_bar() +
-  facet_wrap(~ gender)
-```
-
-
-### Improve piechart
-
-The piechart is a very common way to represent the distribution of a single categorical variable, but they can be more difficult to interpret than barcharts.
-
-```{r, echo = FALSE}
-flavor <- rep(c("cherry", "key lime", "boston creme", "strawberry", 
-                 "blueberry", "apple", "pumpkin"),
-               c(13, 16, 15, 11, 14, 17, 12))
-pies <- data.frame(flavor = as.factor(flavor))
-cnt <- count(pies, flavor)
-
-ggplot(cnt, aes(x = "", y = n, fill = flavor)) +
-  geom_bar(width = 1, stat = "identity") +
-  coord_polar("y", start = pi / 3) +
-  xlab("") + 
-  ylab("") + 
-  theme(panel.grid.minor = element_blank(),
-        panel.grid.major = element_blank(),
-        axis.ticks = element_blank(),
-        axis.text = element_blank())
-```
-
-This is a piechart of a dataset called `pies` that contains the favorite pie flavors of 98 people. Improve the representation of these data by constructing a *barchart* that is ordered in descending order of count.
-
-- Use the code provided to reorder the levels of `flavor` so that they're in descending order by count.
-- Create a barchart of `flavor`. The default coloring may look drab by comparison, so change the `fill` of the bars to `"chartreuse"`. 
-- Plot `flavor` on the y-axis, so that the labels of the flavors don't smoosh together! 
-
-```{r ex7, exercise = TRUE}
-# Discover what the counts of pie flavors are 
-pies |> 
-  count(flavor)
-
-# Put levels of flavor in descending order
-pies_updated <- pies |> 
-  mutate(flavor = factor(flavor, 
-                         levels = c("apple", "key lime", "boston creme",
-                                    "blueberry", "cherry", "pumpkin", "strawberry")
-  )
-  )
-
-# Create barchart of flavor
-# Using plot flavor on y-axis so label text fits
-ggplot(___, aes(y = ___)) + 
-  geom_bar(fill = ___) 
-```
-
-```{r ex7-solution}
-# Create barchart of flavor
-# Using plot flavor on y-axis so label text fits
-ggplot(pies_updated, aes(y = flavor)) + 
-  geom_bar(fill = "chartreuse") 
-```
-
 
 
 
@@ -1051,20 +845,11 @@ If you need to generate a hash for submission, click "Next Topic".
 
 What's next?
 
-`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://openintrostat.github.io/ims-tutorials/)
 
-`r emo::ji("spiral_notepad")` [Tutorial 2: Exploratory data analysis](https://openintrostat.github.io/ims-tutorials/02-explore/)
+`r emo::ji("ledger")` [Full list of tutorials](https://oferengel.github.io/ims-tutorials-4-umcg/)
 
-`r emo::ji("one")` [Tutorial 2 - Lesson 1: Visualizing categorical data](https://openintro.shinyapps.io/ims-02-explore-01/)
 
-`r emo::ji("two")` [Tutorial 2 - Lesson 2: Visualizing numerical data](https://openintro.shinyapps.io/ims-02-explore-02/)
-
-`r emo::ji("three")` [Tutorial 2 - Lesson 3: Summarizing with statistics](https://openintro.shinyapps.io/ims-02-explore-03/)
-
-`r emo::ji("four")` [Tutorial 2 - Lesson 4: Case study](https://openintro.shinyapps.io/ims-02-explore-04/)
-
-`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
-
+`r emo::ji("spiral_notepad")` [Tutorial 2: Exploratory data analysis](https://oferengel.github.io/ims-tutorials-4-umcg/02-explore/)
 
 
 ## Submit
@@ -1076,3 +861,9 @@ encoder_logic()
 ```{r encode, echo=FALSE}
 learnrhash::encoder_ui(ui_before = hash_encoder_ui)
 ```
+
+
+### Submit your hash in a form
+
+After creating the hash, please copy it, navigate to [this form](https://forms.gle/ajEDfePc1jcTukyB7) and fill it in and submit. You will need to submit the form once for every lesson you complete in this tutorial.
+

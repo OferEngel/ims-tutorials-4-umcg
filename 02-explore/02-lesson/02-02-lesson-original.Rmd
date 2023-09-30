@@ -20,8 +20,6 @@ library(patchwork)
 library(openintro)
 library(emo)
 library(ggridges)
-library(gradethis)
-gradethis::gradethis_setup(pass.praise = TRUE, fail.encourage = TRUE)
 
 # knitr options ----------------------------------------------------------------
 
@@ -111,7 +109,7 @@ encoder_logic <- function(strip_output = FALSE) {
 }
 
 hash_encoder_ui <- {
-  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID (Gebruikersnaam  s-/p-nummer)?"), renderText({
+  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID?"), renderText({
     input$caption
   }), )
 }
@@ -197,19 +195,12 @@ The `bins` and `binwidth` arguments to `geom_histogram()` is similar to the `dot
 If we use a binwidth of 5, the result is a histogram that's much smoother.
 Alternatively, we could choose to specify the number of bins we would like, instead of the 30 bins `geom_histogram()` defaults to. 
 
-```{r wbw-5, exercise = TRUE}
-# Set the binwidth to 5
+```{r wbw, echo = TRUE}
 ggplot(data = cars, aes(x = hwy_mpg)) +
-  geom_histogram(binwidth = ___)
+  geom_histogram(binwidth = 5)
 
-```
-
-
-
-```{r wbw-15, exercise = TRUE}
-# Set the binwidth to 15
 ggplot(data = cars, aes(x = hwy_mpg)) +
-  geom_histogram(bins = ___)
+  geom_histogram(bins = 15)
 ```
 
 One thing that's important to know about histograms like this one is that your sense of the shape of the distribution can change depending on the bin width that is selected. 
@@ -224,10 +215,8 @@ Create the following three plots:
 
 ```{r ex4, exercise = TRUE}
 # Create hist of horsepwr with binwidth of 3
-ggplot(data = ___, aes(___)) +
-  geom_histogram(binwidth = ___) +
-  ## adds on a title to the plot
-  labs(title = "binwidth = ___") 
+ggplot(data = cars, aes(___)) +
+  geom_histogram(binwidth = ___) 
 
 # Create hist of horsepwr with binwidth of 30
 
@@ -237,24 +226,12 @@ ggplot(data = ___, aes(___)) +
 
 ```
 
-```{r ex4-hint-1}
-# Create hist of horsepwr with binwidth of 3
+```{r ex4-hint}
 ggplot(data = cars, aes(horsepwr)) +
-  geom_histogram(binwidth = ___) +
-  ## adds on a title to the plot
-  labs(title = "binwidth = ___")
-
-
-# Create hist of horsepwr with binwidth of 30
-
-
-# Create hist of horsepwr with binwidth of 60
-
-
-
+  geom_histogram(binwidth = 3)
 ```
 
-```{r ex4-hint-2}
+```{r ex4-solution}
 # Create hist of horsepwr with binwidth of 3
 ggplot(data = cars, aes(horsepwr)) +
   geom_histogram(binwidth = 3) +
@@ -269,9 +246,9 @@ ggplot(data = cars, aes(horsepwr)) +
 
 # Create hist of horsepwr with binwidth of 60
 ggplot(data = cars, aes(horsepwr)) +
-  geom_histogram(binwidth = ___) +
+  geom_histogram(binwidth = 60) +
   ## adds on a title to the plot
-  labs(title = "binwidth = ___")
+  labs(title = "binwidth = 60")
 ```
 
 ### Three binwidths interpretation
@@ -668,10 +645,10 @@ ggplot(data = cars, ___) +
 ```
 
 ```{r ex6-hint}
-Does a distribution appear to have outliers? If so, a boxplot is more appropriate. Does a distribution have multiple modes? If so, a density plot is more appropriate.  
+ Does a distribution appear to have outliers? If so, a boxplot is more appropriate. Does a distribution have multiple modes? If so, a density plot is more appropriate.  
 ```
 
-```{r ex6-solution, echo=FALSE, eval=FALSE}
+```{r ex6-solution}
 # Create plot of city_mpg
 ggplot(data = cars, aes(x = city_mpg)) +
   geom_boxplot()
@@ -701,7 +678,7 @@ ggplot(data = cars, aes(x = ___)) +
   ___
 
 # Exclude outliers from data
-cars_wo_outliers <- cars |>
+cars_no_out <- cars |>
   filter(___)
 
 # Construct boxplot of msrp using the reduced dataset
@@ -716,7 +693,7 @@ cars |>
   geom_boxplot()
 
 # Exclude outliers from data
-cars_wo_outliers <- cars |>
+cars_no_out <- cars |>
   filter(msrp < ___)
   
 # Construct boxplot of msrp using the reduced dataset
@@ -731,7 +708,7 @@ cars |>
   geom_boxplot()
 
 # Exclude outliers from data
-cars_wo_outliers <- cars |>
+cars_no_out <- cars |>
   filter(msrp < 100000)
   
 # Construct boxplot of msrp using the reduced dataset
@@ -746,11 +723,11 @@ cars |>
   geom_boxplot()
 
 # Exclude outliers from data
-cars_wo_outliers <- cars |>
+cars_no_out <- cars |>
   filter(msrp < 100000)
   
 # Construct boxplot of msrp using the reduced dataset
-ggplot(data = cars_wo_outliers, aes(___)) + 
+ggplot(data = cars_no_out, aes(___)) + 
   ___ 
 ```
 
@@ -761,11 +738,11 @@ cars |>
   geom_boxplot()
 
 # Exclude outliers from data
-cars_wo_outliers <- cars |>
+cars_no_out <- cars |>
   filter(msrp < 100000)
   
 # Construct boxplot of msrp using the reduced dataset
-ggplot(data = cars_wo_outliers, aes(x = msrp)) + 
+ggplot(data = cars_no_out, aes(x = msrp)) + 
   geom_boxplot()
 ```
 
@@ -776,11 +753,11 @@ cars |>
   geom_boxplot()
 
 # Exclude outliers from data
-cars_wo_outliers <- cars |>
+cars_no_out <- cars |>
   filter(msrp < 100000)
   
 # Construct boxplot of msrp using the reduced dataset
-ggplot(data = cars_wo_outliers, aes(x = msrp)) +
+ggplot(data = cars_no_out, aes(x = msrp)) +
   geom_boxplot()
 ```
 
@@ -868,12 +845,11 @@ The mileage of a car tends to be associated with the size of its engine (as meas
 To explore the relationship between these two variables, you could stick to using histograms, but in this exercise you'll try your hand at two alternatives: the boxplot and the density plot.
 
 First, let's see how many unique values number of cylinders there are in the dataset. 
+We can use the `count()` function to find the unique values for a variable and also see how many observations there are for each value. 
 
-We can use the `count()` function to find the unique values for the variable `ncyl` and also see how many observations there are for each value. 
-
-```{r exercise = TRUE}
+```{r echo = TRUE}
 cars |>
-  count(___)
+  count(ncyl)
 ```
 
 That's probably more possible levels of `ncyl` than you might think! Particularly, the `ncly` of -1 should catch your eye! Here, we're going to make a new dataset that only contains the most common values of `ncyl`.
@@ -893,8 +869,6 @@ common_cyl <- cars |>
 ```
 
 ```{r, ref.label="ex2-setup", echo=TRUE}
-
-
 ```
 
 
