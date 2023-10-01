@@ -99,12 +99,12 @@ You will find all the readings and lectures in your the [Perusall course home](h
 The following tutorials are due on the Tuesday, a day before our first weekly sessions.  
 
 -   [Week 1: Introduction to data](01-data/) - **deadline 03-Oct-23**
--   Week 2: Exploratory data analysis - **deadline 10-Oct-23**
+-   Week 2: Exploratory data analysis - **deadline MONDAY!!! 09-Oct-23**
 -   Week 3: Simple linear least square regression **deadline 17-Oct-23**
 -   Week 4: Multiple linear least square regression part I  **deadline 24-Oct-23**
 -   Week 5: Multiple linear least square regression part II  **deadline 31-Oct-23**
 -   Week 6: Generalized linear models **deadline 07-Nov-23**
--   Week 7: Probability and models with a continuous outcome **deadline 14-Nov-23**
+-   Week 7: Probability and models with a continuous outcome **deadline MONDAY!!! 13-Nov-23**
 -   Week 8: Models with a binary outcome **deadline 21-Nov-23**
 -   Week 9: Survival analysis and review **deadline 28-Nov-23**
 

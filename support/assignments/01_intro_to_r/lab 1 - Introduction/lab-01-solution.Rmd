@@ -1,0 +1,131 @@
+---
+title: "Lab 1: Intro to R"
+author: "Ofer Engel"
+date: "Today's date here"
+output: 
+  html_document:
+    highlight: "pygments"
+    theme: "spacelab"
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: "show"
+    df_print: paged
+---
+
+```{r load-packages, message=FALSE}
+
+library(tidyverse)
+arbuthnot <- read_csv("data/arbuthnot.csv")
+  
+```
+
+
+The questions for this lab can be found [here](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/01_intro_to_r/).
+
+
+### Exercise 1
+**Question:** What command would you use to extract just the counts of girls baptized? Try it out in the console!
+
+**Answer:** To extract the girls I will run the command `arbuthnot$girls`
+
+### Exercise 2
+
+**Question:** Is there an apparent trend in the number of girls baptized over the years? How would you describe it? (To ensure that your lab report is comprehensive, be sure to include the code needed to make the plot as well as your written interpretation.)
+
+**Answer:** There appears to be a dip in the number of girls between the 1640s and the 1660s, but from the 1660s onwards there is a general increasing trend in the number of girls born. 
+
+
+```{r trend-girls}
+
+ggplot(data = arbuthnot, aes(x = year, y = girls)) +
+  geom_line() 
+
+```
+
+
+### Exercise 3
+
+**Question:** Now, generate a plot of the proportion of boys born over time. What do you see?
+
+**Answer:** We can see that the proportion of boys varies by 1-3 percentage points every year. On average it is roughly between 51.5% and about 52%, but it is pretty clear that among our 82 observed years, we did not observe any year that had more girls than boys.  
+
+
+```{r plot-prop-boys-arbuthnot}
+
+arbuthnot |> 
+  mutate(total = boys + girls) |> 
+  mutate(prop = boys / total) |> 
+  ggplot(aes(year, prop)) + 
+  geom_line() + 
+  geom_smooth() 
+
+```
+
+
+### Exercise 4
+
+**Question:** What years are included in this data set? What are the dimensions of the data frame? What are the variable (column) names?
+
+
+```{r dim-present}
+# Loading the dataset
+present <- read_csv("data/present.csv")
+
+```
+
+
+**Answer:** The years included in the dataset are from `r min(present$year)` to `r max(present$year)`. The data set has `r ncol(present)` variables and `r nrow(present)` observations, each observation is a year. The names of the variables are `r names(present)` 
+
+
+### Exercise 5
+
+**Question:** How do these counts compare to Arbuthnot’s? Are they of a similar magnitude?
+
+
+
+**Answer:** The counts in the `present` data are much larger (between about 1.1 million births and 2.2 million births) than those in the `arbuthnot` data (between 2722 births and 8426 births )
+
+```{r count-compare}
+
+summary(arbuthnot)
+summary(present)
+
+```
+
+
+### Exercise 6
+
+**Question:** Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot’s observation about boys being born in greater proportion than girls hold up in the U.S.? Include the plot in your response. Hint: You should be able to reuse your code from Exercise 3 above, just replace the name of the data frame.
+
+**Answer:** Yes, it appears that the proportion of boys is still larger than 50%. However, the range of the proportion is smaller. Whereas the proportions in the `arbuthnot` dataset ranges between just above 50% and about 53.5%, we can see that the variation in the US proportion ranges between about 51.1% and 51.4%.  
+
+```{r plot-prop-boys-present}
+# Insert code for Exercise 6 here
+present |> 
+  mutate(total = boys + girls) |> 
+  mutate(prop = boys / total) |> 
+  ggplot(aes(year, prop)) + 
+  geom_line() + 
+  geom_smooth() 
+
+
+```
+
+
+### Exercise 7
+
+**Question:** In what year did we see the largest total number of births in the U.S.? Hint: First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the total column. You can do this interactively in the data viewer by clicking on the arrows next to the variable names. To include the sorted result in your report you will need to use two new functions. First we use arrange() to sorting the variable. Then we can arrange the data in a descending order with another function, desc(), for descending order. The sample code is provided below.
+
+**Answer:** The largest total number of registered births in the US was in 1961, a total of 4.27 million American babies was born. This is probably related to the [mid 20th century baby boom](https://en.wikipedia.org/wiki/Mid-20th_century_baby_boom) in America.
+
+
+
+```{r find-max-total}
+# Insert code for Exercise 7 here
+
+present |> 
+  mutate(total = boys + girls) |> 
+  arrange(desc(total))
+
+```
+
