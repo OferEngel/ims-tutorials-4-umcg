@@ -1,5 +1,5 @@
 ---
-title: "Exploratory data analysis: 2 - Exploring Numerical Data"
+title: "2.2 Exploring Numerical Data"
 output: 
   learnr::tutorial:
     progressive: true
@@ -209,7 +209,7 @@ ggplot(data = cars, aes(x = hwy_mpg)) +
 ```{r wbw-15, exercise = TRUE}
 # Set the binwidth to 15
 ggplot(data = cars, aes(x = hwy_mpg)) +
-  geom_histogram(bins = ___)
+  geom_histogram(binwidth = ___)
 ```
 
 One thing that's important to know about histograms like this one is that your sense of the shape of the distribution can change depending on the bin width that is selected. 
@@ -237,42 +237,6 @@ ggplot(data = ___, aes(___)) +
 
 ```
 
-```{r ex4-hint-1}
-# Create hist of horsepwr with binwidth of 3
-ggplot(data = cars, aes(horsepwr)) +
-  geom_histogram(binwidth = ___) +
-  ## adds on a title to the plot
-  labs(title = "binwidth = ___")
-
-
-# Create hist of horsepwr with binwidth of 30
-
-
-# Create hist of horsepwr with binwidth of 60
-
-
-
-```
-
-```{r ex4-hint-2}
-# Create hist of horsepwr with binwidth of 3
-ggplot(data = cars, aes(horsepwr)) +
-  geom_histogram(binwidth = 3) +
-  ## adds on a title to the plot
-  labs(title = "binwidth = 3")
-
-# Create hist of horsepwr with binwidth of 30
-ggplot(data = cars, aes(horsepwr)) +
-  geom_histogram(binwidth = 30) +
-  ## adds on a title to the plot
-  labs(title = "binwidth = 30")
-
-# Create hist of horsepwr with binwidth of 60
-ggplot(data = cars, aes(horsepwr)) +
-  geom_histogram(binwidth = ___) +
-  ## adds on a title to the plot
-  labs(title = "binwidth = ___")
-```
 
 ### Three binwidths interpretation
 
@@ -671,7 +635,7 @@ ggplot(data = cars, ___) +
 Does a distribution appear to have outliers? If so, a boxplot is more appropriate. Does a distribution have multiple modes? If so, a density plot is more appropriate.  
 ```
 
-```{r ex6-solution, echo=FALSE, eval=FALSE}
+```{r ex6-solution-dont-use, echo=FALSE, eval=FALSE}
 # Create plot of city_mpg
 ggplot(data = cars, aes(x = city_mpg)) +
   geom_boxplot()
@@ -680,6 +644,19 @@ ggplot(data = cars, aes(x = city_mpg)) +
 ggplot(data = cars, aes(x = width)) +
   geom_density()
 ```
+
+
+```{r quiz-ex6}
+
+question("Boxplot or density plot?",
+  answer("For the `city_mpg` variable,  a boxplot is most suitable", message = "That's right!", correct = TRUE),
+  answer("For the `city_mpg` variable,  a density plot is most suitable", message = "Notice this variable has many outliers"),
+  answer("For the `width` variable,  a boxplot is most suitable", message="notice that this variable has many small modes (peaks and troughs)"),
+  answer("For the `width` variable,  a density plot is most suitable", message = "Very good :-)", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
 
 ### Boxplots for outlier detection
 
@@ -839,12 +816,6 @@ ggplot(data = cars, aes(x = city_mpg)) +
   facet_wrap(vars(___))
 ```
 
-```{r ex1-solution}
-# Create faceted histogram
-ggplot(data = cars, aes(x = city_mpg)) +
-  geom_histogram() +
-  facet_wrap(vars(suv))
-```
 
 ## Colored density plots
 
@@ -871,12 +842,14 @@ First, let's see how many unique values number of cylinders there are in the dat
 
 We can use the `count()` function to find the unique values for the variable `ncyl` and also see how many observations there are for each value. 
 
-```{r exercise = TRUE}
+```{r ex-cars, exercise = TRUE}
 cars |>
   count(___)
 ```
 
-That's probably more possible levels of `ncyl` than you might think! Particularly, the `ncly` of -1 should catch your eye! Here, we're going to make a new dataset that only contains the most common values of `ncyl`.
+That's probably more possible levels of `ncyl` than you might think! Particularly, the `ncly` of -1 should catch your eye! (Perhaps this is an error in data entry?)
+
+Here, we're going to make a new dataset that only contains the most common values of `ncyl`.
 
 To do this, we are going to filter `cars` to include only cars with 4, 6, or 8 cylinders and save the result as `common_cyl`.
 When we wanted to filter our data to only include a particular level of a categorical variable, we used the `==` comparison, but here we want to include three different values.
@@ -925,41 +898,18 @@ ggplot(data = common_cyl, aes(x = city_mpg, fill = as.factor(ncyl))) +
 Let's take a more careful look at that plot you just made.
 
 ```{r mc1}
-question("Which of the following interpretations of the plot **is not** valid?",
-  answer("The highest mileage cars have 4 cylinders.", message = "No. What color is the region on the right of the plot?"),
-  answer("The typical 4 cylinder car gets better mileage than the typical 6 cylinder car, which gets better mileage than the typical 8 cylinder car.", message = "No. Look at the midpoint of each region."),
-  answer("Most of the 4 cylinder cars get better mileage than even the most efficient 8 cylinder cars.", message = "No. Compare the position on the x-axis of the red region to the right of the blue region."),
-  answer("The variability in mileage of 8 cylinder cars is similar to the variability in mileage of 4 cylinder cars.", correct = TRUE, message = "Correct! The variability in mileage of 8 cylinder cars seem much smaller than that of 4 cylinder cars."),
+question("Which of the following interpretations of the plot is valid (choose more than one)?",
+  answer("The highest mileage cars have 4 cylinders.", 
+         correct = TRUE),
+  answer("The typical 4 cylinder car gets better mileage than the typical 6 cylinder car, which gets better mileage than the typical 8 cylinder car.", 
+         correct = TRUE),
+  answer("Most of the 4 cylinder cars get better mileage than even the most efficient 8 cylinder cars.", correct = TRUE),
+  answer("The variability in mileage of 8 cylinder cars is similar to the variability in mileage of 4 cylinder cars.", message = "Since its distribution is much narrower, the variability in mileage of 8 cylinder cars seem much smaller than that of 4 cylinder cars."),
   allow_retry = TRUE
 )
 ```
 
-## Building a data pipeline
-
-In some of the previous exercises, you've been asked to filter the cars data in some way and save the filtered data as a new dataset.
-This workflow, however, is a bit inefficient, since we have no real interest in this intermediate dataset. 
-
-We can solve this by linking these two components into a continuous data pipeline, like the one below.
-
-```{r dp2, echo=TRUE, eval = FALSE}
-cars |>
-  filter(eng_size < 2.0) |>
-  ggplot(aes(x = hwy_mpg)) +
-  geom_histogram()
-```
-
-Our pipeline has six steps: 
-
-1. we start with the raw data
-2. we pipe the data into the `filter()` function
-3. we filter out all of the cars that have engines smaller than 2 liters 
-4. we pipe the filtered data into the `ggplot()` function
-5. we specify the variables we are interested in plotting in the `ggplot()` function  
-6. we add a histogram layer to the plot 
-
-This is a powerful and very general paradigm: you can start with a raw dataset, process that dataset using the data wrangling verbs we've learned, and then visualize it!
-
-## (Optional) Ridge plots 
+## Ridge plots 
 
 Ridgeline plots are especially useful for staggering the layout of overlapping density plots.
 Essentially a ridge plot separates each density plot, creating the impression of a mountain range.
@@ -1104,28 +1054,28 @@ common_cyl |>
 
 ```
 
-```{r ex7-hint-2}
-common_cyl |> 
-  ggplot(aes(x = hwy_mpg)) +
-  geom_histogram() +
-  facet_grid(vars(ncyl), vars(___), labeller = ___)
+```{r ex7-hint-2-dontshow}
+# common_cyl |> 
+#   ggplot(aes(x = hwy_mpg)) +
+#   geom_histogram() +
+#   facet_grid(vars(ncyl), vars(___), labeller = ___)
 
 ```
 
-```{r ex7-hint-3}
-common_cyl |> 
-  ggplot(aes(x = hwy_mpg)) +
-  geom_histogram() +
-  facet_grid(vars(ncyl), vars(suv), labeller = ___)
+```{r ex7-hint-3-dontshow}
+# common_cyl |> 
+#   ggplot(aes(x = hwy_mpg)) +
+#   geom_histogram() +
+#   facet_grid(vars(ncyl), vars(suv), labeller = ___)
 
 ```
 
-```{r ex7-solution}
+```{r ex7-solution-dontshow}
 # Facet histograms using hwy mileage and ncyl
-common_cyl |> 
-  ggplot(aes(x = hwy_mpg)) +
-  geom_histogram() +
-  facet_grid(vars(ncyl), vars(suv), labeller = label_both)
+# common_cyl |> 
+#   ggplot(aes(x = hwy_mpg)) +
+#   geom_histogram() +
+#   facet_grid(vars(ncyl), vars(suv), labeller = label_both)
 ```
 
 ### Interpreting plots with three variables
@@ -1148,17 +1098,19 @@ If you need to generate a hash for submission, click "Next Topic".
 
 What's next?
 
-`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://openintrostat.github.io/ims-tutorials/)
 
-`r emo::ji("spiral_notepad")` [Tutorial 2: Exploratory data analysis](https://openintrostat.github.io/ims-tutorials/02-explore/)
 
-`r emo::ji("one")` [Tutorial 2 - Lesson 1: Visualizing categorical data](https://openintro.shinyapps.io/ims-02-explore-01/)
+`r emo::ji("ledger")` [Full list of tutorials](https://oferengel.github.io/ims-tutorials-4-umcg/)
 
-`r emo::ji("two")` [Tutorial 2 - Lesson 2: Visualizing numerical data](https://openintro.shinyapps.io/ims-02-explore-02/)
+`r emo::ji("spiral_notepad")` [Tutorial 2: Exploring data](https://oferengel.github.io/ims-tutorials-4-umcg/02-explore/)
 
-`r emo::ji("three")` [Tutorial 2 - Lesson 3: Summarizing with statistics](https://openintro.shinyapps.io/ims-02-explore-03/)
+`r emo::ji("one")` [2.1: Visualizing categorical data](https://oferengel-posit.shinyapps.io/02-01-lesson/)
 
-`r emo::ji("four")` [Tutorial 2 - Lesson 4: Case study](https://openintro.shinyapps.io/ims-02-explore-04/)
+`r emo::ji("two")` [2.2: Visualizing numerical data](https://oferengel-posit.shinyapps.io/02-02-lesson/)
+
+`r emo::ji("three")` [2.3: Summarizing with statistics](https://oferengel-posit.shinyapps.io/02-03-lesson/)
+
+`r emo::ji("four")` [2.4: Case study](https://oferengel-posit.shinyapps.io/02-04-lesson/)
 
 `r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
 

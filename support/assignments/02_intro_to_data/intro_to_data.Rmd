@@ -40,9 +40,7 @@ library(openintro)
 Remember that we will be using R Markdown to create reproducible lab reports.
 In RStudio, go to New File -\> R Markdown... Then, choose From Template and then choose `Lab Report for OpenIntro Statistics Labs` from the list of templates.
 
-See the following video describing how to get started with creating these reports for this lab, and all future labs:
 
-[**Basic R Markdown with an OpenIntro Lab**](https://www.youtube.com/watch?v=Pdc368lS2hk) <iframe width="560" height="315" src="https://www.youtube.com/embed/Pdc368lS2hk" frameborder="0" allowfullscreen></iframe>
 
 ### The data
 
@@ -69,7 +67,7 @@ names(nycflights)
 This returns the names of the variables in this data frame.
 The **codebook** (description of the variables) can be accessed by pulling up the help file:
 
-```{r help}
+```{r help, eval=FALSE}
 ?nycflights
 ```
 
@@ -246,6 +244,21 @@ nycflights %>%
 ```
 
 1.  Suppose you really dislike departure delays and you want to schedule your travel in a month that minimizes your potential departure delay leaving NYC. One option is to choose the month with the lowest mean departure delay. Another option is to choose the month with the lowest median departure delay. What are the pros and cons of these two choices?
+
+
+
+```{r mean-median-dep-delay-months, eval=FALSE, include=FALSE}
+nycflights %>%
+  group_by(month) %>%
+  summarise(mean_dd = mean(dep_delay), median_dd = median(dep_delay)) %>%
+  arrange(desc(mean_dd))
+
+nycflights |> 
+  ggplot( aes(factor(month), abs(dep_delay)+1)) +
+  geom_boxplot() +
+  scale_y_log10()
+
+```
 
 ```{=html}
 <!--

@@ -99,7 +99,7 @@ You will find all the readings and lectures in your the [Perusall course home](h
 The following tutorials are due on the Tuesday, a day before our first weekly sessions.  
 
 -   [Week 1: Introduction to data](01-data/) - **deadline 03-Oct-23**
--   Week 2: Exploratory data analysis - **deadline MONDAY!!! 09-Oct-23**
+-   [Week 2: Exploratory data analysis](02-explore/) - **deadline MONDAY!!! 09-Oct-23**
 -   Week 3: Simple linear least square regression **deadline 17-Oct-23**
 -   Week 4: Multiple linear least square regression part I  **deadline 24-Oct-23**
 -   Week 5: Multiple linear least square regression part II  **deadline 31-Oct-23**

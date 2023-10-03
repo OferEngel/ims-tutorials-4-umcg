@@ -1,5 +1,5 @@
 ---
-title: "Exploratory data analysis: 3 - Numerical Summaries"
+title: "2.3 Numerical Summaries"
 output: 
   learnr::tutorial:
     progressive: true
@@ -275,65 +275,10 @@ ggplot(data = life_ma, aes(x = expectancy)) +
 
 Now that we have some sensible measures of center, we can answer questions like: Is the typical county life expectancy in Massachusets similar to the typical life expectancy in the rest of the country?
 
-## Group means
-
-To answer this question we start by using `mutate()` to create a new variable that will be TRUE if the state value is either "California", "Oregon", or "Washington", and FALSE otherwise. This process uses some of the tools we've seen before, namely the `if_else()` function and the `%in%` operator, and puts them together. 
-
-In the code below, we make a new variable named `west_coast` and specify how that variable is calculated. The condition we use inside of the `if_else()` function states that if the state associated with an observation is included in "California, Oregon, or Washington, the `west_coast` variable should have a value of `"yes"`. If the state of an observation is not included in this list, then the `west_coast` variable should have a value of `"no"`. 
-
-Notice the `life_with_west <- life |>` line in the code below. This line is telling R that we are creating a new object, `life_with_west` that contains the `west_coast` variable, a variable that consists of values `yes` and `no`.
-
-```{r create-west-coast, echo = TRUE}
-life_with_west <- life |>
-  mutate(
-    west_coast = 
-      if_else(
-        state %in% c("California", "Oregon", "Washington"),
-        "yes",
-        "no")
-    )
-```
-
-To compute means for the two groups (west coast and the rest of the country), we pipe this updated dataset into the `group_by()` function, and indicate how we would like to make the groups. Then we can `summarize()` those groups, West Coast counties and non-West Coast counties, by taking the `mean()` and `median()` of their life expectancies. 
 
 
 
-```{r life-groupby, exercise = TRUE}
-life_with_west |>
-  group_by(west_coast) |>
-  summarize(mean(expectancy),
-            median(expectancy))
-
-```
-
-
-From the code chunk above, remove the line with the `group_by` clause, so that you are left with the following code: 
-
-```{r life-no-groupby, eval=FALSE, echo = TRUE}
-life_with_west |>
-  summarize(mean(expectancy),
-            median(expectancy))
-```
-
-
-Now run the code to answer the following question:
-
-```{r quiz-group-by, echo=FALSE}
-question("What happens when you remove the `group_by` clause from the code above?", 
-         allow_retry = TRUE, random_answer_order = FALSE, 
-         answer("Nothing happens, we still get the same result"), 
-         answer("we get the mean life expectency of all residents in the USA"), 
-         answer("we get the mean of the life expectencies of each county in the USA", correct=TRUE, message="That's correct. Each row represents one county in the USA. If we take the mean of the rows, we are effectively averaging across counties and not across states."), 
-         answer("we get the mean of the life expectencies in each state in the USA")
-         )
-```
-
-
-We learn that looking at both mean and median, the typical West Coast county has a slightly higher average life expectancy than counties not on the West Coast.
-
-
-
-### Puzzles with central tendency
+## Puzzles with central tendency
 
 We observe the numbers: $\{7, 8, 8 , 9, 20, 20, 30\}$
 
@@ -394,7 +339,7 @@ Of course you can use code to calculate the mean and the median! For example, tr
 
 ```{r centrality-4-mean, exercise=TRUE}
 # calculate the mean of the numbers {1, 9, 10}.
-c(___, ___, ___) %>% mean()
+c(___, ___, ___) |> mean()
 ```
 
 
@@ -406,7 +351,7 @@ grade_result(
 
 ```{r centrality-5-median, exercise=TRUE}
 # calculate the median of the numbers {1, 9, 10}.
-___ %>% median()
+___ |> median()
 ```
 
 ```{r centrality-5-median-check}
@@ -436,17 +381,17 @@ Choose a value between the mean and the median of the set $X=\{1, 9, 10\}$ and a
 ```{r centrality-7, exercise=TRUE}
 x_new_value <- ___
 # The mean of the original set 
-old_mean <- c(1, 9, 10) %>% mean()
+old_mean <- c(1, 9, 10) |> mean()
 # The mean with your new value
-new_mean <- c(1, 9, 10, ___) %>% mean()
-glue("Holla! Adding the value {x_new_value} increased the mean from {old_mean} to {new_mean}!") %>% 
+new_mean <- c(1, 9, 10, ___) |> mean()
+glue("Holla! Adding the value {x_new_value} increased the mean from {old_mean} to {new_mean}!") |> 
   print()
 
  # The median of the original set 
-old_median <- c(1, 9, 10) %>% median()
+old_median <- c(1, 9, 10) |> median()
 # The median goes down after adding the the new value
-new_median <- c(1, 9, 10, ___) %>% median()
-glue("Gracious me! The same value decreased the median from {old_median} to {new_median}!")%>% 
+new_median <- c(1, 9, 10, ___) |> median()
+glue("Gracious me! The same value decreased the median from {old_median} to {new_median}!")|> 
   print()
 
 ```
@@ -455,22 +400,79 @@ glue("Gracious me! The same value decreased the median from {old_median} to {new
 ```{r centrality-7-solution}
 x_new_value <- 7
 # The mean of the original set 
-old_mean <- c(1, 9, 10) %>% mean()
+old_mean <- c(1, 9, 10) |> mean()
 # The mean with your new value
-new_mean <- c(1, 9, 10, x_new_value) %>% mean()
+new_mean <- c(1, 9, 10, x_new_value) |> mean()
 glue("Holla! Adding the value {x_new_value} 
-     increased the mean from {old_mean} to {new_mean}!") %>% 
+     increased the mean from {old_mean} to {new_mean}!") |> 
   print()
 
  # The median of the original set 
-old_median <- c(1, 9, 10) %>% median()
+old_median <- c(1, 9, 10) |> median()
 # The median goes down after adding the the new value
-new_median <- c(1, 9, 10, x_new_value) %>% median()
+new_median <- c(1, 9, 10, x_new_value) |> median()
 glue("Gracious me! The same value decreased
-     the median from {old_median} to {new_median}!")%>% 
+     the median from {old_median} to {new_median}!")|> 
   print()
 
 ```
+
+
+### Group means
+
+To answer this question we start by using `mutate()` to create a new variable that will be TRUE if the state value is either "California", "Oregon", or "Washington", and FALSE otherwise. This process uses some of the tools we've seen before, namely the `if_else()` function and the `%in%` operator, and puts them together. 
+
+In the code below, we make a new variable named `west_coast` and specify how that variable is calculated. The condition we use inside of the `if_else()` function states that if the state associated with an observation is included in "California, Oregon, or Washington, the `west_coast` variable should have a value of `"yes"`. If the state of an observation is not included in this list, then the `west_coast` variable should have a value of `"no"`. 
+
+Notice the `life_with_west <- life |>` line in the code below. This line is telling R that we are creating a new object, `life_with_west` that contains the `west_coast` variable, a variable that consists of values `yes` and `no`.
+
+```{r create-west-coast, echo = TRUE}
+life_with_west <- life |>
+  mutate(
+    west_coast = 
+      if_else(
+        state %in% c("California", "Oregon", "Washington"),
+        "yes",
+        "no")
+    )
+```
+
+To compute means for the two groups (west coast and the rest of the country), we pipe this updated dataset into the `group_by()` function, and indicate how we would like to make the groups. Then we can `summarize()` those groups, West Coast counties and non-West Coast counties, by taking the `mean()` and `median()` of their life expectancies. 
+
+
+
+```{r life-groupby, exercise = TRUE}
+life_with_west |>
+  group_by(west_coast) |>
+  summarize(mean(expectancy),
+            median(expectancy))
+
+```
+
+
+From the code chunk above, remove the line with the `group_by` clause, so that you are left with the following code: 
+
+```{r life-no-groupby, eval=FALSE, echo = TRUE}
+life_with_west |>
+  summarize(mean(expectancy),
+            median(expectancy))
+```
+
+
+Now run the code to answer the following question:
+
+```{r quiz-group-by, echo=FALSE}
+question("What happens when you remove the `group_by` clause from the code above?", 
+         allow_retry = TRUE, random_answer_order = FALSE, 
+         answer("Nothing happens, we still get the same result"), 
+         answer("we get the mean life expectency across all residents in the USA"), 
+         answer("we get the mean of the life expectencies across all counties in the USA (the mean of county means)", correct=TRUE, message="That's correct. Each row represents one county in the USA. If we take the mean of the rows, we are effectively averaging across counties and not across states."), 
+         answer("we get the mean of the life expectencies in each state in the USA")
+         )
+```
+
+
+We learn that looking at both mean and median, the typical West Coast county has a slightly higher average life expectancy than counties not on the West Coast.
 
 ### Central tendency: a conclusion {.tip}
 The mean and median are both measures of central tendency, but they have different properties: extreme values influences the mean but not the median.
@@ -485,9 +487,17 @@ But how certain are we, that we will get our prediction right? Imagine that maki
 
 How do you summarize the variability that you see in a set of numbers?
 
+The simplest measure is  the **range** of the data: the distance between the maximum and the minimum.
 
+```{r range, echo = TRUE}
+life_ma |>
+  summarise(
+    min = min(expectancy),
+    max = max(expectancy),
+    range = max - min
+  )
+```
 
-Suppose we want to describe variation in the data. One way is to use the range, which describes the distance between the smallest and largest value in a set.
 
 Consider the following two sets, $A$ and $B$.
 
@@ -544,7 +554,7 @@ In particular, range ignores all the values in a set except for the largest and 
 
 ### Mean Absolute Deviation (MAD)
 
-Consider the following data-points: $X=\{10, 10, 15, 18, 22\}$. Check that its sample mean is $\bar{X}=15$.
+Consider the following data-points: $X=\{10, 10, 15, 18, 22\}$. Check that the sample mean of this set is $\bar{X}=15$.
 
 ```{r spread-fig2, fig.height=1.5, fig.width=3}
 bus.wait <- c(10, 10, 15, 18, 22)
@@ -566,7 +576,7 @@ ggplot() +
 Now consider the distances between each of the data points and the sample mean $\bar{X}=15$. These distances are as follows:
 
 $$
-\text{distance}_i=X_i - \bar{X}=\{10 - 15, 10- 15, 15 - 15,\cdots \}=\{-5, -15, 0,\cdots \}
+\text{distance}_i=X_i - \bar{X}=\{10 - 15, 10- 15, 15 - 15, 18 - 15\cdots \}=\{-5, -15, 0, 3, \cdots \}
 $$
 
 ```{r spread-2, fig.height=3, fig.width=3, eval=TRUE}
@@ -602,7 +612,7 @@ In the question above, you calculated a very important measure of spread: the "m
 
 The mean absolute deviation is a helpful statistic as it allows us to represent the spread of a set of data-points with a single number. A set with a MAD of 4 has values that are, on average, 4 units away from the mean.
 
-```{r, eval=TRUE}
+```{r bus-plot, eval=TRUE}
 ggplot() + 
   geom_point(aes(x = seq(bus.wait), y = bus.wait)) + 
   geom_hline(yintercept = 15, 
@@ -690,9 +700,9 @@ For example, consider our bus-waiting data set $X=\{10, 10, 15, 18, 22\}$. Let's
 In this case we do not see much of a difference between the two MADs, but recall that the mean is more susceptible to extreme values than the median. Adding an extreme value will therefore affect the Mean Absolute Deviance much more than the Median Absolute Deviance.
 
 
-### Variance and SD
+### Variance and Standard deviation
 
-Though simple to use and intuitive as a measure of spread, the two MADs have some unwanted properties. First, the absolute value of a number has no derivative at zero, which makes it mathematically inconvenient to use. In addition, the mean deviation from the **mean** can be the same as the mean deviation from other points along the continuum, so as a measure of spread, MAD is not uniquely associated with the mean. This becomes a problem, when we would like our measure of dispersion to be a mathematical optimum of some objective function.
+Though simple to use and intuitive as a measure of spread, the two MADs have some unwanted properties. First, the absolute value of a number has no derivative at zero, which makes it mathematically inconvenient to use. In addition, the mean absolute deviation from the **mean** can be the same as the mean absolute deviation from other points along the continuum, so as a measure of spread, MAD is not uniquely associated with the mean. This becomes a problem, when we would like our measure of dispersion to be a mathematical optimum of some objective function.
 
 ### 
 
@@ -880,7 +890,7 @@ p1 / p2 / p3
 ```{r  quiz-var2}
 
 quiz(caption = "", 
-     question_checkbox("In a previous question, we explored a set consisting of ninety-nine times the value zero, and one time the value 100 $X=\\{0,0,0,0,\\ldots,100 \\}$. We found that the median of this set is zero while its mean is 1.<br/><br/> Imagine that a number is chosen at random from this set. Your job is to guess this number. Making a mistake incurs a cost, equal to the difference between your guess and the real number. You want to minimize your (average) cost. Select the correct answer:", 
+     question_checkbox("In a previous question, we explored a set consisting of ninety-nine times the value zero, and one time the value 100 $X=\\{0,0,0,0,\\ldots,100 \\}$. We found that the median of this set is zero while its mean is 1.<br/><br/> Imagine that a number is chosen at random from this set. Your job is to guess this number. Making a mistake incurs a cost, equal to the difference between your guess and the real number. <br/><br/>For example, if you guess 50 and the real number is 100, the cost is the difference between 100 and 50, which is 50. You want to minimize your (average) cost. <br/><br/>Select the correct answer:", 
      answer("Guessing the mean minimizes your (average) cost"),
      answer("Guessing the median minimizes your (average) cost", correct = TRUE), 
      answer("Guessing the median, your average cost is 1", correct = TRUE),
@@ -924,6 +934,81 @@ This example may look a bit contrived, but in fact it represents a common patter
 
 It is not surprising that this example was inspired by a (very much recommended) tutorial titled: [Breaking down intuitively the concept of standard deviation. Why people don't get it](https://www.youtube.com/watch?v=iKJy2YpYPe8){target="_blank" rel="noopener noreferrer"} by the great Nassim Nicholas Taleb, the author of the bestseller: **The Black Swan: The Impact of the Highly Improbable**.
 
+### Variation and standard deviation in R
+
+To calculate measures of spread in R, we'll first define the center as the mean and quantify the distance from the mean by taking the difference between each observation and that mean. 
+
+```{r ref.label = "life-ma-plot-mean"}
+```
+
+That results in `r nrow(life_ma)` differences, some positive, some negative. 
+
+```{r ma-deviation}
+life_ma |>
+  mutate(deviation = expectancy - life_ma_summary$mean)
+```
+
+We'd like to reduce all of these differences to a single measure of variability, and one option is to add them up. But as we saw before, if we do that the positives and negatives will cancel each other. To avoid that (and also to give higher weight to deviations from the mean that are larger), we square each difference.
+
+```{r ma-deviation-sq}
+life_ma |>
+  mutate(
+    deviation = expectancy - life_ma_summary$mean,
+    deviation_sq = deviation^2
+    )
+```
+
+And then we sum them up.
+
+```{r ma-deviation-sq-sum}
+life_ma |>
+  mutate(
+    deviation = expectancy - life_ma_summary$mean,
+    deviation_sq = deviation^2
+    ) |>
+  summarise(sum_sq_deviation = sum(deviation_sq))
+```
+
+### 
+
+This new measure has an undesirable property: it will just keep getting bigger the more data that you add. You can fix this by looking at the average square deviation, that is, dividing this measure by the number of observations, `r nrow(life_ma)`. Now, the quantity is a useful measure found by the following steps: 
+
+1. Find the center (mean) of the data
+2. Then find the squared distance between each observation and the mean
+3. Divide the total squared distance by the number of observations ($n$) in the dataset
+
+```{r ma-deviation-sq-mean-pop}
+life_ma |>
+  mutate(
+    deviation = expectancy - mean(life_ma$expectancy),
+    deviation_sq = deviation^2
+    ) |>
+  summarise(mean_sq_deviation = sum(deviation_sq) / nrow(life_ma))
+```
+
+If you change the $n$ to an $n - 1$, you get what's called the *sample variance*, one of the most useful measures of the spread of a distribution. 
+
+```{r ma-deviation-sq-mean-samp, echo = TRUE}
+life_ma |>
+  mutate(
+    deviation = expectancy - mean(life_ma$expectancy),
+    deviation_sq = deviation^2
+    ) |>
+  summarise(mean_sq_deviation = sum(deviation_sq) / (nrow(life_ma) - 1))
+```
+
+### 
+
+In R, you can use the built-in `var()` function to calculate the sample variance.
+
+```{r var, echo = TRUE}
+life_ma |>
+  summarise(var = var(expectancy))
+```
+
+
+
+
 
 ### Standard deviation
 
@@ -934,6 +1019,16 @@ A more intuitive measure of spread is the square root of the variance, also know
 $$
 \text{sd}=\sqrt{\text{variance}}
 $$
+
+
+To calculate it in R, we simply use the function `sd()`. The sample standard deviation is more convenient than the variance because it is in the same units as the original data. In this case we can say that the standard deviation of the `r nrow(life_ma)` counties' life expectancies is `r life_ma_summary$sd` years. 
+
+```{r sd, echo = TRUE}
+life_ma |>
+  summarise(sd = sd(expectancy))
+```
+
+By comparison, the variance of this sample is `r life_ma_summary$var` years squared, which is a unit that we have no real intuition about.
 
 
 ```{r sd-formula, out.width="80%"}
@@ -962,7 +1057,7 @@ Notice that when data represents a sample of a population we will have to use a 
 
 ### Innerquartile range
 
-There are two more measures of spread that are good to know about. The **interquartile range**, or **IQR**, is the distance between the two numbers that cut-off the middle 50% of your data. This should sound familiar from the discussion of boxplots: the height of the box is exactly the IQR. We can either calculate the first and third quartiles using the `quantile()` function and take their difference...
+One last measure of spread that is good to know  is the **interquartile range**, or **IQR**. This is the distance between the two numbers that cut-off the middle 50% of your data. This should sound familiar from the discussion of boxplots: the height of the box is exactly the IQR. We can either calculate the first and third quartiles using the `quantile()` function and take their difference...
 
 ```{r quartile, echo = TRUE}
 life_ma |>
@@ -980,18 +1075,7 @@ life_ma |>
   summarise(iqr = IQR(expectancy))
 ```
 
-### Range 
 
-The final measure is simply the **range** of the data: the distance between the maximum and the minimum.
-
-```{r range, echo = TRUE}
-life_ma |>
-  summarise(
-    min = min(expectancy),
-    max = max(expectancy),
-    range = max - min
-  )
-```
 
 ### Choosing a measure of spread 
 
@@ -1073,7 +1157,7 @@ question("Which set of measures of spread would be *worst* for describing the tw
   answer("A: IQR, B: IQR", message = "Given the two distributions, the IQR seems like it'd be okay."),
   answer("A: SD, B: IQR", message = "Hm, not quite. Try again!"),
   answer("A: Variance, B: Range", correct = TRUE, message = "Good job!" ), 
-  incorrect = "A has a high peak and its width is large. What does that tell you about its variance?",
+  correct = "The variance and the range are measures that are the most sensitive to extreme values, therefore we would probably avoid them in this case.",
   allow_retry = TRUE
 )
 ```
@@ -1402,130 +1486,6 @@ p1 + p2
 
 What we see is interesting: the boxplot flags many counties as outliers, both along the West Coast but also in the rest of the country as well. So why was the blip more apparent on the West Coast? It has to do with sample size. There are far fewer counties in the West Coast group, so these few outliers have an oversized effect on the density plot. In the case of the non-West Coast group, there are many more counties that ended up washing out the effect of the outliers in the density plot.
 
-## Indicating outliers
-
-It is often useful to consider outliers separately from the rest of the data, so lets create a new column to store whether or not a given county is an outlier. This requires that we `mutate()` a new column called `is_outlier` that is TRUE if the income is greater than some threshold and FALSE otherwise. In this case, we've picked a threshold for outliers as counties with incomes greater than $75,000.
-
-```{r io, echo = TRUE}
-life_with_west <- life_with_west |>
-  mutate(is_outlier = income > 75000)
-```
-
-A useful tool when inspecting outliers is to filtering the dataset to only include outliers, and then arranging them in decreasing order. Let's do that next.
-
-```{r, echo = TRUE}
-life_with_west |>
-  filter(is_outlier) |>
-  arrange(desc(income))
-```
-
-Based on the output, we learn that the top income county is actually Teton County, in the Grand Tetons of Wyoming, and that three of the other top ten counties are in Texas and two are in Nebraska. Note that we didn't save this result to a new object, we're only viewing the output to investigate the outliers, but we're not removing them from the dataset (at least not yet).
-
-### Plotting without outliers
-
-We can also try rebuilding the density plots without the outliers.
-
-To do this, we form a pipeline where the first step is to filter on those counties that are not outliers. Recall that `is_outlier` is a vector of `TRUE`s and `FALSE`s. We can simply state that we are not interested in any of the values that are `TRUE` by adding an exclamation point (`!`) before the name of the variable. We can then pipe this filtered dataset into the same `ggplot()` code we used for the original overlaid density plots.
-
-```{r, echo = TRUE, eval = FALSE}
-life_with_west |>
-  filter(!is_outlier) |>  
-  ggplot(aes(x = income, fill = west_coast)) +
-  geom_density(alpha = 0.3)
-
-ggplot(life_with_west, aes(x = income, fill = west_coast)) +
-  geom_density(alpha = 0.3)
-```
-
-```{r, fig.width = 8}
-p1 <- life_with_west |>
-  filter(!is_outlier) |>  
-  ggplot(aes(x = income, fill = west_coast)) +
-  geom_density(alpha = 0.3)
-
-p2 <- ggplot(life_with_west, aes(x = income, fill = west_coast)) +
-  geom_density(alpha = 0.3)
-
-p1 + p2
-```
-
-The result is a plot that focuses much more on the body of the distribution. You can contrast that with the original plot, which was dominated by the strong right skew caused by the extreme values. Note that neither of these plots is right or wrong, but they tell different stories of the structure in this data, both of which are valuable.
-
-
-### Your turn! 
-
-Consider the distribution, shown here, of the life expectancy in Asian countries. The boxplot identifies one clear outlier: a country with a notably low life expectancy. 
-
-```{r}
-gap2007 <- filter(gapminder, year == 2007)
-
-gap2007 |>
-  filter(continent == "Asia") |>
-  ggplot(aes(x = lifeExp)) +
-  geom_boxplot()
-
-```
-
-Next, we'll build a plot with that country removed. The `gap2007` is still available in your workspace. To carry out this process we need to use the following steps: 
-
-1. Use `filter()` to retain only observations from Asia
-2. Use `mutate()` to create a new variable called `is_outlier`
-3. Use `if_else()` to specify how the `is_outlier` variable should be made, where countries with a life expectancy less than 50 should get a value of `TRUE` and everyone else should get a value of `FALSE`
-4. Create a boxplot of the life expectancies of the non-outlier countries
-
-```{r ex5-setup}
-gap2007 <- filter(gapminder, year == 2007)
-```
-
-```{r ex5, exercise = TRUE}
-# Create a boxplot of the distribution of life expectancy with the outlier removed 
-gap2007 |> 
-  filter(___) |>
-  mutate(is_outlier = ___) |> 
-  filter(___) |>
-  ggplot(aes(x = ___)) +
-  geom_boxplot()
-```
-
-```{r ex5-hint-1}
-## First filter out observations from countries other than Asia
-gap2007 |> 
-  filter(continent == "Asia") |>
-  mutate(is_outlier = ___) |> 
-  filter(___) |>
-  ggplot(aes(x = ___)) +
-  geom_boxplot()
-```
-
-```{r ex5-hint-2}
-## Next, create a new variable named is_outlier using the if_else function
-gap2007 |> 
-  filter(continent == "Asia") |>
-  mutate(is_outlier = if_else(lifeExp < 50, TRUE, FALSE)) |> 
-  filter(___) |>
-  ggplot(aes(x = ___)) +
-  geom_boxplot()
-```
-
-```{r ex5-hint-3}
-## Next, use the is_outlier variable to filter out the observations flagged as outliers
-gap2007 |> 
-  filter(continent == "Asia") |>
-  mutate(is_outlier = if_else(lifeExp < 50, TRUE, FALSE)) |> 
-  filter(!is_outlier) |>
-  ggplot(aes(x = ___)) +
-  geom_boxplot()
-```
-
-```{r ex5-solution}
-# Create a boxplot of the distribution of life expectancy with the outlier removed 
-gap2007 |>
-  filter(continent == "Asia") |>
-  mutate(is_outlier = if_else(lifeExp < 50, TRUE, FALSE)) |> 
-  filter(!is_outlier) |>
-  ggplot(aes(x = lifeExp)) +
-  geom_boxplot()
-```
 
 
 ## Congratulations!
@@ -1535,19 +1495,22 @@ If you need to generate a hash for submission, click "Next Topic".
 
 What's next?
 
-`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://openintrostat.github.io/ims-tutorials/)
 
-`r emo::ji("spiral_notepad")` [Tutorial 2: Exploratory data analysis](https://openintrostat.github.io/ims-tutorials/02-explore/)
 
-`r emo::ji("one")` [Tutorial 2 - Lesson 1: Visualizing categorical data](https://openintro.shinyapps.io/ims-02-explore-01/)
+`r emo::ji("ledger")` [Full list of tutorials](https://oferengel.github.io/ims-tutorials-4-umcg/)
 
-`r emo::ji("two")` [Tutorial 2 - Lesson 2: Visualizing numerical data](https://openintro.shinyapps.io/ims-02-explore-02/)
+`r emo::ji("spiral_notepad")` [Tutorial 2: Exploring data](https://oferengel.github.io/ims-tutorials-4-umcg/02-explore/)
 
-`r emo::ji("three")` [Tutorial 2 - Lesson 3: Summarizing with statistics](https://openintro.shinyapps.io/ims-02-explore-03/)
+`r emo::ji("one")` [2.1: Visualizing categorical data](https://oferengel-posit.shinyapps.io/02-01-lesson/)
 
-`r emo::ji("four")` [Tutorial 2 - Lesson 4: Case study](https://openintro.shinyapps.io/ims-02-explore-04/)
+`r emo::ji("two")` [2.2: Visualizing numerical data](https://oferengel-posit.shinyapps.io/02-02-lesson/)
+
+`r emo::ji("three")` [2.3: Summarizing with statistics](https://oferengel-posit.shinyapps.io/02-03-lesson/)
+
+`r emo::ji("four")` [2.4: Case study](https://oferengel-posit.shinyapps.io/02-04-lesson/)
 
 `r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
+
 
 
 

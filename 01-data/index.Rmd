@@ -1,8 +1,6 @@
 ---
 title: "Introduction to data"
 output: html_document
-params:
-  shiny_url: "https://oferengel-posit.shinyapps.io/"
 ---
 
 <meta http-equiv='cache-control' content='no-cache'> 
@@ -13,7 +11,7 @@ params:
 knitr::opts_chunk$set(echo = TRUE)
 library(glue)
 # shiny_url <-  "https://oferengel-posit.shinyapps.io/ims-01-data-02/"
-shiny_url <- params$shiny_url
+shiny_url <- "https://oferengel-posit.shinyapps.io/"
 ```
 
 <img style="float: right; margin: 0px 0px 20px 20px" src="../logo/umcg.png" alt="Tutorial illustration" width="20%" height="20%">

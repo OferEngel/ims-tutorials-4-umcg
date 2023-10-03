@@ -1,5 +1,5 @@
 ---
-title: "2.1 - Exploring categorical data"
+title: "2.1 Exploring categorical data"
 output: 
   learnr::tutorial:
     progressive: true
@@ -283,13 +283,19 @@ comics |>
 ```
 
 
+Your table should look like the one below. See if you can recreate it!
+
+![](images/contingency-align-gender.jpg){width="80%"}
 
 
-```{r ex1-solution}
+```{r ex1-hint}
 # Create a 2-way contingency table
 comics |>
-  count(align, gender) |> 
-  pivot_wider(names_from = align, values_from = n)
+  # you want a count of variables `align` and `gender`
+  count(___, ___) |> 
+  # The names of columns are in the `align` variable
+  # Have a look at the previous example!
+  pivot_wider(names_from = ___, values_from = ___)
 ```
 
 
@@ -421,6 +427,16 @@ comics |>
 
 In the table, we see that the single largest category are characters that are bad and secret at about 29% of characters.
 
+
+```{r quiz-fctp, echo=FALSE}
+question("Which of the following adds up to one?",
+  answer("Adding up all the proportions in one of the columns.", message = "Nope, not quite!"),
+  answer("Adding up all the proportions in one of the rows."),
+  answer("Adding up all the proportions in the entire table.", correct = TRUE), 
+  allow_retry = TRUE
+)
+```
+
 Also note that because these are all proportions out of the whole dataset, the sum of all of these proportions is 1.
 
 
@@ -460,13 +476,21 @@ comics |>
 ```
 
 ```{r quiz-condition-rows, echo=FALSE}
-question(
-  "By conditioning on `id` in the table above, we can infer the following:",
-    allow_retry = TRUE, random_answer_order = TRUE,
-  answer("Among public characters, the proportion of Good characters is the greatest", correct = TRUE, message="To compare between public characters we condition on `id`"),
-  answer("Among secret characters, the proportion of Neutral characters is the lowest", correct = TRUE, message="To compare between secret characters we condition on `id`"),
-  answer("Among Good characters, the proportion of Public characters is the greatest", correct = FALSE, message="To compare Good characters we need to condition on `align` and not on `id`"),
-  answer("Among neutral characters, the proportion of Secret characters is the lowest", correct = FALSE, message="To compare neutral characters we need to condition on `align` and not on `id`")
+quiz(caption = "", 
+  question("Which of the following adds up to one?",
+    answer("Adding up all the proportions in one of the columns.", message = "Nope, not quite!"),
+    answer("Adding up all the proportions in one of the rows.", correct = TRUE),
+    answer("Adding up all the proportions in the entire table."), 
+    allow_retry = TRUE
+  ),
+  question(
+    "By conditioning on `id` in the table above, we can infer the following:",
+      allow_retry = TRUE, random_answer_order = TRUE,
+    answer("Among public characters, the proportion of Good characters is the greatest", correct = TRUE, message="To compare between public characters we condition on `id`"),
+    answer("Among secret characters, the proportion of Neutral characters is the lowest", correct = TRUE, message="To compare between secret characters we condition on `id`"),
+    answer("Among Good characters, the proportion of Public characters is the greatest", correct = FALSE, message="To compare Good characters we need to condition on `align` and not on `id`"),
+    answer("Among neutral characters, the proportion of Secret characters is the lowest", correct = FALSE, message="To compare neutral characters we need to condition on `align` and not on `id`")
+  )
 )
 
 ```
@@ -509,13 +533,22 @@ comics |>
 
 
 ```{r quiz-condition-column, echo=FALSE}
-question(
-  "By conditioning on `align` in the previous table, we can infer the following:",
-    allow_retry = TRUE, random_answer_order = TRUE,
-  answer("Among public characters, the proportion of Neutral characters is the greatest", correct = FALSE, message="To compare between public characters we condition on `id`"),
-  answer("Among secret characters, the proportion of Neutral characters is the lowest", correct = FALSE, message="To compare between secret characters we condition on `id`"),
-  answer("Among Good characters, the proportion of Public characters is the greatest", correct = TRUE, message="To compare Good characters we need to condition on `align`"),
-  answer("Among neutral characters, the proportion of Unknown characters is the lowest", correct = TRUE, message="To compare neutral characters we need to condition on `align`")
+quiz( 
+  caption = "", 
+  question("Which of the following adds up to one?",
+    answer("Adding up all the proportions in one of the columns.", correct = TRUE),
+    answer("Adding up all the proportions in one of the rows."),
+    answer("Adding up all the proportions in the entire table."), 
+    allow_retry = TRUE
+  ),
+  question(
+    "By conditioning on `align` in the previous table, we can infer the following:",
+      allow_retry = TRUE, random_answer_order = TRUE,
+    answer("Among public characters, the proportion of Neutral characters is the greatest", correct = FALSE, message="To compare between public characters we condition on `id`"),
+    answer("Among secret characters, the proportion of Neutral characters is the lowest", correct = FALSE, message="To compare between secret characters we condition on `id`"),
+    answer("Among Good characters, the proportion of Public characters is the greatest", correct = TRUE, message="To compare Good characters we need to condition on `align`"),
+    answer("Among neutral characters, the proportion of Unknown characters is the lowest", correct = TRUE, message="To compare neutral characters we need to condition (or `group_by`) on `align`")
+  )
 )
 
 ```
@@ -613,24 +646,24 @@ quiz(caption = "",
     answer("13%"),
     answer("34%", message = "Nope, try again!"),
     answer("44%", message = "Nope, try again!"),
-    answer("51%", correct = TRUE, message = "Nice! To answer this question, you needed to look at how `align` was distributed *within* each `gender`. That is, you wanted to *condition* on the `gender` variable."),
+    answer("51%", correct = TRUE, message = "Nice! To answer this question, you needed to look at how `align` was distributed *within* each `gender`. That is, you wanted to *condition* on (or `group_by`)  the `gender` variable."),
     answer("We cannot tell from the two tables", message = "Not quite!"),
     allow_retry = TRUE
   ),
-  question("Using the tables above, approximately what proportion of all characters are both good and female?",    
-    answer("13%", correct = TRUE, message = "Nice! To answer this question, you needed to look at the distribution of ALL the combinations. That is, you wanted the table with the joint distribution."),
+  question("Approximately what proportion of all characters are both good and female?",    
+    answer("13%", correct = TRUE, message = "Nice! To answer this question, you needed to look at the joint distribution across ALL the combinations."),
     answer("34%", message = "Nope, try again!"),
     answer("44%", message = "Nope, try again!"),
     answer("51%"),
     answer("We cannot tell from the two tables", message = "Not quite!"),
     allow_retry = TRUE
   ), 
-  question("Using the tables above, approximately what proportion of good characters are female?",
+  question("Approximately what proportion of good characters are female?",
     answer("13%"),
     answer("34%", message = "Nope, try again!"),
     answer("44%", message = "Nope, try again!"),
     answer("51%"),
-    answer("We cannot tell from the two tables", correct = TRUE, message = "Nice! To answer this question, you needed to look at how `gender` was distributed *within* each `align`. That is, you wanted to *condition* on the `align` variable."),
+    answer("We cannot tell from the two tables", correct = TRUE, message = "Nice! To answer this question, you needed to look at how `gender` was distributed *within* each `align`. That is, you wanted to *condition* on (or `group_by`) the `align` variable."),
     allow_retry = TRUE
   )
   
@@ -846,10 +879,20 @@ If you need to generate a hash for submission, click "Next Topic".
 What's next?
 
 
+
 `r emo::ji("ledger")` [Full list of tutorials](https://oferengel.github.io/ims-tutorials-4-umcg/)
 
+`r emo::ji("spiral_notepad")` [Tutorial 2: Exploring data](https://oferengel.github.io/ims-tutorials-4-umcg/02-explore/)
 
-`r emo::ji("spiral_notepad")` [Tutorial 2: Exploratory data analysis](https://oferengel.github.io/ims-tutorials-4-umcg/02-explore/)
+`r emo::ji("one")` [2.1: Visualizing categorical data](https://oferengel-posit.shinyapps.io/02-01-lesson/)
+
+`r emo::ji("two")` [2.2: Visualizing numerical data](https://oferengel-posit.shinyapps.io/02-02-lesson/)
+
+`r emo::ji("three")` [2.3: Summarizing with statistics](https://oferengel-posit.shinyapps.io/02-03-lesson/)
+
+`r emo::ji("four")` [2.4: Case study](https://oferengel-posit.shinyapps.io/02-04-lesson/)
+
+`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
 
 
 ## Submit

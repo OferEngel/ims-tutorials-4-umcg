@@ -777,11 +777,12 @@ What's next?
 
 `r emo::ji("spiral_notepad")` [Tutorial 1: Introduction to data](https://oferengel.github.io/ims-tutorials-4-umcg/01-data/)
 
-`r emo::ji("one")` [Lesson 1.1: Language of data](%60r%20glue(%22%7Bshiny_url%7D01-01-lesson/%22)%60)
 
-`r emo::ji("two")` [Tutorial 1 - Lesson 2: Types of studies](%60r%20glue(%22%7Bshiny_url%7D01-02-lesson/%22)%60)
+`r emo::ji("one")` [Lesson 1.1: Language of data](https://oferengel-posit.shinyapps.io/01-01-lesson/)
 
-`r emo::ji("four")` [Tutorial 1 - Lesson 3: Case study](%60r%20glue(%22%7Bshiny_url%7D01-04-lesson/%22)%60)
+`r emo::ji("two")` [Lesson 1.2: Types of studies](https://oferengel-posit.shinyapps.io/01-02-lesson/)
+
+`r emo::ji("three")` [Lesson 1.3: Case study](https://oferengel-posit.shinyapps.io/01-03-lesson/)
 
 ## Hash and submit
 
