@@ -875,3 +875,10 @@ encoder_logic()
 ```{r encode, echo=FALSE}
 learnrhash::encoder_ui(ui_before = hash_encoder_ui)
 ```
+
+
+
+
+### Submit your hash in a form
+
+After creating the hash, please copy it, navigate to [this form](https://forms.gle/ajEDfePc1jcTukyB7) and fill it in and submit. You will need to submit the form once for every lesson you complete in this tutorial.
