@@ -299,8 +299,8 @@ quiz(
     ), 
   question(
     "In a herd of sheep, animals vary in terms of their: <br/>V1 - daily caloric intake<br/>V2 - Their body mass.", allow_retry = TRUE,
-    answer("V1 is the explanatory and V2 is the outcome"), 
-    answer("V2 is the explanatory and V1 is the outcome", correct = TRUE)
+    answer("V1 is the explanatory and V2 is the outcome", correct = TRUE), 
+    answer("V2 is the explanatory and V1 is the outcome")
     )
 )
 ```
