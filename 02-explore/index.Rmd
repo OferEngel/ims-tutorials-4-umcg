@@ -90,9 +90,9 @@ Statistics for describing distributions of data.
 * Recognize the most important features of the normal distribution
 	
 
-### 5 BONUS [Case study](`r glue("{shiny_url}02-04-lesson")`)
+### 5 [Case study](`r glue("{shiny_url}02-04-lesson")`)
 
-This tutorial is **optional**, though recommended. Apply what you've learned to explore and summarize a real world dataset in this case study of email spam.
+Apply what you've learned to explore and summarize a real world dataset in this case study of email spam.
 
 ## Additional references
 
