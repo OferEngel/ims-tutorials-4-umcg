@@ -1,0 +1,93 @@
+---
+title: "Lab Name"
+author: "Author Name"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    highlight: "pygments"
+    theme: "spacelab"
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: "show"
+    df_print: paged
+---
+
+```{r setup, message=FALSE}
+# 1. load the library "tidyverse"
+library(tidyverse)
+
+# 2. use the read_csv file to read the dataset
+nycflights <- read_csv("data/nycflights.csv")
+
+```
+
+
+### Exercise 1
+
+**Question:**  Experiment with different binwidths and use the `+ scale_x_log10()` to adjust your histogram in a way that will show its important features. What features are revealed now that were obscured in the original histogram?
+
+
+```{r ex1-hist-of-delays}
+# Write your code to create a histogram of delays
+ggplot(data = nycflights, aes(x = dep_delay)) + 
+  geom_histogram(binwidth = .1) + 
+  scale_x_log10()
+```
+
+**Answer:** [Replace this with your answer]
+
+
+
+### Exercise 2
+
+**Question:**  Create a new data frame that includes flights headed to SFO in February, and save this data frame as `sfo_feb_flights`.
+How many flights meet these criteria?
+
+
+```{r create-sfo_feb_flights}
+# Insert code for Exercise 2 here
+sfo_feb_flights <- nycflights %>%
+  filter(dest == "SFO", month == 2)
+```
+
+**Answer:** the number of flights is `r nrow(sfo_feb_flights)`
+
+
+
+### Exercise 3
+
+**Question:** Describe the distribution of the **arrival** delays of then `sfo_feb_flights` using an appropriate histogram and summary statistics.
+
+```{r ex3-arrival-delay}
+# Insert code for Exercise 3 here
+ggplot(data = sfo_feb_flights, aes(x = arr_delay)) + 
+  geom_histogram(binwidth = .2) + 
+  scale_x_log10(breaks = c(1, 2, 3, 5, 10, 25, 50, 100))
+
+sfo_feb_flights %>%
+  summarise(mean_ad   = mean(dep_delay), 
+            median_ad = median(dep_delay), 
+            IQR_ad = IQR(dep_delay), 
+            n         = n())
+
+```
+
+
+
+**Answer:** [Replace this with your answer]
+
+
+
+### Exercise 4
+
+**Question:** Calculate the median and interquartile range for `arr_delay`s of flights in in the `sfo_feb_flights` data frame, grouped by carrier. Which carrier has the most variable arrival delays?
+
+```{r ex4-arrival-delay-median-IQR}
+# Insert code for the Exercise here
+
+
+```
+
+
+**Answer:** [Replace this with your answer]
+
