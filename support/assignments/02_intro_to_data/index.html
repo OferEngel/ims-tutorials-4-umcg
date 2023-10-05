@@ -1664,6 +1664,10 @@ Larger bins will include more observations. You can easily define the
 binwidth you want to use:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nycflights, <span class="fu">aes</span>(<span class="at">x =</span> dep_delay)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">15</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> nycflights, <span class="fu">aes</span>(<span class="at">x =</span> dep_delay)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">150</span>)</span></code></pre></div>
+<div id="boxedtext">
+<p>Notice that the data set includes some delays that are associated
+with negative time. What do you think this could mean?</p>
+</div>
 <p>As you can see, the distribution is very much skewed to the right.
 Ideally we would like to stretch the small numbers and squeeze the large
 numbers together. To do that, add to your <code>ggplot</code> the
@@ -1757,8 +1761,8 @@ in February, you can use the <code>|</code> instead of the comma.</p>
 <ol start="2" style="list-style-type: decimal">
 <li><p>Create a new data frame that includes flights headed to SFO in
 February, and save this data frame as <code>sfo_feb_flights</code>. How
-many flights meet these criteria? Try to use the function
-<code>nrow</code> inside of <a href="https://rmarkdown.rstudio.com/lesson-4.html">inline code</a> in
+many flights meet these criteria? Try using the function
+<code>nrow()</code> inside of <a href="https://rmarkdown.rstudio.com/lesson-4.html">inline code</a> in
 your answer, and knit your file to see that your text shows the answer
 correctly.</p></li>
 <li><p>Describe the distribution of the <strong>arrival</strong> delays
@@ -1844,13 +1848,18 @@ frame with the new version of this data frame that includes the new
 <span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">on_time_dep_rate =</span> <span class="fu">sum</span>(dep_type <span class="sc">==</span> <span class="st">&quot;on time&quot;</span>) <span class="sc">/</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(___))</span></code></pre></div>
 <ol start="5" style="list-style-type: decimal">
-<li>Create a list of <code>origin</code> airports and their rate of on
-time departure, and then visualize the distribution of on on time
-departure rate across the three airports using a segmented bar plot. If
-you could select an airport based on on time departure percentage, which
-NYC airport would you choose to fly out of? <strong>Hint:</strong> For
-the segmented bar plot, will need to map the <code>aes</code>thetic
-arguments as follows: <code>x = origin, fill = dep_type</code>.</li>
+<li>Create a list of <code>origin</code> airports and their rate of
+on-time-departure. Then visualize the distribution of on-time-departure
+rate across the three airports using a segmented bar plot (see below).
+If you could select an airport based on on time departure percentage,
+which NYC airport would you choose to fly out of? <strong>Hint:</strong>
+For the segmented bar plot, will need to map the <code>aes</code>thetic
+arguments as follows: <code>x = origin, fill = dep_type</code> and a
+<code>geom_bar()</code> layer. Create three plots, one with
+<code>geom_bar()</code> layer, one with
+<code>geom_bar(position = &quot;fill&quot;)</code> and the third with
+<code>geom_bar(position = &quot;dodge&quot;)</code>. Explain the difference
+between the three results.</li>
 </ol>
 <hr />
 </div>

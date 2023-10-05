@@ -133,6 +133,13 @@ ggplot(data = nycflights, aes(x = dep_delay)) + geom_histogram(binwidth = 150)
 
 ```
 
+::: {#boxedtext}
+
+Notice that the data set includes some delays that are associated with negative time. What do you think this could mean?
+
+:::
+
+
 As you can see, the distribution is very much skewed to the right. Ideally we would like to stretch the small numbers and squeeze the large numbers together. To do that, add to your `ggplot` the following layer at the very end `+ scale_x_log10()`.  
 
 1.  Experiment with different binwidths to adjust your histogram in a way that will show its important features. You may also want to try using the `+ scale_x_log10()` . What features are revealed now that were obscured in the original histogram? **Note:** When using the log scale, you may need to experiment with bin widths that are smaller than 1, such as `binwidth=0.1` or even less!
@@ -205,7 +212,7 @@ sfo_feb_flights <- nycflights %>%
 Note that you can separate the conditions using commas if you want flights that are both headed to SFO **and** in February.
 If you are interested in either flights headed to SFO **or** in February, you can use the `|` instead of the comma.
 
-2.  Create a new data frame that includes flights headed to SFO in February, and save this data frame as `sfo_feb_flights`. How many flights meet these criteria? Try to use the function `nrow` inside of [inline code](https://rmarkdown.rstudio.com/lesson-4.html) in your answer, and knit your file to see that your text shows the  answer correctly. 
+2.  Create a new data frame that includes flights headed to SFO in February, and save this data frame as `sfo_feb_flights`. How many flights meet these criteria? Try using the function `nrow()` inside of [inline code](https://rmarkdown.rstudio.com/lesson-4.html) in your answer, and knit your file to see that your text shows the  answer correctly. 
 
 
 3.  Describe the distribution of the **arrival** delays of flights headed to SFO in February, using an appropriate histogram and summary statistics.
@@ -306,17 +313,28 @@ nycflights %>%
 
 
 ```{r ot-dep-rate-sol, eval=FALSE, echo=FALSE}
+nycflights <- nycflights %>%
+  mutate(dep_type = ifelse(dep_delay < 5, "on time", "delayed"))
+
 nycflights %>%
   group_by(origin) %>%
   summarise(on_time_dep_rate = sum(dep_type == "on time") / n(), n = n()) %>%
-  arrange(desc(on_time_dep_rate)) |> 
-  ggplot(aes(origin, on_time_dep_rate)) + geom_col()
+  arrange(desc(on_time_dep_rate))  
+ 
+
+nycflights |> 
+  ggplot(aes(x = origin, fill = dep_type)) + geom_bar(position = "fill")
+
+nycflights |> 
+  ggplot(aes(x = origin, fill = dep_type)) + geom_bar(position = "dodge")
+
+
 ```
 
 
 
-5.  Create a list of `origin` airports and their rate of on time departure, and then visualize the distribution of on on time departure rate across the three airports using a segmented bar plot. If you could select an airport based on on time departure percentage, which NYC airport would you choose to fly out of?
-**Hint:** For the segmented bar plot, will need to map the `aes`thetic arguments as follows: `x = origin, fill = dep_type`.
+5.  Create a list of `origin` airports and their rate of on-time-departure. Then visualize the distribution of  on-time-departure rate across the three airports using a segmented bar plot (see below). If you could select an airport based on on time departure percentage, which NYC airport would you choose to fly out of?
+**Hint:** For the segmented bar plot, will need to map the `aes`thetic arguments as follows: `x = origin, fill = dep_type` and a `geom_bar()` layer. Create three plots, one with `geom_bar()` layer, one with `geom_bar(position = "fill")` and the third with `geom_bar(position = "dodge")`. Explain the difference between the three results.
 
 
 ------------------------------------------------------------------------

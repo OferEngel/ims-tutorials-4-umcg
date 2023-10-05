@@ -57,18 +57,22 @@ sfo_feb_flights <- nycflights %>%
 
 ### Exercise 3
 
-**Question:** Describe the distribution of the **arrival** delays of then `sfo_feb_flights` using an appropriate histogram and summary statistics.
+**Question:** Describe the distribution of the **arrival** delays of flights headed to SFO in February, using an appropriate histogram and summary statistics.
 
 ```{r ex3-arrival-delay}
 # Insert code for Exercise 3 here
 ggplot(data = sfo_feb_flights, aes(x = arr_delay)) + 
-  geom_histogram(binwidth = .2) + 
+  geom_histogram(binwidth = 5) 
+
+
+ggplot(data = sfo_feb_flights, aes(x = arr_delay)) + 
+  geom_histogram(binwidth = .1) + 
   scale_x_log10(breaks = c(1, 2, 3, 5, 10, 25, 50, 100))
 
 sfo_feb_flights %>%
-  summarise(mean_ad   = mean(dep_delay), 
-            median_ad = median(dep_delay), 
-            IQR_ad = IQR(dep_delay), 
+  summarise(mean_ad   = mean(arr_delay), 
+            median_ad = median(arr_delay), 
+            IQR_ad = IQR(arr_delay), 
             n         = n())
 
 ```
@@ -82,10 +86,17 @@ sfo_feb_flights %>%
 
 ### Exercise 4
 
-**Question:** Calculate the median and interquartile range for `arr_delay`s of flights in in the `sfo_feb_flights` data frame, grouped by carrier. Which carrier has the most variable arrival delays?
+**Question:** Calculate the median and interquartile range for `arr_delay`s of flights in in the `sfo_feb_flights` data frame, grouped by carrier. Which carrier(s) have the most variable arrival delays?
 
-```{r ex4-arrival-delay-median-IQR}
+```{r ex4-ad-by-carrier}
 # Insert code for the Exercise here
+sfo_feb_flights %>%
+  group_by(carrier) |> 
+  summarise(mean_ad   = mean(arr_delay), 
+            median_ad = median(arr_delay), 
+            sd_ad = sd(arr_delay), 
+            IQR_ad = IQR(arr_delay), 
+            n         = n())
 
 
 ```
@@ -99,12 +110,30 @@ sfo_feb_flights %>%
 
 ### Exercise 5
 
-**Question:** Create a list of `origin` airports and their rate of on-time-departure. Visualise your result using the `geom_col()` layer. If you could select an airport based on on time departure percentage, which NYC airport would you choose to fly out of?
+**Question:** Create a list of `origin` airports and their rate of on-time-departure. Then visualize the distribution of  on-time-departure rate across the three airports using a segmented bar plot (see below). If you could select an airport based on on time departure percentage, which NYC airport would you choose to fly out of?
+**Hint:** For the segmented bar plot, will need to map the `aes`thetic arguments as follows: `x = origin, fill = dep_type` and a `geom_bar()` layer. Create three plots, one with `geom_bar()` layer, one with `geom_bar(position = "fill")` and the third with `geom_bar(position = "dodge")`. Explain the difference between the three results.
 
 
 ```{r ex5-on_time_dep_rate}
 # Insert code for the Exercise here
+nycflights <- nycflights %>%
+  mutate(dep_type = ifelse(dep_delay < 5, "on time", "delayed"))
 
+nycflights %>%
+  group_by(origin) %>%
+  summarise(on_time_dep_rate = sum(dep_type == "on time") / n(), n = n()) %>%
+  arrange(desc(on_time_dep_rate))  
+ 
+
+nycflights |> 
+  ggplot(aes(x = origin, fill = dep_type)) + geom_bar()
+
+
+nycflights |> 
+  ggplot(aes(x = origin, fill = dep_type)) + geom_bar(position = "fill")
+
+nycflights |> 
+  ggplot(aes(x = origin, fill = dep_type)) + geom_bar(position = "dodge")
 
 ```
 
@@ -117,7 +146,10 @@ sfo_feb_flights %>%
 
 ```{r ex6-avg-speed-distance}
 # Insert code for the Exercise here
-
+nycflights |> 
+  mutate(speed = distance / air_time) |> 
+  ggplot(aes(distance, speed)) + 
+  geom_point() 
 
 ```
 
@@ -126,11 +158,14 @@ sfo_feb_flights %>%
 
 ### Exercise 7
 
-**Question:** Replicate the plot.
+**Question:** Replicate the following plot and determine what is the cutoff point for the latest departure delay where you can still have a chance to arrive at your destination on time. 
 
 ```{r ex7-plot-to-replicate}
 # Insert code for the Exercise here
-
+nycflights %>%
+  filter(carrier == "AA" | carrier == "DL" | carrier == "UA") |> 
+ggplot(aes(x = dep_delay, y = arr_delay, color = carrier)) +
+  geom_point(alpha = .5) 
 
 ```
 

@@ -54,7 +54,7 @@ How many flights meet these criteria?
 
 ### Exercise 3
 
-**Question:** Describe the distribution of the **arrival** delays of then `sfo_feb_flights` using an appropriate histogram and summary statistics.
+**Question:** Describe the distribution of the **arrival** delays of flights headed to SFO in February, using an appropriate histogram and summary statistics.
 
 ```{r ex3-arrival-delay}
 # Insert code for Exercise 3 here
@@ -72,7 +72,7 @@ How many flights meet these criteria?
 
 **Question:** Calculate the median and interquartile range for `arr_delay`s of flights in in the `sfo_feb_flights` data frame, grouped by carrier. Which carrier has the most variable arrival delays?
 
-```{r ex4-arrival-delay-median-IQR}
+```{r ex4-ad-by-carrier}
 # Insert code for the Exercise here
 
 
@@ -87,7 +87,8 @@ How many flights meet these criteria?
 
 ### Exercise 5
 
-**Question:** Create a list of `origin` airports and their rate of on-time-departure. Visualise your result using the `geom_col()` layer. If you could select an airport based on on time departure percentage, which NYC airport would you choose to fly out of?
+**Question:** Create a list of `origin` airports and their rate of on-time-departure. Then visualize the distribution of  on-time-departure rate across the three airports using a segmented bar plot (see below). If you could select an airport based on on time departure percentage, which NYC airport would you choose to fly out of?
+**Hint:** For the segmented bar plot, will need to map the `aes`thetic arguments as follows: `x = origin, fill = dep_type` and a `geom_bar()` layer. Create three plots, one with `geom_bar()` layer, one with `geom_bar(position = "fill")` and the third with `geom_bar(position = "dodge")`. Explain the difference between the three results.
 
 
 ```{r ex5-on_time_dep_rate}
