@@ -135,7 +135,7 @@ ggplot(data = nycflights, aes(x = dep_delay)) + geom_histogram(binwidth = 150)
 
 As you can see, the distribution is very much skewed to the right. Ideally we would like to stretch the small numbers and squeeze the large numbers together. To do that, add to your `ggplot` the following layer at the very end `+ scale_x_log10()`.  
 
-1.  Experiment with different binwidths and use the `+ scale_x_log10()` to adjust your histogram in a way that will show its important features. What features are revealed now that were obscured in the original histogram? **Note:** When using the log scale, you may need to experiment with bin widths that are smaller than 1, such as `binwidth=0.1` or even less!
+1.  Experiment with different binwidths to adjust your histogram in a way that will show its important features. You may also want to try using the `+ scale_x_log10()` . What features are revealed now that were obscured in the original histogram? **Note:** When using the log scale, you may need to experiment with bin widths that are smaller than 1, such as `binwidth=0.1` or even less!
 
 If you want to visualize only delays of flights headed to Los Angeles, you need to first `filter` the data for flights with that destination (`dest == "LAX"`) and then make a histogram of the departure delays of only those flights.
 

@@ -23,7 +23,7 @@ output:
 
 ### Exercise 1
 
-**Question:**  Experiment with different binwidths and use the `+ scale_x_log10()` to adjust your histogram in a way that will show its important features. What features are revealed now that were obscured in the original histogram?
+**Question:**  Experiment with different binwidths to adjust your histogram in a way that will show its important features. You may also want to try using the `+ scale_x_log10()`. What features are revealed now that were obscured in the original histogram?
 
 ```{r ex1-histogram-of-delays}
 # Write your code to create a histogram of delays
@@ -114,7 +114,7 @@ How many flights meet these criteria?
 
 ### Exercise 7
 
-**Question:** Replicate the plot.
+**Question:** Replicate the following plot and determine what is the cutoff point for the latest departure delay where you can still have a chance to arrive at your destination on time. 
 
 ```{r ex7-plot-to-replicate}
 # Insert code for the Exercise here

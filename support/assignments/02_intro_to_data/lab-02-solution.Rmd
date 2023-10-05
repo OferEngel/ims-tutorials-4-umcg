@@ -24,17 +24,18 @@ nycflights <- read_csv("data/nycflights.csv")
 
 ### Exercise 1
 
-**Question:**  Experiment with different binwidths and use the `+ scale_x_log10()` to adjust your histogram in a way that will show its important features. What features are revealed now that were obscured in the original histogram?
+**Question:**  Experiment with different binwidths to adjust your histogram in a way that will show its important features. You may also want to try using the `+ scale_x_log10()` . What features are revealed now that were obscured in the original histogram?
 
 
 ```{r ex1-hist-of-delays}
 # Write your code to create a histogram of delays
 ggplot(data = nycflights, aes(x = dep_delay)) + 
-  geom_histogram(binwidth = .1) + 
-  scale_x_log10()
+  geom_histogram(binwidth = .01) + 
+  scale_x_log10(breaks=c(1:20, 50, 100, 500, 1000)) + 
+  scale_y_log10()
 ```
 
-**Answer:** [Replace this with your answer]
+**Answer:** Very skewed distribution suggests that delays are rare, but when there is a delay it could be very large. 
 
 
 
@@ -78,6 +79,7 @@ sfo_feb_flights %>%
 
 
 
+
 ### Exercise 4
 
 **Question:** Calculate the median and interquartile range for `arr_delay`s of flights in in the `sfo_feb_flights` data frame, grouped by carrier. Which carrier has the most variable arrival delays?
@@ -91,3 +93,45 @@ sfo_feb_flights %>%
 
 **Answer:** [Replace this with your answer]
 
+
+
+
+
+### Exercise 5
+
+**Question:** Create a list of `origin` airports and their rate of on-time-departure. Visualise your result using the `geom_col()` layer. If you could select an airport based on on time departure percentage, which NYC airport would you choose to fly out of?
+
+
+```{r ex5-on_time_dep_rate}
+# Insert code for the Exercise here
+
+
+```
+
+
+
+### Exercise 6
+
+**Question:** Mutate the data frame so that it includes a new variable that contains the average speed, `avg_speed` traveled by the plane for each flight (in mph, or if you are brave, in km/h). Now make a scatter plot of `distance` vs. `avg_speed`. 
+    Think carefully which of the two variables is the predictor (on the `x-axis`) and which is the outcome variable (on the `y-axis`) and explain why you made this choice. Describe the relationship between average speed and distance.
+
+```{r ex6-avg-speed-distance}
+# Insert code for the Exercise here
+
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+### Exercise 7
+
+**Question:** Replicate the plot.
+
+```{r ex7-plot-to-replicate}
+# Insert code for the Exercise here
+
+
+```
+
+**Answer:** [Replace this with your answer]

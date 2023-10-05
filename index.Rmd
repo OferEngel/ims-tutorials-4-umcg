@@ -112,8 +112,8 @@ The following tutorials are due on the Tuesday, a day before our first weekly se
 
 Only three labs are due for submission, but the rest will prepare you for them.
 
--   [Lab 01: Introduction to R and RStudio](support/assignments/01_intro_to_r/) - 
--   [Lab02 2: Intro to data](support/assignments/02_intro_to_data/) - 
+-   [Lab 01: Introduction to R and RStudio](support/assignments/01_intro_to_r/) 
+-   [Lab02: Intro to data](support/assignments/02_intro_to_data/) 
 -   Week 3: Simple linear least square regression 
 -   Week 4: Multiple linear least square regression part I  **deadline 27-Oct-23**
 -   Week 5: Multiple linear least square regression part II  

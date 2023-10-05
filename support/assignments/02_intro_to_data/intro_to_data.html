@@ -1669,12 +1669,13 @@ Ideally we would like to stretch the small numbers and squeeze the large
 numbers together. To do that, add to your <code>ggplot</code> the
 following layer at the very end <code>+ scale_x_log10()</code>.</p>
 <ol style="list-style-type: decimal">
-<li>Experiment with different binwidths and use the
-<code>+ scale_x_log10()</code> to adjust your histogram in a way that
-will show its important features. What features are revealed now that
-were obscured in the original histogram? <strong>Note:</strong> When
-using the log scale, you may need to experiment with bin widths that are
-smaller than 1, such as <code>binwidth=0.1</code> or even less!</li>
+<li>Experiment with different binwidths to adjust your histogram in a
+way that will show its important features. You may also want to try
+using the <code>+ scale_x_log10()</code> . What features are revealed
+now that were obscured in the original histogram? <strong>Note:</strong>
+When using the log scale, you may need to experiment with bin widths
+that are smaller than 1, such as <code>binwidth=0.1</code> or even
+less!</li>
 </ol>
 <p>If you want to visualize only delays of flights headed to Los
 Angeles, you need to first <code>filter</code> the data for flights with
