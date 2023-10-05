@@ -352,7 +352,8 @@ nycflights |>
 dl_aa_ua <- nycflights %>%
   filter(carrier == "AA" | carrier == "DL" | carrier == "UA")
 ggplot(data = dl_aa_ua, aes(x = dep_delay, y = arr_delay, color = carrier)) +
-  geom_point(alpha = .5) 
+  geom_point(alpha = .5) + 
+  labs(x = "Departure delay (in minutes)", y = "Arrival delay (in minutes)")
 
 # dl_aa_ua <- nycflights %>%
 #   filter((carrier == "AA" | carrier == "DL" | carrier == "UA") & arr_delay <= 0)
