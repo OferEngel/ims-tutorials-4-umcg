@@ -18,7 +18,7 @@ library(openintro)
 
 In this lab we explore flights, specifically a random sample of domestic flights that departed from the three major New York City airports in 2013.
 
-We will generate simple graphical and numerical summaries of data on these flights and explore delay times.
+We will generate simple graphical and numerical summaries of data on these flights and explore delay times. You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/405625/content/6723024).
 
 
 ## Getting started
