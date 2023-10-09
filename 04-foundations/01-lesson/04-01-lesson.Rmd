@@ -132,22 +132,22 @@ Typically, the data represent only a small portion of the larger group which you
 
 At first glance, the logic of statistical inference seems to be backwards, but as you become more familiar with the steps in the process, the logic will make much more sense.
 
-![](images/lesson1_img1.png){ width=80% }
+![](images/lesson1_img1.png){width=80% }
 
 Consider a situation where you are trying to convince your marketing director that people on the East Coast prefer cola versus orange soda at a higher rate than people on the West Coast. 
 
 To make the argument, the first step is to assume that the two populations, East Coast people and West Coast people, prefer cola to orange soda at the same rate. Here, about 60% of all people prefer cola and 40% prefer orange soda.
 
-![](images/lesson1_img2.png){ width=80% }
+![](images/lesson1_img2.png){width=80% }
 
 The second step in the process is to investigate the sample data and attempt to argue that the data at hand are nothing like that which would be collected had the populations really been identical with respect to soda preference. Here, soda preference is equal in the samples and the population.
 
 
-![](images/lesson1_img3.png){ width=80% }
+![](images/lesson1_img3.png){width=80% }
 
 Here, however, the sample from the East Coast prefers cola *at a rate which is twice as high as that from the West Coast*. With large samples, if the data are extremely different from the equal populations model, we can assume that the equal populations assumption is invalid.
 
-![](images/lesson1_img4.png){ width=80% }
+![](images/lesson1_img4.png){width=80% }
 
 ### Vocabulary
 
@@ -210,11 +210,11 @@ question("Which would be a good *alternative* hypothesis?",
 
 The idea behind statistical inference is to understand samples from a hypothetical population where the null hypothesis is true. For example, from East and West Coasts, where cola preference is the same. 
 
-![](images/lesson1_img3.png){ width=80% }
+![](images/lesson1_img3.png){width=80% }
 
 $$\hat{p}_W - \hat{p}_E = \frac{2}{3} - \frac{2}{3} = 0$$
 
-![](images/lesson1_img5.png){ width=80% }
+![](images/lesson1_img5.png){width=80% }
 $$\hat{p}_W - \hat{p}_E = \frac{1}{3} - \frac{2}{3} = -\frac{1}{3}$$
 
 As a way of summarizing each of the null samples, we calculate one statistic from each sample. Here, the statistic is the difference in the proportion of West Coast people who prefer cola as compared with the proportion of East Coast people who prefer cola, where each of the sample proportions is denoted “$\hat{p}$”. The difference in $\hat{p}$s changes with each sample. First it is 0, then it is negative one third, and it will keep changing.
@@ -400,9 +400,9 @@ ggplot() +
 
 ###
 
-Now go to [this link](https://istats.shinyapps.io/Association_Categorical/), and fill in the contingency table as shown below. 
+Now go to [this link](https://istats.shinyapps.io/Association_Categorical/){target="_blank" rel="noopener noreferrer"}, and fill in the contingency table as shown below. 
 
-![](images/artofstats-01.jpg){ width=40% }
+![](images/artofstats-01.jpg){width=40% }
 
 ###
 
@@ -419,7 +419,7 @@ question("When looking at the descriptive statistics in the panel on the left, w
 
 You can now click on the `Permutation Distribution` tab on the top right hand side of the page.
 
-![](images/artofstats-02.jpg){ width=60% }
+![](images/artofstats-02.jpg){width=60% }
 
 <br/>
 
@@ -432,13 +432,13 @@ You can now generate one permutation at a time, and see the result in the panel 
 
 ###
 
-![](images/artofstats-03.jpg){ width=60% }
+![](images/artofstats-03.jpg){width=60% }
 
 <br/>
 
 If you have done everything correctly, you should see the distribution of the permutations **assuming** that the null hypothesis is true, and there is no association between the location and the drink preference (see below).  
 
-![](images/artofstats-04.jpg){ width=80% }
+![](images/artofstats-04.jpg){width=80% }
 
 
 ###
@@ -528,11 +528,11 @@ ggplot() +
 
 ### Working with the `NHANES` data
 
-Throughout this lesson, you will use the [NHANES](https://CRAN.R-project.org/package=NHANES) dataset from the NHANES R package. The data are collected by the Center for Disease Control (CDC, the national public health institute in the United States) and can be thought of as a random sample of US residents.
+Throughout this lesson, you will use the [NHANES](https://CRAN.R-project.org/package=NHANES){target="_blank" rel="noopener noreferrer"} dataset from the NHANES R package. The data are collected by the Center for Disease Control (CDC, the national public health institute in the United States) and can be thought of as a random sample of US residents.
 
 Before moving on to investigate particular variables, you'll have an opportunity to briefly explore the data in this exercise.
 
-(1) Use the `names()` function to list the variables included in the `NHANES` data frame from the [NHANES](https://CRAN.R-project.org/package=NHANES) package. (Click the link for more info.)
+(1) Use the `names()` function to list the variables included in the `NHANES` data frame from the [NHANES](https://CRAN.R-project.org/package=NHANES){target="_blank" rel="noopener noreferrer"} package. (Click the link for more info.)
 
 
 ```{r hhanes-exercise, exercise=TRUE, exercise.eval=TRUE}
@@ -636,7 +636,7 @@ Great work!  Notice that the warning message for the densities and the grey port
 
 ### Calculating statistic of interest
 
-Using the `NHANES` dataset, let's investigate the relationship between gender and home ownership. Remember, more information about the dataset can be found here: [NHANES](https://www.rdocumentation.org/packages/NHANES/topics/NHANES).
+Using the `NHANES` dataset, let's investigate the relationship between gender and home ownership. Remember, more information about the dataset can be found here: [NHANES](https://www.rdocumentation.org/packages/NHANES/topics/NHANES){target="_blank" rel="noopener noreferrer"}.
 
 As seen in this lesson, natural variability can be modeled from shuffling observations around to remove any relationships that might exist in the population.  However, before you permute the data, you need to calculate the original observed statistic.  In this exercise, you will calculate the difference in proportion of home owners who are men versus women.
 
@@ -706,14 +706,14 @@ homes  |>  count(Gender, HomeOwn)
 
 ###
 
-Now go to [this link](https://istats.shinyapps.io/Association_Categorical/), and fill in the contingency table according to the data shown above.  
+Now go to [this link](https://istats.shinyapps.io/Association_Categorical/){target="_blank" rel="noopener noreferrer"}, and fill in the contingency table according to the data shown above.  
 
-![](images/artofstats-05.jpg){ width=40% }
+![](images/artofstats-05.jpg){width=40% }
 
 
 Now you can generate many permutations, just like you've done previously. You will have to adjust the bin-width and the range on the x-axis in order to see the histogram of the permutations properly.
 
-![](images/artofstats-06.jpg){ width=40% }
+![](images/artofstats-06.jpg){width=40% }
 
 
 
