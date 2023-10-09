@@ -897,7 +897,7 @@ quiz(caption = "",
      answer("Guessing the median, your average cost is 1.98"),
      answer("Guessing the mean, your average cost is 1"),
      answer("Guessing the mean, your average cost is 1.98", correct = TRUE),
-     correct = "That's right! If you guess the median (the number 0) you will be spot on ninety-nine times out of 100. You will incur a cost only once: when the number 100 appears (your cost will be 100). Over 100 games, your total cost is 100, or an average cost of $\\frac{99\\cdot0 + 1\\cdot100}{100}=1$. <br/>In contrast, guessing the mean (the number 1), your total cost is $99\\cdot1 + 1\\cdot100=198$, or on average $\\frac{99\\cdot1 + 1\\cdot100}{100}=1.98$ This number is also the MAD of the set.<br/><br/>Guessing the mean will nearly double the cost, so the median is your best bet!",
+     correct = "That's right! If you guess the median (the number 0) you will be spot on ninety-nine times out of 100. You will incur a cost only once: when the number 100 appears (your cost will be 100). Over 100 games, your total cost is 100, or an average cost of $\\frac{99\\cdot0 + 1\\cdot100}{100}=1$. <br/>In contrast, guessing the mean (the number 1), your total cost is $99\\cdot1 + 1\\cdot99=198$, or on average $\\frac{99\\cdot1 + 1\\cdot99}{100}=1.98$ This number is also the MAD of the set.<br/><br/>Guessing the mean will nearly double the cost, so the median is your best bet!",
      try_again = "Here's a hint: suppose you play the game 100 times (once for each number in the set). If you guess the median (the number 0) you will be spot on ninety-nine times out of 100. You will incur a cost only once, when the real number is 100. Over 100 games, the total cost is 100, or an average fine of $\\frac{99\\cdot0 + 1\\cdot100}{100}$. <br/>Now suppose you guess the mean (the number 1), you will be off by 1 point ninety nine times out of a hundred, and you will be off by 99 once out of 100. What would be your cost on average?",
      allow_retry = TRUE, 
      random_answer_order = TRUE
@@ -1047,7 +1047,7 @@ When you want to estimate the variance of the population, the formula above turn
 To correct for this bias, we will need to replace the denominator $n$ with $n-1$. By dividing by a smaller number, we get a larger estimate, which turns out to be unbiased. The unbiased sample estimate for the standard deviation of the population is denoted with the letter $s$, and its square calculated as follows:
 
 $$
-s^2=\frac{\sum(X_i-\bar{X})}{n-1}
+s^2=\frac{\sum(X_i-\bar{X})^2}{n-1}
 $$
 
 Notice that when data represents a sample of a population we will have to use a different version of the variance formula.
