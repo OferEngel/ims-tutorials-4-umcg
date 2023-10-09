@@ -1,5 +1,5 @@
 ---
-title: "Foundations of inference: 1 - Sampling Variability"
+title: "3.1 - Sampling Variability"
 output: 
   learnr::tutorial:
     progressive: true
@@ -109,7 +109,7 @@ encoder_logic <- function(strip_output = FALSE) {
 }
 
 hash_encoder_ui <- {
-  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID?"), renderText({
+  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID (Gebruikersnaam  s-/p-nummer)?"), renderText({
     input$caption
   }), )
 }
@@ -223,12 +223,10 @@ As a way of summarizing each of the null samples, we calculate one statistic fro
 
 We can build a distribution of differences in proportions assuming the null hypothesis, that there is no link between location and soda preference, is true. That is, the null samples consist of randomly shuffled soda variables so that the samples don't have any dependency between location and soda preference.
 
-Generating a distribution of the statistic from the null population
-gives information about whether the observed data are inconsistent with
-the null hypothesis.
+Generating a distribution of the statistic from the null population gives information about whether the observed data are inconsistent with the null hypothesis.
 
 
-The original sample proportions are $\hat{p}_{East}$ of 0.82 and $\hat{p}_{West}$ of 0.73. A difference of -0.09. 
+The original sample proportions are $\hat{p}_{East}$ of 0.82 and $\hat{p}_{West}$ of 0.73. The difference between the proportions is about 0.09. 
 
 *Original data*
 
@@ -242,7 +240,9 @@ kable(dt, format = "html", escape = F) |>
 
 *First shuffle, same as original*
 
-The first shuffle of the drink variable gives the exact same summaries as the observed data! 
+If there was no association between the location and the drink preference, we could shuffle the data completely at random, and the result of that shuffle would be a potential observation that is as likely as the original observation. So let us shuffle the data and see what we get! 
+
+As it turns out, by pure chance, the first shuffle of the drink variable gives the exact same summaries as the observed data! 
 
 
 ```{r}
@@ -398,12 +398,67 @@ ggplot() +
   scale_x_continuous(breaks = seq(-0.5,0.5,0.1), limits = c(-0.5,0.5)) 
 ```
 
+###
+
+Now go to [this link](https://istats.shinyapps.io/Association_Categorical/), and fill in the contingency table as shown below. 
+
+![](images/artofstats-01.jpg){ width=40% }
+
+###
+
+```{r quiz-artofstats-1}
+question("When looking at the descriptive statistics in the panel on the left, we can see that:",
+  answer("Proportion of Cola for East is `0.824`, for West is `0.731` and the difference is `0.0928`", correct = TRUE, message = "Nice one!"),
+  answer("Proportion of Cola for East is `0.731`, for West is `0.824` and the difference is `0.0928`"),
+  answer("Proportion of Cola for East is `0.0928`, for West is `0.824` and the difference is `0.731`"),
+  allow_retry = TRUE, random_answer_order = TRUE
+)
+```
+
+<br/>
+
+You can now click on the `Permutation Distribution` tab on the top right hand side of the page.
+
+![](images/artofstats-02.jpg){ width=60% }
+
+<br/>
+
+
+In this panel, you can reshuffle the data (generate  permutations of the data). If the null hypothesis was true, there would be no association between the location and the drink preference. In that case, each permutation would be equally likely. 
+
+You can now generate one permutation at a time, and see the result in the panel on the left. You can then increase the number of permutations to 100 at a time, and finally 10,000 permutations (it may take a few moments to complete, so you will need to be patient). You can now select the bin-width as shown below. 
+
+<br/>
+
+###
+
+![](images/artofstats-03.jpg){ width=60% }
+
+<br/>
+
+If you have done everything correctly, you should see the distribution of the permutations **assuming** that the null hypothesis is true, and there is no association between the location and the drink preference (see below).  
+
+![](images/artofstats-04.jpg){ width=80% }
+
+
+###
+
+
+```{r quiz-artofstats-2}
+question("Assuming that the null hypothesis is true, what is the proportion of random shuffles that produce a difference that is more extreme that the one we observed (i.e., a difference that is greater than 0.0928):",
+  answer("About 12%", correct = TRUE, message = "Nice one! We can see that the proportion of permutations, less than the Observed Difference (an observed difference of 0.0928) is about 88%. In other words, the probability of observing a more extreme difference is about 12%."),
+  answer("About 88%"),
+  answer("About 20%"),
+  answer("About 9%"),
+  allow_retry = TRUE, random_answer_order = TRUE
+)
+```
+
 
 Now that we have seen a visual representation of the null distribution, let's see how a null sample can be generated in R. 
 
 ## Random permutation
 
-### One random permutation
 
 Using the `mutate()` and `sample()` functions, the vector of soda preference is mixed up, or permuted, such that whether someone is on the East or West Coast can't possibly be causing any difference in proportions. However, due to inherent natural variability, there is also no expectation that the soda preferences are exactly the same for any sample. We use the `sample()` function to create the shuffled soda preferences, and then save that shuffled dataset into a new variable named `drink_perm`, using the `mutate()` function. 
 
@@ -477,9 +532,7 @@ Throughout this lesson, you will use the [NHANES](https://CRAN.R-project.org/pac
 
 Before moving on to investigate particular variables, you'll have an opportunity to briefly explore the data in this exercise.
 
- (1)
-
-Use the `names()` function to list the variables included in the `NHANES` data frame from the [NHANES](https://CRAN.R-project.org/package=NHANES) package. (Click the link for more info.)
+(1) Use the `names()` function to list the variables included in the `NHANES` data frame from the [NHANES](https://CRAN.R-project.org/package=NHANES) package. (Click the link for more info.)
 
 
 ```{r hhanes-exercise, exercise=TRUE, exercise.eval=TRUE}
@@ -492,9 +545,7 @@ Use the `names()` function to list the variables included in the `NHANES` data f
 names(NHANES)
 ```
 
- (2)
-
-- Using the `NHANES` data, create a bar plot of `HomeOwn` (fill color) broken down by `Gender` (x-axis).  
+(2) Using the `NHANES` data, create a bar plot of `HomeOwn` (fill color) broken down by `Gender` (x-axis).  
 - Set `position = "fill"` in `geom_bar()` to allow for use to compare relative frequencies.
 
 ```{r nhanes-plot, exercise=TRUE}
@@ -600,11 +651,7 @@ fruits %in% c("banana", "cherry")
 mean(fruits %in% c("banana", "cherry"))
 ```
 
- (1)
-
-The dplyr, ggplot2, infer, and NHANES packages have been loaded for you.
-
-- From `NHANES`, select the `Gender` and `HomeOwn`ership columns, then filter the rows to keep individuals whose home ownership status is `"Own"` or `"Rent"`.  Save the result to the dataset named `homes`.
+(1) From `NHANES`, select the `Gender` and `HomeOwn`ership columns, then filter the rows to keep individuals whose home ownership status is `"Own"` or `"Rent"`.  Save the result to the dataset named `homes`.
 
 
 ```{r statistic_of_interest, exercise=TRUE}
@@ -613,24 +660,36 @@ homes <- NHANES |>
   ___(___, ___) |>
   # Filter for HomeOwn equal to "Own" or "Rent"
   ___(___ %in% c("___", "___"))
+
+
+homes  |>  count(Gender, HomeOwn)
 ```
 
 ```{r statistic_of_interest-hint-1}
 homes <- NHANES |>
   select(Gender, HomeOwn) |>
   ___(___ %in% c("___", "___"))
+
+homes  |>  count(Gender, HomeOwn)
+
 ```
 
 ```{r statistic_of_interest-hint-2}
 homes <- NHANES |>
   select(Gender, HomeOwn) |>
   filter(___ %in% c("___", "___"))
+
+homes  |>  count(Gender, HomeOwn)
+
 ```
 
 ```{r statistic_of_interest-hint-3}
 homes <- NHANES |>
   select(Gender, HomeOwn) |>
   filter(HomeOwn %in% c("___", "___"))
+
+homes  |>  count(Gender, HomeOwn)
+
 ```
 
 ```{r statistic_of_interest-solution}
@@ -640,14 +699,51 @@ homes <- NHANES |>
   select(Gender, HomeOwn) |>
   # Filter for HomeOwn equal to "Own" or "Rent"
   filter(HomeOwn %in% c("Own", "Rent"))
+
+homes  |>  count(Gender, HomeOwn)
+
 ```
 
-(2)
+###
 
-- Find the observed difference in proportions of men who own and women who own, by carrying out the following steps: 
-1. Using the `homes` dataset, group by `Gender`.
-2. Summarize the proportion of individuals who own a home. *Note that this will calculate proportions for both genders since you've grouped by the `Gender` variable in the line before it.*  You can calculate the proportion by finding the `mean()` of the observations that equal `"Own"` in the `HomeOwn` variable.
-3. Finally, summarize the observed difference in proportions using the `diff()` function to calculate the difference in male and female home ownership.
+Now go to [this link](https://istats.shinyapps.io/Association_Categorical/), and fill in the contingency table according to the data shown above.  
+
+![](images/artofstats-05.jpg){ width=40% }
+
+
+Now you can generate many permutations, just like you've done previously. You will have to adjust the bin-width and the range on the x-axis in order to see the histogram of the permutations properly.
+
+![](images/artofstats-06.jpg){ width=40% }
+
+
+
+```{r quiz-artofstats-3}
+quiz( caption = "", 
+  question("What was the observed **difference** between home ownership among men and among women?",
+    answer("About 0.78%", correct = TRUE, message = "Nice one! On the `Data Entry` tab we can see that the difference of proportion is 0.00783"),
+    answer("About 1%"),
+    answer("About 10%"),
+    answer("More than 10%"),
+    allow_retry = TRUE, random_answer_order = TRUE
+  ), 
+  question("Assuming that the null hypothesis was true, what is the proportion of random shuffles that produce a **difference** that is more extreme that the one we observed?",
+    answer("About 20%", correct = TRUE, message = "Nice one! We can see that the proportion of permutations that are less than the Observed Difference (an observed difference of 0.00783) is about 80%. In other words, the probability of observing a more extreme difference is about 20%."),
+    answer("About 88%"),
+    answer("About 12%"),
+    answer("About 9%"),
+    allow_retry = TRUE, random_answer_order = TRUE
+  )
+)
+```
+
+
+(2) Now use R to find the observed difference in proportions of men who own and women who own, by carrying out the following steps: 
+
+-   step 1. Using the `homes` dataset, group by `Gender`.
+
+-   step 2. Summarize the proportion of individuals who own a home. *Note that this will calculate proportions for both genders since you've grouped by the `Gender` variable in the line before it.*  You can calculate the proportion by finding the `mean()` of the observations that equal `"Own"` in the `HomeOwn` variable.
+
+-   step 3. Finally, summarize the observed difference in proportions using the `diff()` function to calculate the difference in male and female home ownership.
 
 
 ```{r statistic_of_interest2, exercise=TRUE}
@@ -737,9 +833,7 @@ homes <- NHANES |>
   filter(HomeOwn %in% c("Own", "Rent"))
 ```
 
- (1)
-
-- Using the infer framework, step through specifying the null model and then performing 10 permutations to evaluate whether home ownership status (i.e. `HomeOwn`) differs between the `"female"` and `"male"` groups:
+ (1) Using the infer framework, step through specifying the null model and then performing 10 permutations to evaluate whether home ownership status (i.e. `HomeOwn`) differs between the `"female"` and `"male"` groups:
 - `specify()` that the relationship of interest is `HomeOwn` vs. `Gender` and a success in this context is homeownership, set `success` to `"Own"`.
 
 
@@ -753,6 +847,7 @@ homeown_perm
 ```
 
 ```{r null_model-hint}
+
  `specify()` takes a formula, `HomeOwn ~ Gender`, and `success` is `"Own"`.
 ```
 
@@ -765,9 +860,7 @@ homeown_perm <- homes |>
 homeown_perm
 ```
 
- (2)
-
-- Using the infer framework:
+ (2) Using the infer framework:
     - `specify()` has been done for you.
     - `hypothesize()` that the null is true where `null = "independence"` (gender and homeownership are not related).
 
@@ -796,9 +889,7 @@ homeown_perm <- homes |>
 homeown_perm
 ```
 
- (3)
-
-- Using the infer framework:
+(3) Using the infer framework:
     - `specify()` has been done for you.
     - `hypothesize()` has been done for you.
     - `generate()` ten permutations; set `reps` to 10.
@@ -860,9 +951,7 @@ homes <- NHANES |>
   filter(HomeOwn %in% c("Own", "Rent"))
 ```
 
- (1) 
-
-- Using the infer framework, step through specifying the null model and then performing 100 permutations to evaluate whether home ownership status (i.e. `HomeOwn`) differs between the `"female"` and `"male"` groups:
+(1) Using the infer framework, step through specifying the null model and then performing 100 permutations to evaluate whether home ownership status (i.e. `HomeOwn`) differs between the `"female"` and `"male"` groups:
     + `specify()`, `hypothesize()`, and  `generate()` have been done for you.
     + `calculate()` the `stat`istic `"diff in props"` with the order of `c("male", "female")`, telling `R` that the female proportion should be subtracted from the male proportion.
 
@@ -1275,29 +1364,24 @@ If you need to generate a hash for submission, click "Next Topic".
 
 What's next?
 
-`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://openintrostat.github.io/ims-tutorials/)
 
-`r emo::ji("spiral_notepad")` [Tutorial 4: Foundations of inference](https://openintrostat.github.io/ims-tutorials/04-foundations/)
-
-`r emo::ji("one")` [Tutorial 4 - Lesson 1: Sampling variability](https://openintro.shinyapps.io/ims-04-foundations-01/)
-
-`r emo::ji("two")` [Tutorial 4 - Lesson 2: Randomization test](https://openintro.shinyapps.io/ims-04-foundations-02/)
-
-`r emo::ji("three")` [Tutorial 4 - Lesson 3: Errors in hypothesis testing](https://openintro.shinyapps.io/ims-04-foundations-03/)
-
-`r emo::ji("four")` [Tutorial 4 - Lesson 4: Parameters and confidence intervals](https://openintro.shinyapps.io/ims-04-foundations-04/)
+`r emo::ji("ledger")` [Full list of tutorials](https://oferengel.github.io/ims-tutorials-4-umcg/)
 
 `r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
 
 
 
-## Submit
+## Hash and submit
 
-```{r, echo=FALSE, context="server"}
+```{r encoder, echo=FALSE, context="server"}
 encoder_logic()
 ```
 
 ```{r encode, echo=FALSE}
 learnrhash::encoder_ui(ui_before = hash_encoder_ui)
 ```
+
+### Submit your hash in a form
+
+After creating the hash, please copy it, navigate to [this form](https://forms.gle/ajEDfePc1jcTukyB7) and fill it in and submit. You will need to submit the form once for every lesson you complete in this tutorial.
 

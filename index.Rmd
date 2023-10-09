@@ -99,8 +99,8 @@ You will find all the readings and lectures in your the [Perusall course home](h
 The following tutorials are due on the Tuesday, a day before our first weekly sessions.  
 
 -   ~~[Week 1: Introduction to data](01-data/) - **deadline 03-Oct-23**~~
--   [Week 2: Exploratory data analysis](02-explore/) - **deadline MONDAY!!! 09-Oct-23**
--   ~~Week 3: CANCELED **deadline 17-Oct-23**~~
+-   ~~[Week 2: Exploratory data analysis](02-explore/) - **deadline MONDAY!!! 09-Oct-23**~~
+-   [Week 3: Sampling variability](https://oferengel-posit.shinyapps.io/04-01-lesson/) **deadline 17-Oct-23**
 -   Week 4: Simple linear least square regression  **deadline 24-Oct-23**
 -   Week 5: Multiple linear least square regression  **deadline 31-Oct-23**
 -   Week 6: Generalized linear models **deadline 07-Nov-23**

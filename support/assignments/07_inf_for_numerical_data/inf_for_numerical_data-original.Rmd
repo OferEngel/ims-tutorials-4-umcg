@@ -26,7 +26,7 @@ Let's load the packages.
 library(tidyverse)
 library(openintro)
 library(infer)
-# library(skimr)
+library(skimr)
 ```
 
 ### Creating a reproducible lab report
@@ -47,7 +47,7 @@ data(yrbss)
 There are observations on 13 different variables, some categorical and some numerical.
 The meaning of each variable can be found by bringing up the help file:
 
-```{r help-nc, eval=FALSE}
+```{r help-nc}
 ?yrbss
 ```
 
@@ -66,7 +66,7 @@ You will first start with analyzing the weight of the participants in kilograms:
 Using visualization and summary statistics, describe the distribution of weights.
 The `skim()` function from the **skimr** package produces nice summaries of the variables in the dataset, separating categorical (character) variables from quantitative variables.
 
-```{r summary, eval=FALSE}
+```{r summary}
 yrbss %>% 
   skim()
 ```
@@ -83,26 +83,14 @@ yrbss <- yrbss %>%
   mutate(physical_3plus = if_else(physically_active_7d > 2, "yes", "no"))
 ```
 
-2.  Make a side-by-side box plots of `physical_3plus` and `weight`. Is there a relationship between these two variables? What did you expect and why?
-
-```{r, eval=FALSE, echo=FALSE}
-yrbss |> drop_na(physical_3plus, weight) |> 
-  ggplot(aes(physical_3plus, weight)) + 
-  geom_boxplot()
-```
-
+2.  Make a side-by-side violin plots of `physical_3plus` and `weight`. Is there a relationship between these two variables? What did you expect and why?
 
 The box plots show how the medians of the two distributions compare, but we can also compare the means of the distributions using the following to first group the data by the `physical_3plus` variable, and then calculate the mean `weight` in these groups using the `mean` function while ignoring missing values by setting the `na.rm` argument to `TRUE`.
 
 ```{r by-means}
 yrbss %>%
   group_by(physical_3plus) %>%
-  summarise(mean_weight = mean(weight, na.rm = TRUE), 
-            sd_weight   = sd(weight, na.rm = TRUE), 
-            n           = n())
-
-
-
+  summarise(mean_weight = mean(weight, na.rm = TRUE))
 ```
 
 There is an observed difference, but is this difference large enough to deem it "statistically significant"?
@@ -113,16 +101,6 @@ In order to answer this question we will conduct a hypothesis test.
 3.  Are all conditions necessary for inference satisfied?
     Comment on each.
     You can compute the group sizes with the `summarize` command above by defining a new variable with the definition `n()`.
-    
-    
-```{r, eval=FALSE, echo=FALSE}
-mosaic::t_test(
-  weight ~ physical_3plus, 
-  data = yrbss) |> 
-  broom::tidy()
-
-```
-    
 
 4.  Write the hypotheses for testing if the average weights are different for those who exercise at least times a week and those who don't.
 
