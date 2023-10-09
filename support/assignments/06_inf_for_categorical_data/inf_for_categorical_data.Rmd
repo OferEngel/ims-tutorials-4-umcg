@@ -67,11 +67,12 @@ To do this, you can answer the question, "What proportion of people in your samp
 The inferential tools for estimating population proportion are analogous to those used for means in the last chapter: the confidence interval and the hypothesis test.
 
 ```{r nohelmet-text-ci}
-no_helmet %>%
+no_helmet %>% drop_na(text_ind) |> 
   specify(response = text_ind, success = "yes") %>%
   generate(reps = 1000, type = "bootstrap") %>%
   calculate(stat = "prop") %>%
   get_ci(level = 0.95)
+
 ```
 
 Note that since the goal is to construct an interval estimate for a proportion, it's necessary to both include the `success` argument within `specify`, which accounts for the proportion of non-helmet wearers than have consistently texted while driving the past 30 days, in this example, and that `stat` within `calculate` is here "prop", signaling that you are trying to do some sort of inference on a proportion.

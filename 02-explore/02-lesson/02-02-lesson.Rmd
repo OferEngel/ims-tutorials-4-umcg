@@ -982,7 +982,7 @@ cars |>
 Within the `facet_wrap()` function, whichever variable you put first will go in the rows of the grid and the the one that you put last form the columns.
 Unfortunately, this plot is difficult to interpret since it doesn't remind us which variable is on the rows versus columns. We can solve this by adding an option to the facet grid layer: labeller is equal to `label_both`.
 
-```{r labeller, echo=TRUE}
+```{r labeller, exercise=TRUE}
 cars |> 
   ggplot(aes(x = msrp)) +
   geom_density() +

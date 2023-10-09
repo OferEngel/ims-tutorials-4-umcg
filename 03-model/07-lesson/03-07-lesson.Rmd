@@ -124,7 +124,7 @@ ggplot(data = mpg, aes(x = displ, y = hwy, color = factor(year))) +
   geom_segment(data = filter(augment(mod), hwy <= 25 & displ > 6.1 & displ < 7), 
                aes(xend = displ, yend = .fitted, color = `factor(year)`), 
                arrow = arrow(length = unit(0.3,"cm")), 
-               size = 1) + 
+               linewidth = 1) + 
   geom_point()
 ```
 
