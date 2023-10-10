@@ -1,0 +1,127 @@
+---
+title: "Lab Name"
+author: "Author Name"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    highlight: "pygments"
+    theme: "spacelab"
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: "show"
+    df_print: paged
+---
+
+```{r setup, message=FALSE}
+# 1. load the library "tidyverse"
+
+
+# 2. use the read_csv file to read the dataset
+
+
+```
+
+### Exercise 1
+
+**Question:**  Experiment with different binwidths to adjust your histogram in a way that will show its important features. You may also want to try using the `+ scale_x_log10()`. What features are revealed now that were obscured in the original histogram?
+
+```{r ex1-histogram-of-delays}
+# Write your code to create a histogram of delays
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+
+
+### Exercise 2
+
+**Question:**  Create a new data frame that includes flights headed to SFO in February, and save this data frame as `sfo_feb_flights`.
+How many flights meet these criteria?
+
+
+```{r ex2-create-sfo_feb_flights}
+# Insert code for Exercise 2 here
+
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+
+
+### Exercise 3
+
+**Question:** Describe the distribution of the **arrival** delays of flights headed to SFO in February, using an appropriate histogram and summary statistics.
+
+```{r ex3-arrival-delay}
+# Insert code for Exercise 3 here
+
+
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+
+
+### Exercise 4
+
+**Question:** Calculate the median and interquartile range for `arr_delay`s of flights in in the `sfo_feb_flights` data frame, grouped by carrier. Which carrier has the most variable arrival delays?
+
+```{r ex4-ad-by-carrier}
+# Insert code for the Exercise here
+
+
+```
+
+
+**Answer:** [Replace this with your answer]
+
+
+
+
+
+### Exercise 5
+
+**Question:** Create a list of `origin` airports and their rate of on-time-departure. Then visualize the distribution of  on-time-departure rate across the three airports using a segmented bar plot (see below). If you could select an airport based on on time departure percentage, which NYC airport would you choose to fly out of?
+**Hint:** For the segmented bar plot, will need to map the `aes`thetic arguments as follows: `x = origin, fill = dep_type` and a `geom_bar()` layer. Create three plots, one with `geom_bar()` layer, one with `geom_bar(position = "fill")` and the third with `geom_bar(position = "dodge")`. Explain the difference between the three results.
+
+
+```{r ex5-on_time_dep_rate}
+# Insert code for the Exercise here
+
+
+```
+
+
+
+### Exercise 6
+
+**Question:** Mutate the data frame so that it includes a new variable that contains the average speed, `avg_speed` traveled by the plane for each flight (in mph, or if you are brave, in km/h). Now make a scatter plot of `distance` vs. `avg_speed`. 
+    Think carefully which of the two variables is the predictor (on the `x-axis`) and which is the outcome variable (on the `y-axis`) and explain why you made this choice. Describe the relationship between average speed and distance.
+
+```{r ex6-avg-speed-distance}
+# Insert code for the Exercise here
+
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+### Exercise 7
+
+**Question:** Replicate the following plot and determine what is the cutoff point for the latest departure delay where you can still have a chance to arrive at your destination on time. 
+
+```{r ex7-plot-to-replicate}
+# Insert code for the Exercise here
+
+
+```
+
+**Answer:** [Replace this with your answer]
+
