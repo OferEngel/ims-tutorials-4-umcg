@@ -17,7 +17,6 @@ library(openintro)
 
 
 
-<span style="color: red;font-size: 14px;font-weight: bold;">DEADLINE FOR COMPLETING THIS LAB: 19th October (during the lab) </span>
 
 <img src="terminal-s.png" style="float: right;width: 200px;"/>
 
