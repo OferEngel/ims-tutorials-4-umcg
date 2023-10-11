@@ -113,7 +113,7 @@ The following tutorials are due on the Tuesday, a day before our first weekly se
 Only three labs are due for submission, but the rest will prepare you for them.
 
 -   Lab 1: [Introduction to R and RStudio](support/assignments/01_intro_to_r/) 
--   Lab 2: [Intro to data](support/assignments/02_intro_to_data/) **deadline 19-Oct-23**
+-   Lab 2: [Intro to data](support/assignments/02_intro_to_data/)
 -   Lab 3: [Confidence intervals](https://oferengel-posit.shinyapps.io/LAB_Confidence_intervals/) **deadline 19-Oct-23**
 -   Lab 4: Multiple linear least square regression part I  
 -   Lab 5: Multiple linear least square regression part II  

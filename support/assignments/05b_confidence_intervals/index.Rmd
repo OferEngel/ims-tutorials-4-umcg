@@ -28,7 +28,7 @@ us_adults <- read_rds("data/climate_believers.rds")
 
 ```
 
-<span style="color: red;font-size: 14px;font-weight: bold;">DEADLINE FOR COMPLETING THIS LAB: 19th October (during the lab) </span>
+<span style="color: red;font-size: 14px;font-weight: bold;">DEADLINE FOR COMPLETING THIS LAB: 19th October (during the lab). Please submit your final pdf report [using this form](https://forms.gle/JB5c9apmkx3wD8WG7). </span>
 
 
 <!--img src="images/climate-change-denial.jpg" style="float: right;width: 300px;margin: 5px 5px 5px 5px"/ -->
@@ -50,7 +50,7 @@ A 2019 Pew Research report states the following:
 In this lab, you will assume this $\pi=62\%$ is the very true population proportion. In reality, we cannot observe this number, but for the purpose of this lab we work under this assumption. We will then sample our data from our hypothetical population, demonstrating that sample proportions vary from sample to sample.
 
 
-You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/405625/content/6758634).
+You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/405625/content/6758634). 
 
 
 
@@ -383,15 +383,15 @@ shinyApp(
 )
 ```
 
-8.  Given a sample size of 60, 1000 bootstrap samples for each interval, and 50 confidence intervals constructed (the default values for the above app), what proportion of your confidence intervals include the true population proportion? Is this proportion exactly equal to the confidence level? If not, explain why. If you can, try to include your plot in the answer (to learn how to include an image in your RMarkdown, read [this](https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html)).
+8.  Given a sample size of 60, 1000 bootstrap samples for each interval, and 50 confidence intervals constructed (the default values for the above app), what proportion of your confidence intervals include the true population proportion? Is this proportion exactly equal to the confidence level? If not, explain why. Include an image of your plot with your the answer (to learn how to include an image in your RMarkdown, see [this](https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html)).
 
 
-9.  Choose a different confidence level than 95%. Would you expect a confidence interval at this level to be wider or narrower than the confidence interval you calculated at the 95% confidence level? Explain your reasoning and confirm your claim using the app. What is the proportion of intervals that include the true population proportion? How does this percentage compare to the confidence level selected for the intervals?
+9.  Choose a **different confidence level** than 95%. Would you expect a confidence interval at this level to be wider or narrower than the confidence interval you calculated at the 95% confidence level? Explain your reasoning and confirm your using the app. What is the proportion of intervals that include the true population proportion? How does this percentage compare to the confidence level selected for the intervals? Include an image of your plot with your the answer.
 
 
-10.  Using the app, experiment with different sample sizes and comment on how the widths of intervals change as sample size changes (increases and decreases).
+10.  Using the app, experiment with different **sample sizes** and comment on how the widths of intervals change as sample size changes (increases and decreases). Include an image of your plot with your the answer.
 
-11.  Finally, given a sample size (say, 60), how does the width of the interval change as you increase the number of bootstrap samples.
+11.  Finally, given a sample size (say, 60), how does the width of the interval change as you increase **the number of bootstrap samples**? Include an image of your plot with your the answer.
 
 
 ------------------------------------------------------------------------
