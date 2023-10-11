@@ -322,26 +322,27 @@ nycflights %>%
 ```
 
 
-```{r ot-dep-rate-sol, eval=FALSE, echo=FALSE}
-nycflights <- nycflights %>%
-  mutate(dep_type = ifelse(dep_delay < 5, "on time", "delayed"))
-
-nycflights %>%
-  group_by(origin) %>%
-  summarise(on_time_dep_rate = sum(dep_type == "on time") / n(), n = n()) %>%
-  arrange(desc(on_time_dep_rate))  
- 
+```{r ot-dep-rate-sol, eval=TRUE, echo=FALSE, include=TRUE, results = TRUE}
+# nycflights <- nycflights %>%
+#   mutate(dep_type = ifelse(dep_delay < 5, "on time", "delayed"))
+# 
+# nycflights %>%
+#   group_by(origin) %>%
+#   summarise(on_time_dep_rate = sum(dep_type == "on time") / n(), n = n()) %>%
+#   arrange(desc(on_time_dep_rate))  
+#  
+# 
+# nycflights |> 
+#   ggplot(aes(x = origin, fill = dep_type)) + geom_bar(position = "fill")
 
 nycflights |> 
-  ggplot(aes(x = origin, fill = dep_type)) + geom_bar(position = "fill")
-
-nycflights |> 
-  ggplot(aes(x = origin, fill = dep_type)) + geom_bar(position = "dodge")
+  ggplot(aes(x = origin, fill = dep_type)) + geom_bar(position = "dodge") + 
+  labs(fill = "Departure type")
 
 
 ```
 
-
+![](bar-dodge.jpg){width=50%}
 
 5.  Create a list of `origin` airports and their rate of on-time-departure. Then visualize the distribution of  on-time-departure rate across the three airports using a segmented bar plot (see below). If you could select an airport based on on time departure percentage, which NYC airport would you choose to fly out of?
 **Hint:** For the segmented bar plot, will need to map the `aes`thetic arguments as follows: `x = origin, fill = dep_type` and a `geom_bar()` layer. Create three plots, one with `geom_bar()` layer, one with `geom_bar(position = "fill")` and the third with `geom_bar(position = "dodge")`. Explain the difference between the three results.
