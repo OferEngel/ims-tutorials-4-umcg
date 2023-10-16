@@ -1,5 +1,5 @@
 ---
-title: "Regression modeling: 4 - Interpreting regression models"
+title: "4.3 Interpreting regression models"
 output: 
   learnr::tutorial:
     progressive: true
@@ -26,7 +26,9 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE, 
                       message = FALSE)
 tutorial_options(exercise.eval = FALSE)
-textbooks$course <- as.character(textbooks$course) 
+textbooks$course <- as.character(textbooks$course)
+textbooks <- textbooks |>
+  mutate(course_number = readr::parse_number(course))
 
 # Hash generation helpers
 # Should ideally be loaded from the imstutorials package when it exists
@@ -92,7 +94,7 @@ encoder_logic <- function(strip_output = FALSE) {
 }
 
 hash_encoder_ui <- {
-  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID?"), renderText({
+  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID (Gebruikersnaam  s-/p-nummer)?"), renderText({
     input$caption
   }), )
 }
@@ -102,19 +104,13 @@ hash_encoder_ui <- {
 
 ### Is that textbook overpriced?
 
-We've spent some time building our graphical intuition about regression, as well as learning the mathematical specification of the model. Now it's time to focus on what is often the most important thing about a regression model: interpreting the value of the coefficients. 
 
-Data were collected on 73 textbooks required for a few randomly selected courses at UCLA. For each textbook, we know the retail price at both the UCLA bookstore and on Amazon.com. We also know the department and course number for each corresponding course, and the ISBN of the book. 
+Data were collected on 73 textbooks required for a few randomly selected courses at UCLA. For each textbook, we know the retail price at both the UCLA bookstore and on Amazon.com. We also know the department and course number for each corresponding course, and the ISBN of the book. You can find more information about this dataset [here](https://www.openintro.org/data/index.php?data=textbooks).
 
 > What factors are associated with the price of each book at the UCLA bookstore?
 
-```{r}
-textbooks <- textbooks |>
-  mutate(course_number = readr::parse_number(course))
-```
 
-
-```{r 1, echo = TRUE}
+```{r 1, exercise = TRUE}
 glimpse(textbooks)
 ```
 
@@ -154,6 +150,12 @@ ggplot(data = textbooks, aes(x = amaz_new, y = ucla_new)) +
 
 To get those values, we'll use the `lm()` command to actually fit the model. We specify two arguments to `lm()`: 
 
+
+```{r image-reg-model, out.width="60%"}
+knitr::include_graphics("images/formula.jpeg")
+
+```
+
 1. a `formula` that indicates which variable is the response and which is the explanatory
 2. a `data` argument that identifies the data frame where those variables are located
 
@@ -191,7 +193,7 @@ It's time for you to start fitting your own regression models.
 
 ## Your turn! 
 
-Recall that the fitted model for the poverty rate of U.S. counties as a function of high school graduation rate is:
+The fitted model for the poverty rate of U.S. counties as a function of high school graduation rate is:
 
 $$
     \widehat{poverty} = 64.594 - 0.591 \cdot hs_{grad}
@@ -239,9 +241,9 @@ The `lm()` function return a model object having class `"lm"`. This object conta
 
 For this exercise, fit the following regression models: 
 
-1. Using the `bdims` dataset, create a linear model for the weight of people (`wgt`) as a function of their height (`hgt`).
-2. Using the `mlbbat10` dataset, create a linear model for `slg` (y) as a function of `obp` (x).
-3. Using the `mammals` dataset, create a linear model for the body weight of mammals (`body_wt`) as a function of their brain weight (`brain_wt`), after taking the natural log of both variables.
+1. Using the `bdims` dataset, create a linear model for the weight of people (`wgt`) as a function of their height (`hgt`). You can find more information about this dataset [here](https://www.openintro.org/data/index.php?data=bdims)
+2. Using the `mlbbat10` dataset, create a linear model for `slg` (y) as a function of `obp` (x). You can find more information about this dataset [here](https://www.openintro.org/data/index.php?data=mlbbat10)
+3. Using the `mammals` dataset, create a linear model for the body weight of mammals (`body_wt`) as a function of their brain weight (`brain_wt`), after taking the natural log of both variables. You can find more information about this dataset [here](https://www.openintro.org/data/index.php?data=mammals)
 
 
 ```{r ex1, exercise = TRUE}
@@ -286,6 +288,8 @@ lm(log(body_wt) ~ log(brain_wt), data = mammals)
 ```
 
 
+
+<!--
 ### 
 
 ### Units and scale
@@ -301,14 +305,15 @@ $$
 $$
 
 ```{r mc3}
-question("Which of the following statements is **incorrect**?",
-  answer("A person who is 170 cm tall is expected to weigh about 68 kg. ", message = "This answer is correct! If you plug in the values, a person who is 170 cm tall *is* expected to weigh about 68 kg: -105.011+ (1.018 * 170) = 68.049."),
-  answer("Because the slope coefficient for `obp` is larger (1.110) than the slope coefficient for `hgt` (1.018), we can conclude that the association between `obp` and `slg` is stronger than the association between height and weight. ", message = "This answer is correct! If you plug in the values, then you will see that the association between `obp` and `slg` is `cor(mlbbat10$obp, mlbbat10$slg) ≈ 0.82` whereas the association between height and weight is only `cor(bdims$hgt, bdims$wgt) ≈ 0.72`."),
-  answer("None of the above.", correct = TRUE, message = "Yes, both of the above options are correct, e.g. none of the above is incorrect! For the first option we have `-105.011+ (1.018 * 170) = 68.049` and the association between `obp` and `slg` is `cor(mlbbat10$obp, mlbbat10$slg) ≈ 0.82` whereas the association between height and weight is only `cor(bdims$hgt, bdims$wgt) ≈ 0.72`.  'None of the above' is the **only wrong statement** in this question."),
-  allow_retry = TRUE
+question("Which of the following statements is **correct**?",
+  answer("A person who is 170 cm tall is expected to weigh about 68 kg. ", correct = TRUE, message = "This answer is correct! If you plug in the values, a person who is 170 cm tall *is* expected to weigh about 68 kg: -105.011+ (1.018 * 170) = 68.049."),
+  answer("Because the slope coefficient for `obp` is larger (1.110) than the slope coefficient for `hgt` (1.018), we can conclude that the association between `obp` and `slg` is stronger than the association between height and weight. ", correct = TRUE, message = "This answer is correct! If you plug in the values, then you will see that the association between `obp` and `slg` is `cor(mlbbat10$obp, mlbbat10$slg) ≈ 0.82` whereas the association between height and weight is only `cor(bdims$hgt, bdims$wgt) ≈ 0.72`."),
+  answer("None of the above.", message = "Yes, both of the above options are correct, e.g. none of the above is incorrect! For the first option we have `-105.011+ (1.018 * 170) = 68.049` and the association between `obp` and `slg` is `cor(mlbbat10$obp, mlbbat10$slg) ≈ 0.82` whereas the association between height and weight is only `cor(bdims$hgt, bdims$wgt) ≈ 0.72`.  'None of the above' is the **only wrong statement** in this question."),
+  allow_retry = TRUE, random_answer_order = TRUE
 )
 ```
 
+-->
 
 
 ## A linear model object
@@ -343,12 +348,20 @@ coef(books_mod)
 
 ### Summary
 
-In this tutorial, we treat regression as a descriptive statistical technique---thus explaining our focus on the coefficients. In a later tutorial, you will learn about inference for regression. In that application, there is a whole host of other pieces of information about your regression model that you'll want to inspect. The `summary()` function displays these. Just about every statistical software package has a function that displays a similar table of outputs for a regression model. 
+In this tutorial, we treat regression as a descriptive statistical technique---thus explaining our focus on the coefficients. In a later tutorial, you will learn about inference for regression. In that application, there is a whole host of other pieces of information about your regression model that you'll want to inspect. The `summary()` function displays these.
 
-However, we won't dive into this at the moment. 
+
+
 
 ```{r 15, echo = TRUE}
 summary(books_mod)
+```
+
+
+Below, you can see an explanation for each of those elements:
+
+```{r img-lm-summary-2, out.width="100%"}
+knitr::include_graphics("images/lm-summary-2.jpg")
 ```
 
 ### Fitted values
@@ -434,7 +447,7 @@ In this exercise, we will confirm these two mathematical facts by accessing the 
 hgt_wgt_mod <- lm(wgt ~ hgt, data = bdims)
 ```
 
-`mod` (defined above) is available in your workspace. We will use the `all.equal()` function to confirm that the mean of the body weights equals the mean of the fitted values of `hgt_wgt_mod`. This function takes two inputs (separated by a comma) that you would like to check if they are equal (up to a tolerance of 1.5e-8). 
+We will now use the `all.equal()` function to confirm that the mean of the body weights equals the mean of the fitted values of `hgt_wgt_mod`. This function takes two inputs (separated by a comma) that you would like to check if they are equal (up to a tolerance of 1.5e-8). 
 
 *Hint*: Remember, you can extract a specific column of a `data.frame` using the `$`. 
 
@@ -517,19 +530,6 @@ augment(books_mod) |>
   head()
 ```
 
-### Markup
-
-This turns out to be the management textbook "Financial Statement Analysis and Security Valuation". Does this qualify as irony? 
-
-```{r lm3, echo = TRUE}
-textbooks |>
-  filter(ucla_new == 197)
-```
-
-```{r img1, out.width=400}
-# https://images-na.ssl-images-amazon.com/images/I/51FfR15sN9L._SX395_BO1,204,203,200_.jpg
-knitr::include_graphics("images/FSSV.png")
-```
 
 ### Making predictions
 
@@ -575,7 +575,7 @@ Now it's time for you to make some of your own predictions.
 
 The `fitted.values()` function or the `augment()`-ed data frame provides us with the fitted values for the observations that were in the original data. However, once we have fit the model, we may want to compute expected values for observations that were **not** present in the data on which the model was fit. These types of predictions are called *out-of-sample* predictions. 
 
-The `ben` data frame contains a height and weight observation for one person. The `hgt_wgt_mod` object contains the fitted model for weight as a function of height for the observations in the `bdims` dataset. We can use the `predict()` function to generate expected values for the weight of new individuals. We must pass the data frame of new observations through the `newdata` argument.
+The `ben` data frame contains a height and weight observation for one person, named Ben. The `hgt_wgt_mod` object contains the fitted model for weight as a function of height for the observations in the `bdims` dataset. We can use the `predict()` function to generate expected values for the weight of new individuals. We must pass the data frame of new observations through the `newdata` argument.
 
 The same linear model, `hgt_wgt_mod`, is defined in your workspace.
 
@@ -602,6 +602,24 @@ ben
 # Predict the weight of ben
 predict(hgt_wgt_mod, newdata = ben)
 ```
+
+
+```{r quiz-ben}
+question(
+  "Which sentences are correct?",
+  answer("Ben's predicted weight is 74.8kg"),
+  answer("Ben's predicted weight is 81.0kg", correct = TRUE),
+  answer("Ben's actual weight is 74.8kg", correct = TRUE),
+  answer("Ben's actual weight is 81.0kg"),
+  answer("The model suggests that, given his height, Ben is overweight"),
+  answer("The model suggests that, given his height, Ben is underweight", correct = TRUE), 
+  allow_retry = TRUE, 
+  random_answer_order = TRUE
+)
+
+```
+
+
 
 
 ### Adding a regression line to a plot manually
@@ -646,41 +664,11 @@ ggplot(data = bdims, aes(x = hgt, y = wgt)) +
 
 
 
+
 ## Congratulations!
 
-You have successfully completed Lesson 4 in Tutorial 3: Regression modeling.  
-If you need to generate a hash for submission, click "Next Topic".
+You have successfully completed Tutorial 4.3.  To generate a hash for submission, see below.
 
-What's next?
-
-`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://openintrostat.github.io/ims-tutorials/)
-
-`r emo::ji("spiral_notepad")` [Tutorial 3: Regression modeling](https://openintrostat.github.io/ims-tutorials/03-model/)
-
-`r emo::ji("one")` [Tutorial 3 - Lesson 1: Visualizing two variables](https://openintro.shinyapps.io/ims-03-model-01/)
-
-`r emo::ji("two")` [Tutorial 3 - Lesson 2: Correlation](https://openintro.shinyapps.io/ims-03-model-02/)
-
-`r emo::ji("three")` [Tutorial 3 - Lesson 3: Simple linear regression](https://openintro.shinyapps.io/ims-03-model-03/)
-
-`r emo::ji("four")` [Tutorial 3 - Lesson 4: Interpreting regression models](https://openintro.shinyapps.io/ims-03-model-04/)
-
-`r emo::ji("five")` [Tutorial 3 - Lesson 5: Model fit](https://openintro.shinyapps.io/ims-03-model-05/)
-
-`r emo::ji("six")` [Tutorial 3 - Lesson 6: Parallel slopes](https://openintro.shinyapps.io/ims-03-model-06/)
-
-`r emo::ji("seven")` [Tutorial 3 - Lesson 7: Evaluating and extending parallel slopes model](https://openintro.shinyapps.io/ims-03-model-07/)
-
-`r emo::ji("eight")` [Tutorial 3 - Lesson 8: Multiple regression](https://openintro.shinyapps.io/ims-03-model-08/)
-
-`r emo::ji("nine")` [Tutorial 3 - Lesson 9: Logistic regression](https://openintro.shinyapps.io/ims-03-model-09/)
-
-`r emo::ji("keycap_ten")` [Tutorial 3 - Lesson 10: Case study: Italian restaurants in NYC](https://openintro.shinyapps.io/ims-03-model-10/)
-
-`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
-
-
-## Submit
 
 ```{r, echo=FALSE, context="server"}
 encoder_logic()
@@ -690,3 +678,9 @@ encoder_logic()
 learnrhash::encoder_ui(ui_before = hash_encoder_ui)
 ```
 
+
+
+
+### Submit your hash in a form
+
+After creating the hash, please copy it, navigate to [this form](https://forms.gle/ajEDfePc1jcTukyB7) and fill it in and submit. You will need to submit the form once for every lesson you complete in this tutorial.

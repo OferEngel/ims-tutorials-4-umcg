@@ -1,5 +1,5 @@
 ---
-title: "4.2 Simple linear regression"
+title: "Regression modeling: 3 - Simple linear regression"
 output: 
   learnr::tutorial:
     progressive: true
@@ -85,23 +85,18 @@ encoder_logic <- function(strip_output = FALSE) {
   )
 }
 
-
 hash_encoder_ui <- {
-  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID (Gebruikersnaam  s-/p-nummer)?"), renderText({
+  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID?"), renderText({
     input$caption
   }), )
 }
-
 ```
 
 ## Visualization of linear models
 
 Before we get into the mathematical specification for a regression model, let's build some intuition about what a regression line is.  
 
-
-In this section we will be looking at a dataset that records 104 observations of possums in Australia and New Guinea. Specifically, we will predict the body length of the possum from their tail length. You can find more information about this dataset [here](https://www.openintro.org/data/index.php?data=possum).
-
-The scatterplot shows the relationship between the total length of a possum, and the corresponding length of its tail. Clearly there is not a perfect relationship here: the total length of the possum varies even for possums with the same tail length. But we still have some intuitive desire to describe the relationship with a line. 
+In this scatterplot, we see the relationship between the total length of a possum, and the corresponding length of its tail. Clearly there is not a perfect relationship here: the total length of the possum varies even for possums with the same tail length. But we still have some intuitive desire to describe the relationship with a line. 
 
 ```{r 1, echo = TRUE}
 ggplot(data = possum, aes(y = total_l, x = tail_l)) +
@@ -243,36 +238,17 @@ ggplot(data = bdims, aes(x = hgt, y = wgt)) +
 ```
 
 ```{r ex2, exercise = TRUE}
-# Input your best guess for the slope.
-#Try numbers 0, 1, 2, 3, etc... 
- 
-add_line(my_slope = ___)
+ add_line(my_slope = ___)
 ```
 
-
-```{r quiz-fit}
-quiz(caption = "", 
-  question(
-    "Which slope appears to fit the data best?", 
-    answer("0"), 
-    answer("1", correct = TRUE),
-    answer("2"),
-    answer("3"),
-    answer("4"), try_again = TRUE
-  ), 
-  question(
-    "Notice that all the lines pass through a red point in the middle. How do you think this point was found?", 
-    answer("The point's coordinates (x,y) represent the medians of the variables `hgt` and `wgt`"), 
-    answer("The point's coordinates (x,y) represent the mean of the variables `hgt` and `wgt`", correct = TRUE),
-    answer("The point's coordinates (x,y) represent the standard deviation of the variables `hgt` and `wgt`"),
-    try_again = TRUE
-  )
-)
-
+```{r ex2-hint}
+ Input your best guess for the slope of the regression line between height and weight. 
 ```
 
-
-
+```{r ex2-solution}
+# Estimate optimal value of my_slope
+add_line(my_slope = 1)
+```
 
 ## Understanding Linear Models
 
@@ -329,47 +305,20 @@ $$
   e = Y - \hat{Y}
 $$
 
-
-```{r image-reg-labeled, out.width="60%"}
-knitr::include_graphics("images/regression-labeled.jpeg")
-
-```
-
-
-```{r quiz-reg-lab, echo=FALSE}
-question("Identify the elements in the image above", allow_retry = TRUE, random_answer_order = TRUE, 
-  answer("1 - residuals $\\epsilon$, 2 - slope $\\beta_1$, 3 - intercept $\\beta_0$", correct = TRUE),
-  answer("1 - slope $\\beta_1$, 2 - residuals $\\epsilon$, 3 - intercept $\\beta_0$"),
-  answer("1 - residuals $\\epsilon$, 2 - intercept $\\beta_0$, 3 - slope $\\beta_1$")
-         )
-
-
-```
-
-
-
 ### Fitting procedure
 
-While we won't delve into the specifics of the least squares fitting procedure, we will outline what it does. It is intuitive that we would want a line that has small residuals. More precisely we choose a line that minimizes the sum of squared residuals. 
+While we won't delve into the specifics of the least squares fitting procedure, we will outline what it does. It is intuitive that we would want a line that has small residuals. As discussed in the [Introduction to Modern Statistics textbook](https://openintro-ims.netlify.app/intro-linear-models.html#least-squares-regression), it is common practice to choose a line that minimizes the sum of squared residuals. 
 
 In this procedure, the residual for each observation is squared and all of the squared residuals are added up. You can think of the use of the squared error as saying that "a residual twice as large as another residual is more than twice as bad." In other words, overestimating by 4 is more than twice as bad as overestimating by 2. 
 
-```{r quiz-reg-1}
-question(
-  "A least-squares regression line will always have the following attributes:", 
-  allow_retry = TRUE, 
-  random_answer_order = TRUE,  
-  answer("The residuals will always sum to 0", correct = TRUE), 
-  answer("The line always passes through the point $(\\bar{x}, \\bar{y})$", correct = TRUE), 
-  answer("The line always minimizes the absolute distance to all the points at the same time"), 
-  answer("The line always minimizes the square distance to all the points at the same time", correct = TRUE), 
-  answer("The slope and the correlation coefficient are proportional to one another", correct = TRUE), 
-  answer("The slope equals the correlation coefficient")
-)
+### Least squares
 
-```
+Actually computing the fitted coefficients is usually a messy business for which the computer is much better suited than we are, so we won't discuss that here. You should know that the least squares fitting procedure is a well-understood, relatively straightforward, deterministic process that can be computed efficiently. It will always return a unique solution, except in rare, unrealistic cases. 
 
+Your regression line will always have two attributes, (1) the residuals will always sum to 0, and (2) the point $(\bar{x}, \bar{y})$ is guaranteed to lie on the regression line.
+Given your understanding of correlation, it should not surprise you to learn that the regression slope and the correlation coefficient are closely-related. In fact, they are proportional to one another. 
 
+You should also be aware that there are other criteria---apart from least squares---for choosing a line of "best" fit, but we won't talk about them in this tutorial.
 
 ### Key concepts
 
@@ -394,14 +343,23 @@ $$
     Y = \beta_0 + \beta_1 \cdot X + \epsilon \,, \text{ where } \epsilon \sim N(0, \sigma_{\epsilon}) \,.
 $$
 
+The slope coefficient is:
+
+1. $Y$
+
+2. $\beta_0$
+
+3. $\beta_1$
+
+4. $\epsilon$
 
 
 ```{r mc}
-question("The slope coefficient is:",
-  answer("$Y$", message = "Not quite! $Y$ represents the response variable."),
-  answer("$\\beta_0$", message = "Try again! $\\beta_0$ represents the y-intercept."),
-  answer("$\\beta_1$", correct = TRUE, message = "The $X$ represents the explanatory variables and the $\\beta_0$ represents the y-intercept."),
-  answer("$\\epsilon$", message = "Wrong! That represents the disturbance term, or the noise."),
+question("",
+  answer("1", message = "Not quite! 1 represents the response variable."),
+  answer("2", message = "Try again! 2 represents the y-intercept."),
+  answer("3", correct = TRUE, message = "The $X$ represents the explanatory variables and the $\beta_0$ represents the y-intercept."),
+  answer("4", message = "Wrong! That represents the disturbance term, or the noise."),
   allow_retry = TRUE
 )
 ```
@@ -450,7 +408,7 @@ Second, the point $(\bar{x}, \bar{y})$ is *always* on the least squares regressi
 
 In this exercise, you will find the slope and intercept of the least squares regression line for body weight ($y$) as a function of height ($x$). But, you might need to do some algebra to solve for $b_0$!
 
-The `bdims_summary` table has been added to your workspace. Run the code chunk below to preview what the table looks like! 
+The `bdims_summary` table has been added to your workspace. Use the `glimpse()` function to preview what the table looks like! 
 
 ```{r preview-setup}
 bdims_summary <- bdims |>
@@ -461,7 +419,7 @@ bdims_summary <- bdims |>
 
 ```{r preview, exercise = TRUE}
 # Print bdims_summary
-bdims_summary
+
 
 ```
 
@@ -504,12 +462,165 @@ bdims_summary |>
          intercept = mean_wgt - slope * mean_hgt)
 ```
 
+<!--
+
+## Regression vs. regression to the mean
+
+### Heredity
+
+In the late 19th century, Sir Francis Galton developed much of the theory surrounding correlation and regression. One of the more enduring concepts is "regression to the mean." Here we note that "regression to the mean" is a distinct concept from "linear regression", which is the focus of this tutorial. But "regression to the mean" is an important statistical concept in its own right, so we will explore it here so that you can appreciate the difference. 
+
+As an example of Galton's "regression to the mean", consider analyzing  the heights of the children of NBA players.
+
+As always, it's best to start with a question: Do tall men tend to beget tall sons? Do tall women tend to have tall daughters? You might consider this question in the context of NBA and WNBA players. Do you suspect that children of NBA and WNBA players are likely to be tall? 
+
+### Galton's data
+
+The answer turns out to be "yes, but not as tall as their fathers." This effect is what Galton deemed "regression to the mean". Another way of thinking about this is that unusual phenomena are likely to become more common over time.
+
+In the plot, we see the relationship between the heights of a group of 465 men that Galton measured in the 1880s, and their fathers. The height of the son is on the $y$ axis, while the height of the corresponding father is on the $x$ axis. The diagonal indicates sons who are as tall as their fathers. The slope of the regression line---shown in blue---is more gentle. This reflects the observation that while tall fathers are still likely to have tall sons, the sons are not likely to be *as tall* as their fathers. Their height has been "regressed" towards the mean height. 
+
+```{r}
+Galton_men <- mosaicData::Galton |>
+ filter(sex == "M")
+Galton_summary <- Galton_men |>
+ summarize(N = n(),
+           mean_height = mean(height), sd_height = sd(height),
+           mean_father = mean(father), sd_father = sd(father))
+ggplot(data = Galton_men, aes(x = father, y = height)) +
+ geom_point() +
+# geom_rect(data = Galton_summary,
+#           aes(xmin = mean_height, xmax = 100, ymin = mean_father, ymax = 100))
+ geom_hline(data = Galton_summary, aes(yintercept = mean_height), lty = 3) +
+ geom_vline(data = Galton_summary, aes(xintercept = mean_father), lty = 3) +
+ geom_abline(slope = 1, intercept = 0, lty = 2) +
+ geom_smooth(method = "lm", se = FALSE)
+```
+
+It may be tempting to think that regression to the mean implies that men are getting shorter, but this is not true. Even in this sample, the mean height of the sons was the same---to the nearest tenth of an inch---to those of the fathers. 
+
+### Regression modeling
+
+This tutorial is about simple linear regression *modeling*. Typically, regression models combine some explanatory variables into an estimate for a single, numerical response variable. We are pursuing least squares regression models, but there are any number of alternative regression model specifications. Additionally, there are models like "regression trees" that also estimate a single, numerical response, but do not use a linear framework as we do in this tutorial. 
+
+"Regression": techniques for modeling a quantitative response can include a variety of models including:  
+- Least squares  
+- Weighted  
+- Generalized  
+- Nonparametric  
+- Ridge  
+- Bayesian  
+- ...  
+    
+The next exercises will allow you to explore Galton's data on your own. 
+
+### Regression to the mean
+
+*Regression to the mean* is a concept attributed to Sir Francis Galton. The basic idea is that extreme random observations will tend to be less extreme upon a second trial. This is simply due to chance alone. While "regression to the mean" and "linear regression" are not the same thing, we will examine them together in this exercise.
+
+One way to see the effects of regression to the mean is to compare the heights of parents to their children's heights. While it is true that tall mothers and fathers tend to have tall children, those children tend to be less tall than their parents, relative to average. That is, fathers who are 3 inches taller than the average father tend to have children who may be taller than average, but by less than 3 inches. 
+
+The `Galton_men` and `Galton_women` datasets contain data originally collected by Galton himself in the 1880s on the heights of men and women, respectively, along with their parents' heights.
+
+Compare the slope of the regression line to the slope of the diagonal line. What does this tell you?
+
+
+- Create a scatterplot of the height of men as a function of their father's height. Add the simple linear regression line and a diagonal line (with slope equal to 1 and intercept equal to 0) to the plot.
+- Create a scatterplot of the height of women as a function of their mother's height. Add the simple linear regression line and a diagonal line to the plot.
+
+```{r ex4-setup}
+Galton_men <- filter(Galton, sex == "M")
+Galton_women <- filter(Galton, sex == "F")
+```
+
+```{r ex4, exercise = TRUE}
+# Height of children vs. height of father
+ggplot(data = ___, aes(x = ___, y = ___)) +
+  geom_point() + 
+  geom_abline(slope = ___, intercept = ___) + 
+  geom_smooth(method = ___, se = FALSE)
+
+# Height of children vs. height of mother
+```
+
+```{r ex4-hint}
+"Use the scaffolding for the first scatterplot to generate your
+second scatterplot."
+```
+
+```{r ex4-solution}
+# Height of children vs. height of father
+ggplot(data = Galton_men, aes(x = father, y = height)) +
+  geom_point() + 
+  geom_abline(slope = 1, intercept = 0) + 
+  geom_smooth(method = "lm", se = FALSE)
+
+# Height of children vs. height of mother
+ggplot(data = Galton_women, aes(x = mother, y = height)) +
+  geom_point() + 
+  geom_abline(slope = 1, intercept = 0) + 
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+
+### "Regression" in the parlance of our time
+
+In an opinion piece about nepotism [published in *The New York Times* in 2015](http://www.nytimes.com/2015/03/22/opinion/sunday/seth-stephens-davidowitz-just-how-nepotistic-are-we.html), economist Seth Stephens-Davidowitz wrote that:
+
+> "Regression to the mean is so powerful that once-in-a-generation talent basically never sires once-in-a-generation talent. It explains why Michael Jordan’s sons were middling college basketball players and Jakob Dylan wrote two good songs. It is why there are no American parent-child pairs among Hall of Fame players in any major professional sports league."
+
+
+
+```{r mc2}
+question("The author is arguing that...",
+  answer("Because of regression to the mean, an outstanding basketball player is likely to have sons that are as good at basketball as him.", message = "False, think about the previous example concerning the children of very tall parents."),
+  answer("Because of regression to the mean, an outstanding basketball player is likely to have sons that are not good at basketball.", message = "Not quite!  Think about the previous example concerning the children of very tall parents."),
+  answer("Because of regression to the mean, an outstanding basketball player is likely to have sons that are good at basketball, but not as good as him.", correct = TRUE, message ="That's right!  Basketball skill is likely similar to the previous example concerning the children of very tall parents."),
+  answer("Linear regression is incapable of evaluating musical or athletic talent.", message = "Incorrect!"),
+  allow_retry = TRUE
+)
+```
+
+-->
+
 
 
 ## Congratulations!
 
-You have successfully completed Tutorial 4.2.  To generate a hash for submission, see below.
+You have successfully completed Lesson 3 in Tutorial 3: Regression modeling.  
+If you need to generate a hash for submission, click "Next Topic".
 
+What's next?
+
+`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://openintrostat.github.io/ims-tutorials/)
+
+`r emo::ji("spiral_notepad")` [Tutorial 3: Regression modeling](https://openintrostat.github.io/ims-tutorials/03-model/)
+
+`r emo::ji("one")` [Tutorial 3 - Lesson 1: Visualizing two variables](https://openintro.shinyapps.io/ims-03-model-01/)
+
+`r emo::ji("two")` [Tutorial 3 - Lesson 2: Correlation](https://openintro.shinyapps.io/ims-03-model-02/)
+
+`r emo::ji("three")` [Tutorial 3 - Lesson 3: Simple linear regression](https://openintro.shinyapps.io/ims-03-model-03/)
+
+`r emo::ji("four")` [Tutorial 3 - Lesson 4: Interpreting regression models](https://openintro.shinyapps.io/ims-03-model-04/)
+
+`r emo::ji("five")` [Tutorial 3 - Lesson 5: Model fit](https://openintro.shinyapps.io/ims-03-model-05/)
+
+`r emo::ji("six")` [Tutorial 3 - Lesson 6: Parallel slopes](https://openintro.shinyapps.io/ims-03-model-06/)
+
+`r emo::ji("seven")` [Tutorial 3 - Lesson 7: Evaluating and extending parallel slopes model](https://openintro.shinyapps.io/ims-03-model-07/)
+
+`r emo::ji("eight")` [Tutorial 3 - Lesson 8: Multiple regression](https://openintro.shinyapps.io/ims-03-model-08/)
+
+`r emo::ji("nine")` [Tutorial 3 - Lesson 9: Logistic regression](https://openintro.shinyapps.io/ims-03-model-09/)
+
+`r emo::ji("keycap_ten")` [Tutorial 3 - Lesson 10: Case study: Italian restaurants in NYC](https://openintro.shinyapps.io/ims-03-model-10/)
+
+`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
+
+
+
+## Submit
 
 ```{r, echo=FALSE, context="server"}
 encoder_logic()
@@ -518,10 +629,3 @@ encoder_logic()
 ```{r encode, echo=FALSE}
 learnrhash::encoder_ui(ui_before = hash_encoder_ui)
 ```
-
-
-
-
-### Submit your hash in a form
-
-After creating the hash, please copy it, navigate to [this form](https://forms.gle/ajEDfePc1jcTukyB7) and fill it in and submit. You will need to submit the form once for every lesson you complete in this tutorial.

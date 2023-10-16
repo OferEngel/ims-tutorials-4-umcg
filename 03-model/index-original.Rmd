@@ -1,5 +1,5 @@
 ---
-title: "4 Regression modeling"
+title: "Regression modeling"
 output: html_document
 params:
   shiny_url: "https://oferengel-posit.shinyapps.io/"
@@ -32,20 +32,28 @@ In this tutorial you'll also take your skills with simple linear regression to t
 
 ## Lessons
 
+### 1 - Visualizing two variables
 
-### 4.1 ~~[Sampling variability](https://oferengel-posit.shinyapps.io/04-01-lesson/) **deadline 17-Oct-23**~~
+* Explore [bivariate relationships](https://en.wikipedia.org/wiki/Bivariate_analysis) graphically
+* Characterize bivariate relationships
+* Create and interpret [scatterplots](https://en.wikipedia.org/wiki/Scatter_plot)
+* Discuss transformations
+* Identify [outliers](https://en.wikipedia.org/wiki/Outlier)
 
-The fundamental principle that there is variability across different samples will be investigated in this lesson. You will be able to characterize the variability across samples as compared to the underlying population. Remember, the goal of the research is to understand the population, while the information you have comes only from a single sample of data.
+### 2 - Correlation
 
+* Quantify the strength of a linear relationship
+* Compute and interpret Pearson Product-Moment [correlation](https://en.wikipedia.org/wiki/Correlation_and_dependence)
+* Identify spurious correlations
 
-### [4.2 Simple linear regression](https://oferengel-posit.shinyapps.io/03-03-lesson/)
+### 3 - Simple linear regression
 
 * Visualize a simple linear model as "best fit" line
 * Conceptualize simple [linear regression](https://en.wikipedia.org/wiki/Linear_regression)
 * Fit and describe simple linear regression models
 * Internalize [regression to the mean](https://en.wikipedia.org/wiki/Regression_toward_the_mean)
 
-### [4.3 Interpreting regression models](https://oferengel-posit.shinyapps.io/03-03-lesson/)
+### 4 - Interpreting regression models
 
 * Interpret the meaning of coefficients in a regression model
 * Understand the impact of units and scales
@@ -53,18 +61,41 @@ The fundamental principle that there is variability across different samples wil
 * Make predictions from regression models
 * Overlay a regression model on a scatterplot
 
-### [4.4 Model fit](https://oferengel-posit.shinyapps.io/03-05-lesson/)
+### 5 - Model fit
 
 * Assess the quality of fit of a regression model
 * Interpret [$R^2$](https://en.wikipedia.org/wiki/Coefficient_of_determination)
 * Measure [leverage](https://en.wikipedia.org/wiki/Leverage_(statistics)) and influence
 * Identify and attend to outliers
 
-### [4.5 - Parallel slopes](https://oferengel-posit.shinyapps.io/03-06-lesson/)
+### 6 - Parallel slopes
 
 * Visualize, fit, and interpret a parallel slopes model, which has one numeric and one categorical explanatory variable
 * Describe a model in three different ways: mathematically, graphically, and through R syntax
 
+### 7 - Evaluating and extending parallel slopes model
+
+* Assess and interpret model fit
+* Compute residuals and predictions
+* Fit and interpret interaction models
+* Recognize [Simpson's paradox](https://en.wikipedia.org/wiki/Simpson%27s_paradox)
+
+### 8 - Multiple regression
+
+* Visualize, fit, and interpret a multiple regression model with two numeric explanatory variables
+* Visualize, fit, and interpret a parallel planes model with two numeric explanatory variables and a categorical variable
+* Fit and interpret multiple regression models in higher dimensions
+* Understand and identify [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity)
+
+### 9 - Logistic regression
+
+* Visualize, fit, and interpret logistic regression models
+* Interpret coefficients on three different scales
+* Make predictions from a logistic regression model
+
+### 10 - Case study: Italian restaurants in NYC
+
+* Explore the relationship between price and the quality of food, service, and decor for Italian restaurants in [New York City](https://en.wikipedia.org/wiki/New_York_City)
 
 <br/>
 <br/>

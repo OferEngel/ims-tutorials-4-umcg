@@ -1,5 +1,5 @@
 ---
-title: "4.4 Model fit"
+title: "Regression modeling: 5 - Model fit"
 output:
   learnr::tutorial:
     progressive: true
@@ -97,22 +97,18 @@ encoder_logic <- function(strip_output = FALSE) {
   )
 }
 
-
 hash_encoder_ui <- {
-  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID (Gebruikersnaam  s-/p-nummer)?"), renderText({
+  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID?"), renderText({
     input$caption
   }), )
 }
-
 ```
 
 ## Assessing model fit
 
 ### How well does our textbook model fit?
 
-Now that we understand what linear regression models *are* and how they *work*, a natural next question is to consider *how well* they work. This is called _model fit_ or sometimes _model performance_.
-
-In an intuitive sense, it seems clear that the regression line for the textbooks fits really well.
+Now that we understand what linear regression models *are* and how they *work*, a natural next question is to consider *how well* they work. In an intuitive sense, it seems clear that the regression line for the textbooks fits really well.
 
 ```{r textbooks, echo = TRUE}
 ggplot(data = textbooks, aes(x = amaz_new, y = ucla_new)) +
@@ -121,10 +117,6 @@ ggplot(data = textbooks, aes(x = amaz_new, y = ucla_new)) +
 ```
 
 ### How well does our possum model fit?
-
-In this section we will be looking at a dataset that records 104 observations of possums in Australia and New Guinea. Specifically, we will predict the body length of the possum from their tail length. You can find more information about this dataset [here](https://www.openintro.org/data/index.php?data=possum).
-
-
 
 At the same time, the regression line for the possums fits less well, but it still seems useful.
 
@@ -163,7 +155,7 @@ The sum of the squares works well mathematically, but it also has the effect of 
 
 One way to assess strength of fit is to consider how far off the model is for a typical case. That is, for some observations, the fitted value will be very close to the actual value, while for others it will not. The magnitude of a typical residual can give us a sense of generally how close our estimates are.
 
-### Sum of Squared Errors (SSE)
+### SSE
 
 Recall that some of the residuals are positive, while others are negative. In fact, it is guaranteed by the least squares fitting procedure that the mean of the residuals is zero. Thus, it makes more sense to compute the square of the residuals.
 
@@ -172,7 +164,7 @@ After using the `augment()` function to tidy up our model, the sum of the square
 Keep in mind the column of the `augment()`-ed model we are interested in is named `.resid`. The period before it is part of its name and must be included!
 
 ```{r total_tail_mod-summary-1, echo = TRUE}
-lm(total_l ~ tail_l, data = possum) |>
+total_tail_mod |>
   augment() |>
   summarize(SSE = sum(.resid^2),
             SSE_also = (n() - 1) * var(.resid))
@@ -185,23 +177,8 @@ The SSE is a single number that captures how much our model missed by. Unfortuna
 The RMSE is essentially the standard deviation of the residuals. You might expect us to divide by $n$ here, but we instead divide by the number of *degrees of freedom*, which in this case is $n-2$. The concept of degrees of freedom comes up in many contexts in statistics, but a fuller discussion is beyond the scope of this tutorial.
 
 $$
-    RMSE = \sqrt{ \frac{\sum_i{e_i^2}}{df} } = \sqrt{ \frac{SSE}{n-2} }
+    RMSE = \sqrt{ \frac{\sum_i{e_i^2}}{d.f.} } = \sqrt{ \frac{SSE}{n-2} }
 $$
-
-```{r quiz-df}
-question(
-  "Notice that the degrees of freedom is $n-2$. That implies that the regression is estimating two parameters. Which two parameters is it estimating?", 
-  allow_retry = TRUE, 
-  random_answer_order = TRUE,
-  answer("The mean of the sample"), 
-  answer("The intercept", correct = TRUE),
-  answer("The slope", correct = TRUE),
-  answer("The residuals")
-  )
-
-```
-
-
 
 The RMSE also generalizes to any kind of model for a single numerical response, so it is not specific to regression models.
 
@@ -210,8 +187,7 @@ The RMSE also generalizes to any kind of model for a single numerical response, 
 When R displays the `summary()` of a regression model, it displays the "residual standard error". This is the RMSE. Conveniently, the RMSE is in the units of the response, so this says that our model makes a predicted body length that is typically within about 3.57 centimeters of the truth. That seems useful, since the possums in our data set are between 75 and 96 centimeters.
 
 ```{r total_tail_mod-summary-2, echo = TRUE}
-lm(total_l ~ tail_l, data = possum) |> 
-  summary()
+summary(total_tail_mod)
 ```
 
 ### Residual standard error (textbooks)
@@ -219,8 +195,9 @@ lm(total_l ~ tail_l, data = possum) |>
 For the textbooks, the residual standard error is $10.47. Somehow this doesn't seem as useful--and yet it seemed from the scatterplot that the fit of the textbook model was much better than the fit of the possum model. Reconciling these two notions will be up next.
 
 ```{r textbooks-summary, echo = TRUE}
-lm(ucla_new ~ amaz_new, data = textbooks) |> 
-  summary()
+books_mod <- lm(ucla_new ~ amaz_new, data = textbooks)
+
+summary(books_mod)
 ```
 
 You'll work with residuals on your own in the next exercises.
@@ -241,9 +218,6 @@ question("What does this mean?",
 
 ## Your turn!
 
-In this section, we will be using a dataset describing the body measurements of 507 physically active individuals. You can find more details about the data [in this web page](https://www.openintro.org/data/index.php?data=bdims).
-
-
 You can recover the residuals from `wgt_hgt_mod` with `residuals()`, and the degrees of freedom with `df.residual()`. Use these components to compute the RMSE of the `wgt_hgt_mod`.
 
 1. View a `summary()` of `wgt_hgt_mod`.
@@ -251,7 +225,6 @@ You can recover the residuals from `wgt_hgt_mod` with `residuals()`, and the deg
 3. Use `residuals()` and `df.residual()` to compute the root mean squared error (RMSE), a.k.a. *residual standard error*.
 
 ```{r ex2, exercise = TRUE}
-wgt_hgt_mod <- lm(wgt ~ hgt, data = bdims)
 # View summary of model
 
 
@@ -267,7 +240,6 @@ ___(residuals(wgt_hgt_mod))
 ```
 
 ```{r ex2-solution}
-wgt_hgt_mod <- lm(wgt ~ hgt, data = bdims)
 # View summary of model
 summary(wgt_hgt_mod)
 
@@ -277,21 +249,6 @@ mean(residuals(wgt_hgt_mod))
 # Compute RMSE
 sqrt(sum(residuals(wgt_hgt_mod)^2) / df.residual(wgt_hgt_mod))
 ```
-
-```{r quiz-rmse}
-question(
-  "We found the `RMSE` by calculating the root mean of the residual squares. Which element in the output of the `summary` function is equal to the RMSE?", 
-  answer("The intercept"), 
-  answer("The slope"), 
-  answer("The R-squared"), 
-  answer("The Standard error"), 
-  answer("Residual standard error", correct = TRUE), 
-  allow_retry = TRUE, 
-  random_answer_order = TRUE
-)
-
-```
- 
 
 ## Comparing model fits
 
@@ -317,11 +274,11 @@ ggplot(data = possum, aes(y = total_l, x = tail_l)) +
 
 ### Null (average) model
 
-It's hard to compare the textbook RMSE=$10  to the possum's RMSE=3.5 centimeters. Which is "bigger"? What would be nice is if we had a way to compare the quality of a model's fit that was unit-less. To do so, it is helpful to think about a benchmark.
+It's hard to compare $10 to 3.5 centimeters. Which is "bigger"? What would be nice is if we had a way to compare the quality of a model's fit that was unitless. To do so, it is helpful to think about a benchmark.
 
 If you had to predict the body length of a possum, and you didn't have any information about that particular possum, what would your prediction be? Let's pause for a second and think.
 
-A sensible choice would be the average length of all possum. And in fact, if you have to make the same prediction for every possum, the average is the *best* number you can pick (if you are trying to minimize the sum of squares). We can think about this as a model where $\hat{y}$ (the predicted value of $y$) is equal to $\bar{y}$ (the average value of $y$).
+A sensible choice would be the average length of all possum. And in fact, if you have to make the same prediction for every possum, the average is the *best* number you can pick. We can think about this as a model where $\hat{y}$ (the predicted value of $y$) is equal to $\bar{y}$ (the average value of $y$).
 
 ### Visualization of null model
 
@@ -350,7 +307,7 @@ possum_null <- lm(total_l ~ 1, data = possum)
 ```
 
 ```{r, echo = TRUE}
-lm(total_l ~ 1, data = possum) |>
+null_mod |>
   augment(possum) |>
   summarize(SST = sum(.resid^2))
 ```
@@ -359,15 +316,11 @@ lm(total_l ~ 1, data = possum) |>
 
 Compare this number to the SSE for our possum model that uses tail length as an explanatory variable. The SSE in this case is 1301.488.
 
-```{r possum-total-summary, exercise = TRUE}
-lm(total_l ~ tail_l, data = possum) |>
+```{r possum-total-summary, echo = TRUE}
+total_tail_mod |>
   augment() |>
   summarize(SSE = sum(.resid^2))
 ```
-
-We can see that knowing the length of the possum's tail and our linear model, we reduce the sum of square errors from 1913.826 to 1301.488. The model with the possum's tail is clearly superior to the model with the intercept only!
-
-
 
 ### Coefficient of determination
 
@@ -397,8 +350,7 @@ The null model has an $R^2$ of zero because $SSE = SST$. That is, since the fitt
 The easiest way to see the $R^2$ value is to apply the `summary()` function to your model object. In this case, we see that our model based on tail length explains about 32\% of the variability in body length for these possums.
 
 ```{r possum-total-summary-2, echo = TRUE}
-lm(total_l ~ tail_l, data = possum) |>
-  summary()
+summary(total_tail_mod)
 ```
 
 ### What about the textbooks?
@@ -406,8 +358,9 @@ lm(total_l ~ tail_l, data = possum) |>
 For the textbooks, the $R^2$ value is much higher -- here we can explain 97% of the variability in UCLA price using price on Amazon. Indeed, the $R^2$ comparison helps to confirm our graphical intuition that the textbook model is a better fit to the textbook data than the possum model is the possum data.
 
 ```{r textbook-summary, echo = TRUE}
-lm(ucla_new ~ amaz_new, data = textbooks) |> 
-  summary()
+books_mod <- lm(ucla_new ~ amaz_new, data = textbooks)
+
+summary(books_mod)
 ```
 
 ### Over-reliance on $R^2$
@@ -440,36 +393,29 @@ wgt_hgt_augment <- augment(wgt_hgt_mod)
 ```
 
 ```{r ex3, exercise = TRUE}
-wgt_hgt_mod <- lm(wgt ~ hgt, data = bdims)
 # View model summary
-summary(____)
+
 
 # Compute R-squared
-augment(wgt_hgt_mod) |>
+wgt_hgt_augment |>
   summarize(var_y = ___,
             var_e = ___) |>
   mutate(R_squared = ___)
 ```
 
 ```{r ex3-hint}
-wgt_hgt_mod <- lm(wgt ~ hgt, data = bdims)
-# View model summary
-summary(wgt_hgt_mod)
-
-# Compute R-squared
-augment(wgt_hgt_mod) |>
+wgt_hgt_augment |>
   summarize(var_y = var(wgt),
             var_e = var(.resid)) |>
   mutate(R_squared = ___)
 ```
 
 ```{r ex3-solution}
-wgt_hgt_mod <- lm(wgt ~ hgt, data = bdims)
 # View model summary
 summary(wgt_hgt_mod)
 
 # Compute R-squared
-augment(wgt_hgt_mod) |>
+wgt_hgt_augment |>
   summarize(var_y = var(wgt),
             var_e = var(.resid)) |>
   mutate(R_squared = 1 - var_e / var_y)
@@ -591,10 +537,6 @@ You'll explore some more outliers in these next exercises.
 ## Your turn!
 
 The *leverage* of an observation in a regression model is defined entirely in terms of the distance of that observation from the mean of the explanatory variable. That is, observations close to the mean of the explanatory variable have low leverage, while observations far from the mean of the explanatory variable have high leverage. Points of high leverage may or may not be influential.
-
-In this section we will be using the `mlbbat10` dataset, consisting of the Major League Baseball Player Hitting Statistics for 2010 in the united states. This is a dataset with 1199 observations on and 19 variables. You can find more information about this dataset on [this web page.](https://www.openintro.org/data/index.php?data=mlbbat10)
-
-
 
 The `augment()` function from the **broom** package automatically adds the leverage scores (`.hat`) to a model dataframe. Use `augment()` to list the top 6 observations by their leverage scores, in descending order.
 
@@ -848,20 +790,54 @@ summary(mod_original)
 
 ## Congratulations!
 
-You have successfully completed tutorial 4.4 Model fit. To generate a hash for submission, see below.
+You have successfully completed half of the lessons in Tutorial 3: Regression Modeling.
+If you need to generate a hash for submission, click "Next Topic".
 
-This tutorial was about analyzing the relationship between two numeric variables. We learned a variety of techniques for doing this.
+This first half of the tutorial was about analyzing the relationship between two numeric variables. We learned a variety of techniques for doing this.
 
-We learned about linear regression---a relatively simple, yet powerful technique for modeling a response variable in terms of a single explanatory variable. We built our intuition about how these models work and identified some of their key properties.
+First, we explored how powerful scatterplots can be in revealing bivariate relationships in an intuitive, graphical form. We built a framework for describing what we see in those scatterplots, and practiced implementing that framework on real data.
 
-We focused carefully on how to interpret the coefficients of regression models, and how those interpretations can bring real insight into complex problems. We also developed a foundational understanding of how to build these models in R, and how to work with them afterwards.
+Second, we learned about correlation---a simple way to quantify the strength of the linear relationship between two variables in a single number. We emphasized the value of such measurements, but illustrated how their careless application can lead to erroneous results.
+
+Third, we learned about linear regression---a relatively simple, yet powerful technique for modeling a response variable in terms of a single explanatory variable. We built our intuition about how these models work and identified some of their key properties.
+
+Fourth, we focused carefully on how to interpret the coefficients of regression models, and how those interpretations can bring real insight into complex problems. We also developed a foundational understanding of how to build these models in R, and how to work with them afterwards.
 
 Finally, we introduced the notion of model fit, and developed tools for helping us reason about the quality of our models, and how much we can learn from them.
 
 Together, we hope that these concepts will inform your thinking about the nature of the relationship between variables. These techniques should help to you unravel them on your own.
 
-To generate a hash for submission, see below.
+What's next?
 
+`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://openintrostat.github.io/ims-tutorials/)
+
+`r emo::ji("spiral_notepad")` [Tutorial 3: Regression modeling](https://openintrostat.github.io/ims-tutorials/03-model/)
+
+`r emo::ji("one")` [Tutorial 3 - Lesson 1: Visualizing two variables](https://openintro.shinyapps.io/ims-03-model-01/)
+
+`r emo::ji("two")` [Tutorial 3 - Lesson 2: Correlation](https://openintro.shinyapps.io/ims-03-model-02/)
+
+`r emo::ji("three")` [Tutorial 3 - Lesson 3: Simple linear regression](https://openintro.shinyapps.io/ims-03-model-03/)
+
+`r emo::ji("four")` [Tutorial 3 - Lesson 4: Interpreting regression models](https://openintro.shinyapps.io/ims-03-model-04/)
+
+`r emo::ji("five")` [Tutorial 3 - Lesson 5: Model fit](https://openintro.shinyapps.io/ims-03-model-05/)
+
+`r emo::ji("six")` [Tutorial 3 - Lesson 6: Parallel slopes](https://openintro.shinyapps.io/ims-03-model-06/)
+
+`r emo::ji("seven")` [Tutorial 3 - Lesson 7: Evaluating and extending parallel slopes model](https://openintro.shinyapps.io/ims-03-model-07/)
+
+`r emo::ji("eight")` [Tutorial 3 - Lesson 8: Multiple regression](https://openintro.shinyapps.io/ims-03-model-08/)
+
+`r emo::ji("nine")` [Tutorial 3 - Lesson 9: Logistic regression](https://openintro.shinyapps.io/ims-03-model-09/)
+
+`r emo::ji("keycap_ten")` [Tutorial 3 - Lesson 10: Case study: Italian restaurants in NYC](https://openintro.shinyapps.io/ims-03-model-10/)
+
+`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
+
+
+
+## Submit
 
 ```{r, echo=FALSE, context="server"}
 encoder_logic()
@@ -870,8 +846,3 @@ encoder_logic()
 ```{r encode, echo=FALSE}
 learnrhash::encoder_ui(ui_before = hash_encoder_ui)
 ```
-
-
-### Submit your hash in a form
-
-After creating the hash, please copy it, navigate to [this form](https://forms.gle/ajEDfePc1jcTukyB7) and fill it in and submit. You will need to submit the form once for every lesson you complete in this tutorial.
