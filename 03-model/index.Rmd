@@ -45,7 +45,7 @@ The fundamental principle that there is variability across different samples wil
 * Fit and describe simple linear regression models
 * Internalize [regression to the mean](https://en.wikipedia.org/wiki/Regression_toward_the_mean)
 
-### [4.3 Interpreting regression models](https://oferengel-posit.shinyapps.io/03-03-lesson/)
+### [4.3 Interpreting regression models](https://oferengel-posit.shinyapps.io/03-04-lesson/)
 
 * Interpret the meaning of coefficients in a regression model
 * Understand the impact of units and scales
