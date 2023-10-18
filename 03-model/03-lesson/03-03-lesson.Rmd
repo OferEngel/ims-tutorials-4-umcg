@@ -99,6 +99,9 @@ hash_encoder_ui <- {
 Before we get into the mathematical specification for a regression model, let's build some intuition about what a regression line is.  
 
 
+<div style="float: right; margin: 0px 0px 20px 20px">
+<img  src="images/possum.jpg" alt="possums in Australia and New Guinea" width="80%" height="80%">
+</div>
 In this section we will be looking at a dataset that records 104 observations of possums in Australia and New Guinea. Specifically, we will predict the body length of the possum from their tail length. You can find more information about this dataset [here](https://www.openintro.org/data/index.php?data=possum).
 
 The scatterplot shows the relationship between the total length of a possum, and the corresponding length of its tail. Clearly there is not a perfect relationship here: the total length of the possum varies even for possums with the same tail length. But we still have some intuitive desire to describe the relationship with a line. 

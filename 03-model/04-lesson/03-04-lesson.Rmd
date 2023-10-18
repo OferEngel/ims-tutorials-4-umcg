@@ -8,7 +8,17 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, message=FALSE, warning=FALSE, include=FALSE}
-# load packages ----------------------------------------------------------------
+# knitr options --------------------------------------
+
+knitr::opts_chunk$set(echo = FALSE, 
+                      fig.align = "center", 
+                      fig.height = 3, 
+                      fig.width = 5,
+                      warning = FALSE, 
+                      message = FALSE)
+
+
+# load packages -----------------------------------------------
 
 library(learnr)
 library(tidyverse)
@@ -17,14 +27,7 @@ library(grid)
 library(broom)
 library(emo)
 
-# knitr options ----------------------------------------------------------------
 
-knitr::opts_chunk$set(echo = FALSE, 
-                      fig.align = "center", 
-                      fig.height = 3, 
-                      fig.width = 5,
-                      warning = FALSE, 
-                      message = FALSE)
 tutorial_options(exercise.eval = FALSE)
 textbooks$course <- as.character(textbooks$course)
 textbooks <- textbooks |>
@@ -104,6 +107,9 @@ hash_encoder_ui <- {
 
 ### Is that textbook overpriced?
 
+```{r UCLA_bookstore, fig.align="right", out.width="30%",   out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics("images/UCLA_bookstore.jpg")
+```
 
 Data were collected on 73 textbooks required for a few randomly selected courses at UCLA. For each textbook, we know the retail price at both the UCLA bookstore and on Amazon.com. We also know the department and course number for each corresponding course, and the ISBN of the book. You can find more information about this dataset [here](https://www.openintro.org/data/index.php?data=textbooks).
 
