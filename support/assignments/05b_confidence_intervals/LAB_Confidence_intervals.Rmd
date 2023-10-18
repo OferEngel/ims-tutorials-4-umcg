@@ -63,8 +63,8 @@ To keep our computation simple, we will assume a total population size of 100,00
 We will be using R Markdown to create reproducible lab reports. In RStudio, you will find the file `lab-03.Rmd` in the `Files` panel. Double click it to show the script in the code panel.
 
 -   In the file, update the YAML with your name, the date and the name of the lab.
--   Load the `tidyverse`, `mosaic`, `broom` and `infer` package.
--   Load the `climate_believers` data set into your workspace, and save it as `us_adults`. Notice that this time the file you are reading has an `rds` extension. You will therefore need to use the `read_rds("data/climate_believers")` function to read it.
+-   Load the `tidyverse`, `broom` and `infer` package.
+-   Load the `climate_believers` data set into your workspace, and save it as `us_adults`. Notice that this time the file you are reading has an `rds` extension. You will therefore need to use the `read_rds("data/climate_believers.rds")` function to read it.
 -   knit your file to see that everything is working. 
 
 
@@ -205,8 +205,6 @@ prop_test(data = samp_1, climate_believers ~ NULL) |>
   tidy()
 
 ```
-
-
 
 ### Using bootstrapping to estimate uncertainty
 

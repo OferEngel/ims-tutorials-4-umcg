@@ -1,0 +1,170 @@
+---
+title: "Lab Name"
+author: "Author Name"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    highlight: "pygments"
+    theme: "spacelab"
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: "show"
+    df_print: paged
+---
+
+```{r setup, message=FALSE}
+# Load the tidyverse, mosaic, broom and infer packages
+library(tidyverse)
+library(broom)
+library(mosaic)
+
+# 2. use the read_rds file to read the dataset
+df <- read_rds("data/climate_believers.rds")
+
+```
+
+### Exercise 1
+
+**Question:** We can visualize the hypothetical distribution of the responses in the population using a bar plot. Recreate the plot below using the `ggplot()`, `geom_bar()` and `labs()` layers. To flip the `x` and `y` coordinates, add the `coord_flip()` layer.
+
+
+```{r ex1-visualize-population}
+# Write your code to create determine the missing data
+
+```
+
+
+
+
+
+### Exercise 2
+
+**Question:**  Print the summary statistics to confirm we constructed the data frame correctly. Use the `count` function to show the numeric quantities and use `mutate(p = n /sum(n))` to calculate the proportions in the population. What is the proportion of climate-believers in our hypothetical population?
+
+
+```{r ex2-descriptive}
+# Insert code for Exercise 2 here
+
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+
+
+### Exercise 3
+
+**Question:** Calculate the proportions like we did in the previous question and answer the following: (1) What percent of your sample are climate-believers? (2) How does this compare to the proportion of climate-believers in the population? **Hint:** Just like we did with the population, we can calculate the proportion of those **in this sample** who think climate change affects their local community.
+
+```{r ex3-prop-in-sample-1}
+# Insert code for Exercise 3 here
+
+
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+
+
+### Exercise 4
+
+**Question:** Create code to generate a second sample (call it `samp_2`). Answer the same questions as before, but this time with respect to `samp_2`. How do the two samples compare? Explain any difference you found between the two samples. 
+
+```{r ex4-prop-in-sample-2}
+# Insert code for the Exercise here
+
+
+```
+
+
+**Answer:** [Replace this with your answer]
+
+
+
+
+
+### Exercise 5
+
+**Question:** Run the proportion test (see code below) on the first sample `samp_1`, to estimate the proportion of climate-believers in the population. Now answer the following questions: (1) How does the estimation compare to the real proportion of climate-believers in the population? (2) What is the  confidence interval associated with your estimation? (3) Is the proportion of climate-believers in the population contained within your confidence interval? 
+
+
+```{r ex5-prop-test}
+
+set.seed(35797)
+n <- 60
+samp_1 <- df %>%
+  sample_n(size = n)
+
+table(df$climate_believers)
+
+# Insert code for the Exercise here
+library(infer)
+prop_test(samp_1, climate_believers ~ NULL) 
+
+
+```
+
+
+
+### Exercise 6
+
+**Question:** This code will create 1000 bootstrapping samples from `samp_1`, and use those samples to find the 95 percent confidence interval for proportion of climate-believers. Run the code and compare your results with the proportion test we've run in the previous question.
+
+```{r ex6-bootstrap-samp-1}
+# Insert code for the Exercise here
+
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+### Exercise 7
+
+**Question:** Does your confidence interval capture the true population proportion of US adults who think climate change affects their local community? Now run the bootstrapping method on `samp_2`. How do your results compare? 
+
+Each time you run a sample, you would get different intervals.  What proportion of those intervals would you expect to contain the true population mean?
+
+```{r ex7-bootstrap-samp-1}
+# Insert code for the Exercise here
+
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+
+
+### Exercise 8
+
+Given a sample size of 60, 1000 bootstrap samples for each interval, and 50 confidence intervals constructed (the default values for the above app), what proportion of your confidence intervals include the true population proportion? Is this proportion exactly equal to the confidence level? If not, explain why. If you can, try to include your plot in the answer (to learn how to include an image in your RMarkdown, read [this](https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html)).
+
+**Answer:** [Replace this with your answer]
+
+
+
+### Exercise 9
+
+Choose a different confidence level than 95%. Would you expect a confidence interval at this level to be wider or narrower than the confidence interval you calculated at the 95% confidence level? Explain your reasoning and confirm your claim using the app. What is the proportion of intervals that include the true population proportion? How does this percentage compare to the confidence level selected for the intervals?
+
+**Answer:** [Replace this with your answer]
+
+
+
+### Exercise 10
+
+Using the app, experiment with different sample sizes and comment on how the widths of intervals change as sample size changes (increases and decreases).
+
+**Answer:** [Replace this with your answer]
+
+
+
+### Exercise 11
+
+Finally, given a sample size (say, 60), how does the width of the interval change as you increase the number of bootstrap samples?
+
+**Answer:** [Replace this with your answer]

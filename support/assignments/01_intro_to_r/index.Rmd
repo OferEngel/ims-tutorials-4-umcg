@@ -135,7 +135,7 @@ Again, you can run the code above by:
 The single line of code included in this code chunk instructs `R` to load some data: the Arbuthnot baptism counts for boys and girls. You should see that the *Environment* tab in the upper right hand corner of the RStudio window now lists a data set called `arbuthnot` that has 82 observations on 3 variables. 
 
 ```{r img-arbuth-env, out.width="40%", echo=FALSE}
-knitr::include_graphics("img/arbuth-env.jpg")
+knitr::include_graphics("img/arbuth-env.jpg")d
 ```
 
 
