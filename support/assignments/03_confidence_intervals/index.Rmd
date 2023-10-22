@@ -20,7 +20,6 @@ knitr::opts_chunk$set(
 
 # `tidyverse`, `mosaic`, `broom` and `infer`
 library(tidyverse)
-library(mosaic)
 library(broom)
 library(infer)
 
@@ -63,7 +62,7 @@ To keep our computation simple, we will assume a total population size of 100,00
 We will be using R Markdown to create reproducible lab reports. In RStudio, you will find the file `lab-03.Rmd` in the `Files` panel. Double click it to show the script in the code panel.
 
 -   In the file, update the YAML with your name, the date and the name of the lab.
--   Load the `tidyverse`, `mosaic`, `broom` and `infer` package.
+-   Load the `tidyverse`, `broom` and `infer` package.
 -   Load the `climate_believers` data set into your workspace, and save it as `us_adults`. Notice that this time the file you are reading has an `rds` extension. You will therefore need to use the `read_rds("data/climate_believers")` function to read it.
 -   knit your file to see that everything is working. 
 
@@ -165,7 +164,7 @@ samp_1 <- us_adults %>%
 
 ```
 
-3.  Calculate the proportions like we did in the previous question and answer the following: (1) What percent of your sample are climate-believers? (2) How does this compare to the proportion of climate-believers in the population? **Hint:** Just like we did with the population, we can calculate the proportion of those **in this sample** who think climate change affects their local community.
+3.  Calculate the proportions like we did in the previous question  and answer the following: (1) What percent of your sample are climate-believers? (2) How does this compare to the proportion of climate-believers in the population? **Hint:** Just like we did with the population, we can calculate the proportion of those **in this sample** who think climate change affects their local community. 
 
 
 ```{r summ-stat-smpl-1, echo=FALSE, include=FALSE}
@@ -174,7 +173,7 @@ samp_1 %>%
   mutate(p = n /sum(n))
 ```
 
-4.  Create code to generate a second sample (call it `samp_2`). Answer the same questions as before, but this time with respect to `samp_2`. How do the two samples compare? Explain any difference you found between the two samples. 
+4.  Create code to generate a second sample (call it `samp_2`). Answer the same questions as before, but this time with respect to `samp_2`. How do the two samples compare? Explain any difference you found between the two samples. **Warning:** DO NOT set the seed AGAIN!
 
 ```{r summ-stat-smpl-2, echo=FALSE, include=FALSE}
 us_adults %>%
@@ -201,8 +200,7 @@ We will explore this method more, later in the course, but in the meanwhile you 
 
 ```{r prop-test, echo=TRUE, eval=FALSE}
 
-prop_test(data = samp_1, climate_believers ~ NULL) |>  
-  tidy()
+prop_test(samp_1, climate_believers ~ NULL) 
 
 ```
 
@@ -239,7 +237,7 @@ Below is an overview of the functions we will use to construct this confidence i
 | `get_ci`    | Find the confidence interval                                                                                                               |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------+
 
-6. This code will create 1000 bootstrapping samples from `samp_1`, and use those samples to find the 95 percent confidence interval for proportion of climate-believers. Run the code and compare your results with the proportion test we've run in the previous question.
+6. This code will create 1000 bootstrapping samples from `samp_1`, and use those samples to find the 95 percent confidence interval for proportion of climate-believers. Run the code and compare your results with the proportion test we've run in the previous question. Does your confidence interval capture the true population proportion of US adults who think climate change affects their local community? 
 
 ```{r confidence-interval-infer, eval=FALSE}
 samp_1 %>%
@@ -265,7 +263,7 @@ font-size: 10pt;">
 
 In this case, you have the rare luxury of knowing the true population proportion (62%) since you have data on the entire population.
 
-7.  Does your confidence interval capture the true population proportion of US adults who think climate change affects their local community? Now run the bootstrapping method on `samp_2`. How do your results compare? Each time you run a sample, you would get different intervals.  What proportion of those intervals would you expect to contain the true population mean?
+7.  Now run the bootstrapping method on `samp_2`. How do your results compare? Each time you run a sample, you would get different intervals.  What proportion of those intervals would you expect to contain the true population mean?
 
 In the next part of the lab, you will collect many samples to learn more about how sample proportions and confidence intervals constructed based on those samples vary from one sample to another.
 

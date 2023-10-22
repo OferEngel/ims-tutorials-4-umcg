@@ -16,10 +16,10 @@ output:
 # Load the tidyverse, mosaic, broom and infer packages
 library(tidyverse)
 library(broom)
-library(mosaic)
+library(infer)
 
 # 2. use the read_rds file to read the dataset
-df <- read_rds("data/climate_believers.rds")
+us_adults <- read_rds("data/climate_believers.rds")
 
 ```
 
@@ -30,6 +30,9 @@ df <- read_rds("data/climate_believers.rds")
 
 ```{r ex1-visualize-population}
 # Write your code to create determine the missing data
+us_adults |> 
+  ggplot(aes(y=climate_believers)) +
+  geom_bar()
 
 ```
 
@@ -44,7 +47,9 @@ df <- read_rds("data/climate_believers.rds")
 
 ```{r ex2-descriptive}
 # Insert code for Exercise 2 here
-
+us_adults |> 
+  count(climate_believers) |> 
+  mutate(p = n / sum(n))
 
 ```
 
@@ -59,6 +64,15 @@ df <- read_rds("data/climate_believers.rds")
 
 ```{r ex3-prop-in-sample-1}
 # Insert code for Exercise 3 here
+# make sure to change the seed
+set.seed(35797)
+n <- 60
+samp_1 <- us_adults %>%
+  sample_n(size = n)
+
+samp_1 |> 
+  count(climate_believers) |> 
+  mutate(p = n / sum(n))
 
 
 
@@ -75,7 +89,11 @@ df <- read_rds("data/climate_believers.rds")
 
 ```{r ex4-prop-in-sample-2}
 # Insert code for the Exercise here
-
+samp_2 <- us_adults %>%
+  sample_n(size = n)
+samp_2 |> 
+  count(climate_believers) |> 
+  mutate(p = n / sum(n))
 
 ```
 
@@ -93,18 +111,15 @@ df <- read_rds("data/climate_believers.rds")
 
 ```{r ex5-prop-test}
 
-set.seed(35797)
-n <- 60
-samp_1 <- df %>%
-  sample_n(size = n)
-
-table(df$climate_believers)
-
-# Insert code for the Exercise here
 library(infer)
+table(samp_1$climate_believers)
+
+2*pbinom(24, 60, .5)
+
 prop_test(samp_1, climate_believers ~ NULL) 
-
-
+binom.test(36, 60)
+36 / 60 +c(-1, 1)*qt(.975, 59)* sqrt(24/60 * 36/60 * 1/60)
+qt(.975, 59)
 ```
 
 
@@ -115,7 +130,11 @@ prop_test(samp_1, climate_believers ~ NULL)
 
 ```{r ex6-bootstrap-samp-1}
 # Insert code for the Exercise here
-
+samp_1 %>%
+  specify(response = climate_believers, success = "Yes") %>%
+  generate(reps = 10000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.95)
 
 ```
 
