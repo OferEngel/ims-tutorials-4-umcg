@@ -1,0 +1,249 @@
+---
+title: "HW 03 - Birthdays and Penguins"
+subtitle: "Individual assignment"
+date: "Due: Sep 24 at 23:59"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: ../hw.css
+---
+
+<div style= "float:right;position: relative; margin-left: 100px">
+```{r bday, echo=FALSE, fig.align="right", out.width=400}
+knitr::include_graphics("happy-birthday.gif")
+```
+</div>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(broom)
+library(modelsummary)
+library(kableExtra)
+
+# Load penguins data
+penguins <- read_csv("penguins.csv")
+
+```
+
+# Task 1: A dataset for a friend's birthday!
+
+As researchers, you will first have to acquire a data-set, and only then you will fit it with a linear regression. Why do you need the regression? In order to understand the *mechanisms* that generated your data. 
+
+In this exercise, we are going to do everything the other way around. We are going to start with a linear equation model, and then generate a data-set, such that our model would be the best fit for that data-set. 
+
+The first thing you want to do is to choose two numbers: 
+
+* one number for the slope of the linear equation (a positive number between 0.50 and 4 or a negative one between -4 and -0.50) 
+* one number for the intercept (any number between -4 and 4) 
+
+The numbers should be meaningful to you in some way. They can be someone's birthday, but they can be something different. For example, I have a special friend whose birthday is the 3 of December. So I will choose an intercept of 3 (I could also choose 0.30), and a slope of -1.2 (since December is 12th month, and I wanted a number between -4 and 4, I decided to take 1.2 and make it negative just for fun). The next step would be to create a diagram of my linear model. (I could also choose the slope to be 3 and the intercept to be 1.2 if I want, whatever choice I make is fine, as long as I stay within the constraints described above).
+
+1. Please choose *two* numbers as indicated above. Explain why you chose them and, using one of them as the slope and the other as an intercept, plot the linear equation in your report. 
+
+
+```{r linear-eq.show, eval=FALSE}
+
+ggplot() + geom_abline(intercept=3, slope=-1.2, color="red") + 
+  # The following lines are just for the x-axis and the y-axis 
+  geom_hline(yintercept = 0, color="grey")+ geom_vline(xintercept = 0, color="grey") +
+  # The following tells R about the names of the axes and their limits. 
+  scale_x_continuous(name="x-axis", limits=c(-5,5)) +
+  scale_y_continuous(name="y-axis", limits=c(-5,5)) 
+
+```
+
+
+```{r linear-eq, fig.height=4, fig.width=4, echo=FALSE}
+
+ggplot() + geom_abline(intercept=3, slope=-1.2, color="red") + 
+  # The following lines are just for the x-axis and the y-axis 
+  geom_hline(yintercept = 0, color="grey")+ geom_vline(xintercept = 0, color="grey") +
+  # The following tells R about the names of the axes and their limits. 
+  scale_x_continuous(name="x-axis", limits=c(-5,5), breaks=-5:5) +
+  scale_y_continuous(name="y-axis", limits=c(-5,5), breaks=-5:5) 
+
+```
+
+
+
+
+<div style= "float:right;position: relative; margin-left: 10px">
+```{r Desmos01, echo=FALSE, fig.align="right", out.width=500}
+knitr::include_graphics("Desmos01.jpg")
+```
+</div>
+
+```{marginfigure}
+There is a way to do this in R as well, but we will do this manually for now to give you a more hands-on experience of the model. 
+```
+
+Finally, we are going to use the [desmos platform](https://www.desmos.com/calculator), in order to create our dataset. What you want to do is to click on the hamburger on the top left side of the screen, choose the linear regression tool and open it. You will see six green dots on the graph, each dot is a data point whose $x$ and $y$ coordinates are visible in the table on the left part of the screen. You can now click-and-drag the green dots and move them around, changing the coordinates of the data point. When you move the dot, you can see that the regression line will move  accordingly, minimizing its distance to the data points (more precisely, minimizing the square of the residuals). Now try to move the dots, such, that you will have a line with the intercept and slope you've chosen in question 1. I got the picture below. Notice that the data can be fit with a model that has the slope and the intercept I've chosen before. Also, notice the value of $R^2$   
+
+```{r Desmos03, echo=FALSE, fig.align="right", out.width=500}
+knitr::include_graphics("Desmos03.png")
+```
+
+2. Now copy the data you created into your RMarkdown and present it in a neat table, one column for your  $x$ variable and one for your $y$ variable. Run the regression model in R and compare the results (the slope, intercept and the $R^2$) to results shown in the [desmos platform](https://www.desmos.com/calculator). Would you say that your slope and intercept are significantly different from zero? Please explain your answer. Calculate the correlation between $x$ and $y$, and compare the square of the correlation to $R^2$. Find the place in the book that describes the relationship between the correlation coefficient and $R^2$ in regression models with one independent variable (aka univariate regression model). 
+
+With the slope and intercept I chose, I got the following table: 
+
+```{r my.dataset, echo=FALSE}
+
+df <- tribble(
+  ~x,~y,
+  0.1,	4.6,
+  -11,	19.7,
+  -0.2,	-2,
+  22.8,	-26.3,
+  12.5,	-29.6,
+  15.1,	4.4,
+) 
+
+df %>% kbl(align="c") %>%
+  kable_classic(full_width = FALSE,position="left")
+
+
+mdl <- lm(y~x,data=df)
+
+```
+
+
+Below you can see how I run the linear regression model...
+
+```{r my.dataset.show, eval=FALSE}
+
+df <- tribble(
+  ~x,~y,
+  0.1,	4.6,
+  -11,	19.7,
+  -0.2,	-2,
+  22.8,	-26.3,
+  12.5,	-29.6,
+  15.1,	4.4,
+) 
+
+  
+mdl <- lm(y~x,data=df)
+
+summary(mdl)
+
+```
+
+The command `lm(y~x,data=df)` calculates the slope and intercept of the model, the test-statistics, their p-values, the $R^2$ and related information. When you write the formula `y~x`, you are telling R that $y$ is the outcome (dependent) variable and $x$ is the explanatory (independent variable). 
+
+Below you can compare the results I got in R to the results I got on the [desmos platform](https://www.desmos.com/calculator). You can see that I got very similar results. Hooray! 
+
+```{r Desmos06, echo=FALSE, fig.align="right", out.width=600}
+knitr::include_graphics("Desmos06.jpg")
+```
+
+```{marginfigure}
+For example, if I have $R^2=0.6033$, I will try to create a dataset with $R^2=0.90$ or $R^2=0.30$.  
+```
+
+3. Bonus question (optional): Try now to create a dataset that can be fit with the exact same model (i.e, with the same  *slope* and *intercept*), but this time  try to choose the data in such a way that the $R^2$ would be dramatically different (e.g. 50% larger or 50% smaller, than the one you had in the previous model). Now present a neat table with the six data points and run the regression model in R. Confirm that your slope, intercept and $R^2$ are what you expected them to be.
+
+
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r penguins, echo=FALSE, fig.align="right", out.width=500}
+knitr::include_graphics("penguins.png")
+```
+</div>
+
+
+
+
+# Task 2: Penguins
+
+In the previous task we started with a model (slope and intercept), and created data to match. In this exercise, just like in real life, we do things the other way around. We start with the data. Between 2007 and 2009, researchers collected data on penguins in three islands in the Palmer Archipelago in Antarctica: Biscoe, Dream, and Torgersen. The `penguins` dataset has data for 342 penguins from 3 different species: Chinstrap, Gentoo, and Adélie. It includes the following variables:
+
+- `species`: The penguin's species (Chinstrap, Gentoo, and Adélie)
+- `island`: The island where the penguin lives (Biscoe, Dream, and Torgersen)
+- `bill_length_mm`: The length of the penguin's bill, in millimeters (distance from the penguin's face to the tip of the bill)
+- `bill_depth_mm`: The depth of the penguin's bill, in millimeters (height of the bill; distance from the bottom of the bill to the top of the bill)
+- `flipper_length_mm`: The length of the penguin's flippers, in millimeters
+- `body_mass_g`: The weight of the penguin, in grams
+- `sex`: The sex of the penguin
+- `year`: The year the observation was made
+
+The first thing we need to do is to load our dataset.
+
+
+```{r load-penguins, eval=FALSE}
+# Load penguins data
+penguins <- read_csv(_______________)
+```
+
+
+
+## Exploratory analysis
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r islands, echo=FALSE, fig.align="right", out.width=500}
+knitr::include_graphics("islands.png")
+```
+</div>
+
+Let's say we want to know  the relationship between penguin weight and bill depth. Start with a simple plot like the one below:
+
+```{r plot-penguin-weight-depth, eval=FALSE}
+ggplot(data = penguins, 
+       aes(x = bill_depth_mm, y = body_mass_g)) +
+  geom_______
+
+```
+
+Notice that each point in the graph is associated with a penguin, and for each penguin we have information about its different features: weight, bill depth, flipper length etc...
+
+
+1. Make a new plot that colors these points by species. What can you tell about the relationship between bill depth and penguin weight? 
+
+
+```{r plot-penguin-weight-depth-by-species, echo=FALSE}
+ggplot(data = penguins, 
+       aes(x = bill_depth_mm, y = body_mass_g, color=species)) +
+  geom_point() + 
+  scale_x_continuous(name="bill depth (mm)", breaks=seq(13,21,by=1)) + 
+  scale_y_continuous(name="body mass (g)")
+
+
+```
+
+2. Now make a new graph that depicts the  the relationship between flipper length and body mass, such that `flipper_length_mm` on the x-axis, `body_mass_g` on the y-axis, and points colored by `species`. Facet the plot by island (you can do that by adding another layer, namely `+ facet_grid(island~.)`). Finally, tell a story about the relationship between flipper length and weight in these three penguin species, and the distribution of penguins across the three islands.
+
+
+
+```{r eval=FALSE}
+ggplot(data = penguins,
+       aes(x = _______, y = ________, color = ___________)) +
+  geom___________ +
+  facet_grid(island~.)
+```
+
+
+```{r include=FALSE}
+ggplot(data = penguins,
+        aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+     geom_point() +
+    facet_grid(island~.) + theme(legend.position = "bottom")
+
+```
+
+
+
+## Models: Does bill depth predict penguin weight?
+
+2. Run a regression model and interpret the regression it as described in your textbook, section 7.5. What is the sign of the slope in your regression, and what does this mean? Is the association statistically significant? Is the slope of your regression positive or negative? What does that mean? How well does your model predict the body weight? (Hint: look at the $R^2$). What can be done to improve the model?
+
+```{r model-depth-weight, include=FALSE}
+model_depth_weight <- lm(body_mass_g ~ bill_depth_mm,
+                         data = penguins)
+
+summary(model_depth_weight)
+
+
+```
+

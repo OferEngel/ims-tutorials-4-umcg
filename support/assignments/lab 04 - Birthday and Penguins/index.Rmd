@@ -1,0 +1,235 @@
+---
+title: "Penguins and Birthdays"
+output:
+  html_document:
+    css: ../lab.css
+    highlight: pygments
+    theme: cerulean
+    toc: true
+    toc_float: true
+---
+
+```{r global_options, include = FALSE}
+knitr::opts_chunk$set(eval = TRUE, results = "as.is", fig.align = "center", message = "false", echo = FALSE)
+library(extrafont) 
+library(tidyverse)
+library(table1)
+library(modelsummary)
+library(broom)
+library(car)
+# library(openintro)
+penguins <- read_rds("data/penguins.rds")
+# Custom ggplot theme to make pretty plots
+# Get Barlow Semi Condensed at https://fonts.google.com/specimen/Barlow+Semi+Condensed
+theme_clean <- function() {
+  theme_minimal(base_family = "Barlow Semi Condensed") +
+    theme(panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white", color = NA),
+          plot.title = element_text(face = "bold"),
+          axis.title = element_text(face = "bold"),
+          strip.text = element_text(face = "bold", size = rel(0.8), hjust = 0),
+          strip.background = element_rect(fill = "grey80", color = NA),
+          legend.title = element_text(face = "bold"))
+}
+
+
+```
+
+
+<span style="color: red;font-size: 14px;font-weight: bold;">DEADLINE FOR COMPLETING THIS LAB: Friday, 3rd November 
+<br/>GROUP WORK. One member of your group submits your final report [using this form](https://forms.gle/JB5c9apmkx3wD8WG7). </span>
+
+
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r penguins, echo=FALSE, fig.align="right", out.width=300}
+knitr::include_graphics("images/penguins.png")
+```
+</div>
+
+
+
+
+## Penguins
+
+Between 2007 and 2009, researchers collected data on penguins in three islands in the Palmer Archipelago in Antarctica: Biscoe, Dream, and Torgersen. The `penguins` dataset has data for 342 penguins from 3 different species: Chinstrap, Gentoo, and Adélie. It includes the following variables:
+
+- `species`: The penguin's species (Chinstrap, Gentoo, and Adélie)
+- `island`: The island where the penguin lives (Biscoe, Dream, and Torgersen)
+- `bill_length_mm`: The length of the penguin's bill, in millimeters (distance from the penguin's face to the tip of the bill)
+- `bill_depth_mm`: The depth of the penguin's bill, in millimeters (height of the bill; distance from the bottom of the bill to the top of the bill)
+- `flipper_length_mm`: The length of the penguin's flippers, in millimeters
+- `body_mass_g`: The weight of the penguin, in grams
+- `sex`: The sex of the penguin
+- `year`: The year the observation was made
+
+
+
+### Creating a reproducible lab report
+
+
+You will find all the work-space for your lab on posit cloud [using this link](TODO).
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r islands, echo=FALSE, fig.align="right", out.width=300}
+# knitr::include_graphics("images/islands.png")
+knitr::include_graphics("images/culmen_depth.png")
+```
+</div>
+
+We will be using R Markdown to create reproducible lab reports. In RStudio, you will find the file `lab-04.Rmd` in the `Files` panel. Double click it to show the script in the code panel.
+
+-   In the file, update the YAML with your name, the date and the name of the lab.
+-   Load the `tidyverse`, `broom`, `table1`, `car` and `modelsummary` packages.
+-   Load the `penguins.rds` data set into your workspace, and save it as `penguins`. Notice that this time the file you are reading has an `rds` extension. You will therefore need to use the `read_rds` function to read it.
+-   knit your file to see that everything is working. 
+
+
+## Creating Table1
+
+In most published articles, there is a “Table 1” containing descriptive statistics for the sample. This may include, for example, the mean and standard deviation for continuous variables, the frequency and proportion for categorical variables, and perhaps also the number of missing values.
+
+The brute force method of creating such a table would be to compute each statistic for each variable of interest and then copy and paste the results into a table. Having done this even once you will wish for an easier method! There are many possible solutions, but one that is quick and easy to use the `table1` package described in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"}
+
+
+## Association between variables
+
+1. Use the `table1` package to replicate the table below. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"}.
+
+```{r table1, echo=FALSE}
+label(penguins$body_mass_g) <- "Body mass (g)"
+label(penguins$sex)         <- "Sex"
+label(penguins$flipper_length_mm) <- "Flipper length (mm)"
+label(penguins$bill_depth_mm) <- "Bill depth (mm)"
+
+
+table1(~ sex + body_mass_g + flipper_length_mm + bill_depth_mm + island | species, data=penguins, caption = "Measurements for three penguin species in the Palmer Archipelago", overall = FALSE)
+
+
+```
+
+<br/>
+<br/>
+<br/>
+
+We first want to know  the relationship between penguin weight (grams) and bill depth (mm). Start with a simple plot like the one below:
+
+
+Notice that each point in the graph is associated with a penguin, and for each penguin we have information about its different features: weight, bill depth, flipper length etc.
+
+
+2. Replicate the scatter plot below, coloring the  points according to the species. What can you tell about the relationship between bill depth and penguin weight? Comment on the intercepts and the slopes, associated with the three species (are they the same? similar? different).
+Does the outcome variable appear normally distributed? Why is that important?
+
+
+```{r plot-penguin-weight-depth-by-species, echo=FALSE, out.width="70%"}
+ggplot(data = penguins, 
+       aes(x = bill_depth_mm, 
+           y = body_mass_g, 
+           color = species)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = 0) +
+  scale_x_continuous(name="bill depth (mm)", breaks=seq(13,21,by=1)) + 
+  scale_y_continuous(name="body mass (g)") + 
+  theme_clean()
+
+
+# ggplot(data = penguins, 
+#        aes(x = bill_depth_mm))  + geom_histogram()
+
+```
+
+4. Now replicate the plot below, illustrating the relationship between flipper length and body mass, points colored by `species`. Facet the plot by island (if you forgot how to use it, just search it online). Finally, tell a story about the relationship between flipper length and weight in these three penguin species, and the distribution of penguins across the three islands.
+
+
+
+```{r eval=FALSE, echo=TRUE, include=TRUE}
+ggplot(data = penguins,
+       aes(x = _______, y = ________, color = ___________)) +
+  geom___________ +
+  facet_grid(island~.)
+```
+
+
+```{r scatter-mass-length, include=TRUE, echo=FALSE, eval=TRUE}
+ggplot(data = penguins,
+        aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+     geom_point() +
+     facet_wrap(~island, scales = "free", nrow = 2) + 
+  theme_clean() +
+  scale_y_continuous(name="body mass (g)") + 
+  scale_x_continuous(name="flipper length (mm)") 
+
+```
+
+
+
+
+5. Replicate the scatter plot below, adding vertical and horizontal lines to indicate the mean of the predictor and of the outcome variable. Show that the linear regression line passes at the intersection of the two means. 
+
+To create the horizontal and vertical lines, please use the layers `geom_vline(xintercept = ___)` and `geom_hline(yintercept =  = ___)`
+
+```{r model-depth-weight, include=TRUE}
+
+mn.flipper <- mean(penguins$flipper_length_mm)
+mn.body_mass <- mean(penguins$body_mass_g)
+
+ggplot(data = penguins,
+        aes(x = flipper_length_mm, y = body_mass_g)) +
+     geom_point() +
+  geom_vline(xintercept = mn.flipper, alpha = .3) +
+  geom_hline(yintercept = mn.body_mass, alpha = .3) +
+  geom_label(aes(x = 225, y = mn.body_mass, label = "mean\n body mass")) + 
+  geom_label(aes(x = mn.flipper, y = 5500, label = "mean\n flipper length")) + 
+  geom_smooth(method = "lm", se = 0) +
+  theme_clean() +
+  scale_y_continuous(name="body mass (g)") + 
+  scale_x_continuous(name="flipper length (mm)") 
+
+
+
+
+```
+
+## Models I: Does flipper length predict penguin weight?
+
+6. Use the `lm` function to fit a simple linear regression with one predictor. Fill the gaps in the template below to write up your findings.
+
+```{r M1, echo=TRUE, eval=FALSE}
+M1 <- lm(body_mass_g ~ flipper_length_mm,
+                         data = penguins)
+
+summary(M1)
+tidy(M1, conf.int = TRUE)
+glance(M1)
+
+```
+
+> Linear regression was used to test the association between _____ (_____) and _____ (_____) using data from n = _____ Penguins. _____% of the variation in _____ was explained by _____ ($R^2 =$ _____). There was a significant _____ (positive/negative) association between _____ and _____ (B = _____; 95% CI = _____, _____; p < .001). On average, for every 1-__ difference in _____, penguins differ in mean _____ by _____ _____. 
+
+7. We now want to fit a model with parallel slopes. Run the regression and then write down the equation for the linear model. The result should look like this. 
+
+$$
+Y = b_0 + b_1\cdot X_{flipper} + b_2\cdot X_{chinstram} + b_3\cdot X_{Gentoo}
+$$
+
+```{r M2, echo=TRUE, eval=FALSE}
+
+M2 <- lm(body_mass_g ~ flipper_length_mm + species,
+                         data = penguins)
+
+summary(M2)
+tidy(M2, conf.int = TRUE)
+glance(M2)
+
+
+```
+
+The `summary(M2)` and `tidy(M2)` functions display separate P-values for categorical predictor non-reference levels (Chinstrap and Gentoo species), testing significance for specific pairwise comparisons between levels (Adelie vs. Chinstrap is tested seperately from Adelie vs. Gentoo). But what if you want a single overall test of significance for the categorical species predictor? The null hypothesis of no association corresponds to the mean outcome being equal at ALL levels of the predictor or, equivalently, that all differences in mean outcome between each level and the reference level are 0. For example, for `species`, which has 3 levels, the null hypothesis is that both $\beta_{chinstrap}=\beta_{gentoo}=0$ simultaneously, where $\beta_{chinstrap}=0$ corresponds to the mean weight of Chinstrap penguins equals to the mean weight of Adelie penguins, and    $\beta_{gentoo}=0$ corresponds to the mean weight of Gentoo penguins equals to the mean weight of Adelie penguins. If both are true then Adelie, Chinstrap and Gentoo species have equal mean weights, implying no association between species and weight. Since these are two tests, this would be a 2 df (two degree of freedom) test. In general, for a categorical predictor with `L` levels, we expect the corresponding test to have `L-1` degrees of freedom.
+
+Obtain the p-value corresponding to this multiple degree of freedom (df) test by calling the `Anova()` (upper case A) function in the car package (Fox, Weisberg, and Price 2022; Fox and Weisberg 2019). The type = 3 option specifies that we want a Type III test, which is a test of a predictor after adjusting for all other terms in the model (in this case, we will be adjusting for the flipper length). A Type III test for a predictor X compares the regression model to a reduced model in which that predictor has been removed.
+
+```{r}
+Anova(M2, type = 3)
+```
+
