@@ -144,7 +144,7 @@ The brute force method of creating such a table would be to compute each statist
 
 
 
-1. Use the `table1` package to replicate the table below. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"}.
+1. Use the `table1` package to replicate the table below. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"}. What do you notice from the table? Which species of penguin is the heaviest? Which one has the largest flippers? Which have the largest bill depth? On which islands are the penguins located?
 
 ```{r table1, echo=FALSE}
 label(penguins$body_mass_g) <- "Body mass (g)"
