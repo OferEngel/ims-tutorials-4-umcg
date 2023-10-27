@@ -144,7 +144,7 @@ The brute force method of creating such a table would be to compute each statist
 
 
 
-1. Use the `table1` package to replicate the table below. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"}. What do you notice from the table? Which species of penguin is the heaviest? Which one has the largest flippers? Which have the largest bill depth? On which islands are the penguins located?
+1. Use the `table1` package to replicate the table below. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"}. What do you notice from the table? Which species of penguin is the heaviest? Which one has the largest flippers? Which have the largest bill depth? How are the different species distributed across the three islands?
 
 ```{r table1, echo=FALSE}
 label(penguins$body_mass_g) <- "Body mass (g)"
@@ -383,7 +383,7 @@ We will now look at four different diagnostic tests for the second model `M2`:
 -   Cook's distance `plot(M2, which = 4)`
 
 
-9. Search online for an explanation of the various plots (for example, [this](https://library.virginia.edu/data/articles/diagnostic-plots){target="_blank"} is a good resource, but you may find others). Create a plot for **each** of the four diagnostic tests, and describe in words what is the purpose of each diagnostic plot. Then interpret the plot.
+9. Search online for an explanation of the various plots (for example, [this](https://library.virginia.edu/data/articles/diagnostic-plots){target="_blank"} is a good resource, but you may find others). Create a plot for **each** of the four diagnostic tests, and describe in words what is the purpose of each diagnostic plot. Then interpret the plot: what can we learn from it?  
 
 
 
