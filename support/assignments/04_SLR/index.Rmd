@@ -14,7 +14,6 @@ knitr::opts_chunk$set(eval = TRUE, results = "as.is", fig.align = "center", mess
 library(extrafont) 
 library(tidyverse)
 library(table1)
-library(modelsummary)
 library(broom)
 library(car)
 library(santoku)
@@ -128,7 +127,7 @@ knitr::include_graphics("images/culmen_depth.png")
 We will be using R Markdown to create reproducible lab reports. In RStudio, you will find the file `lab-04.Rmd` in the `Files` panel. Double click it to show the script in the code panel.
 
 -   In the file, update the YAML with your name, the date and the name of the lab.
--   Load the `tidyverse`, `broom`, `table1`, `car` and `modelsummary` packages.
+-   Load the `tidyverse`, `broom`, `table1` and the `car`  packages.
 -   Load the `penguins.rds` data set into your workspace, and save it as `penguins`. Notice that this time the file you are reading has an `rds` extension. You will therefore need to use the `read_rds` function to read it.
 -   Knit your file to see that everything is working. 
 -   For each question, please add the text of the question, the code chunks and your answer. The image below shows how to add a new code chunk in RStudio.     
@@ -249,7 +248,7 @@ ggplot(data = penguins,
 
 ```
 
-5. In R, run a hypothesis test to see whether the flipper length and the body mass are correlated. Write down your null hypothesis, the p-value and the confidence interval. 
+5. In R, run a hypothesis test to see whether the flipper length and the body mass are correlated. Write down your null hypothesis, the p-value and the confidence interval, describe and interpret your findings. 
 
 
 ## Modelling the association between flippers and body mass
