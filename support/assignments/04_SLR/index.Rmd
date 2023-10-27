@@ -130,8 +130,12 @@ We will be using R Markdown to create reproducible lab reports. In RStudio, you 
 -   In the file, update the YAML with your name, the date and the name of the lab.
 -   Load the `tidyverse`, `broom`, `table1`, `car` and `modelsummary` packages.
 -   Load the `penguins.rds` data set into your workspace, and save it as `penguins`. Notice that this time the file you are reading has an `rds` extension. You will therefore need to use the `read_rds` function to read it.
--   knit your file to see that everything is working. 
+-   Knit your file to see that everything is working. 
+-   For each question, please add the text of the question, the code chunks and your answer. The image below shows how to add a new code chunk in RStudio.     
 
+```{r img-code-chunk, echo=FALSE, out.width=300}
+knitr::include_graphics("images/code-chunk.jpg")
+```
 
 ## Creating Table1
 
@@ -148,6 +152,7 @@ label(penguins$body_mass_g) <- "Body mass (g)"
 label(penguins$sex)         <- "Sex"
 label(penguins$flipper_length_mm) <- "Flipper length (mm)"
 label(penguins$bill_depth_mm) <- "Bill depth (mm)"
+label(penguins$island) <- "Island"
 
 
 table1(~ sex + body_mass_g + flipper_length_mm + bill_depth_mm + island | species, data=penguins, caption = "Measurements for three penguin species in the Palmer Archipelago", overall = FALSE)
@@ -175,7 +180,7 @@ Notice that each point in the graph is associated with a penguin, and for each p
 
 
 2. Replicate the scatter plot below, coloring the  points according to the species. What can you tell about the relationship between bill depth and penguin weight? Comment on the intercepts and the slopes, associated with the three species (are they the same? similar? different).
-Does the outcome variable appear normally distributed? Why is that important?
+Does the outcome variable appear normally distributed? Why does that matter?
 
 
 ```{r plot-penguin-weight-depth-by-species, echo=FALSE, out.width="70%", warning=FALSE}
@@ -391,13 +396,13 @@ The `summary(M2)` and `tidy(M2)` functions display separate P-values for categor
 Obtain the p-value corresponding to this multiple degree of freedom (df) test by calling the `Anova()` (upper case A) function in the car package (Fox, Weisberg, and Price 2022; Fox and Weisberg 2019). The type = 3 option specifies that we want a Type III test, which is a test of a predictor after adjusting for all other terms in the model (in this case, we will be adjusting for the flipper length). A Type III test for a predictor compares the regression model to a reduced model in which that predictor has been removed - to learn more about this test, please watch [this video](https://www.youtube.com/watch?v=NKMFgejt3U0){target="_blank"}.
 
 
-10. Run the type 3 Anova and interpret the output you see.
+10. Run the type 3 Anova, discuss and interpret the output you see and link it to the results of the fitted model `summary(M2)`.
 
 
 ```{r Anova-3, eval=FALSE, echo = TRUE}
 M2 <- lm(body_mass_g ~ flipper_length_mm + species,
                          data = penguins)
-
+summary(M2)
 Anova(M2, type = 3)
 ```
 

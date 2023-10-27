@@ -1,0 +1,51 @@
+---
+title: "Lab Name"
+author: "Author Name"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    highlight: "pygments"
+    theme: "spacelab"
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: "show"
+    df_print: paged
+---
+
+```{r setup, message=FALSE}
+# 1. load the appropriate libraries
+
+
+# 2. use the read_rds file to read the dataset
+
+
+```
+
+### Exercise 1
+
+**Question:**  1. Use the `table1` package to replicate the table below. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html).
+
+```{r ex1-table1}
+# Write your code to create a histogram of delays
+
+```
+
+**Answer:** [Replace this with your answer]
+
+
+
+### Exercise 2
+
+**Question:**  [Replace this with the question]
+
+```{r ex2-bodymass-billdepth}
+
+```
+
+
+**Answer:** [Replace this with your answer]
+
+
+
+
+
