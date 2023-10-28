@@ -1,0 +1,122 @@
+---
+title: Does the protein you eat affect bleeding?
+subtitle: Analysis using t-tests and regression
+output: 
+  html_document:
+    df_print: paged
+    highlight: pygments
+    theme: sandstone
+    toc: true
+    toc_float: true
+---
+
+A randomised clinical trial has been conducted to analyse the effect of fish consumption (fish or meat) on bleeding time in minutes. There were 84 volunteers coming from three different research centres (Maastricht, Tromso and Zeist). Each person was measured twice: a baseline measurement before the fish/meat treatment (Bt0 in minutes) and a postmeasurement 6 weeks after the intervention (Bt6 in minutes). A comparison is made between eating fish and eating meat (variable Fish) with respect to the change in bleeding time (Bt6 -- Bt0). It was hypothesised (according to theory or what we want to find out) that the average change in bleeding time of fish eaters differs from that of the meat eaters.
+
+```{r setup, include = FALSE, warning = FALSE}
+library(tidyverse)
+library(modelsummary)
+library(haven)
+library(table1)
+library(broom)
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+df <- read_sav("Fish.sav") |> 
+  mutate(
+    protein = as.factor(if_else(fish == 0, "meat", "fish")), 
+    protein = fct_relevel(protein, "meat")
+    ) |> 
+  mutate(
+    delta.bt = bt6 - bt0,
+    center = as.factor(
+      case_when(
+        center == 4 ~ "Maastricht", 
+        center == 5 ~ "Tromso", 
+        TRUE ~ "Zeist"
+        )
+      )
+    )
+
+
+```
+
+For Table 1, see below
+
+```{r table1, fig.align='center'}
+
+label(df$delta.bt) <- "difference in bleeding time"
+units(df$delta.bt) <- "min"
+table1(~delta.bt + center | protein, data = df, overall = FALSE )
+
+
+```
+
+## Plotting the bleeding times
+
+```{r plot}
+ggplot(df, aes(protein, delta.bt, color = center)) + 
+  geom_boxplot(alpha = .5)   + 
+  geom_jitter(width = .2) + 
+  theme_minimal() + 
+  labs(x = "Protein", y = "Difference bleeding time (min)") + 
+  theme(text = element_text(size = 14))
+```
+
+## t-test results
+
+```{r t-test}
+mosaic::t_test(data = df, delta.bt ~ protein) |> tidy()
+```
+
+## Three regression models
+
+We run three linear regression analyses, the third model including two interaction terms, between fish and center.
+
+```{r regressions, echo=TRUE}
+
+
+M1 <- lm(bt6 ~ bt0 + protein, df)
+
+M2 <- lm(bt6 ~ bt0 + protein + center, df)
+
+M3 <- lm(bt6 ~ bt0 + protein + center + protein:center, df)
+
+msummary(list(M1 = M1, M2 = M2, M3 = M3), stars = TRUE, 
+         estimate = "{estimate} [{conf.low}, {conf.high}]",
+         statistic = "(s.err = {std.error} p = {p.value})",
+         gof_omit = "AIC|BIC|Log*")
+
+```
+
+### Comparing model's performance
+
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r img-penguins, echo=FALSE, fig.align="right", out.width=300}
+knitr::include_graphics("einstein.png")
+```
+</div>
+
+
+A good model not only needs to fit data well, it also needs to be parsimonious. That is, a good model should be only be as complex as necessary to describe a dataset. If you are choosing between a very simple model with 1 predictor, and a very complex model with, say, 10 predictors, the very complex model needs to provide a much better fit to the data in order to justify its increased complexity. If it is only marginally better, then the simpler model should be preferred.
+
+To compare the fits of two models, we use the `anova()` function with the regression objects as separate arguments. The `anova()` function will take the model objects as arguments, and return an ANOVA object comparing every two consecutive models. For each test, ANOVA tests whether the more complex model is significantly better at capturing the data than the simpler model. If the resulting p-value is sufficiently low (usually less than 0.05), we conclude that the more complex model is significantly better than the simpler model, and thus favor the more complex model. If the p-value is not sufficiently low (usually greater than 0.05), we should favor the simpler model.
+
+When comparing nested regression models using an ANOVA (Analysis of Variance) test, the null hypothesis is that the simpler, more restricted model is just as effective in explaining the variation in the dependent variable as the more complex model.
+
+Specifically, let's say we have two models:
+
+-   Null Model (Restricted Model): This is the simpler model with fewer predictor variables.
+
+-   Alternative Model (Complex Model): This is the more elaborate model with additional predictor variables, including all the predictors in the null model.
+
+The null hypothesis, denoted as `H0`, states that the additional predictors in the alternative model do not provide a significant improvement in explaining the variance of the dependent variable compared to the null model. In other words, the extra variables in the alternative model do not contribute significantly to the model's predictive power.
+
+The alternative hypothesis `H1` would be that the additional predictors in the alternative model do lead to a significant improvement in explaining the variance of the dependent variable compared to the null model.
+
+Below we create compare our three regression models, each model more complex than the previous one. Your job is to interpret the results
+
+```{r model-performance}
+anova(M1, M2, M3) |> 
+  tidy()
+```

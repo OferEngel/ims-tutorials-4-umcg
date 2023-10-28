@@ -45,8 +45,9 @@ Does the outcome variable appear normally distributed? Why does that matter?
 ```{r ex2-bodymass-billdepth}
 
 penguins |> 
-  ggplot(aes(body_mass_g, bill_depth_mm, color = species)) + 
+  ggplot(aes(bill_depth_mm, body_mass_g, color = species)) + 
   geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) + 
   theme_minimal()
 
 ```
@@ -55,6 +56,21 @@ penguins |>
 **Answer:** [Replace this with your answer]
 
 
+### Exercise 3 
+
+**Question** Now replicate the plot below, describing the relationship between flipper length and body mass, and coloring the data according to the associated species. Facet the plot by island (search online if necessary). Finally, tell a story about the relationship between flipper length and weight in these three penguin species, and the distribution of penguins across the three islands.
+
+
+```{r ex-3}
+
+penguins |> 
+  ggplot(aes(flipper_length_mm, body_mass_g, color = species)) + 
+  geom_point() + 
+  theme_minimal() + 
+  facet_wrap(~island, nrow = 2)
+
+
+```
 
 
 
