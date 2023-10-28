@@ -18,6 +18,7 @@ library(modelsummary)
 library(haven)
 library(table1)
 library(broom)
+library(infer)
 
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
@@ -62,10 +63,26 @@ ggplot(df, aes(protein, delta.bt, color = center)) +
   theme(text = element_text(size = 14))
 ```
 
-## t-test results
+## t-test and the equivalent regression
 
-```{r t-test}
-mosaic::t_test(data = df, delta.bt ~ protein) |> tidy()
+```{r t-test, echo=TRUE}
+
+df |>  
+  drop_na(delta.bt, protein) |> 
+  t_test(
+    delta.bt ~ protein, 
+    order = c("fish", "meat"),
+    alternative = "two-sided", 
+    var.equal = TRUE
+    )
+
+M0 <- lm(delta.bt ~ protein, df)
+
+msummary(list(delta.bt = M0), stars = TRUE, 
+         estimate = "{estimate} [{conf.low}, {conf.high}]",
+         statistic = "(s.err = {std.error} p = {p.value})",
+         gof_omit = "AIC|BIC|Log*")
+
 ```
 
 ## Three regression models
@@ -74,12 +91,11 @@ We run three linear regression analyses, the third model including two interacti
 
 ```{r regressions, echo=TRUE}
 
-
 M1 <- lm(bt6 ~ bt0 + protein, df)
 
-M2 <- lm(bt6 ~ bt0 + protein + center, df)
+M2 <- lm(bt6 ~ bt0 +  protein + center, df)
 
-M3 <- lm(bt6 ~ bt0 + protein + center + protein:center, df)
+M3 <- lm(bt6 ~ bt0 +  protein + center + protein:center, df)
 
 msummary(list(M1 = M1, M2 = M2, M3 = M3), stars = TRUE, 
          estimate = "{estimate} [{conf.low}, {conf.high}]",
