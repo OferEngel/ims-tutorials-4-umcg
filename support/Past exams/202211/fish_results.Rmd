@@ -10,7 +10,7 @@ output:
     toc_float: true
 ---
 
-A randomised clinical trial has been conducted to analyse the effect of fish consumption (fish or meat) on bleeding time in minutes. There were 84 volunteers coming from three different research centres (Maastricht, Tromso and Zeist). Each person was measured twice: a baseline measurement before the fish/meat treatment (Bt0 in minutes) and a postmeasurement 6 weeks after the intervention (Bt6 in minutes). A comparison is made between eating fish and eating meat (variable Fish) with respect to the change in bleeding time (Bt6 -- Bt0). It was hypothesised (according to theory or what we want to find out) that the average change in bleeding time of fish eaters differs from that of the meat eaters.
+A randomised clinical trial has been conducted to analyse the effect of fish consumption (fish or meat) on bleeding time in minutes. There were 84 volunteers coming from three different research centres (Maastricht, Tromso and Zeist). Each person was measured twice: a baseline measurement before the fish/meat treatment ($B_{t0}$ in minutes) and a post measurement 6 weeks after the intervention ($B_{t6}$) in minutes). A comparison is made between eating fish and eating meat (variable `protein`) with respect to the change in bleeding time ($\Delta~B_t=B_{t6} -B_{t0}$). It was hypothesized (according to theory or what we want to find out) that the average change in bleeding time of fish eaters differs from that of the meat eaters.
 
 ```{r setup, include = FALSE, warning = FALSE}
 library(tidyverse)
@@ -21,6 +21,12 @@ library(broom)
 library(infer)
 
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+# df <- read_sav("simulated exam data 2021.sav")
+# glm(hypertension ~ age, family = binomial(), data = df) |> 
+#   summary()
+# 1 - 199.8/247.5
+# 47.7 / 247.5
 
 df <- read_sav("Fish.sav") |> 
   mutate(
@@ -41,15 +47,12 @@ df <- read_sav("Fish.sav") |>
 
 ```
 
-For Table 1, see below
 
 ```{r table1, fig.align='center'}
 
 label(df$delta.bt) <- "difference in bleeding time"
 units(df$delta.bt) <- "min"
-table1(~delta.bt + center | protein, data = df, overall = FALSE )
-
-
+table1(~delta.bt + center | protein, data = df, overall = FALSE, caption = "Table 1: The distribution of the difference in bleeding time (delta.Bt = Bt6 - Bt0) and research center" )
 ```
 
 ## Plotting the bleeding times
@@ -59,31 +62,52 @@ ggplot(df, aes(protein, delta.bt, color = center)) +
   geom_boxplot(alpha = .5)   + 
   geom_jitter(width = .2) + 
   theme_minimal() + 
-  labs(x = "Protein", y = "Difference bleeding time (min)") + 
+  scale_x_discrete(labels = c("meat eaters", "fish eaters")) + 
+  labs(x = NULL, y = "Difference bleeding time (min)") + 
   theme(text = element_text(size = 14))
 ```
 
-## t-test and the equivalent regression
+## Comparing a t-test and a regression
 
-```{r t-test, echo=TRUE}
+```{r t-test-regression, echo=TRUE}
+
+t.test(df$delta.bt ~ df$protein, var.equal = TRUE)
+
+
+M0 <- lm(delta.bt ~ protein, df)
+summary(M0)
+
+
+```
+
+
+```{r t-test-regression-noshow, eval=FALSE, echo=FALSE}
 
 df |>  
   drop_na(delta.bt, protein) |> 
   t_test(
     delta.bt ~ protein, 
-    order = c("fish", "meat"),
+    # Subtract the meat eaters' bleeding time from the fish eaters
+    order = c("fish", "meat"), 
     alternative = "two-sided", 
     var.equal = TRUE
     )
 
-M0 <- lm(delta.bt ~ protein, df)
-
-msummary(list(delta.bt = M0), stars = TRUE, 
+msummary(list(delta.bt = M0), stars = TRUE,
          estimate = "{estimate} [{conf.low}, {conf.high}]",
          statistic = "(s.err = {std.error} p = {p.value})",
          gof_omit = "AIC|BIC|Log*")
 
 ```
+
+
+The fitted model would therefore be: 
+
+$$
+Y = −0.083 + 1.742 \cdot X_{eat\_fish} + e \\
+e \sim \mathcal{N}(0, 2.45^2)
+$$
+
 
 ## Three regression models
 
@@ -98,13 +122,25 @@ M2 <- lm(bt6 ~ bt0 +  protein + center, df)
 M3 <- lm(bt6 ~ bt0 +  protein + center + protein:center, df)
 
 msummary(list(M1 = M1, M2 = M2, M3 = M3), stars = TRUE, 
-         estimate = "{estimate} [{conf.low}, {conf.high}]",
-         statistic = "(s.err = {std.error} p = {p.value})",
+         estimate = "{estimate} (se={std.error}) p={p.value}{stars}",
+         statistic = NULL,
          gof_omit = "AIC|BIC|Log*")
 
 ```
 
-### Comparing model's performance
+
+```{r anova-3, eval=FALSE, echo=FALSE}
+### Using Anova type III 
+
+car::Anova(M2, type=3)
+car::Anova(M3)
+
+```
+
+
+
+
+### Comparing models' performance
 
 
 <div style= "float:right;position: relative; margin-left: 20px">
@@ -132,7 +168,7 @@ The alternative hypothesis `H1` would be that the additional predictors in the a
 
 Below we create compare our three regression models, each model more complex than the previous one. Your job is to interpret the results
 
-```{r model-performance}
+```{r model-performance, echo=TRUE}
 anova(M1, M2, M3) |> 
   tidy()
 ```

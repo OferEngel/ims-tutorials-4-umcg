@@ -154,7 +154,7 @@ label(penguins$bill_depth_mm) <- "Bill depth (mm)"
 label(penguins$island) <- "Island"
 
 
-table1(~ sex + body_mass_g + flipper_length_mm + bill_depth_mm + island | species, data=penguins, caption = "Measurements for three penguin species in the Palmer Archipelago", overall = FALSE)
+table1(~ sex + body_mass_g + flipper_length_mm + bill_depth_mm + island | species, data=penguins, caption = "Table 1: Measurements for three penguin species in the Palmer Archipelago", overall = FALSE)
 
 
 ```
@@ -280,7 +280,8 @@ knitr::include_graphics("images/lm-summary-2.jpg")
 7. We now want to fit a model with parallel slopes, one slope for each of the three species of penguins. Run the regression as you have done above, but this time, add the `species` variable as a predictor in your model. (1) Write the equation for the linear model (you will need to replace the coefficients in the formula $b_0, b_1, b_2$ with their estimates). (2) Write up your findings in a similar manner to the template shown in the previous question. (3) Write a separate model for each of the three species. (4) Use the `augment(M2)` to see the list of residuals and show that the mean of the residuals is almost zero and its standard deviation is the residual standard error.
 
 $$
-Y = b_0 + b_1\cdot X_{flipper} + b_2\cdot X_{chinstrap} + b_3\cdot X_{gentoo}
+Y = b_0 + b_1\cdot X_{flipper} + b_2\cdot X_{chinstrap} + b_3\cdot X_{gentoo} + e\\
+e\sim\mathcal{N}(0, s^2)
 $$
 
 
@@ -301,7 +302,6 @@ augment(M2)
 
 ```{r parallel-body-flipper-echo, echo=TRUE, eval=FALSE}
 
-
 coefs <- coef(M2)
 
 penguins |> 
@@ -315,11 +315,11 @@ penguins |>
     ) +
   # Use the appropriate intercept for Chinstrap
   geom_abline(
-    intercept = ___ + ___, slope = ___, color = "___",
+    intercept = ___ + ___, slope = ___, color = "___"
     ) +
   # Use the appropriate intercept for Gentoo
   geom_abline(
-    intercept = ___ + ___, slope = ___, color = "___",
+    intercept = ___ + ___, slope = ___, color = "___"
     ) + 
   scale_color_manual(
     values = c("___", "___", "___")
