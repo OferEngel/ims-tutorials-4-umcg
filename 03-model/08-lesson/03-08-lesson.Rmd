@@ -612,7 +612,7 @@ You fit a multiple regression model for the total auction price of an item in th
 
 ```{r mc2}
 question("This interpretation is correct …",
-  answer("For each additional day the auction lasts, the expected final price declines by $1.51, after controlling for starting price."),
+  answer("For each additional day the auction lasts, the expected final price declines by $1.51, after controlling for starting price.", correct = TRUE),
   answer("For each additional dollar of starting price, the expected final price increases by $0.23, after controlling for the duration of the auction.", correct = TRUE, message="Remember, the inclusion of another variable in your model is sometimes referred to as 'controlling for' that variable."),
   answer("The duration of the auction is a more important determinant of final price than starting price, because the coefficient is larger."),
   answer("The average auction lasts 51 days."),

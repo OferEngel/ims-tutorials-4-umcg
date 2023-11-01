@@ -67,27 +67,27 @@ The fundamental principle that there is variability across different samples wil
 
 
 
-###  [4.6 Evaluating and extending parallel slopes model](https://oferengel-posit.shinyapps.io/03-07-lesson/)**deadline 31-Oct-23**
+###  ~~[4.6 Evaluating and extending parallel slopes model](https://oferengel-posit.shinyapps.io/03-07-lesson/)**deadline 31-Oct-23**~~
 
 * Assess and interpret model fit
 * Compute residuals and predictions
 * Fit and interpret interaction models
 * Recognize [Simpson's paradox](https://en.wikipedia.org/wiki/Simpson%27s_paradox)**deadline 31-Oct-23**
 
-### [4.7 Multiple regression](https://oferengel-posit.shinyapps.io/03-08-lesson/)**deadline 31-Oct-23**
+### ~~[4.7 Multiple regression](https://oferengel-posit.shinyapps.io/03-08-lesson/)**deadline 31-Oct-23**~~
 
 * Visualize, fit, and interpret a multiple regression model with two numeric explanatory variables
 * Visualize, fit, and interpret a parallel planes model with two numeric explanatory variables and a categorical variable
 * Fit and interpret multiple regression models in higher dimensions
-* Understand and identify [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity)**deadline 31-Oct-23**
+* Understand and identify [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity)
 
-### [4.8 Logistic regression](https://oferengel-posit.shinyapps.io/03-09-lesson/)
+### [4.8 Logistic regression](https://oferengel-posit.shinyapps.io/03-09-lesson/) **deadline 7-Nov-23**
 
 * Visualize, fit, and interpret logistic regression models
 * Interpret coefficients on three different scales
 * Make predictions from a logistic regression model
 
-### [4.9 Case study: Italian restaurants in NYC](https://oferengel-posit.shinyapps.io/03-10-lesson/)
+### [4.9 Case study: Italian restaurants in NYC](https://oferengel-posit.shinyapps.io/03-10-lesson/) **deadline 7-Nov-23**
 
 * Explore the relationship between price and the quality of food, service, and decor for Italian restaurants in [New York City](https://en.wikipedia.org/wiki/New_York_City)
 
@@ -96,6 +96,7 @@ The fundamental principle that there is variability across different samples wil
 <br/>
 <br/>
 <br/>
+
 
 <br/>
 <br/>

@@ -43,15 +43,99 @@ knitr::include_graphics("images/regression-labeled.jpeg")
 
 
 ```{r prep-lab, eval = FALSE}
+cor2data <- function(cor, n, seed){
+  # number of observations to simulate
+  nobs = n
+  # cor <- matrix(cbind(1, 0.001, 0.001, 1), nrow=2)
+  # rownames(cor) <- colnames(cor) <- c("x1",  "e")
+  # Cholesky decomposition
+  U = t(chol(cor))
+  nvars = dim(U)[1]
+  
+  if(missing(seed)) {
+    
+  } else {
+    set.seed(seed)
+  }
+  
+  # Random variables that follow the correlation matrix
+  rdata = matrix(rnorm(nvars*nobs,0,1), nrow=nvars, ncol=nobs)
+  X = U %*% rdata
+  # Transpose, convert to data
+  # require(tidyverse)
+  Data = t(X)
+  Data = as.data.frame(Data)
+  return(Data)
+}
+
+vars <- c("x1",  "e")
+Cor <- matrix(cbind(1, 0.001,
+                    0.001, 1), nrow=2)
+rownames(Cor) <- colnames(Cor) <- vars
+
+df <- cor2data(Cor, 1000, 8675309) %>% as_tibble() # Jenny I got your number...
+df |> 
+  mutate(y = 1 + x1 + 0.5*e) |> 
+  mutate(quantile = chop_equally(x1, 6, labels = 1:6)) -> df
+
+glimpse(df)
+
+# The quantiles
+df |> 
+  group_by(quantile) |> 
+  summarise(n())
+
+df |> ggplot(aes(quantile, y, color = quantile)) + 
+  geom_violin(alpha=.6) + 
+  geom_jitter(alpha=.6) 
+
+# Show the model
+m1 <- lm(y ~ x1, data = df)
+summary(m1)
+# Interpret the two parameters
+# Explain the degrees of freedom
+# Explain the residual standard error
+# Interpret the R squared
+# Interpret the F-statistic 
+
+
+# Scatterplot with linear regression
+df |> ggplot(aes(x1, y)) + 
+  geom_point(alpha=.6, aes(color = quantile)) + 
+  geom_smooth(method = "lm")
+
+mean.x1 <- mean(df$x1)
+mean.y1 <- mean(df$y)
+
+# Show that it is passing through the middle
+df |> ggplot(aes(x1, y)) + 
+  geom_point(alpha=.6, aes(color = quantile)) + 
+  geom_point(x = mean.x1, y = mean.y1, size = 4) + 
+  geom_smooth(method = "lm")
+
+
+# Show that the sum of the residuals is zero and that x is uncorrelated with the residuals
+augment(m1) |> 
+  summarize(sum.resid = sum(.resid))
+cor_test(x1 ~ .resid, data = augment(m1))
+
+# Diagnostics 
+plot(m1, which = 1)
+plot(m1, which = 2)
+plot(m1, which = 3)
+plot(m1, which = 4)
+plot(m1, which = 5)
+plot(m1, which = 6)
+
 
 
 ######################
 # nhanes
-# load("data/nhanes1718_adult_fast_sub_rmph.RData") 
-# nhanes_adult_fast_sub |> 
-#   select(LBDGLUSI, BMXWAIST, RIAGENDR, smoker) |> 
-#   mutate(fast_gluc = LBDGLUSI, waist = BMXWAIST, gender = RIAGENDR, smoking = smoker, .keep = "none")  -> nhanes
-# readr::write_rds(nhanes, "data/nhanes.rds")
+load("data/nhanes1718_adult_fast_sub_rmph.RData") 
+nhanes_adult_fast_sub |> 
+  select(LBDGLUSI, BMXWAIST, RIAGENDR, smoker) |> 
+  mutate(fast_gluc = LBDGLUSI, waist = BMXWAIST, gender = RIAGENDR, smoking = smoker, .keep = "none")  -> nhanes
+readr::write_rds(nhanes, "data/nhanes.rds")
 
 nhanes <- read_rds("data/nhanes.rds")
 
@@ -80,6 +164,12 @@ We will be using R Markdown to create reproducible lab reports. In RStudio, you 
 -   Load the `tidyverse`, `broom`, `car` and `infer` package.
 -   knit your file to see that everything is working. 
 
+
+
+
+## Using a toy dataset
+
+Real data is messy and rarely meets the various assumptions needed to run a simple linear regression. It is for that reason, that in this section we will use a 
 
 
 

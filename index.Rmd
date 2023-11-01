@@ -102,8 +102,8 @@ The following tutorials are due on the Tuesday, a day before our first weekly se
 -   ~~[Week 2: Exploratory data analysis](02-explore/) - **deadline MONDAY!!! 09-Oct-23**~~
 -   ~~[Week 3: Sampling variability](https://oferengel-posit.shinyapps.io/04-01-lesson/) **deadline 17-Oct-23**~~
 -   ~~[Week 4: Simple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/03-model/)  **deadline 24-Oct-23**~~
--   [Week 5: Multiple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/03-model/index_02.html)  **deadline 31-Oct-23**
--   Week 6: Generalized linear models **deadline 07-Nov-23**
+-   ~~[Week 5: Multiple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/03-model/index_02.html)  **deadline 31-Oct-23**~~
+-   [Week 6: Generalized linear models](https://oferengel.github.io/ims-tutorials-4-umcg/03-model/index_03.html) **deadline 07-Nov-23**
 -   Week 7: Models with a binary outcome **deadline 21-Nov-23**
 -   Week 8: Survival analysis and review **deadline 28-Nov-23**
 
@@ -113,7 +113,7 @@ Only three labs are due for submission, but the rest will prepare you for them.
 
 -   ~~Lab 1: [Introduction to R and RStudio](support/assignments/01_intro_to_r/)~~ 
 -  ~~Lab 2: [Intro to data](support/assignments/02_intro_to_data/)~~
--   ~~Lab 3: [Confidence intervals](https://oferengel-posit.shinyapps.io/LAB_Confidence_intervals/) **INDIVIDUAL deadline 20-Oct-23**~~
+-  ~~Lab 3: [Confidence intervals](https://oferengel-posit.shinyapps.io/LAB_Confidence_intervals/) **INDIVIDUAL deadline 20-Oct-23**~~
 -   Lab 4: [Simple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/04_SLR/)  **GROUP deadline 03-Nov-23**
 -   Lab 5: Multiple linear least square regression part II **GROUP deadline 10-Nov-23**  
 -   Lab 6: Generalized linear models **INDIVIDUAL deadline 15-Nov-23**

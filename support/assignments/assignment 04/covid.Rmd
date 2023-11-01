@@ -1,0 +1,230 @@
+---
+title: Diabetes and fasting  glucose
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    css: ../lab.css
+    toc: true
+    toc_float: true
+---
+
+```{r global_options, include=FALSE}
+library(emo)
+library(tidyverse)
+library(broom)
+library(infer)
+library(santoku)
+library(car)
+library(table1)
+
+
+
+knitr::opts_chunk$set(echo = FALSE, 
+                      fig.align = "center", 
+                      fig.height = 3, 
+                      fig.width = 5,
+                      warning = FALSE, 
+                      message = FALSE)
+# covid.orig <- covid
+attributes(covid.orig$hospitals_per_100k) <- NULL
+attributes(covid.orig$icu_beds_per_100k) <- NULL
+
+
+chop_equally(covid.orig$hospitals_per_100k, groups = 10) |> 
+  table()
+chop_equally(covid.orig$icu_beds_per_100k, groups = 10) |> 
+  table()
+
+
+covid <- covid.orig %>%
+  mutate(State              = factor(State),
+         Rural.Urban = factor(Rural.UrbanContinuumCode2013),
+         hospitals_per_100k = 100000*X.Hospitals / PopulationEstimate2018,
+         icu_beds_per_100k  = 100000*X.ICU_beds  / PopulationEstimate2018,
+         icu_beds_per_hosp  =        X.ICU_beds  / X.Hospitals,
+         fte_hosp_per_100k  = 100000*X.FTEHospitalTotal2017 / PopulationEstimate2018,
+         fte_hosp_per_hosp  =        X.FTEHospitalTotal2017 / X.Hospitals,
+         mds_per_100k       = 100000*TotalM.D..s.TotNon.FedandFed2017 / PopulationEstimate2018,
+         mds_per_hosp       =        TotalM.D..s.TotNon.FedandFed2017 / X.Hospitals,
+         # fte_hosp_per_hosp  = na_if(fte_hosp_per_hosp, Inf),
+         # mds_per_hosp       = na_if(mds_per_hosp,      Inf), 
+         population = pop.usafacts, # County population
+         cum.cases = cases.usafacts.20210908, # COVID-19 cumulative cases as of 2021-09-08
+         cum.deaths = deaths.usafacts.20210908, # : COVID-19 cumulative deaths as of 2021-09-08, 
+         median.age = MedianAge2010, # median age of county in 2010
+         census.region = CensusRegionName, # : name of census region
+         hospitals_per_100k_fact = chop_equally(
+           covid.orig$hospitals_per_100k, 
+           groups = 2, 
+           labels = c("hosp/100k (<2.34)", "hosp/100k (>2.34)")
+           ), # : name of census region
+         icu_beds_per_100k_fact = chop_equally(
+           covid.orig$icu_beds_per_100k, 
+           groups = 2, 
+           labels = c("hosp/100k (<2.34)", "hosp/100k (>2.34)")
+           ),
+         .keep = "none")
+
+
+label(covid$population) = "County population"
+label(covid$hospitals_per_100k) = "Hospitals/100k"
+label(covid$cum.cases) = "Covid cum. cases"
+label(covid$cum.deaths) = "Covid cum. deaths"
+label(covid$median.age) = "Median age (2010)"
+label(covid$census.region) = "Region"
+
+
+render.continuous <- function (x) 
+{
+    fmt_me <- function(x){
+      number_format(scale_cut = cut_long_scale())(as.numeric(x))
+    }
+    stats <- stats.default(x)
+     c(
+         "", 
+        `Median [Q1, Q3]` = sprintf(
+          "%s [%s, %s]",
+          fmt_me(stats$MEDIAN), 
+          fmt_me(stats$Q1), 
+          fmt_me(stats$Q3)
+        )
+     )
+}
+
+
+
+```
+
+
+<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE 27th of October. 
+<br/>Please submit your final report [using this form](https://forms.gle/JB5c9apmkx3wD8WG7). </span>
+
+
+<div style="float: right;width: 200px;margin: 5px 5px 5px 5px">
+```{r img-regression-labeled, echo=FALSE, fig.align='center'}
+knitr::include_graphics("images/regression-labeled.jpeg")
+```
+</div>
+
+The COVID Severity Forecasting data include county-level demographics and risk factors related to COVID-19 (Altieri et al. 2020). The USA Facts case, death, and county population data include county-level COVID-19 case and death counts, as well as population sizes (Source: [USAFacts](https://usafacts.org)).
+
+Data documentation is available at [COVID Severity Forecasting data](https://github.com/Yu-Group/covid19-severity-prediction) and [USA Facts case, death, and county population data](https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/). The COVID Severity Forecasting data are distributed under the [MIT License](https://github.com/Yu-Group/covid19-severity-prediction/blob/master/LICENSE). The USA Facts data are distributed under a Creative Commons Attribution-ShareAlike 4.0 (or higher) International Public License (the “CC BY-SA 4.0 License”). See [How to Cite USAFacts](https://usafacts.org/how-to-cite-usafacts/) and [Terms and Conditions](https://usafacts.org/terms-and-conditions/) for more information. Data derived herein from USA Facts are made available under the same license as the original USA Facts data.
+
+:::{#boxedtext}
+
+**This is a teaching dataset**
+
+Any analyses, interpretations, or conclusions reached herein are are only for the purpose of illustrating regression methods and are credited to the author, not to the licensors. The author makes no claim or implication that any inferences derived from this teaching dataset are valid estimates. The dataset is a subset of the original datasets, produced by merging the COVID Severity Forecasting data with USA Facts case, death, and county population data. The COVID Severity Forecasting data were downloaded September 9, 2021, and the USA Facts data were downloaded September 10, 2021 and contained data collected through September 8, 2021.
+:::
+
+
+1.  Use the COVID dataset create a "Table 1" of descriptive statistics, overall and by the number of hospitals per 100,000 persons (hospitals_per_100k) (use a median split to create a binary version of this “by” variable). 
+
+Describe the following variables in this table:
+
+-   population: County population
+-   cum.cases: COVID-19 cumulative cases as of 2021-09-08
+-   cum.deaths: COVID-19 cumulative deaths as of 2021-09-08
+-   median.age: median age of county in 2010
+-   census.region: name of census region
+
+```{r table1, echo=FALSE, eval=TRUE}
+
+table1(~ population + cum.cases + cum.deaths + median.age + census.region + hospitals_per_100k
+       | hospitals_per_100k_fact, data = covid, render.continuous = render.continuous)
+
+# table1(~ population + cum.cases + cum.deaths + median.age + census.region + hospitals_per_100k | hospitals_per_100k_fact, data = covid)
+
+table1(~ population + cum.cases + cum.deaths + median.age + census.region + hospitals_per_100k + Rural.Urban | hospitals_per_100k_fact, data = covid)
+
+```
+
+
+
+:::{#boxedtext}
+Hint: Remove the statistic option in tbl_summary() to display the default statistics (median and interquartile range) which are more appropriate for data that are skewed, such as county population. This is equivalent to replacing "{mean} ({sd})" with "{median} ({p25}, {p75})".
+:::
+
+2. Is the (predictor) county-level number of ICU beds per 100,000 population (icu_beds_per_100k) associated with the (outcome) number of deaths (cum.deaths)? Give a possible interpretation for the direction of association, and compare it to the results the pattern you found in table 1.
+
+```{r cortest, eval = FALSE}
+
+cor.test(covid$cum.deaths, covid$icu_beds_per_100k)
+
+
+```
+
+3. Is the predictor county-level number of ICU beds per 100,000 population (icu_beds_per_100k) associated with the outcome number of deaths (cum.deaths) after adjusting for population size (population)?
+
+```{r}
+
+
+m1 <- lm(cum.deaths ~ hospitals_per_100k, data = covid) 
+m1 |> summary()
+
+m2 <- lm(cum.deaths ~ hospitals_per_100k + population, data = covid) 
+m2 |> summary()
+
+plot(m2, which = 1)
+covid[2963,]
+
+covid.log <- covid |> 
+  mutate(
+    log.cum.deaths = log(cum.deaths + 1), 
+    log.icu_beds_per_100k = log(icu_beds_per_100k + 1),
+    log.hospitals_per_100k = log(hospitals_per_100k + 1),
+    log.population = log(population + 1)
+    )
+
+m1 <- lm(log.cum.deaths ~ log.hospitals_per_100k, data = covid.log) 
+m1 |> summary()
+
+table(m2$Rural.Urban)
+
+
+covid.log |> 
+  mutate(log_cum_death_per_100k = log((icu_beds_per_100k + 1) / population)) |> 
+  lm(log_cum_death_per_100k ~ log.icu_beds_per_100k  ,
+     data = _) |> summary()
+
+
+covid.log |> mutate(log_cum_death_per_100k = log(icu_beds_per_100k / population)) |> 
+  lm(log.cum.deaths ~ log.icu_beds_per_100k  ,
+     data = _) |> summary()
+covid.log |> 
+  lm(log.cum.deaths ~ log.icu_beds_per_100k + log.population  ,
+     data = _)  |> summary()
+
+covid.log |> 
+  lm(log.cum.deaths ~ log.icu_beds_per_100k + log.population + 
+       log.icu_beds_per_100k : log.population,
+     data = _)  |> summary()
+
+plot(m2, which = 1)
+plot(m2, which = 2)
+plot(m2, which = 3)
+plot(m2, which = 4)
+covid[2963,]
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Acknowledgements
+
+This lab was adopted from Introduction to Regression Methods for Public Health using R by Ramzi W. Nahhas is licensed under a [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License](http://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+------------------------------------------------------------------------
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){style="border-width:0"}</a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
