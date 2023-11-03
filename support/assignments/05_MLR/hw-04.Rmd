@@ -1,0 +1,259 @@
+---
+title: "HW 04 - Modeling course evaluations"
+subtitle: "Individual assignment"
+date: "Due: Oct 1 at 23:59"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: ../../hw_small.css
+---
+
+<div style= "float:right;position: relative; margin-left: 10px">
+```{r icon, echo=FALSE, fig.align="right", out.width=500}
+knitr::include_graphics("students.jpg")
+```
+</div>
+
+```{r setup, include=FALSE}
+# library(DT)
+# options(
+#   htmltools.dir.version = FALSE, # for blogdown
+#   show.signif.stars = FALSE      # for regression output
+#   )
+knitr::opts_chunk$set(eval = TRUE, echo = TRUE, warning=FALSE)
+library(tidyverse)
+evals <- read_csv("evals-mod.csv")
+```
+
+Towards the end of your course, you will be asked to fill-in an anonymous evaluation form. This is your opportunity to share your thoughts about your learning experience during the course. But what do these evaluations actually measure? Studies have found that evaluations are influenced by factors,  not necessarily related to the learning experience. For example, Hamermesh and Parker (2005)  [found](https://www.sciencedirect.com/science/article/abs/pii/S0272775704001165) that instructors who are perceived to be better looking receive higher instructional ratings. 
+
+For the purpose of this assignment you will analyze  data from this study in order to better understand student evaluations. 
+
+The data were gathered from end of semester student evaluations for a large sample of professors from the University of Texas at Austin. In addition, six students rated the professors’ physical appearance. (This is a slightly modified version of the original data set that was released as part of the replication data for Data Analysis Using Regression and Multilevel/Hierarchical Models (Gelman and Hill, 2007). The result is a data frame where each row contains a different course and columns represent variables about the courses and professors.
+
+1. Before looking at the results, what do you think of the course evaluations you've  filled in (or those you've chosen not to)? What do you think they were intended to measure? Do you think there is a difference between what evaluations are intended to measure and what they really measure? Does a lecturer's physical appearance influence your evaluation? Does it influence your peers? Would appearance have the same influence when evaluating lecturers of different genders? Feel free to share any thoughts and feelings about this topic. 
+
+## Packages
+
+In this lab we will work with the a number of packages. You may need to install them on your machine. Then, load them with the following commands:
+
+```{marginfigure}
+When you install the tidyverse package, a long list of packages get installed with it. However when you load it (with the `library` function) only a few of them get loaded, e.g. `dplyr`, `ggplot2`, and `forcats`. The broom package is installed with the tidyverse, but we need to load it separately in order to make use of it.
+```
+
+```{r load-packages, eval=TRUE, echo=TRUE, message=FALSE}
+library(tidyverse)
+library(broom)
+library(gridExtra)
+library(modelsummary)
+```
+
+# The data
+On Nestor you can find the dataset and a draft RMarkdown file and the project file, all zipped up inside a zip-file. Please make sure to *download* and *unzip* the zip-file. You will then need to use RStudio in order to open the project file. In your RMarkdown file, you can load the data-set as follows: 
+
+
+```{r data, eval=FALSE}
+evals <- read_csv("evals-mod.csv")
+```
+
+
+
+## Codebook
+
+A codebook describes the contents, structure, and layout of a data collection. A well-documented codebook contains information about each variable in the data file. Below you can see the code-book for the evaluation dataset.
+
+| Variable name    | Description 
+|:--------|:-------------------------------
+| `score` 		     | Average professor evaluation score: (1) very unsatisfactory - (5) excellent
+| `rank` 		       | Rank of professor: teaching, tenure track, tenure
+| `ethnicity` 	   | Ethnicity of professor: not minority, minority
+| `gender` 		     | Gender of professor: female, male
+| `language` 	     | Language of school where professor received education: english or non-english
+| `age` 		       | Age of professor
+| `cls_perc_eval`  | Percent of students in class who completed evaluation
+| `cls_did_eval`   | Number of students in class who completed evaluation
+| `cls_students`   | Total number of students in class
+| `cls_level` 	   | Class level: lower, upper
+| `cls_profs` 	   | Number of professors teaching sections in course in sample: single, multiple
+| `cls_credits`    | Number of credits of class: one credit (lab, PE, etc.), multi credit
+| `bty_f1lower`    | Beauty rating of professor from lower level female: (1) lowest - (10) highest
+| `bty_f1upper`    | Beauty rating of professor from upper level female: (1) lowest - (10) highest
+| `bty_f2upper`    | Beauty rating of professor from upper level female: (1) lowest - (10) highest
+| `bty_m1lower`    | Beauty rating of professor from lower level male: (1) lowest - (10) highest
+| `bty_m1upper`    | Beauty rating of professor from upper level male: (1) lowest - (10) highest
+| `bty_m2upper`    | Beauty rating of professor from upper level male: (1) lowest - (10) highest
+
+# Exercises
+
+
+
+<div style= "float:right;position: relative; margin-left: 10px">
+```{r skewyou, echo=FALSE, fig.align="right", out.width=400}
+knitr::include_graphics("skewyou.jpeg")
+```
+</div>
+
+## Part 1: Data Manipulation and exploratory analysis (descriptive)
+
+
+
+Create a new variable called `bty_avg` that is the average attractiveness score of the six students for each professor (`bty_f1lower` through `bty_m2upper`). Add this new variable to the `evals` data frame. Incomplete code is given below to guide you in the right direction, however you will need to fill in the blanks.
+
+
+```{r bty_avg.show, eval=FALSE, echo=TRUE}
+evals %>%
+  ___(bty_avg = (___+___+___+___+___+___)/___ )  -> evals
+
+```
+
+
+```{r bty_avg, echo=FALSE}
+evals <- evals %>%
+  mutate(bty_avg = (bty_f1lower+bty_f1upper+bty_f2upper+bty_m1lower+bty_m1upper+bty_m2upper)/6)
+           
+```
+
+2.  Visualize the distribution of `score` and `bty_avg`. Are the distribution skewed? What does that tell you about how students rate courses? Is this what you expected to see? Why, or why not? Include references to summary statistics and visualizations in your response, and make sure to describe and explain *each and every* figure you use. 
+
+
+
+
+```{r score_distrib, echo=FALSE, message=FALSE}
+
+p1 <- evals %>% ggplot(aes(x=score, y=..density..)) + 
+  geom_histogram(binwidth = .1)  +
+  scale_x_continuous(breaks=seq(0,5,by=.5))+ ggtitle("score distribution")
+
+
+p2 <- evals %>% ggplot(aes(x=score, y=..density..)) + 
+  geom_density(aes(fill=gender, color=gender),alpha=.4) +
+  scale_x_continuous(breaks=seq(0,5,by=.5)) + ggtitle("score distribution by gender") + theme(legend.position = "none")
+
+
+p3 <- evals %>% ggplot(aes(y=score, x=gender)) + 
+  geom_boxplot() +
+  scale_y_continuous(breaks=seq(0,5,by=.5))
+
+
+
+p4 <- evals %>% ggplot(aes(x=bty_avg, y=..density..)) + 
+  geom_density(aes(fill=gender, color=gender),alpha=.4) +
+  scale_x_continuous(breaks=0:10, name="average beauty score")+ ggtitle("beauty distribution by gender") + theme(legend.position = "bottom")
+
+grid.arrange(p1,p2,p3,p4, ncol=2)
+
+           
+```
+
+
+
+```{marginfigure}
+**Hint:** See the [help page](http://ggplot2.tidyverse.org/reference/index.html) for the `geom_jitter()` function.
+```
+
+
+3.  Visualize the relationship between `score` and the new variable you created, `bty_avg`, adding a linear trend line. Then, re-plot the scatter-plot, but this time use `geom_jitter()`. What does `jitter` mean? What was misleading about the initial scatter-plot and how did jittering the data help?
+
+
+
+```{r score-vs-beauty, echo=FALSE, fig.height=3, fig.width=3, fig.align='center', message=FALSE}
+
+evals %>% ggplot(aes(x=bty_avg, y=score))+
+  geom_point(alpha=.5)+  geom_jitter() + 
+  geom_smooth(method="lm") +
+  scale_x_continuous(breaks=2:9, name="average beauty score") 
+
+```
+
+## Part 2: Linear regression models (Inference)
+
+
+Let's see if the apparent trend in the plot is something more than natural variation. 
+    
+```{marginfigure}
+A bivariate linear model has the form $\hat{y} = b_0 + b_1\cdot{x}$, where $b_1$ is the slope and $\hat{y}$ is the model's prediction for the dependent variable.
+```
+
+4.  *Bivariate regression model:* Fit a linear model called `m_bty` to predict average professor evaluation `score` by average beauty rating (`bty_avg`).  
+      
+      **(a)** Based on the regression output, write the linear model in the form of
+      
+      $$\hat{y}_{score} = b_0 + b_1\cdot{x_{bty}}$$
+      
+      Please replace the coefficients with the point estimates of the intercept and the slope. 
+      
+      **(b)** Interpret the slope of the linear model in context of the data.  
+      
+      **(c)** Determine the $R^2$ of the model and interpret it in context of the data.
+    
+    
+```{marginfigure}
+A multivariate linear model has one dependent variable and two or more independent variables. It is of the form $\hat{y} = b_0 + b_1\cdot{x_1} + b_2\cdot{x_2}$, where $b_1$ is the slope of $x_1$,  $b_2$ is the slope of $x_2$ and $\hat{y}$ is the model's prediction for the dependent variable.
+```
+Next, we consider a multivariate regression model with two independent variables: beauty  and gender (male).
+
+5.  *Multivariate regression model:* Fit a linear model,`m_bty_gen`, to predict the average course evaluation `score` based on average beauty rating (`bty_avg`) and `gender`. 
+
+      **(a)** Write the linear model, and take note of the $R^2$ and the adjusted $R^2$. Your regression model should look as follows (but you need to replace the regression coefficients, $b_0, b_1, b_2$ with the values in your model)  
+      
+      $$\hat{y}_{score}=b_0+b_1\cdot{x_{bty}}+b_2\cdot{x_{male}}$$  
+      
+
+      **(b)** What is the linear equation associated with the female professors? What is the one associated with the male professors? Please interpret the slope coefficients. 
+
+      **(c)** For two professors who received the same beauty rating, which gender tends to have the higher course evaluation score? 
+
+      **(d)** Compare this model to the bivariate model in the previous question. Specifically, compare the slopes and the adjusted $R^2$. What does this     tell us about how useful `gender` is in explaining the variability in evaluation scores when we already have information on the beauty score of the professor. 
+    
+    
+<left>
+    
+```{r multivariate, echo=FALSE, fig.align='left', include=FALSE}
+
+lm(score ~ bty_avg, evals) -> m_bty
+lm(score ~ bty_avg+gender, evals) -> m_bty_gen
+modelsummary(list(Bivariate=m_bty, Multivariate=m_bty_gen), stars=TRUE, 
+             gof_omit="F|AI|B|L")
+
+
+```
+
+</left>
+
+6. Does the perceived beauty of a professor have a different effect for male and for female professors? To answer that question, you need to add an interaction term to your regression model. So that your regression model will look as follows: 
+      
+      $\hat{y}_{score}=b_0+b_1\cdot{x_{male}}+b_2\cdot{x_{bty}}+b_3\cdot{x_{male}}\cdot{x_{bty}}$  
+      
+      Please replace the coefficients with the point estimates of the intercept and the slope.
+      
+      **(a)** Now write the linear model for male professors and the linear model for female professors separately. Interpret the results.
+      
+      **(b)** Compare the different models and explain which is the best and why.
+      
+      **(c)** Show that the slope for male professors is different from the slope for female professors using a graph (see code below). 
+      
+      
+```{r different-slopes, echo=TRUE, eval=FALSE}
+
+evals %>% ggplot(aes(x=bty_avg, y=score, color=gender))+
+  geom_point(alpha=.3)+  geom_jitter() + 
+  geom_smooth(method="lm") +
+  scale_x_continuous(breaks=2:9)
+
+```
+
+       
+
+
+    
+```{r multivariate-interaction, echo=FALSE, fig.align='left', include=FALSE}
+
+lm(score ~ bty_avg+gender+bty_avg*gender, evals) -> m_bty_gen_int
+modelsummary(list(Bivariate=m_bty, Multivariate=m_bty_gen, `Multi-Interaction`=m_bty_gen_int), stars=TRUE, gof_omit="F|AI|B|L")
+
+
+```
+
+
+
