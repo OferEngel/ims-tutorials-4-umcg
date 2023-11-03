@@ -62,12 +62,12 @@ knitr::include_graphics("images/LBW causes infographic_0.jpg")
 
 The [2018 United States Birth Data](https://www.cdc.gov/nchs/nvss/births.htm) were compiled from information on birth certificates by the National Vital Statistics System, part of the National Center for Health Statistics, in cooperation with States ([National Center for Health Statistics 2022](https://bookdown.org/rwnahhas/RMPH/appendix-natality.html#ref-natality_about_2022)). The dataset consists of a random sample from the original dataset, including birthweight, maternal characteristics and risk factors. Specifically, we will be looking at: 
 
-- DBWT (birthweight (g))
-- CIG_REC (smoked during pregnancy) emo::ji("no_smoking")
+- DBWT (birthweight (g)) `r emo::ji("baby")`
+- CIG_REC (smoked during pregnancy) `r emo::ji("no_smoking")`
 - risks (risk factors reported)
-- MAGER (mother’s age) emo::ji("no_smoking")
+- MAGER (mother’s age) `r emo::ji("clock")`
 - MRACEHISP (mother’s race/ethnicity)
-- DMAR (marital status) 
+- DMAR (marital status) `r emo::ji("ring")`
 - MEDUC (mother’s education)
 - PRIORLIVE (prior births now living)
 - PRIORDEAD (prior births now dead) 
@@ -253,7 +253,7 @@ You can display the various statistics using `M.FULL |> tidy(conf.int = TRUE)`.
 
 6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Use the scaled Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create a [dumbell plot](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. Hint: When creating the dataset for plotting, include the value zero for each predictor not included in the interaction. Picking the value zero in a centered predictor is like choosing the mean of that variable, which is a reasonable choice. 
 
-```{r}
+```{r dumbellplot-1, out.width="50%"}
 
 # Scaling
 natality.ctr <- natality |>
