@@ -21,8 +21,19 @@ natality.orig |> select(
          PRIORDEAD_cat = fct_collapse(as.factor(PRIORDEAD), `1+` = as.character(c(1, 2, 3, 12))),
          MEDUC = fct_collapse(MEDUC, Uni=c("Bachelor", "Adv Degree"))
          ) -> natality
-
-GGally::ggpairs(natality)
+library(GGally)
+ggpairs(
+  natality, c(1, 3, 4, 9, 10),
+  mapping = ggplot2::aes(color = CIG_REC),
+  upper = list(continuous = wrap("density", alpha = 0.9), combo = "facethist", discrete = wrap("count")),
+  lower = list(continuous = wrap("cor"), combo = NULL),
+  diag = list(continuous = wrap("densityDiag", colour = NA, alpha = .6), discrete = "barDiag"),
+  legend = c(3,5),
+  title = "Natality",
+  showStrips	= FALSE,
+  cardinality_threshold = 5
+) + labs(color = "Smoking") +
+  theme_minimal()
 # DBWT (birthweight (g)), CIG_REC (smoked during pregnancy), risks (risk factors reported), MAGER (mother’s age), MRACEHISP (mother’s race/ethnicity), DMAR (marital status), MEDUC (mother’s education), PRIORLIVE (prior births now living), PRIORDEAD (prior births now dead), and BMI
 
 # write_rds(natality, "natality.rds")
@@ -32,9 +43,6 @@ natality <- natality |>
   select(-PRIORLIVE, -PRIORDEAD)
 
 
-natality.ctr <- natality |>
-  mutate(across(all_of(cols), scale)) |>
-  mutate(across(all_of(cols), ~ .x*2))
 
 natality.ctr |>
   summarize(mn = mean(DBWT), sd = sd(BMI))
@@ -50,9 +58,9 @@ table1(~DBWT +
        MRACEHISP +
        DMAR +
        MEDUC +
-       PRIORLIVE_cat +
-       PRIORDEAD_cat +
-       BMI + CIG_REC  | MEDUC, data = natality, overall = FALSE)
+       PRIORLIVE +
+       PRIORDEAD +
+       BMI + MEDUC   | CIG_REC, data = natality, overall = FALSE, caption = "Measures stratified by smoking")
 
 natality$PRIORDEAD_cat |> table()
 
@@ -68,8 +76,22 @@ M1 <- lm(DBWT ~ . +
 
 
 
-M0 <- lm(DBWT ~ 1, natality)
+M.NULL <- lm(DBWT ~ 1, natality)
+M.UNADJUSTED <- lm(DBWT ~ CIG_REC, natality)
 M.FULL <- lm(DBWT ~ ., natality)
+
+step(M.NULL,
+     scope = list(upper = M.FULL),
+     direction="both",
+     data=natality)
+
+M.OPT <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE + CIG_REC + PRIORDEAD, data = natality)
+
+anova(M.NULL, M.UNADJUSTED, M.OPT, M.FULL)
+
+
+summary(M.FULL)
+
 
 M.FULL <- lm(DBWT ~ . + (risks + MAGER + CIG_REC + DMAR + MEDUC + BMI) * (risks + MAGER + CIG_REC + DMAR + MEDUC + BMI), natality)
 
