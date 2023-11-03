@@ -60,18 +60,18 @@ knitr::include_graphics("images/LBW causes infographic_0.jpg")
 </div>
 
 
-The [2018 United States Birth Data](https://www.cdc.gov/nchs/nvss/births.htm) were compiled from information on birth certificates by the National Vital Statistics System, part of the National Center for Health Statistics, in cooperation with States ([National Center for Health Statistics 2022](https://bookdown.org/rwnahhas/RMPH/appendix-natality.html#ref-natality_about_2022)). The dataset consists of a random sample from the original dataset, including birthweight, maternal characteristics and risk factors. Specifically, we will be looking at: 
+The [2018 United States Birth Data](https://www.cdc.gov/nchs/nvss/births.htm) were compiled from information on birth certificates by the National Vital Statistics System, part of the National Center for Health Statistics, in cooperation with States ([National Center for Health Statistics 2022](https://bookdown.org/rwnahhas/RMPH/appendix-natality.html#ref-natality_about_2022)). The dataset consists of a random sample from the original dataset, registering births in the United States in the year 2018. Specifically, we will be looking at the following variables: 
 
-- DBWT (birthweight (g)) `r emo::ji("baby")`
-- CIG_REC (smoked during pregnancy) `r emo::ji("no_smoking")`
-- risks (risk factors reported)
-- MAGER (mother’s age) `r emo::ji("clock")`
-- MRACEHISP (mother’s race/ethnicity)
-- DMAR (marital status) `r emo::ji("ring")`
-- MEDUC (mother’s education)
-- PRIORLIVE (prior births now living)
-- PRIORDEAD (prior births now dead) 
-- BMI (mother’s body mass index, kg/m2)
+- DBWT - birth weight (g) `r emo::ji("baby")`. This will be the outcome we will be predicting using a variety of linear regression models
+- CIG_REC - smoked during pregnancy `r emo::ji("no_smoking")`
+- risks - risk factors reported
+- MAGER - mother’s age `r emo::ji("clock")`
+- MRACEHISP - mother’s race/ethnicity
+- DMAR - marital status`r emo::ji("ring")`
+- MEDUC - mother’s education
+- PRIORLIVE - prior births now living 
+- PRIORDEAD - prior births now dead
+- BMI  - mother’s body mass index, (kg/m2)
 
 
 <div style= "float:right;position: relative; margin-left: 20px">
@@ -118,9 +118,20 @@ table1(~DBWT +
 ```
 
 
+
 2. Use the `ggpairs` function to explore the association between the different variables. Try to replicate the figure below, or create your own variation. 
 
 ```{r ggpairs, fig.align='center', fig.height=7}
+label(natality[,c(1, 3, 4, 6, 10) ])
+
+labels <-  c(
+  label(natality[[1]]), 
+  label(natality[[3]]), 
+  label(natality[[4]]),
+  label(natality[[6]]),
+  label(natality[[10]])
+)
+
 ggpairs(
   natality, c(1, 3, 4, 6, 10),  
   mapping = ggplot2::aes(color = CIG_REC), 
@@ -128,7 +139,8 @@ ggpairs(
   lower = list(continuous = wrap("cor"), combo = NULL),
   diag = list(continuous = wrap("densityDiag", colour = NA, alpha = .6), discrete = wrap("densityDiag")),
   legend = c(3,5),
-  title = "Natality", 
+  columnLabels = labels,
+  title = "Natality in the United States (2018)", 
   showStrips	= FALSE, 
   cardinality_threshold = 5
 ) + labs(color = "Smoking") + 
