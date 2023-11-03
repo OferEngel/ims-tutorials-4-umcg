@@ -1,0 +1,118 @@
+---
+title: "Untitled"
+author: "Ofer Engel"
+date: "2023-11-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)  # For ggplot, dplyr, and friends
+library(patchwork)  # For combining ggplot plots
+library(GGally)     # For scatterplot matrices
+library(broom)      # For converting model objects to data frames
+# easystats::easystats_update()
+library(easystats)
+weather_atl <- read_csv("atl-weather-2019.csv")
+```
+
+
+
+```{r}
+weather_atl_summer <- weather_atl %>% 
+  filter(time >= "2019-05-01", time <= "2019-09-30") %>% 
+  mutate(humidity_scaled = humidity * 100,
+         moonPhase_scaled = moonPhase * 100,
+         precipProbability_scaled = precipProbability * 100,
+         cloudCover_scaled = cloudCover * 100)
+
+model_complex <- weather_atl_summer |> 
+  lm(
+    temperatureHigh ~ humidity_scaled + 
+      moonPhase_scaled + 
+      precipProbability_scaled + 
+      windSpeed + 
+      pressure + 
+      cloudCover_scaled, 
+    data = _)
+
+model_complex.ctr <- weather_atl_summer |> 
+  mutate_if(is.numeric, scale) |>
+  mutate_if(is.numeric, ~ .x / 2)  |> 
+  lm(
+    temperatureHigh ~ humidity_scaled + 
+      moonPhase_scaled + 
+      precipProbability_scaled + 
+      windSpeed + 
+      pressure + 
+      cloudCover_scaled, 
+    data = _)
+
+
+p1 <- model_complex %>% 
+  model_parameters() %>% 
+  plot()
+
+p2 <- model_complex.ctr %>% 
+  model_parameters() %>% 
+  plot()
+
+p1 / p2
+
+newdata_example <- tibble(
+  humidity_scaled = 50, 
+  moonPhase_scaled = 50,
+  precipProbability_scaled = 50, 
+  windSpeed = 1, 
+  pressure = 1000, 
+  cloudCover_scaled = 50
+  )
+
+tidy(model_complex, conf.int = TRUE) |> 
+  bind_rows(tidy(model_complex.ctr, conf.int = TRUE) ) |> 
+  arrange(term)
+
+p1 <- tidy(model_complex, conf.int = TRUE) %>%
+  filter(term != "(Intercept)") |> 
+ggplot(aes(x = estimate, y = term)) +
+  geom_vline(xintercept = 0, color = "red", linetype = "dotted") +
+  geom_pointrange(aes(xmin = conf.low, xmax = conf.high)) + 
+  labs(x = "Coefficient estimate", y = NULL) +
+  theme_minimal()
+
+p2 <- tidy(model_complex.ctr, conf.int = TRUE) %>%
+  filter(term != "(Intercept)") |> 
+  ggplot(aes(x = estimate, y = term)) +
+  geom_vline(xintercept = 0, color = "red", linetype = "dotted") +
+  geom_pointrange(aes(xmin = conf.low, xmax = conf.high)) + 
+  labs(x = "Coefficient estimate", y = NULL) +
+  theme_minimal()
+
+library(patchwork)
+
+p1 / p2
+
+```
+
+
+
+Marginal effects
+
+I don’t have anything official, unfortunately. I have [this example](https://datavizf23.classes.andrewheiss.com/example/07-example.html#predicted-values-and-marginal-effects-in-2023) I use for teaching my dataviz class. 
+
+
+```{r}
+ggplot(weather_atl, aes(x = time, y = temperatureHigh)) +
+  geom_line() +
+  scale_y_continuous(
+    sec.axis = sec_axis(
+      trans = ~ (32 - .) * -5/9,
+      name = "Celsius"
+      )
+    ) +
+  labs(x = NULL, y = "Fahrenheit") +
+  theme_minimal()
+```
+
+
+I have this [longer post](https://www.andrewheiss.com/blog/2022/05/20/marginalia/index.html#marginaleffectss-and-emmeanss-philosophies-of-averaging) going into more detail about the differences between all the different marginal estimands and their ordering and this about marginal vs. conditional effects - but those are all just written out examples, not anything like exercises or [activities](https://www.andrewheiss.com/blog/2022/11/29/conditional-marginal-marginaleffects/index.html)

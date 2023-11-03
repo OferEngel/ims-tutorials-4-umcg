@@ -235,7 +235,7 @@ This situation is why [Gelman recommends](http://www.stat.columbia.edu/~gelman/r
 # Scaling
 natality.ctr <- natality |>
   mutate_if(is.numeric, scale) |>
-  mutate_if(is.numeric, ~ .x / 2)
+  mutate_if(is.numeric, ~ as.numeric(.x / 2))
 
 # Fitting the model
 M.OPT.ctr <- lm(
@@ -271,40 +271,113 @@ You can display the various statistics using `M.FULL |> tidy(conf.int = TRUE)`.
 # Scaling
 natality.ctr <- natality |>
   mutate_if(is.numeric, scale) |>
-  mutate_if(is.numeric, ~ .x / 2)
+  mutate_if(is.numeric, ~ as.numeric(.x / 2))
 
-# Fitting the model
-# M.OPT.ctr <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE + CIG_REC + PRIORDEAD, data = natality.ctr)
 
-terms <- c("(Intercept)", "CIG_RECYes", "MEDUCHS", "MEDUCSome college", "MEDUCUni", "CIG_RECYes:MEDUCHS", "CIG_RECYes:MEDUCSome college", "CIG_RECYes:MEDUCUni")
-M.FULL.ctr <- lm(formula = DBWT ~ ., data = natality.ctr)
 M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC * MEDUC, data = natality.ctr)
 
-M.FULL_int.ctr |> tidy() |> 
-  filter(term %in% terms) |> 
-  select(term, estimate) |> 
+newdata <- data.frame(
+    CIG_REC   = c("No", "Yes", "No", "Yes", "No", "Yes", "No", "Yes"),  
+    MEDUC     = c("lower", "lower", "HS", "HS", "Some college", "Some college", "Uni", "Uni") 
+    ) |> 
   mutate(
-    MEDUC = c("lower", "lower", rep(c("HS", "Some college","Uni"), times = 2)), 
-    SMOKING = c("smoke_no", "smoke_yes", rep(c("smoke_no", "smoke_yes"), each = 3))) |> 
-  pivot_wider(id_cols = MEDUC, names_from = SMOKING, values_from = estimate) |> mutate(x = 1, xend = 2) |> ggplot() + 
-  geom_point(aes(x = x, y = smoke_no, color = MEDUC), size = 5, alpha = .6) +
-  geom_point(aes(x = xend, y = smoke_yes, color = MEDUC), size = 5) +
-  geom_segment(aes(x = x, y = smoke_no, xend = xend, yend=smoke_yes, color = MEDUC), linewidth = 2) + 
-  scale_x_continuous(breaks = c(1, 2), labels = c("no smoking", "smoking")) + 
+    risks = "No", 
+    MAGER = 0, 
+    MRACEHISP = "NH White", 
+    DMAR = "Married", 
+    PRIORLIVE = "0", 
+    PRIORDEAD = "0", 
+    BMI = 0
+    )
+
+newdata |> 
+  mutate(
+    DBWT = predict(
+      M.FULL_int.ctr, 
+      newdata
+      )
+  ) |> select(CIG_REC, MEDUC, DBWT) |> 
+  pivot_wider(id_cols = MEDUC, names_from = CIG_REC, names_prefix = "smoke_", values_from = DBWT) |> 
+  ggplot() + 
+  geom_point(aes(x = "No", y = smoke_No, color = MEDUC), size = 5, alpha = .6) +
+  geom_point(aes(x = "Yes", y = smoke_Yes, color = MEDUC), size = 5) +
+  geom_segment(aes(
+    x = "No", 
+    y = smoke_No, 
+    xend = "Yes", 
+    yend=smoke_Yes, 
+    color = MEDUC
+    ), linewidth = 2) + 
+  scale_x_discrete(labels = c("no smoking", "smoking")) + 
   scale_y_continuous(breaks = seq(-0.2, 0.1, 0.05)) +
   labs(x = NULL, y = "Birth weight (centred, scaled)", color = "Mother's education") + 
   theme_minimal() + 
   theme(legend.position = "bottom", text = element_text(size = 14)) 
-
-
-
-# msummary(list(opt = M.FULL.ctr, opt_int = M.FULL_int.ctr), stars = TRUE)
-# anova(M.OPT.ctr,M.OPT_int.ctr)
-
-# Ethnicity
+  
 
 
 ```
+
+
+
+:::{#boxedtext}
+To create the dumbell figure, you will need to predict the birth weight for smoking and non-smoking mums with different education levels. Here is the code for the calculations you need: 
+
+```{r dumbells-prep, echo=TRUE, eval=FALSE}
+
+M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC * MEDUC, data = natality.ctr)
+
+newdata <- data.frame(
+  CIG_REC = c("No",    "Yes",   "No", "Yes", "No",           "Yes",          "No",  "Yes"),  
+  MEDUC   = c("lower", "lower", "HS", "HS",  "Some college", "Some college", "Uni", "Uni") 
+  ) |> 
+  mutate(
+    risks = "No", 
+    MAGER = 0, 
+    MRACEHISP = "NH White", 
+    DMAR = "Married", 
+    PRIORLIVE = "0", 
+    PRIORDEAD = "0", 
+    BMI = 0
+    )
+
+newdata |> 
+  mutate(
+    DBWT = predict(
+      M.FULL_int.ctr, 
+      newdata
+      )
+  ) |> select(CIG_REC, MEDUC, DBWT)
+```
+
+Once you have your data, here is how you create your dumbells: 
+
+```{r dumbells-plot, eval=FALSE}
+
+tribble(
+  ~Education, ~No_Smoking, ~Smoking, 
+  "Lower",    0.06227469,  0.04447809, 
+  "HS",       0.08854779,  -0.05014673, 
+  # ___,        ___,         ___, 
+  # ___,        ___,         ___
+
+) |> ggplot() + 
+  geom_segment(
+    aes(
+      x = "No Smoking", y = No_Smoking, 
+      xend = "Smoking", yend = Smoking, 
+      color = Education
+      ),
+    linewidth = 2
+    ) + 
+  geom_point(aes(x = "No Smoking", y = No_Smoking, color = Education), size = 6) + 
+  geom_point(aes(x = "Smoking", y = Smoking, color = Education), size = 6)
+
+```
+
+
+
+:::
 
 
 6. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbell plot. 
@@ -312,7 +385,7 @@ M.FULL_int.ctr |> tidy() |>
 ```{r dumbellplot-MRACEHISP, echo = FALSE, out.width="50%"}
 
 
-M.OPT.ctr <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE + CIG_REC + PRIORDEAD, data = natality.ctr)
+# M.OPT.ctr <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE + CIG_REC + PRIORDEAD, data = natality.ctr)
 
 M.OPT_int.ctr <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE + CIG_REC + PRIORDEAD + BMI : MRACEHISP, data = natality.ctr)
 
@@ -346,4 +419,36 @@ M.OPT_int.ctr |>
 ```
 
 
-7. Does the association between mother’s BMI and birthweight depend on mother’s age? Modify the adjusted model appropriately to be able to answer this question. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. Center BMI at 25 kg/m2 and center age at 30 years. 
+7. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. 
+
+```{r dumbellplot-MAGER, eval=FALSE}
+
+M.FULL_int.ctr <- 
+  lm(formula = DBWT ~ . + BMI : MAGER, data = natality.ctr)
+summary(M.FULL_int.ctr)
+terms <- names(M.FULL_int.ctr$coefficients)[c(1, 4, 17, 18)]
+
+
+
+M.FULL_int.ctr |> 
+  tidy() |> 
+  filter(term %in% terms) |> 
+  select(term, estimate) |> 
+  mutate(
+    MRACE = rep(c("NH White", "NH Black", "NH Other", "Hispanic"), 2), 
+    BMI = c(rep("BMI (mean)", each = 4), rep("BMI (+sd/2)", each = 4))) |>
+  pivot_wider(id_cols = MRACE, names_from = BMI, values_from = estimate) |>
+  mutate(x = 1, xend = 2) |> 
+  ggplot() + 
+  geom_point(aes(x = x, y = `BMI (mean)`, color = MRACE), size = 5, alpha = .6) +
+  geom_point(aes(x = xend, y = `BMI (+sd/2)`, color = MRACE), size = 5) +
+  geom_segment(aes(x = x, y = `BMI (mean)`, xend = xend, yend=`BMI (+sd/2)`, color = MRACE), linewidth = 2) + 
+  scale_x_continuous(breaks = c(0, 1, 2, 3), labels = c(NA, "BMI (mean)", "BMI (+sd/2) ", NA)) + 
+  scale_y_continuous(breaks = seq(-0.2, 0.1, 0.05)) +
+  labs(x = NULL, y = "Birth weight (centred, scaled)", color = "Mother’s race/ethnicity") + 
+  theme_minimal() + 
+  theme(legend.position = "bottom", text = element_text(size = 14)) 
+
+```
+
+
