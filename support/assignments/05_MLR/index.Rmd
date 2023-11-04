@@ -20,6 +20,8 @@ library(GGally)
 library(modelsummary)
 library(easystats)
 library(table1)
+library(gt)
+
 knitr::opts_chunk$set(echo = FALSE, 
                       fig.align = "center", 
                       # fig.height = 3, 
@@ -99,7 +101,7 @@ We will be using R Markdown to create reproducible lab reports. In RStudio, you 
 
 1. Use the `table1` package to create a table with appropriate descriptive information about the data set. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"} to help you build a table.
 
-```{r table1}
+```{r table1, fig.align='center'}
 
 label(natality$PRIORLIVE) = "Prior births (living)"
 label(natality$PRIORDEAD) = "Prior births (dead)"
@@ -253,7 +255,8 @@ M.OPT.ctr %>%
 ```
 
 
-5. How do the effect estimate of smoking, the standard error of the estimate, its 95% confidence interval, and its statistical significance change between the four models?
+5. How do the effect estimate of smoking, the standard error of its estimate, its 95% confidence interval, and its statistical significance change between the un-adjusted, optimal and full models? Please use the centered and scaled models to answer this question. 
+
 
 :::{#boxedtext}
 
@@ -262,19 +265,54 @@ You can display the various statistics using `M.FULL |> tidy(conf.int = TRUE)`.
 :::
 
 
-## Exploring interactions
-
-6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Use the scaled Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create a [dumbell plot](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. Hint: When creating the dataset for plotting, include the value zero for each predictor not included in the interaction. Picking the value zero in a centered predictor is like choosing the mean of that variable, which is a reasonable choice. 
-
-```{r dumbellplot-MEDUC, out.width="75%"}
-
+```{r ex-5, echo=FALSE}
 # Scaling
 natality.ctr <- natality |>
   mutate_if(is.numeric, scale) |>
   mutate_if(is.numeric, ~ as.numeric(.x / 2))
 
 
+M.UNADJUSTED.ctr <- lm(DBWT ~ CIG_REC, natality.ctr)
+# The dot represents all variables except the outcome DBWT
+M.OPT.ctr <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE + CIG_REC + PRIORDEAD, data = natality.ctr)
+M.FULL.ctr <- lm(DBWT ~ ., natality.ctr)
+
+
+map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr), 
+    \(x) tidy(x, conf.int = TRUE) |> 
+      filter(term == "CIG_RECYes")) |> 
+  bind_rows() |> 
+  mutate(
+    model = c("Unadjasted", "Optimal", "Full"),
+    .before = term) |> 
+  mutate(CIG_RECYes = estimate, .before = estimate) |> 
+  select(-term, -estimate) |> 
+  gt()  |>
+  fmt_number(
+    columns = c(2, 3, 4, 6, 7),
+    decimals = 3
+  ) |> 
+  fmt_scientific(
+    columns = 5
+  ) |> 
+  cols_align(
+  align = "center"
+)
+
+```
+
+
+
+## Exploring interactions
+
+6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create a [dumbell plot](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. Hint: When creating the dataset for plotting, include the value zero for each predictor not included in the interaction (the reference level for all categorical variables). Picking the value zero in a centered predictor is like choosing the mean of that variable, which is a reasonable choice. 
+
+```{r dumbellplot-MEDUC, out.width="75%"}
+
 M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC * MEDUC, data = natality.ctr)
+
+# anova(M.FULL.ctr, M.FULL_int.ctr)
+
 
 newdata <- data.frame(
     CIG_REC   = c("No", "Yes", "No", "Yes", "No", "Yes", "No", "Yes"),  
@@ -314,6 +352,7 @@ newdata |>
   theme_minimal() + 
   theme(legend.position = "bottom", text = element_text(size = 14)) 
   
+
 
 
 ```
@@ -385,12 +424,15 @@ tribble(
 :::
 
 
-6. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbell plot. 
+7. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbell plot. 
 
 ```{r dumbellplot-MRACEHISP, echo = FALSE, out.width="75%"}
 
 
 M.OPT_int.ctr <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE + CIG_REC + PRIORDEAD + BMI : MRACEHISP, data = natality.ctr)
+
+# anova(M.OPT.ctr, M.OPT_int.ctr)
+
 
 newdata <- data.frame(
     BMI       = rep(c(0, 2), 4),  
@@ -440,12 +482,15 @@ newdata |>
 ```
 
 
-7. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. 
+8. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. 
 
 ```{r dumbellplot-MAGER, eval=TRUE, out.width="75%"}
 
 M.FULL_int.ctr <- 
   lm(formula = DBWT ~ . + BMI : MAGER, data = natality.ctr)
+
+# anova(M.FULL.ctr, M.FULL_int.ctr)
+
 # summary(M.FULL_int.ctr)
 newdata <- data.frame(
     BMI   = rep(c(0, 1, 2), 3),  
