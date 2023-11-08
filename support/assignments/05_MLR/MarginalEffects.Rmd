@@ -13,6 +13,8 @@ library(GGally)     # For scatterplot matrices
 library(broom)      # For converting model objects to data frames
 # easystats::easystats_update()
 library(easystats)
+library(marginaleffects)
+
 weather_atl <- read_csv("atl-weather-2019.csv")
 ```
 
@@ -25,6 +27,60 @@ weather_atl_summer <- weather_atl %>%
          moonPhase_scaled = moonPhase * 100,
          precipProbability_scaled = precipProbability * 100,
          cloudCover_scaled = cloudCover * 100)
+
+weather_atl_summer[,c("windSpeed")]
+mosaic::fav_stats(weather_atl_summer$windSpeed)
+
+newdata <- tibble(
+  windSpeed = seq(0, 8, 0.5),
+  pressure = mean(weather_atl_summer$pressure),
+  precipProbability_scaled =  mean(weather_atl_summer$precipProbability_scaled),
+  moonPhase_scaled = mean(weather_atl_summer$moonPhase_scaled),
+  humidity_scaled = mean(weather_atl_summer$humidity_scaled),
+  cloudCover_scaled = mean(weather_atl_summer$cloudCover_scaled)
+  )
+
+augment(
+  model_complex, 
+  newdata = newdata,
+  se_fit = TRUE, 
+  interval = "confidence") %>% 
+  select(1, 7:10)
+
+# Calculate predictions across a range of windSpeed
+predicted_values_easy <- predictions(
+  model_complex,
+  newdata = datagrid(windSpeed = seq(0, 8, 0.5))
+)
+
+# Look at predicted values
+predicted_values_easy %>% as.data.frame() |> 
+  select(windSpeed, estimate, std.error, conf.low, conf.high)
+
+
+
+newdata_fancy <- expand_grid(
+  windSpeed = seq(0, 8, 0.5),
+  pressure = mean(weather_atl_summer$pressure),
+  precipProbability_scaled = mean(weather_atl_summer$precipProbability_scaled),
+  moonPhase_scaled = mean(weather_atl_summer$moonPhase_scaled),
+  humidity_scaled = mean(weather_atl_summer$humidity_scaled),
+  cloudCover_scaled = c(0, 33, 66, 100))
+
+newdata_fancy
+
+
+
+
+
+# Calculate predictions across a range of windSpeed
+predicted_values_easy <- predictions(
+  model_complex,
+  newdata = datagrid(windSpeed = seq(0, 8, 0.5))
+)
+
+
+
 
 model_complex <- weather_atl_summer |> 
   lm(
@@ -92,6 +148,23 @@ library(patchwork)
 
 p1 / p2
 
+
+model_simple <- lm(temperatureHigh ~ humidity_scaled, 
+                   data = weather_atl_summer)
+
+tidy(model_simple, conf.int = TRUE)
+
+
+# Centered and scaled all
+weather_atl_summer |> 
+  mutate_if(is.numeric, scale) |>
+  mutate_if(is.numeric, ~ .x / 2)  |> 
+  lm(
+    temperatureHigh ~ humidity_scaled,
+    data = _) |> 
+  tidy(conf.int = TRUE)
+
+
 ```
 
 
@@ -113,6 +186,53 @@ ggplot(weather_atl, aes(x = time, y = temperatureHigh)) +
   labs(x = NULL, y = "Fahrenheit") +
   theme_minimal()
 ```
+
+
+let's check natality 
+
+```{r}
+
+natality.ctr <- natality |>
+  mutate_if(is.numeric, scale) |>
+  mutate_if(is.numeric, ~ as.numeric(.x / 2))
+
+M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC * MEDUC, data = natality.ctr)
+
+# anova(M.FULL.ctr, M.FULL_int.ctr)
+
+predictions(
+  M.FULL_int.ctr,
+  newdata = datagrid(
+    CIG_REC = c("No", "Yes"), 
+    MEDUC = c("lower", "HS", "Some college", "Uni"))
+) |> as.data.frame() |> select(CIG_REC, MEDUC, estimate) |> 
+  arrange(MEDUC, CIG_REC) |> 
+  pivot_wider(id_cols = MEDUC, names_from = CIG_REC, values_from = estimate) |> 
+  ggplot(aes(CIG_REC, estimate, color = MEDUC) ) + 
+  geom_segment(aes(x = "no smoking", xend = "smoking", y = No, yend = Yes))
+
+
+
+data.frame(
+    CIG_REC   = c("No", "Yes", "No", "Yes", "No", "Yes", "No", "Yes"),  
+    MEDUC     = c("lower", "lower", "HS", "HS", "Some college", "Some college", "Uni", "Uni") 
+    ) |> 
+  mutate(
+    risks = "No", 
+    MAGER = 0, 
+    MRACEHISP = "NH White", 
+    DMAR = "Married", 
+    PRIORLIVE = "0", 
+    PRIORDEAD = "0", 
+    BMI = 0
+    ) |> 
+  predict(M.FULL_int.ctr, newdata = _)
+
+
+
+
+```
+
 
 
 I have this [longer post](https://www.andrewheiss.com/blog/2022/05/20/marginalia/index.html#marginaleffectss-and-emmeanss-philosophies-of-averaging) going into more detail about the differences between all the different marginal estimands and their ordering and this about marginal vs. conditional effects - but those are all just written out examples, not anything like exercises or [activities](https://www.andrewheiss.com/blog/2022/11/29/conditional-marginal-marginaleffects/index.html)
