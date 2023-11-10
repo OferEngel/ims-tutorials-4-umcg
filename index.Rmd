@@ -113,9 +113,9 @@ Only three labs are due for submission, but the rest will prepare you for them.
 -  ~~Lab 2: [Intro to data](support/assignments/02_intro_to_data/)~~
 -  ~~Lab 3: [Confidence intervals](https://oferengel-posit.shinyapps.io/LAB_Confidence_intervals/) **INDIVIDUAL deadline 20-Oct-23**~~
 -   ~~Lab 4: [Simple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/04_SLR/)  **GROUP deadline 03-Nov-23**~~
--   Lab 5: [Multiple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/06_logistic/) **GROUP deadline 10-Nov-23**  
--   Lab 6: [Generalized linear models]() **GROUP deadline 17-Nov-23**
--   Lab 7: Survival Analysis **GROUP deadline 22-Nov-23**
+-   Lab 5: [Multiple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/05_MLR/) **GROUP deadline 10-Nov-23**  
+-   Lab 6: [Generalized linear models](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/05_logistic/) **GROUP deadline 17-Nov-23**
+-   Lab 7: Multilevel models **GROUP deadline 22-Nov-23**
 
 
 
