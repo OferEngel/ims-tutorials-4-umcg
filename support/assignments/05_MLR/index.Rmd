@@ -21,6 +21,7 @@ library(modelsummary)
 library(easystats)
 library(table1)
 library(gt)
+library(datawizard)
 
 knitr::opts_chunk$set(echo = FALSE, 
                       fig.align = "center", 
@@ -92,7 +93,7 @@ You will find all the work-space for your lab on posit cloud [using this link](h
 We will be using R Markdown to create reproducible lab reports. In RStudio, you will find the file `lab05.Rmd` in the `Files` panel. Double click it to show the script in the code panel.
 
 -   In the file, update the YAML with your name, the date and the name of the lab.
--   Load the `tidyverse`, `broom`, `table1`, `GGally`, `car`, `easystats` and the `modelsummary`  packages.
+-   Load the `tidyverse`, `broom`, `table1`, `GGally`, `car`, `easystats`, `datawizard` and the `modelsummary`  packages.
 -   Load the `natality.rds` data set into your workspace, and save it as `natality`. 
 -   Knit your file to see that everything is working. 
 -   For each question, please add the text of the question, the code chunks and your answer. 
@@ -235,9 +236,8 @@ This situation is why [Gelman recommends](http://www.stat.columbia.edu/~gelman/r
 ```{r scale-and-forest, eval=FALSE, echo=TRUE}
 
 # Scaling
-natality.ctr <- natality |>
-  mutate_if(is.numeric, scale) |>
-  mutate_if(is.numeric, ~ as.numeric(.x / 2))
+natality.ctr <- natality |> 
+  standardize(two_sd = TRUE)
 
 # Fitting the model
 M.OPT.ctr <- lm(
@@ -267,9 +267,8 @@ You can display the various statistics using `M.FULL |> tidy(conf.int = TRUE)`.
 
 ```{r ex-5, echo=FALSE}
 # Scaling
-natality.ctr <- natality |>
-  mutate_if(is.numeric, scale) |>
-  mutate_if(is.numeric, ~ as.numeric(.x / 2))
+natality.ctr <- natality |> 
+  standardize(two_sd = TRUE)
 
 
 M.UNADJUSTED.ctr <- lm(DBWT ~ CIG_REC, natality.ctr)

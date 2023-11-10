@@ -1,0 +1,403 @@
+---
+title: 'Logistic regression'
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    css: ../lab.css
+    toc: true
+    toc_float: true
+---
+
+```{r global_options, include=FALSE}
+library(emo)
+library(tidyverse)
+library(broom)
+library(infer)
+library(santoku)
+library(car)
+library(GGally)
+library(modelsummary)
+library(easystats)
+library(table1)
+library(gt)
+library(janitor)
+library(lmtest)
+library(datawizard)
+library(extrafont) 
+
+knitr::opts_chunk$set(echo = FALSE, 
+                      fig.align = "center", 
+                      # fig.height = 3, 
+                      # fig.width = 5,
+                      warning = FALSE, 
+                      message = FALSE)
+
+
+# nsduh <- read_rds("nsduh.rds") |> 
+#   mutate(mj_lifetime.numeric = as.numeric(mj_lifetime) - 1, 
+#          .before = mj_agefirst) |> 
+#   select(mj_lifetime, mj_lifetime.numeric, alc_agefirst, demog_age_cat6, demog_sex, demog_income)
+# summary(nsduh$alc_agefirst)
+# write_csv(nsduh, "nsduh.csv")
+# nsduh <- read_csv("nsduh.csv")  |>
+  # mutate_if(is.character, as.factor)
+# write_rds(nsduh, "nsduh.rds")
+nsduh <- read_rds("nsduh.rds") 
+# Custom ggplot theme to make pretty plots
+# Get Barlow Semi Condensed at https://fonts.google.com/specimen/Barlow+Semi+Condensed
+theme_clean <- function() {
+  theme_minimal(base_family = "Barlow Semi Condensed") +
+    theme(panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white", color = NA),
+          plot.title = element_text(face = "bold"),
+          axis.title = element_text(face = "bold"),
+          strip.text = element_text(face = "bold", size = rel(0.8), hjust = 0),
+          strip.background = element_rect(fill = "grey80", color = NA),
+          legend.title = element_text(face = "bold"))
+}
+
+
+
+```
+
+
+
+<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  15-Nov-23. 
+<br/>Please submit your final report [using this form](https://forms.gle/JB5c9apmkx3wD8WG7). </span>
+
+
+
+
+<div style="float: right;width: 350px;margin: 5px 5px 5px 5px">
+```{r img-logistic, echo=FALSE, fig.align='center'}
+knitr::include_graphics("logistic.png")
+```
+</div>
+
+Probability, odds and odds ratio are different ways of expressing the same thing, but on different scales.
+
+-   If the probability is greater than 0.5, the odds are greater than 1 and the log odds are positive
+-   If the probability is less than 0.5, the odds are less than 1 and the log odds are negative.
+-   You can transform probability into odds $\text{odds} = \frac{p}{1-p}$
+-   You can transform odds to probability by hand using $p = \frac{\text{odds}}{1+\text{odds}}$. 
+-   Transforming log odds to probability in R, you can use the `plogis` function. For example, if the log-odds is zero, the probability is equal to `plogis(0) = 0.5`.
+
+$$
+\log\frac{p}{1-p} = \beta_0 + \beta_1X_1 + \beta_2X_2 + \ldots + \beta_kX_k
+$$
+
+Assuming you have your model, here is the interpretation
+
+-   The intercept is the log-odds of the outcome when all (continuous) predictors are at 0 at their reference level . The odds of the outcome is $\text{odds} = \exp(\beta_0)$ and the probability is $\frac{\text{odds}}{1+\text{odds}}= \frac{\exp(\beta_0)}{1+\exp(\beta_0)}$
+
+-   For a continuous predictor the regression coefficient $\beta_k$ is the log of the odds ratio comparing individuals who differ in that predictor by one unit, holding the other predictors fixed.
+
+-   For a categorical predictor, the regression coefficient $\beta_k$ is the log of the odds ratio comparing individuals at a given level of the predictor to those at the reference level, holding the other predictors fixed.
+
+-   To compute **odds ratio** for a variable, exponentiate the corresponding regression coefficient $\text{odds ratio} = \exp(\beta_k)$.
+
+-   To predict the **probability** of an outcome, calculate your log odds, and turn your log-odds to probability using the `plogis` function.
+
+
+
+
+## The data: NSDUH (2019)
+
+
+<div style="float: right;width: 200px;margin: 5px 5px 5px 5px">
+```{r img-survey, echo=FALSE, fig.align='center'}
+knitr::include_graphics("survey.jpeg")
+```
+</div>
+
+The teaching dataset `nsduh` includes a random subset of 1000 observations of adults, and variables that have been renamed for clarity. Sampling was done with replacement using sampling weights in order to approximate a nationally representative distribution. This sampling method is solely for the purpose of creating a teaching dataset to illustrate regression methods. The [National Survey on Drug Use and Health (NSDUH)](https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health), a product of the Substance Abuse and Mental Health Services Administration (SAMHSA) under the U.S. Department of Health and Human Services, measures the use of illegal substances, the use and misuse of prescribed substances, substance use disorder and treatment, and mental health outcomes ( [Substance Abuse and Mental Health Services Administration 2022](https://bookdown.org/rwnahhas/RMPH/appendix-nsduh.html#ref-nsduh_about_2022)). Downloadable data and documentation are freely available from SAMHSA ([U.S. Department of Health and Human Services, Substance Abuse and Mental Health Services Administration, Center for Behavioral Health Statistics and Quality 2019](https://bookdown.org/rwnahhas/RMPH/appendix-nsduh.html#ref-nsduh2019)) for research and statistical purposes. Documentation for the 2019 data can be found in the [2019 NSDUH Public Use File Codebook](https://www.datafiles.samhsa.gov/sites/default/files/field-uploads-protected/studies/NSDUH-2019/NSDUH-2019-datasets/NSDUH-2019-DS0001/NSDUH-2019-DS0001-info/NSDUH-2019-DS0001-info-codebook.pdf). See also [Policies](https://www.samhsa.gov/).
+
+
+### Creating a reproducible lab report
+
+
+You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/405625/content/7018761){target="_blank"}.
+
+
+We will be using R Markdown to create reproducible lab reports. In RStudio, you will find the file `lab06.Rmd` in the `Files` panel. Double click it to show the script in the code panel.
+
+-   In the file, update the YAML with your name, the date and the name of the lab.
+-   Load the `tidyverse`, `broom`, `table1`, `GGally`, `car`, `easystats`, `gt`, `janitor`, `lmtest`, `datawizard` and the `modelsummary`  packages.
+-   Load the `nsduh.rds` data set into your workspace, and save it as `nsduh`. 
+-   Knit your file to see that everything is working. 
+-   For each question, please add the text of the question, the code chunks and your answer. 
+
+## Exploratory data analysis
+
+1. Create a `table1` and use `GGally::ggpairs` to explore your data. 
+
+```{r}
+label(nsduh$mj_lifetime) <- "Marijuana (lifetime)"
+label(nsduh$alc_agefirst) <- "Alcohol (age first used)"
+label(nsduh$demog_age_cat6) <- "Age"
+label(nsduh$demog_sex) <- "Sex"
+label(nsduh$demog_income) <- "Income"
+
+table1(~ demog_sex + alc_agefirst + demog_age_cat6  + demog_income | mj_lifetime, data = nsduh, overall = FALSE, caption = "Table 1: Demographic stratified by lifetime marijuana use") 
+```
+
+
+
+## Calculating odds ratio
+
+2.  Use the contingency table below to calculate (a) probability of lifetime marijuana among sample subjects (independent of sex), among sample females and among sample males, (b) Odds of lifetime marijuana use among sample subjects, among sample females and among sample males. (c) What is the risk difference, the risk ratio and the odds ratio when comparing lifetime marijuana use among males and females in our sample?
+
+```{r ex-1-sex-lifetime, echo=TRUE, eval=FALSE}
+
+# Showing absolute numbers
+nsduh |> 
+  tabyl(demog_sex, mj_lifetime) |> 
+  adorn_title()
+
+# Showing percentages
+nsduh |> 
+  tabyl(demog_sex, mj_lifetime) |> 
+  adorn_percentages() |> 
+  adorn_pct_formatting() |> 
+  adorn_title()
+
+
+# Replace the 0's below with appropriate values
+tribble(
+  ~` `, ~General, ~Female, ~Male, 
+  "Probability", ___, ___, ___, 
+  "Odds",        ___, ___, ___
+) |> gt()
+
+# Replace the 0's below with appropriate values
+tribble(
+  ~` `, ~`Males vs. Females`, 
+  "Risk difference", ___, 
+  "Risk Ratio",      ___,
+  "Odds ratio",      ___
+) |> gt()
+
+```
+
+
+
+
+To answer the question, please fill in the tables below.
+
+```{r ex-1-tables, out.width="50%"}
+
+# prob female = 55.8%
+# prob male = 46.6%
+# odds_ratio = (55.8/44.2) / (46.6 / 53.4) = 1.45
+
+# Replace the 0's below with the values you've calculated above
+tribble(
+  ~` `, ~General, ~Female, ~Male, 
+  "Probability", "___", "___", "___", 
+  "Odds",        "___", "___", "___"
+) |> gt() |> 
+  cols_align(
+    align = "center", 
+    columns = 2:4
+  )
+
+# Replace the 0's below with the values you've calculated above
+tribble(
+  ~` `, ~`Males vs. Females`, 
+  "Risk difference", "___", 
+  "Risk Ratio",      "___",
+  "Odds ratio",      "___"
+) |> gt() |> 
+  cols_align(
+    align = "center", 
+    columns = 2
+  )
+
+```
+
+
+
+3.  You will now estimate the same measures from the previous question, but this time using two types of regressions: a **logistic regression** and a regular **linear regression**. To those measures add the 95% confidence intervals associated. Show your code and present your results in a table, just as you've done above. Explain your findings: what are the differences between the three approaches (using a contingency table as in the question above, using logistic regression and using linear regression)? What explains these differences (or lack thereof)? What are the advantages/drawbacks of using one approach over the other? 
+
+
+:::{#boxedtext}
+**Hint:** Use the two null models to calculate probability and odds at the population level. Use the regression models with a single predictor to calculate the probabilities and odds for males and females as well as risk difference, risk ratio and odds ratio. 
+:::
+
+```{r ex-2, echo=TRUE, eval=FALSE}
+
+mdl.glm.null <- glm(
+  mj_lifetime ~ 1, 
+  data = nsduh, 
+  family = "binomial"
+  )
+summary(___)
+
+# probability of lifetime marijuana (everyone)
+plogis(___)
+
+mdl.lm.null <- lm(mj_lifetime.numeric ~ 1, data = nsduh )
+summary(___)
+# probability of lifetime marijuana (everyone)
+___
+
+
+mdl.glm <- glm(___ ~ ___, data = ___, family = "binomial")
+summary(___)
+
+# probability lifetime marijuana (females)
+plogis(___)
+
+# probability lifetime marijuana (males)
+plogis(___ + ___)
+
+# Odds ratio male over female
+exp(___)
+
+
+mdl.lm <- lm(___ ~ ___, data = nsduh )
+summary(___)
+# probability among female
+___
+# probability among males
+___ + ___ = ___
+
+
+
+```
+
+
+
+```{r ex-2-noshow, echo=FALSE, eval=FALSE}
+
+mdl.glm.null <- glm(mj_lifetime ~ 1, data = nsduh, family = "binomial")
+mdl.glm.null |> 
+  tidy(conf.int = TRUE) |> 
+  mutate(
+    estimate = plogis(estimate), 
+    conf.low = plogis(conf.low), 
+    conf.high = plogis(conf.high), .keep = "none")
+
+
+
+mdl.lm.null <- 
+  lm(mj_lifetime.numeric ~ 1, data = nsduh )
+mdl.lm.null |> 
+  tidy(conf.int = TRUE) |> 
+  mutate(estimate, conf.low, conf.high, .keep = "none")
+
+mdl.glm <- glm(mj_lifetime ~ demog_sex, data = nsduh, family = "binomial")
+summary(mdl.glm)
+
+# probability among female
+plogis(-0.13504)
+
+# probability among male
+plogis(-0.13504 + 0.36784)
+
+# Odds ratio male over female
+exp(0.36784)
+
+
+mdl.lm <- lm(mj_lifetime.numeric ~ demog_sex, data = nsduh )
+summary(mdl.lm)
+# probability among female
+0.46629
+# probability among male
+0.46629 + 0.09165 = 0.55794
+
+# Conclusion: Males have significantly greater odds of lifetime marijuana use than females (OR = 1.44; 95% CI = 1.13, 1.86; p = .004). Males have 44% greater odds of lifetime marijuana use than females.
+
+```
+
+
+4. Write up your results using the template shown below. 
+
+> Conclusion: Males have significantly ___ (higher/lower) odds of lifetime marijuana use than females (OR = ___ ; 95% CI = ___ , ___ p = ___ ). Males have ___% (higher/lower) odds of lifetime marijuana use than females.
+
+
+For this simple case with a binary outcome and a binary predictor, the OR is exactly the same as that obtained via the cross-product from a 2 x 2 contingency table. An advantage of using logistic regression, however, is that it provides the ability to adjust for other predictors to obtain an adjusted OR (AOR). Next, we are going to fit a logistic regression with a continuous predictor.
+
+## Adjusted logistic regression
+
+The main reason we add additional predictors is to mitigate confounding bias. Confounding bias occurs when a predictor affects both outcome and exposure. Adding a confounder to as a predictor to the model removes this bias. 
+
+5. Using the 2019 National Survey of Drug Use and Health (NSDUH) teaching dataset, explore the association between lifetime marijuana use `mj_lifetime` and age at first use of alcohol `alc_agefirst`? Fit a logistic regression and interpret the results, using the template shown below. 
+
+```{r ex6.3, eval=TRUE, echo=FALSE}
+fit.ex6.3 <- glm(mj_lifetime ~ alc_agefirst, family = binomial, data = nsduh)
+
+# summary(fit.ex6.3)
+
+# Age at first alcohol use is significantly negatively associated with lifetime marijuana use (OR = 0.753; 95% CI = 0.713, 0.792; p < .001). Individuals who first used alcohol at, say, age 19 years have 24.7% lower odds of having ever used marijuana than those who first used alcohol at age 18 years.
+
+```
+
+
+> Age at first alcohol use is significantly ___ (negatively/positively) associated with lifetime marijuana use (OR = ___ ; 95% CI = ___ , ___ ; p < ___ ). Individuals who first used alcohol at age 19 years have ___ % ___ (lower/higher) odds of having ever used marijuana than those who first used alcohol at age 18 years. In contrast, the reduction in odds associated with starting drinking alcohol **3 years later** is ___ % ___ (lower/higher) odds.
+
+
+Just as you can move from simple to multiple linear regression by adding more predictors, so you can move from simple to multiple logistic regression. When there are multiple predictors in a logistic regression model, the resulting odds ratios are called adjusted odds ratios (AOR).
+
+6. What is the association between lifetime marijuana use (mj_lifetime) and age at first use of alcohol (`alc_agefirst`), adjusted for age (`demog_age_cat6`), sex (`demog_sex`), and income (`demog_income`)? Fit a model with and without an interaction term (`alc_agefirst:demog_sex`) and compute the AOR, its 95% CI, and the p-value that tests the significance of age at first use of alcohol. Report also their AORs of the other predictors, their 95% CIs and p-values. Since there are some categorical predictors with more than two levels, use `car::Anova()` function to compute p-values for multiple degrees of freedom. In your answer, fill in the following template. 
+
+::: {#boxedtext}
+The Type III tests output contains the multiple df Wald tests for categorical predictors with more than two levels. For continuous predictors, or for categorical predictors with exactly two levels, the Type III Wald test p-values are identical to those in the Coefficients table.
+:::
+
+```{r ex-5-no-show, include=FALSE}
+fit.ex6.3.adj <- glm(mj_lifetime ~ alc_agefirst + demog_age_cat6 + demog_sex +  demog_income, family = binomial, data = nsduh)
+# Regression coefficient table
+tidy(fit.ex6.3.adj, exponentiate = TRUE)
+
+fit.ex6.3.int.adj <- glm(mj_lifetime ~ alc_agefirst + demog_age_cat6 + demog_sex +  demog_income + alc_agefirst:demog_sex, family = binomial, data = nsduh)
+
+# Regression coefficient table
+tidy(fit.ex6.3.int.adj, exponentiate = TRUE)
+
+lrtest(fit.ex6.3, fit.ex6.3.adj, fit.ex6.3.int.adj)
+
+```
+
+
+> Interpreting the output:
+
+> The AOR for our primary predictor `alc_agefirst` is ___. This represents the OR for lifetime marijuana use comparing those with a one-year difference in age at first use of alcohol, adjusted for age, sex, and income.
+
+> The remaining AORs compare levels of categorical predictors to their reference level, adjusted for the other predictors in the model. For example, comparing individuals with the same age of first alcohol use, sex, and income, 35-49 year-olds have ___ %  (lower/higher) odds of lifetime marijuana use than 18-25 year-olds (OR = ___ ; 95% CI = ___ , ___ ; p = ___ ). An overall, 4 df p-value for age, can be read from the Type III Test table (p = ___ ).
+
+
+> Conclusion: After adjusting for age, sex, and income, age at first alcohol use is significantly ___ (negatively/positively) associated with lifetime marijuana use (AOR = ___ ; 95% CI = ___ , ___ ; p < ___ ). Individuals who first used alcohol at a given age have ___ % (lower/higher) odds of having ever used marijuana than those who first used alcohol one year earlier. The association between age of first alcohol use and lifetime marijuana use differs significantly between males and females (p = ___ ). A likelihood ratio test shows that the adjusted model with the interaction is ___ (superior/not superior) to the one without the interaction (p = ___)
+
+7. Replicate the model summary and the forest plot shown below (the forest plot using a centralized variable `alc_agefirst`, scaled such that its standard deviation is 0.5). 
+
+```{r ex-7}
+
+modelsummary(list(Unadjasted = fit.ex6.3, Adjusted = fit.ex6.3.adj, Interaction = fit.ex6.3.int.adj), 
+  stars = TRUE, 
+  estimate = "{estimate} ({std.error}){stars}", 
+  statistic = NULL, 
+  coef_rename = TRUE)
+
+
+nsduh.ctr <- nsduh |>
+  standardize(two_sd = TRUE)
+
+
+fit.ex6.3.int.adj.ctr <- glm(mj_lifetime ~ alc_agefirst + demog_age_cat6 + demog_sex +  demog_income + alc_agefirst:demog_sex, family = binomial, data = nsduh.ctr)
+
+# modelsummary(list(non_c = fit.ex6.3.int.adj, 
+# c = fit.ex6.3.int.adj.ctr), stars = TRUE)
+
+# creating a forest plot
+fit.ex6.3.int.adj.ctr %>% 
+  model_parameters() %>% 
+  plot() + 
+  theme_clean() + 
+  labs(x = "Log-Odds (standardized)") +
+  theme(legend.position = "bottom")
+
+```
+
+
