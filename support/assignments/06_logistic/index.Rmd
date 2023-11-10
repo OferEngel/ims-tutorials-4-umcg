@@ -191,7 +191,7 @@ To answer the question, please fill in the tables below.
 # prob male = 46.6%
 # odds_ratio = (55.8/44.2) / (46.6 / 53.4) = 1.45
 
-# Replace the 0's below with the values you've calculated above
+# Fill in the gaps below with the values you've calculated above
 tribble(
   ~` `, ~General, ~Female, ~Male, 
   "Probability", "___", "___", "___", 
@@ -202,7 +202,7 @@ tribble(
     columns = 2:4
   )
 
-# Replace the 0's below with the values you've calculated above
+# Fill in the gaps below with the values you've calculated above
 tribble(
   ~` `, ~`Males vs. Females`, 
   "Risk difference", "___", 
