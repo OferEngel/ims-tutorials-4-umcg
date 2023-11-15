@@ -199,7 +199,8 @@ This looks a bit better, for example the residuals of the `magnirostris` are cen
 ggplot(finches, aes(wingl, beakh, color = species, group = species)) +
   geom_point(alpha = .7) +
   geom_smooth(method = "lm", alpha = .2)  + theme_clean() + 
-  labs(x = "wing length (mm)", y = "Beak height (mm)")
+  labs(x = "wing length (mm)", y = "beak height (mm)", title = "Fixed effects: intercepts and slopes", 
+       subtitle = "Intercepts and slopes are calculated separatly for each species")
 
 ```
 
@@ -207,7 +208,7 @@ The residual plot would then look like this
 
 ```{r resid-fe-int-slope, eval = TRUE}
 finches |> 
-lm(beakh ~ (wingl  + species)^2, data = _) |> 
+lm(beakh ~ wingl  + species + wingl:species, data = _) |> 
   augment() |> 
 ggplot(aes(wingl, .resid, color = species)) +
   geom_hline(yintercept = 0, lty = 2) +
@@ -258,7 +259,7 @@ ggplot(aes(wingl, beakh, colour = species)) +
 ```
 
 
-```{r plot-lmer,echo=TRUE}
+```{r plot-lmer, echo=TRUE, eval=FALSE}
 finches |> 
 ggplot(aes(___, ___, colour = ___)) +
   geom_point(alpha = 0.5) + # alpha = 0.1 make 10% opaque
@@ -300,7 +301,11 @@ ggplot(aes(wingl, beakh, colour = species)) +
   labs(x = "wing length (mm)", y = "beak height (mm)", title = "Random intercept model", subtitle = "Intercepts are normally distributed")
 
 
- # p_fe + p_rint
+  # p_fe + p_rint
+# finches |> 
+#   lm(beakh ~ 0 + wingl + species, data = _) |> 
+#     summary()
+
 
 p_rint
 
