@@ -143,7 +143,9 @@ msummary(list(M1 = M1, M2 = M2, M3 = M3), estimate = "{estimate} ({std.error}){s
 
 ```
 
+Use the following template below to summarize the results of model 1. 
 
+> Linear regression was used to test the association between _____ (gram) and _____ (_____) using data from n = _____ Penguins. _____% of the variation in _____ was explained by _____ ($R^2 =$ _____). There was a significant _____ (positive/negative) association between _____ and _____ (B = _____; 95% CI = _____, _____; p < .001). On average, for every 1-__ difference in _____, penguins differ in mean _____ by _____ _____. 
 
 
 ```{r img-lm-summary, echo=FALSE, eval=FALSE, fig.align="center", out.width=800}
@@ -155,12 +157,15 @@ knitr::include_graphics("images/lm-summary-2.jpg")
 
 ## Visualizing the data
 
-Let's visualize the models across the scatter-plot, as shown in the figure below. 
+Let's visualize the models across the scatter-plot, we will use the code shown below to proeduce the the figure below. 
 
 
-```{r parallel-body-flipper-echo, echo=FALSE, eval=FALSE}
+```{r parallel-body-flipper-echo, echo=TRUE, eval=FALSE}
 
 coefs <- coef(M2)
+coefs
+    # (Intercept)    bill_depth_mm speciesChinstrap    speciesGentoo 
+    #  -1007.28112        256.61461         13.37732       2238.66811 
 
 penguins |> 
   ggplot(
@@ -179,6 +184,11 @@ penguins |>
   geom_abline(
     intercept = ___ + ___, slope = ___ + ___
     ) 
+
+
+```
+
+```{r parallel-body-flipper-answer, echo=FALSE, eval=FALSE}
 
 penguins |> 
   ggplot(
@@ -200,7 +210,6 @@ penguins |>
     intercept = coefs[1] + coefs[4],
     slope     = coefs[2] + coefs[6]
     ) 
-
 ```
 
 
