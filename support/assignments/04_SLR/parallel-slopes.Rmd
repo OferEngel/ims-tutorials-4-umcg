@@ -18,6 +18,7 @@ library(broom)
 library(car)
 library(santoku)
 library(wesanderson)
+library(modelsummary)
 
 cols <- wes_palette("GrandBudapest1", 3)
 
@@ -58,6 +59,7 @@ Between 2007 and 2009, data were collected about penguins in three islands of th
 ## Palmer Penguins: the data
 
 
+
 The data includes the following variables:
 
 - `species`: The penguin's species (Chinstrap, Gentoo, and Adélie)
@@ -70,6 +72,12 @@ The data includes the following variables:
 - `year`: The year the observation was made
 
 
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r img-culmen_depth, echo=FALSE, eval=TRUE, fig.align="center", out.width=250}
+knitr::include_graphics("images/culmen_depth.png")
+```
+</div>
 
 ```{r table1, echo=FALSE}
 label(penguins$body_mass_g) <- "Body mass (g)"
@@ -86,6 +94,7 @@ table1(~ sex + body_mass_g + flipper_length_mm + bill_depth_mm + island | specie
 
 <br/>
 <br/>
+
 <br/>
 
 ## Three linear regression models
@@ -99,7 +108,7 @@ knitr::include_graphics("images/islands.png")
 We want to compare three different models to understand the relationship between penguin weight (grams) and bill depth (mm). Here are the results of our estimation: 
 
 
-```{r M1, echo=TRUE, eval=TRUE}
+```{r M1, echo=FALSE, eval=TRUE}
 M1 <- lm(body_mass_g ~ bill_depth_mm,
                          data = penguins)
 
@@ -108,7 +117,8 @@ M2 <- lm(body_mass_g ~ bill_depth_mm + species,
 M3 <- lm(body_mass_g ~ bill_depth_mm + species + bill_depth_mm:species, 
          data = penguins)
 
-modelsummary::msummary(list(M1 = M1, M2 = M2, M3 = M3), stars = TRUE)
+msummary(list(M1 = M1, M2 = M2, M3 = M3), estimate = "{estimate} ({std.error}){stars}", stars = TRUE, statistic = NULL, 
+         gof_omit = "Log|F")
 
 # anova(M1, M2, M3)
 # anova(M1, M2, M3, test = "LRT")
@@ -136,7 +146,6 @@ modelsummary::msummary(list(M1 = M1, M2 = M2, M3 = M3), stars = TRUE)
 
 
 
-
 ```{r img-lm-summary, echo=FALSE, eval=FALSE, fig.align="center", out.width=800}
 knitr::include_graphics("images/lm-summary-2.jpg")
 ```
@@ -146,6 +155,7 @@ knitr::include_graphics("images/lm-summary-2.jpg")
 
 ## Visualizing the data
 
+Let's visualize the models across the scatter-plot, as shown in the figure below. 
 
 
 ```{r parallel-body-flipper-echo, echo=FALSE, eval=FALSE}
@@ -169,9 +179,6 @@ penguins |>
   geom_abline(
     intercept = ___ + ___, slope = ___ + ___
     ) 
-
-
-
 
 penguins |> 
   ggplot(
@@ -205,7 +212,7 @@ penguins |>
 M2 <- lm(body_mass_g ~ bill_depth_mm + species + bill_depth_mm:species,
                          data = penguins)
 
-summary(M2)
+# summary(M2)
 coefs <- coef(M2)
 cols <- wes_palette("GrandBudapest1", 3)
 
@@ -242,7 +249,7 @@ penguins |>
     ) + 
   theme_clean() + 
   scale_y_continuous(name="body mass (g)") + 
-  scale_x_continuous(name="flipper length (mm)") 
+  scale_x_continuous(name="bill depth (mm)") 
 
 
 # M2 <- lm(body_mass_g ~ flipper_length_mm + species,
