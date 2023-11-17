@@ -1,0 +1,256 @@
+---
+title: "Modelling Penguins"
+output:
+  html_document:
+    css: ../lab.css
+    highlight: pygments
+    theme: cerulean
+    toc: true
+    toc_float: true
+---
+
+```{r global_options, include = FALSE}
+knitr::opts_chunk$set(eval = TRUE, results = "as.is", fig.align = "center", message = "false", echo = FALSE)
+library(extrafont) 
+library(tidyverse)
+library(table1)
+library(broom)
+library(car)
+library(santoku)
+library(wesanderson)
+
+cols <- wes_palette("GrandBudapest1", 3)
+
+# library(openintro)
+penguins <- read_rds("data/penguins.rds")
+# Custom ggplot theme to make pretty plots
+# Get Barlow Semi Condensed at https://fonts.google.com/specimen/Barlow+Semi+Condensed
+theme_clean <- function() {
+  theme_minimal(base_family = "Barlow Semi Condensed") +
+    theme(panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white", color = NA),
+          plot.title = element_text(face = "bold"),
+          axis.title = element_text(face = "bold"),
+          strip.text = element_text(face = "bold", size = rel(0.8), hjust = 0),
+          strip.background = element_rect(fill = "grey80", color = NA),
+          legend.title = element_text(face = "bold"))
+}
+
+
+```
+
+
+
+
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r img-penguins, echo=FALSE, fig.align="right", out.width=300}
+knitr::include_graphics("images/penguins.png")
+```
+</div>
+
+
+
+
+
+Between 2007 and 2009, data were collected about penguins in three islands of the Palmer Archipelago in Antarctica: the islands of Biscoe, Dream, and Torgersen. Data were collected and made available by [Dr. Kristen Gorman](https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php) and the [Palmer Station, Antarctica LTER](https://pallter.marine.rutgers.edu/), a member of the [Long Term Ecological Research Network](https://lternet.edu/). The `penguins` data-set is a collection of data for 342 penguins from 3 different species: Chinstrap, Gentoo, and Adélie. If you would like to try and replicate the results, you can find the data set in the [`palmerpenguins` package](https://cran.r-project.org/web/packages/palmerpenguins/index.html). 
+
+## Palmer Penguins: the data
+
+
+The data includes the following variables:
+
+- `species`: The penguin's species (Chinstrap, Gentoo, and Adélie)
+- `island`: The island where the penguin lives (Biscoe, Dream, and Torgersen)
+- `bill_length_mm`: The length of the penguin's bill, in millimeters (distance from the penguin's face to the tip of the bill)
+- `bill_depth_mm`: The depth of the penguin's bill, in millimeters (height of the bill; distance from the bottom of the bill to the top of the bill)
+- `flipper_length_mm`: The length of the penguin's flippers, in millimeters
+- `body_mass_g`: The weight of the penguin, in grams
+- `sex`: The sex of the penguin
+- `year`: The year the observation was made
+
+
+
+```{r table1, echo=FALSE}
+label(penguins$body_mass_g) <- "Body mass (g)"
+label(penguins$sex)         <- "Sex"
+label(penguins$flipper_length_mm) <- "Flipper length (mm)"
+label(penguins$bill_depth_mm) <- "Bill depth (mm)"
+label(penguins$island) <- "Island"
+
+
+table1(~ sex + body_mass_g + flipper_length_mm + bill_depth_mm + island | species, data=penguins, caption = "Table 1: Measurements for three penguin species in the Palmer Archipelago", overall = FALSE)
+
+
+```
+
+<br/>
+<br/>
+<br/>
+
+## Three linear regression models
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r img-islands, eval=TRUE, echo=FALSE, fig.align="right", out.width=200}
+knitr::include_graphics("images/islands.png")
+```
+</div>
+
+We want to compare three different models to understand the relationship between penguin weight (grams) and bill depth (mm). Here are the results of our estimation: 
+
+
+```{r M1, echo=TRUE, eval=TRUE}
+M1 <- lm(body_mass_g ~ bill_depth_mm,
+                         data = penguins)
+
+M2 <- lm(body_mass_g ~ bill_depth_mm + species,
+                         data = penguins)
+M3 <- lm(body_mass_g ~ bill_depth_mm + species + bill_depth_mm:species, 
+         data = penguins)
+
+modelsummary::msummary(list(M1 = M1, M2 = M2, M3 = M3), stars = TRUE)
+
+# anova(M1, M2, M3)
+# anova(M1, M2, M3, test = "LRT")
+# lmtest::lrtest(M1, M2, M3)
+
+# -2*(-2728.667 -	-2498.619)
+# pchisq(16.365, df = 2, lower.tail = FALSE)
+# qchisq(.05, df = 1, lower.tail = FALSE)
+# qchisq(.05, df = 2, lower.tail = FALSE)
+# qchisq(.05, df = 100, lower.tail = FALSE)
+```
+
+
+
+
+```{r M1-noshow, echo=FALSE, eval=FALSE}
+
+# Linear regression was used to test the association between *bill depth* (*mm*) and *body mass* (gram) using data from n = *342* Penguins. *22.23%* of the variation in *body mass* was explained by *bill depth* ($R^2 = $ *22.23%*). There was a significant *negative* (positive/negative) association between *bill depth* and body-mass (B = *-191.64*; 95% CI = *-229.8*, *-153.5*; p < .001). On average, for every 1-*mm* difference in *bill depth*, penguins differ in mean *body mass* by *-191.64* *gram* 
+
+
+# > Linear regression was used to test the association between _____ (_____) and _____ (_____) using data from n = _____ Penguins. _____% of the variation in _____ was explained by _____ ($R^2 =$ _____). There was a significant _____ (positive/negative) association between _____ and _____ (B = _____; 95% CI = _____, _____; p < .001). On average, for every 1-__ difference in _____, penguins differ in mean _____ by _____ _____. 
+
+```
+
+
+
+
+
+```{r img-lm-summary, echo=FALSE, eval=FALSE, fig.align="center", out.width=800}
+knitr::include_graphics("images/lm-summary-2.jpg")
+```
+
+
+
+
+## Visualizing the data
+
+
+
+```{r parallel-body-flipper-echo, echo=FALSE, eval=FALSE}
+
+coefs <- coef(M2)
+
+penguins |> 
+  ggplot(
+    aes(x = ___, y = ___, color = ___)
+    ) + 
+  geom_point() + 
+  # Use the intercept for the reference category (Adelie)
+  geom_abline(
+    intercept = ___, slope = ___
+    ) +
+  # Use the appropriate intercept for Chinstrap
+  geom_abline(
+    intercept = ___ + ___, slope = ___ + ___
+    ) +
+  # Use the appropriate intercept for Gentoo
+  geom_abline(
+    intercept = ___ + ___, slope = ___ + ___
+    ) 
+
+
+
+
+penguins |> 
+  ggplot(
+    aes(
+      bill_depth_mm, 
+      body_mass_g)
+    ) + 
+  geom_point() + 
+  # Adelie
+  geom_abline(
+    intercept = coefs[1],
+    slope = coefs[2]
+    ) +
+  geom_abline(
+    intercept = coefs[1] + coefs[3],
+    slope     = coefs[2] + coefs[5]
+    ) +
+  geom_abline(
+    intercept = coefs[1] + coefs[4],
+    slope     = coefs[2] + coefs[6]
+    ) 
+
+```
+
+
+
+
+```{r parallel-body-flipper-noshow, echo=FALSE, eval = TRUE, warning = FALSE}
+
+# Load
+M2 <- lm(body_mass_g ~ bill_depth_mm + species + bill_depth_mm:species,
+                         data = penguins)
+
+summary(M2)
+coefs <- coef(M2)
+cols <- wes_palette("GrandBudapest1", 3)
+
+
+penguins |> 
+  ggplot(
+    aes(
+      bill_depth_mm, 
+      body_mass_g, 
+      color = species)
+    ) + 
+  geom_point() + 
+  # Adelie
+  geom_abline(
+    intercept = coefs[1],
+    slope = coefs[2],
+    color = cols[1],
+    linewidth = 1
+    ) +
+  geom_abline(
+    intercept = coefs[1] + coefs[3] + 355,
+    slope = coefs[2] + coefs[5] - 25,
+    color = cols[2],
+    linewidth = 1
+    ) +
+  geom_abline(
+    intercept = coefs[1] + coefs[4],
+    slope = coefs[2] + coefs[6],
+    color = cols[3],
+    linewidth = 1
+    ) +
+  scale_color_manual(
+    values = cols
+    ) + 
+  theme_clean() + 
+  scale_y_continuous(name="body mass (g)") + 
+  scale_x_continuous(name="flipper length (mm)") 
+
+
+# M2 <- lm(body_mass_g ~ flipper_length_mm + species,
+#                          data = penguins)
+# summary(M2)
+# Anova(M2, type = 3)
+
+```
+
+
+

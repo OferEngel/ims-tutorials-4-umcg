@@ -22,6 +22,7 @@ library(easystats)
 library(table1)
 library(gt)
 library(datawizard)
+library(marginaleffects)
 
 knitr::opts_chunk$set(echo = FALSE, 
                       fig.align = "center", 
@@ -93,7 +94,7 @@ You will find all the work-space for your lab on posit cloud [using this link](h
 We will be using R Markdown to create reproducible lab reports. In RStudio, you will find the file `lab05.Rmd` in the `Files` panel. Double click it to show the script in the code panel.
 
 -   In the file, update the YAML with your name, the date and the name of the lab.
--   Load the `tidyverse`, `broom`, `table1`, `GGally`, `car`, `easystats`, `datawizard` and the `modelsummary`  packages.
+-   Load the `tidyverse`, `broom`, `table1`, `GGally`, `car`, `easystats`, `datawizard`, `marginaleffects` and the `modelsummary`  packages.
 -   Load the `natality.rds` data set into your workspace, and save it as `natality`. 
 -   Knit your file to see that everything is working. 
 -   For each question, please add the text of the question, the code chunks and your answer. 
@@ -304,37 +305,24 @@ map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr),
 
 ## Exploring interactions
 
-6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create a [dumbell plot](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. Hint: When creating the dataset for plotting, include the value zero for each predictor not included in the interaction (the reference level for all categorical variables). Picking the value zero in a centered predictor is like choosing the mean of that variable, which is a reasonable choice. 
+6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create ONE of the [dumbell plots](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) shown below, illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. **Hint:** We will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots. You need only to create one of the plots, but bonus for creating ALL the plots.   
 
-```{r dumbellplot-MEDUC, out.width="75%"}
+```{r dumbellplot-MEDUC, out.width="100%"}
 
-M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC * MEDUC, data = natality.ctr)
+M.FULL_int.ctr <- lm(formula = DBWT ~ . + (CIG_REC:MEDUC + MRACEHISP)^2, data = natality.ctr)
 
-# anova(M.FULL.ctr, M.FULL_int.ctr)
+# anova(M.FULL.ctr, M.FULL_int.ctr, test = "LRT")
 
-
-newdata <- data.frame(
-    CIG_REC   = c("No", "Yes", "No", "Yes", "No", "Yes", "No", "Yes"),  
-    MEDUC     = c("lower", "lower", "HS", "HS", "Some college", "Some college", "Uni", "Uni") 
-    ) |> 
-  mutate(
-    risks = "No", 
-    MAGER = 0, 
-    MRACEHISP = "NH White", 
-    DMAR = "Married", 
-    PRIORLIVE = "0", 
-    PRIORDEAD = "0", 
-    BMI = 0
-    )
-
-newdata |> 
-  mutate(
-    DBWT = predict(
-      M.FULL_int.ctr, 
-      newdata
-      )
-  ) |> select(CIG_REC, MEDUC, DBWT) |> 
-  pivot_wider(id_cols = MEDUC, names_from = CIG_REC, names_prefix = "smoke_", values_from = DBWT) |> 
+predictions(M.FULL_int.ctr, 
+            newdata = datagrid(
+              model = M.FULL_int.ctr,
+              MRACEHISP = c("NH White", "NH Black", "NH Other", "Hispanic"),
+              MEDUC   = c("lower", "HS", "Some college", "Uni"),
+              CIG_REC = c("No", "Yes")
+              )
+            ) |> select(rowid, estimate, MRACEHISP, CIG_REC, MEDUC) |> 
+  as.data.frame() |> 
+  pivot_wider(id_cols = c(MEDUC, MRACEHISP), names_from = CIG_REC, names_prefix = "smoke_", values_from = estimate) |>  
   ggplot() + 
   geom_point(aes(x = "No",  y = smoke_No,  color = MEDUC), size = 5) +
   geom_point(aes(x = "Yes", y = smoke_Yes, color = MEDUC), size = 5) +
@@ -346,11 +334,12 @@ newdata |>
     color = MEDUC
     ), linewidth = 2) + 
   scale_x_discrete(labels = c("no smoking", "smoking")) + 
-  scale_y_continuous(breaks = seq(-0.2, 0.1, 0.05)) +
+  scale_y_continuous(breaks = seq(-1, 1, 0.1)) +
   labs(x = NULL, y = "Birth weight (centred, scaled)", color = "Mother's education") + 
+  facet_wrap(~MRACEHISP, scales = "free_y") +
   theme_minimal() + 
   theme(legend.position = "bottom", text = element_text(size = 14)) 
-  
+
 
 
 
@@ -363,32 +352,25 @@ To create the dumbell figure, you will need to predict the birth weight for smok
 
 ```{r dumbells-prep, echo=TRUE, eval=FALSE}
 
+library(marginaleffects)
 M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC * MEDUC, data = natality.ctr)
 
-newdata <- data.frame(
-  CIG_REC = c("No",    "Yes",   "No", "Yes", "No",           "Yes",          "No",  "Yes"),  
-  MEDUC   = c("lower", "lower", "HS", "HS",  "Some college", "Some college", "Uni", "Uni") 
-  ) |> 
-  mutate(
-    risks = "No", 
-    MAGER = 0, 
-    MRACEHISP = "NH White", 
-    DMAR = "Married", 
-    PRIORLIVE = "0", 
-    PRIORDEAD = "0", 
-    BMI = 0
-    )
+predictions(M.FULL_int.ctr, 
+            newdata = datagrid(
+              model = M.FULL_int.ctr,
+              MRACEHISP = c("NH White", "NH Black", "NH Other", "Hispanic"),
+              MEDUC   = c("lower", "HS", "Some college", "Uni"),
+              CIG_REC = c("No", "Yes")
+              )
+            ) |> 
+  as.data.frame() |> 
+  mutate(DBWT = estimate)  |> 
+  select(DBWT, MRACEHISP, CIG_REC, MEDUC) 
 
-newdata |> 
-  mutate(
-    DBWT = predict(
-      M.FULL_int.ctr, 
-      newdata
-      )
-  ) |> select(CIG_REC, MEDUC, DBWT)
+
 ```
 
-Once you have your data, here is how you create your dumbells: 
+Once you have your data, here is how you create your dumbells (for the race `NH White`, for example): 
 
 ```{r dumbells-plot, echo=TRUE, eval=FALSE}
 
