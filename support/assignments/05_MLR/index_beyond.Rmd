@@ -354,9 +354,16 @@ map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr),
 
 ```{r dumbellplot-MEDUC, out.width="100%"}
 
-M.FULL_int.ctr <- lm(formula = DBWT ~ . + (CIG_REC:MEDUC + MRACEHISP)^2, data = natality.ctr)
+# M.FULL_int.ctr <- lm(formula = DBWT ~ . , data = natality.ctr)
+# M.FULL_int.ctr <- lm(formula = DBWT ~ . + (CIG_REC + MEDUC + MRACEHISP)^2, data = natality.ctr)
+# 
+# M.FULL_int.ctr <- lm(formula = DBWT ~ . + (CIG_REC + MEDUC + MRACEHISP)^3, data = natality.ctr)
+M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC:MRACEHISP, data = natality.ctr)
 
 # anova(M.FULL.ctr, M.FULL_int.ctr, test = "LRT")
+# options(width = 10000)
+# options(marginaleffects_print_column_names = FALSE)
+# options(marginaleffects_print_type = FALSE)
 
 predictions(M.FULL_int.ctr, 
             newdata = datagrid(
@@ -379,7 +386,7 @@ predictions(M.FULL_int.ctr,
     color = MEDUC
     ), linewidth = 2) + 
   scale_x_discrete(labels = c("no smoking", "smoking")) + 
-  scale_y_continuous(breaks = seq(-1, 1, 0.1)) +
+  scale_y_continuous(breaks = seq(-1, 1, 0.15)) +
   labs(x = NULL, y = "Birth weight (centred, scaled)", color = "Mother's education") + 
   facet_wrap(~MRACEHISP, scales = "free_y") +
   theme_minimal() + 
@@ -402,7 +409,6 @@ M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC * MEDUC, data = natality.ctr)
 
 predictions(M.FULL_int.ctr, 
             newdata = datagrid(
-              model = M.FULL_int.ctr,
               MRACEHISP = c("NH White", "NH Black", "NH Other", "Hispanic"),
               MEDUC   = c("lower", "HS", "Some college", "Uni"),
               CIG_REC = c("No", "Yes")
@@ -451,6 +457,9 @@ tribble(
 
 
 7. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbell plot. 
+
+
+
 
 ```{r dumbellplot-MRACEHISP, echo = FALSE, out.width="75%"}
 
@@ -506,6 +515,11 @@ newdata |>
   
 
 ```
+
+:::{#boxedtext}
+**Note:** Since we have scaled the continuous variable `BMI` by **TWO** standard deviations, you will need to estimate the right tip of the dumbbell at **two units** and not at one unit.  
+:::
+
 
 
 8. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. 
