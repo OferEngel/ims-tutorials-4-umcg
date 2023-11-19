@@ -48,8 +48,7 @@ dbinom(4, 10, 0.4)
 
 :::{#boxedtext}
 
-See some hints below
-:::
+
 
 
 This is an example for a question about the binomial distribution. Where we have a $N$ [bernoulli trials](https://en.wikipedia.org/wiki/Bernoulli_trial), each trial can end in a `success` or `failure`, and each trial has the same probability of `success`: $p$. 
@@ -77,8 +76,9 @@ dbinom(25, 50, 0.49) +
 ```
 
 
-It could also be written as `dbinom(25:50, 50, 0.49) |> sum()`.
+It could also be calculated as `dbinom(25:50, 50, 0.49) |> sum()`.
 
+:::
 
 2.	For 36 – 40 years old women, following this IVF program, the probability to become pregnant equals 0.3. Two women from this group, and one woman aged 32 are in the IVF program, all independent of each other. What is the probability that exactly two of these three women will become pregnant? [6]
 
