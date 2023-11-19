@@ -162,10 +162,15 @@ Let's visualize the models across the scatter-plot, we will use the code shown b
 
 ```{r parallel-body-flipper-echo, echo=TRUE, eval=FALSE}
 
-coefs <- coef(M2)
-coefs
-    # (Intercept)    bill_depth_mm speciesChinstrap    speciesGentoo 
-    #  -1007.28112        256.61461         13.37732       2238.66811 
+coefs <- coef(M3)
+coefs 
+
+#                    (Intercept)                  bill_depth_mm 
+#                        -283.3                           217.2  
+#               speciesChinstrap                  speciesGentoo 
+#                          247.1                         -175.7
+# bill_depth_mm:speciesChinstrap    bill_depth_mm:speciesGentoo 
+#                          -12.5                          152.3
 
 penguins |> 
   ggplot(

@@ -392,11 +392,38 @@ predictions(M.FULL_int.ctr,
   theme_minimal() + 
   theme(legend.position = "bottom", text = element_text(size = 14)) 
 
-
-
-
 ```
 
+
+
+```{r testing-stuff, echo=FALSE, eval=FALSE}
+M.FULL_int.ctr <- 
+  natality.ctr |> 
+  mutate(MRACEHISP = factor(MRACEHISP)) |> 
+  lm(formula = DBWT ~ CIG_REC:MEDUC:MRACEHISP, data = _)
+summary(M.FULL_int.ctr)
+
+pc <- plot_comparisons(M.FULL_int.ctr, 
+                 variables = "CIG_REC", 
+                 condition = c("MEDUC", "MRACEHISP"), draw = FALSE) 
+pc |> 
+  ggplot(aes(x = MEDUC, xend = MEDUC, y = conf.low, yend = conf.high, color = MRACEHISP)) + 
+  geom_segment(linewidth = 2) + 
+  geom_point(aes(y = estimate), size = 4) + 
+  geom_hline(yintercept = 0, lty = 2) +
+  facet_wrap(~MRACEHISP) + 
+  theme_minimal() + 
+  labs(y = "Effect of non-smoking vs. smoking on birthweight", x = "Education level") + 
+  theme(legend.position = "none", text = element_text(size = 14))
+
+# plot_comparisons(M.FULL_int.ctr, 
+#                  variables = "CIG_REC", 
+#                  condition = c("MEDUC", "MRACEHISP")) +
+#   facet_wrap(~MRACEHISP) +
+#   theme_minimal() +
+#   theme(legend.position = "bottom", text = element_text(size = 14))
+
+```
 
 
 :::{#boxedtext}
@@ -582,4 +609,46 @@ newdata |>
 
 ```
 
+
+
+
+```{r MAGER-test, eval=FALSE, echo=FALSE}
+
+
+
+M.FULL <- 
+  lm(formula = DBWT ~ BMI * MAGER * MRACEHISP * CIG_REC, data = natality.ctr)
+M.NULL <- lm(formula = DBWT ~ 1, data = natality.ctr)
+
+# anova(M.FULL.ctr, M.FULL_int.ctr)
+# Finding the optimal model
+M.OPT <- step(M.NULL,
+     scope = list(upper = M.FULL),
+     direction="both",
+     data=natality.ctr)
+summary(M.OPT)
+
+MAGER.szd <- standardize(data.frame(MAGER = c(20, 30, 40)), two.sd = TRUE, reference = natality) |> pull(MAGER) |> as.numeric()
+
+unique(natality$MRACEHISP)
+
+comparisons(
+  M.OPT, 
+  variables = list(BMI = c(0, 2)), 
+  # condition = "MAGER"
+  # CIG_REC = c("No", "Yes"), 
+)
+  
+#c("MEDUC", "MRACEHISP", "MAGER")) 
+pc |> 
+  ggplot(aes(x = MEDUC, xend = MEDUC, y = conf.low, yend = conf.high, color = MRACEHISP)) + 
+  geom_segment(linewidth = 2) + 
+  geom_point(aes(y = estimate), size = 4) + 
+  geom_hline(yintercept = 0, lty = 2) +
+  facet_wrap(~MRACEHISP) + 
+  theme_minimal() + 
+  labs(y = "Effect of non-smoking vs. smoking on birthweight", x = "Education level") + 
+  theme(legend.position = "none", text = element_text(size = 14))
+
+```
 
