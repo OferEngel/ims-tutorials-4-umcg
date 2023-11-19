@@ -1,5 +1,5 @@
 ---
-title: 'Multiple linear least squares regression'
+title: 'Readiness Assurance Week 9'
 output:
   html_document:
     theme: cerulean
@@ -152,6 +152,8 @@ The [2018 United States Birth Data](https://www.cdc.gov/nchs/nvss/births.htm) we
 
 label(natality$PRIORLIVE) = "Prior births (living)"
 label(natality$PRIORDEAD) = "Prior births (dead)"
+label(natality$risks) = "Risks"
+
 natality |> mutate(CIG_REC = if_else(CIG_REC == "Yes", "Smoker", "Non smoker")) |> 
 table1(~DBWT +
        # CIG_REC +
