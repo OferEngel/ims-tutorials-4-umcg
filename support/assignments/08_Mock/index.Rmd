@@ -203,6 +203,8 @@ knitr::include_graphics("img/Q2_lm.png")
 
 
 ```{r ex6-solution}
+# Null hypothesis: the interaction coefficient is not signifiant
+# Yes it is 
 2*pt(-2.227, df = 3154 - 1)
 2*pt(2.227, df = 3154 - 1, lower.tail = FALSE)
 
@@ -250,6 +252,14 @@ This is a two-tailed t-test, so we want to calculate the probability of being in
 Here you will find a couple of diagrams, you will need to choose which one represents the correct figure. Try to reflect, what should you expect to see in the graphs? How would they look like? 
 :::
 
+```{r ex9}
+
+n <- 100
+chd <- rbinom()
+39.657 + 15.047 * 1  + .217 * 50 +  1.311 * 30 - .508 * 30 * 1
+
+```
+
 
 10.	The variable `Smokecat` is a categorical variable with three categories: 0 : 0 cigarettes, 1: 1 – 20 cigarettes a day, 2: more than 20 cigarettes a day. Dummy variables are created and added to the previous model to test if `Smokecat` is significant, given the other variables. Which test will be used to test the null hypothesis that `Smokecat` has no effect on `dbp`, given the other variables? [3]
 
@@ -279,6 +289,13 @@ $\hat{Y} = b_0 + b_1X_{chd} + b_2X_{age} + \ldots$
 :::
 
 
+```{r ex11}
+
+# \hat{Y} = b_0 + b_1X_{chd} + b_2X_{age}
+
+```
+
+
 ## Logistic regression
 
 
@@ -292,7 +309,20 @@ knitr::include_graphics("img/Q3_OR.png")
 
 12 Calculate the Odds Ratio of having Microfilarial infection for individuals living at the savannah compared to individuals living in the forest. [4]
 
+```{r ex12}
+
+(22 / 28) / (45 / 17)
+
+```
+
+
 13.	Also a simple logistic regression was performed. Check the OR you calculated in the previous question using the information in the table below. What is your conclusion? [4]
+
+```{r ex13}
+1 / exp(1.215)
+
+```
+
 
 ```{r Q3_logit, eval=TRUE, out.width="110%"}
 knitr::include_graphics("img/Q3_logit.png")
@@ -303,23 +333,67 @@ knitr::include_graphics("img/Q3_logit.png")
 
 
 
+:::{#boxedtext}
+
+Try to do this twice, and see if you get the same result: 
+
+-   First, calculate the CI of the log-odd-ratio (use the estimate plus or minus two std.errors), and then take the exponent of your result
+-   Second, use R to calculate the result using the following code... 
+
+
 ```{r ex14}
+df <- tribble(
+  ~area, ~infect, ~freq, 
+  0, 0, 28, 
+  0, 1, ___, 
+  1, 0, ___, 
+  1, 1, ___
+) |> uncount(freq) 
 
-mdl <- data.frame(x = rbinom(1000, 1, .5)) |> 
-  mutate(y = rbinom(1000, 1, plogis(-.5 + x))) |> 
-  glm(y ~ x, data = _, family = binomial) 
-mdl |> broom::tidy() 
-library(aod)
-
-wald.test(b=coef(object=mdl), Sigma=vcov(object=mdl), Terms=c(1,2))
-7.70^2
-
+glm(infect ~ area, data = df, family = binomial) |> 
+  tidy(exponentiate = TRUE, conf.int = TRUE)
+  
 ```
+
+:::
+
+```{r ex14-solution}
+
+exp(1.21 + .403*c(-1.96, 1.96))
+
+tribble(
+  ~area, ~infect, ~freq, 
+  0, 0, 28, 
+  0, 1, 22, 
+  1, 0, 17, 
+  1, 1, 45
+) |> uncount(freq) |> 
+  glm(infect ~ area, data = _, family = binomial) |> 
+  tidy(exponentiate = TRUE, conf.int = TRUE)
+
+
+tribble(
+  ~area, ~infect, ~freq, 
+  0, 0, 28, 
+  0, 1, 22, 
+  1, 0, 17, 
+  1, 1, 45
+) |> uncount(freq) |> 
+  glm(infect ~ area, data = _, family = binomial) |> 
+  tidy( ) |> 
+  mutate(ci.low = exp(estimate - 1.96*std.error), 
+         ci.hi  = exp(estimate + 1.96*std.error))
+  
+```
+
+
+See next table for a multiple logistic regression.
 
 
 ```{r Q3_logit_2, eval=TRUE, out.width="110%"}
 knitr::include_graphics("img/Q3_logit_2.png")
 ```
+
 
 
 15. What is the Wald value of Area of residence in this model? [3]
@@ -337,9 +411,11 @@ There is a slight difference between the test statistic we use in R and the Wald
 
 :::{#boxedtext}
 
-To answer the question, simply take the square root of the Wald statistic and compare it to the critical value of a 5% significance test.
+To answer the question, simply take the square root of the Wald statistic and compare it to the critical value of the appropriate t-test .
 
 :::
 
 17.	Which age group has the highest risk according to this model? [4]
+
+
 18.	How can we test if this model fits the data? [3]
