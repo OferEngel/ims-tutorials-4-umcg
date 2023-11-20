@@ -55,7 +55,7 @@ theme_clean <- function() {
 
 
 
-<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  24-Nov-23. 
+<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  27-Nov-23. 
 <br/>Please submit your final report [using this form](https://forms.gle/pxb8VyVzaUivdMbi8). </span>
 
 
@@ -146,7 +146,7 @@ The [2018 United States Birth Data](https://www.cdc.gov/nchs/nvss/births.htm) we
 
 ## Descriptive statistics
 
-1. Use the `table1` package to create a table with appropriate descriptive information about the data set. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"} to help you build a table.
+1. Use the `table1` package to create a table with appropriate descriptive information about the data set. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"} to help you build a table. **Bonus:** Provide a brief description, interpretation or reflection about your findings from the table: (e.g., what do you notice? what do you wonder? how does this relate to you or your community?)
 
 ```{r table1, fig.align='center'}
 
@@ -172,7 +172,7 @@ table1(~DBWT +
 <br/>
 <br/>
 
-2. Use the `ggpairs` function to explore the association between the different variables. Try to replicate the figure below, or create your own variation. 
+2. Use the `ggpairs` function to explore the association between the different variables. Try to replicate the figure below, or create your own variation. **Bonus:** Provide a brief description, interpretation or reflection about your findings from the table: (e.g., what do you notice? what do you wonder? how does this relate to you or your community?)
 
 ```{r ggpairs, fig.align='center', fig.height=7}
 
@@ -277,7 +277,7 @@ This situation is why [Gelman recommends](http://www.stat.columbia.edu/~gelman/r
 
 
 
-4. Center and scale all the continuous variables, and create a [forest plot](https://en.wikipedia.org/wiki/Forest_plot) for the optimal model.
+4. Center and scale all the continuous variables, and create a [forest plot](https://en.wikipedia.org/wiki/Forest_plot) for the optimal model. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the forest plot (e.g., what do you notice? what do you wonder?)
 
 
 
@@ -303,7 +303,7 @@ M.OPT.ctr %>%
 ```
 
 
-5. How do the effect estimate of smoking, the standard error of its estimate, its 95% confidence interval, and its statistical significance change between the un-adjusted, optimal and full models? Please use the centered and scaled models to answer this question. 
+5. How do the effect estimate of smoking, the standard error of its estimate, its 95% confidence interval, and its statistical significance change between the un-adjusted, optimal and full models? Please use the centered and scaled models to answer this question, adding a brief description, interpretation or reflection about what your findings.
 
 
 :::{#boxedtext}
@@ -352,7 +352,7 @@ map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr),
 
 ## Exploring interactions
 
-6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create ONE of the [dumbell plots](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) shown below, illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. **Hint:** We will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots. You need only to create one of the plots, but bonus for creating ALL the plots.   
+6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create ONE of the [dumbell plots](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) shown below, illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. **Hint:** We will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots. You need only to create one of the plots, but bonus for creating ALL the plots. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)  
 
 ```{r dumbellplot-MEDUC, out.width="100%"}
 
@@ -485,7 +485,7 @@ tribble(
 :::
 
 
-7. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbell plot. 
+7. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbell plot. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)
 
 
 
@@ -551,7 +551,7 @@ newdata |>
 
 
 
-8. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. 
+8. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)
 
 ```{r dumbellplot-MAGER, eval=TRUE, out.width="75%"}
 

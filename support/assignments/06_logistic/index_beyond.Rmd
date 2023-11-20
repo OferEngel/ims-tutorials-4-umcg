@@ -1,5 +1,5 @@
 ---
-title: 'Logistic regression'
+title: 'BMLR LAB 2: Logistic regression - DRAFT'
 output:
   html_document:
     theme: cerulean
@@ -63,8 +63,8 @@ theme_clean <- function() {
 
 
 
-<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  17-Nov-23. 
-<br/>Please submit your final report [using this form](https://forms.gle/JB5c9apmkx3wD8WG7). </span>
+<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  4-Dec-23. 
+<br/>Please submit your final report [using this form](https://forms.gle/pxb8VyVzaUivdMbi8). </span>
 
 
 
@@ -91,9 +91,9 @@ Assuming you have your model, here is the interpretation
 
 -   The intercept is the log-odds of the outcome when all (continuous) predictors are at 0 at their reference level . The odds of the outcome is $\text{odds} = \exp(\beta_0)$ and the probability is $\frac{\text{odds}}{1+\text{odds}}= \frac{\exp(\beta_0)}{1+\exp(\beta_0)}$
 
--   For a continuous predictor the regression coefficient $\beta_k$ is the log of the odds ratio comparing individuals who differ in that predictor by one unit, holding the other predictors fixed.
+-   For a continuous predictor, the regression coefficient $\beta_k$ is the log of the odds ratio, comparing individuals who differ in that predictor by one unit, holding the other predictors fixed.
 
--   For a categorical predictor, the regression coefficient $\beta_k$ is the log of the odds ratio comparing individuals at a given level of the predictor to those at the reference level, holding the other predictors fixed.
+-   For a categorical predictor, the regression coefficient $\beta_k$ is the log of the odds ratio, comparing individuals at a given level of the predictor to those at the reference level, holding the other predictors fixed.
 
 -   To compute **odds ratio** for a variable, exponentiate the corresponding regression coefficient $\text{odds ratio} = \exp(\beta_k)$.
 
@@ -117,13 +117,13 @@ The teaching dataset `nsduh` includes a random subset of 1000 observations of ad
 ### Creating a reproducible lab report
 
 
-You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/405625/content/7018761){target="_blank"}.
+You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/446537){target="_blank"}.
 
 
 We will be using R Markdown to create reproducible lab reports. In RStudio, you will find the file `lab06.Rmd` in the `Files` panel. Double click it to show the script in the code panel.
 
 -   In the file, update the YAML with your name, the date and the name of the lab.
--   Load the `tidyverse`, `broom`, `table1`, `GGally`, `car`, `easystats`, `gt`, `janitor`, `lmtest`, `datawizard` and the `modelsummary`  packages.
+-   Load the `tidyverse`, `broom`, `table1`, `GGally`, `car`, `easystats`, `gt`, `janitor`, `lmtest`, `datawizard`, `marginaleffects` and the `modelsummary`  packages.
 -   Load the `nsduh.rds` data set into your workspace, and save it as `nsduh`. 
 -   Knit your file to see that everything is working. 
 -   For each question, please add the text of the question, the code chunks and your answer. 
