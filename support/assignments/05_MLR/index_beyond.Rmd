@@ -104,7 +104,7 @@ If at any point you need to start over and run all of the code chunks before a s
 ### Creating a reproducible lab report
 
 
-You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/446537/content/7044802){target="_blank"}.
+You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/446537/){target="_blank"}.
 
 
 ```{r global_options-img, include = FALSE}
