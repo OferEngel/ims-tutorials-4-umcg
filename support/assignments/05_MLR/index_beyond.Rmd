@@ -1,5 +1,5 @@
 ---
-title: 'Readiness Assurance Week 9'
+title: 'BMLR LAB 1: Multiple LLSR'
 output:
   html_document:
     theme: cerulean
@@ -104,7 +104,7 @@ If at any point you need to start over and run all of the code chunks before a s
 ### Creating a reproducible lab report
 
 
-You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/446537/){target="_blank"}.
+You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/446537/join?access_code=jKJElYe4HIgzHsdwO5UilZKc9fF9FN3L2SKY1PAH){target="_blank"}.
 
 
 ```{r global_options-img, include = FALSE}
