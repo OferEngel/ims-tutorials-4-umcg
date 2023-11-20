@@ -90,10 +90,15 @@ dbinom(2, 2, .3)*dbinom(0, 1, .4) +
 
 :::{#boxedtext}
 
+In this question we have two pregnant women from the older group and one from the younger group. Your job is to calculate the probability that out of these three women, two will become pregnant. Two women will be pregnant in one of two ways:  
+
+-   Either both women from the older group both get pregnant (but the younger will not), **OR**
+-   One of the women from the older group will get pregnant AND the younger will get pregnant too. 
+
 To answer this question, you need to add up two probabilities: 
 
--   The probability that the two women from the older group becomes pregnant (two successes in two trials) group multiplied the probability that the younger woman does NOT get pregnant (zero successes from one trial) `dbinom(__, 2, .3)*dbinom(__, 1, .4)`
--   The probability that the ONE woman from the older group becomes pregnant (one success in two trials) group multiplied the probability that the younger woman gets pregnant (zero successes from one trial) `dbinom(__, 2, .3)*dbinom(__, 1, .4)`
+-   The probability that the two women from the older group becomes pregnant (two successes in two trials) multiplied by the probability that the younger woman does NOT get pregnant (zero successes from one trial) `dbinom(__, 2, .3)*dbinom(__, 1, .4)`
+-   The probability that the ONE woman from the older group becomes pregnant (one success in two trials)  multiplied by the probability that the younger woman gets pregnant (one success from one trial) `dbinom(__, 2, .3)*dbinom(__, 1, .4)`
  
 You will need to add up the two probabilities, and that is your final answer! 
  
@@ -108,26 +113,29 @@ You will need to add up the two probabilities, and that is your final answer!
 library(gtExtras)
 
 tribble(
-  ~outcome_right,   ~outcome_left,    ~freq, 
+  ~` `,   ~`Medicine B`,    ~freq, 
   "helpful",         "helpful",        18,
   "helpful",         "not helpful",    15,
   "not helpful",     "helpful",        5,
   "not helpful",     "not helpful",    6,
-) |> pivot_wider(id_cols = outcome_right, 
-                 names_from = outcome_left, 
+) |> pivot_wider(id_cols = ` `, 
+                 names_from = `Medicine B`, 
                  values_from = freq, 
-                 names_prefix = "left eye_") |> 
+                 names_prefix = "Medicine B_") |> 
   mutate(
-    outcome = "right eye", 
-    sum = `left eye_helpful` + `left eye_not helpful`
+    outcome = "Medicine A", 
+    sum = `Medicine B_helpful` + `Medicine B_not helpful`
     ) |> group_by(outcome) |> 
-  gt(rowname_col = "outcome_right")  %>% 
+  gt( )  %>% 
   tab_spanner_delim(
     delim = "_"
   ) |> 
   summary_rows(
     # groups = everything(),
-    # columns = num,
+    columns = c(
+      `Medicine B_helpful`, 
+      `Medicine B_not helpful`, sum
+      ),
     fns = list(
       total = "sum"
     )
@@ -136,11 +144,33 @@ tribble(
 
 ```
 
+:::{#boxedtext}
+To answer this question you will use McNemar's test, which is effectively a chi-square test with one degree of freedom, where 
+
+$$
+\chi^2 = \frac{(b-c)^2}{(b+c)};~~~\text{df}=1
+$$
+To calculate the p-value associated with your $\chi^2$, simply use R as follows: 
+
+```{r ex3-mcnemar, echo=TRUE}
+pchisq(chi.sq, df = 1, lower.tail = TRUE)
+```
+
+
+:::
+
+```{r ex3-solution}
+pchisq((15 - 5)^2 / (15 + 5), df = 1, lower.tail = FALSE)
+
+```
+
 
 4.	Another group of ophthalmologists also want to compare eye drops A with eye drops B, but they have patients with dryness in one eye only. What kind of study design and statistical test would you advise this group to use? [4]
 
 
-```{r}
+```{r ex-4}
+
+# They could use a chisquare or a binomial test
 
 ```
 
@@ -154,6 +184,13 @@ If we know that a variable has a normal distribution in the population with mean
 :::
 
 
+```{r ex5-solution}
+# 100 - 95 - 5 / 2
+pnorm(109, 115, 15 / sqrt(25))
+
+```
+
+
 ## Linear regression
 
 Cariologists are interested in the relation between Diastolic Blood Pressure (dbp in mm Hg) on the one hand and several explanatory variables on the other. They collected data on 3154 individuals and performed a linear regression analysis. The binary variable “chd” (chronic heart disease) is coded 0 (no) and 1 (yes). Age is measured in years and BMI (Body Mass Index) in kg/m2. The variable “intBMIchd” is calculated as the product of BMI and chd.
@@ -164,15 +201,82 @@ knitr::include_graphics("img/Q2_lm.png")
 
 6. The P-value in the last row was eliminated. Is the test in the last row significant? What null hypothesis is tested in this last row? [4]
 
+
+```{r ex6-solution}
+2*pt(-2.227, df = 3154 - 1)
+2*pt(2.227, df = 3154 - 1, lower.tail = FALSE)
+
+n <- 20
+tibble(x1 = rnorm(n), x2 = rnorm(n) , x3 = rnorm(n), 
+       y = x1 + x2 + x3 + rnorm(n)) |> 
+  lm(y ~ x1 + x2 + x3, data = _) |> 
+  summary()
+  
+```
+
+
+:::{#boxedtext}
+
+This is a two-tailed t-test, so we want to calculate the probability of being in the tail, so for example to find the p-value associated with a two-tailed t-test with $t = 3.01, df = 100$ you run the following in R: 
+
+```{r ex-6, echo=TRUE}
+2 * pt(3.01, df = 100, lower.tail = FALSE)
+```
+
+
+:::
+
+
 7.	What is the estimated mean dpd for a 50 years old person with a BMI of 25 and without `chd`, based on this model? [3]
+
+```{r ex7-solution}
+39.657 + 15.047 * 0  + .217 * 50 +  1.311 * 25 - .508 * 25 * 0
+# 83.282
+```
+
 
 8.	What is the estimated mean dpd for a 50 years old person with a BMI of 30 and with `chd`, based on this model? [3]
 
+
+```{r ex8-solution}
+
+39.657 + 15.047 * 1  + .217 * 50 +  1.311 * 30 - .508 * 30 * 1
+# 89.644
+```
+
 9.	Draw, as accurately as possible, the estimated relationships between BMI and dbp for 60 years old individuals with and without `chd` ~~in the separate sheet. Do not forget to put your name on this sheet.~~ [4]
+
+:::{#boxedtext}
+Here you will find a couple of diagrams, you will need to choose which one represents the correct figure. Try to reflect, what should you expect to see in the graphs? How would they look like? 
+:::
+
 
 10.	The variable `Smokecat` is a categorical variable with three categories: 0 : 0 cigarettes, 1: 1 – 20 cigarettes a day, 2: more than 20 cigarettes a day. Dummy variables are created and added to the previous model to test if `Smokecat` is significant, given the other variables. Which test will be used to test the null hypothesis that `Smokecat` has no effect on `dbp`, given the other variables? [3]
 
-11.	Let’s assume `Smokecat` was not significant and not added to the model. The cardiologists want to test if dbp depends on BMI in a quadratic way. What will the new model look like? 
+
+:::{#boxedtext}
+
+For this question we want a test that associates *one* p-value with all three categories. We *do not* want separate p-values for the different levels. 
+
+:::
+
+```{r ex10}
+
+# type-III analysis-of-variance
+# in R car::Anova(model, type = 3)
+
+```
+
+
+11.	Let’s assume `Smokecat` was not significant and not added to the model. The cardiologists want to test if `dbp` depends on BMI in a quadratic way. What will the new model look like? 
+
+:::{#boxedtext}
+
+Please write out the model in the following form: 
+
+$\hat{Y} = b_0 + b_1X_{chd} + b_2X_{age} + \ldots$ 
+
+:::
 
 
 ## Logistic regression
@@ -181,7 +285,7 @@ knitr::include_graphics("img/Q2_lm.png")
 In some countries in Africa, there is a high prevalence of Microfilarial infection (0 = no, 1 = yes). A study focused on several risk factors, one of them being "area of residence".
 
 
-```{r Q3_OR, eval=TRUE}
+```{r Q3_OR, eval=TRUE, out.width="120%"}
 knitr::include_graphics("img/Q3_OR.png")
 ```
 
@@ -190,7 +294,7 @@ knitr::include_graphics("img/Q3_OR.png")
 
 13.	Also a simple logistic regression was performed. Check the OR you calculated in the previous question using the information in the table below. What is your conclusion? [4]
 
-```{r Q3_logit, eval=TRUE}
+```{r Q3_logit, eval=TRUE, out.width="110%"}
 knitr::include_graphics("img/Q3_logit.png")
 ```
 
@@ -213,7 +317,7 @@ wald.test(b=coef(object=mdl), Sigma=vcov(object=mdl), Terms=c(1,2))
 ```
 
 
-```{r Q3_logit_2, eval=TRUE}
+```{r Q3_logit_2, eval=TRUE, out.width="110%"}
 knitr::include_graphics("img/Q3_logit_2.png")
 ```
 
