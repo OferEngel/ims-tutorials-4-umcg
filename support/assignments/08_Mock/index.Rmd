@@ -106,7 +106,7 @@ You will need to add up the two probabilities, and that is your final answer!
 
 
 
-3.	 [Ophthalmologists](https://en.wikipedia.org/wiki/Ophthalmology) want to compare two types of eye drops, A and B, to prevent dryness of the eye. 44 volunteers with dryness problems in both eyes receive A in the one eye and B in the other. They evaluate both eye drops with a binary response ("helpful" or "not helpful").
+3.	 [Ophthalmologists](https://en.wikipedia.org/wiki/Ophthalmology) want to compare two types of eye drops, A and B, to prevent dryness of the eye. 44 volunteers with dryness problems in both eyes receive A in the one eye and B in the other. They evaluate both eye drops with a binary response ("helpful" or "not helpful"). Perform a valid statistical test to test the null hypothesis that A and B have equal effects. Show your calculations and give your conclusion. [8]
 
 
 ```{r Ophthalmology, echo=FALSE, eval=TRUE}
@@ -252,11 +252,151 @@ This is a two-tailed t-test, so we want to calculate the probability of being in
 Here you will find a couple of diagrams, you will need to choose which one represents the correct figure. Try to reflect, what should you expect to see in the graphs? How would they look like? 
 :::
 
-```{r ex9}
 
-n <- 100
-chd <- rbinom()
-39.657 + 15.047 * 1  + .217 * 50 +  1.311 * 30 - .508 * 30 * 1
+
+```{r ex-9-img, eval=TRUE, out.width="150%"}
+knitr::include_graphics("img/int_plots.png")
+```
+
+
+```{r ex9, echo = FALSE, eval = FALSE}
+
+n <- 1000
+chd <- rbinom(n, 1, .5)
+age <- runif(n, 20, 70)
+bmi <- rnorm(n, 28, 5)
+dbp1 <- 39.657 + 15.047 * chd + .217 * age +  1.311 * bmi - .508 * bmi * chd + rnorm(n, 0, 5)
+dbp2 <- 39.657 + 15.047 * chd + .217 * age +  1.311 * bmi + rnorm(n, 0, 5)
+dbp3 <- 39.657 + 15.047 - 15.047 * chd + .217 * age +  1.311 * bmi  - .508 * bmi * chd + rnorm(n, 0, 5)
+dbp4 <- 39.657 + 15.047 - 15.047 * chd + .217 * age +  1.311 * bmi + rnorm(n, 0, 5)
+dbp5 <- 39.657 + 15.047 - 15.047 * chd + .217 * age +  1.311 * bmi  + .508 * bmi * chd + rnorm(n, 0, 5)
+dbp6 <- 39.657 + 15.047 * chd + .217 * age +  1.311 * bmi  + .508 * bmi * chd + rnorm(n, 0, 5)
+
+df1 <- data.frame(chd, age, bmi, dbp = dbp1) |> 
+  mutate(chd = factor(chd)) 
+df2 <- data.frame(chd, age, bmi, dbp = dbp2) |> 
+  mutate(chd = factor(chd)) 
+df3 <- data.frame(chd, age, bmi, dbp = dbp3) |> 
+  mutate(chd = factor(chd)) 
+df4 <- data.frame(chd, age, bmi, dbp = dbp4) |> 
+  mutate(chd = factor(chd)) 
+df5 <- data.frame(chd, age, bmi, dbp = dbp5) |> 
+  mutate(chd = factor(chd)) 
+df6 <- data.frame(chd, age, bmi, dbp = dbp6) |> 
+  mutate(chd = factor(chd)) 
+
+
+mdl1 <- lm(dbp ~ chd + age + bmi + bmi:chd, df1)
+mdl2 <- lm(dbp ~ chd + age + bmi, df2)
+mdl3 <- lm(dbp ~ chd + age + bmi + bmi:chd, df3)
+mdl4 <- lm(dbp ~ chd + age + bmi, df4)
+mdl5 <- lm(dbp ~ chd + age + bmi + bmi:chd, df5)
+mdl6 <- lm(dbp ~ chd + age + bmi + bmi:chd, df6)
+
+
+p1 <- plot_predictions(mdl1, 
+     newdata = datagrid(
+              chd = c(0, 1),
+              age = 60, 
+              bmi = seq(20, 35, by = 0.5)
+              ), 
+     condition = c("bmi", "chd"), draw = FALSE
+) 
+
+p2 <- plot_predictions(mdl2, 
+     newdata = datagrid(
+              chd = c(0, 1),
+              age = 60, 
+              bmi = seq(20, 35, by = 0.5)
+              ), 
+     condition = c("bmi", "chd"), draw = FALSE
+) 
+p3 <- plot_predictions(mdl3, 
+     newdata = datagrid(
+              chd = c(0, 1),
+              age = 60, 
+              bmi = seq(20, 35, by = 0.5)
+              ), 
+     condition = c("bmi", "chd"), draw = FALSE
+) 
+p4 <- plot_predictions(mdl4, 
+     newdata = datagrid(
+              chd = c(0, 1),
+              age = 60, 
+              bmi = seq(20, 35, by = 0.5)
+              ), 
+     condition = c("bmi", "chd"), draw = FALSE
+) 
+p5 <- plot_predictions(mdl5, 
+     newdata = datagrid(
+              chd = c(0, 1),
+              age = 60, 
+              bmi = seq(20, 35, by = 0.5)
+              ), 
+     condition = c("bmi", "chd"), draw = FALSE
+) 
+p6 <- plot_predictions(mdl6, 
+     newdata = datagrid(
+              chd = c(0, 1),
+              age = 60, 
+              bmi = seq(20, 35, by = 0.5)
+              ), 
+     condition = c("bmi", "chd"), draw = FALSE
+) 
+
+
+p.1 <- p1 |> 
+  ggplot(aes(x = bmi, y = estimate, group = chd, color = chd)) + 
+  geom_point(data = slice_sample(df1, n = 200), aes(x = bmi, y = dbp, group = chd, color = chd), alpha = .6) +
+  geom_line(size = 1.5) + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(x = NULL, y = "DBP", title = "Figure 1")
+
+ 
+p.2 <- p2 |> 
+  ggplot( data = p2, 
+            mapping = aes(x = bmi, y = estimate, group = chd, color = chd))  + 
+  geom_point(data = slice_sample(df2, n = 200), aes(x = bmi, y = dbp, group = chd, color = chd), alpha = .6) +
+  geom_line( size = 1.5) + 
+  theme_minimal() + 
+  labs(x = NULL, y = NULL, , title = "Figure 2")
+
+p.3 <- p3 |> 
+  ggplot( data = p3, 
+            mapping = aes(x = bmi, y = estimate, group = chd, color = chd))  + 
+  geom_point(data = slice_sample(df3, n = 200), aes(x = bmi, y = dbp, group = chd, color = chd), alpha = .6) +
+  geom_line( size = 1.5) + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(x = NULL, y = "DBP", , title = "Figure 3")
+
+p.4 <- p4 |> 
+  ggplot( data = p4, 
+            mapping = aes(x = bmi, y = estimate, group = chd, color = chd))  + 
+  geom_point(data = slice_sample(df4, n = 200), aes(x = bmi, y = dbp, group = chd, color = chd), alpha = .6) +
+  geom_line( size = 1.5) + 
+  theme_minimal() + 
+  labs(x = NULL, y = NULL, , title = "Figure 4")
+
+p.5 <- p5 |> 
+  ggplot( data = p5, 
+            mapping = aes(x = bmi, y = estimate, group = chd, color = chd))  + 
+  geom_point(data = slice_sample(df5, n = 200), aes(x = bmi, y = dbp, group = chd, color = chd), alpha = .6) +
+  geom_line( size = 1.5) + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(y = "DBP", title = "Figure 5")
+
+p.6 <- p6 |> 
+  ggplot( mapping = aes(x = bmi, y = estimate, group = chd, color = chd))  + 
+  geom_point(data = slice_sample(df6, n = 200), aes(x = bmi, y = dbp, group = chd, color = chd), alpha = .6) +
+  geom_line( size = 1.5) + 
+  theme_minimal() + labs(y = NULL, title = "Figure 6")
+
+
+library(patchwork)
+(p.1 + p.2) / (p.3 + p.4) / (p.5 + p.6)
 
 ```
 
@@ -309,7 +449,7 @@ knitr::include_graphics("img/Q3_OR.png")
 
 12 Calculate the Odds Ratio of having Microfilarial infection for individuals living at the savannah compared to individuals living in the forest. [4]
 
-```{r ex12}
+```{r ex12-solution}
 
 (22 / 28) / (45 / 17)
 
@@ -406,7 +546,7 @@ There is a slight difference between the test statistic we use in R and the Wald
 :::
 
 
-16.	Is sex a significant variable in this model? [4]
+16.	Is sex a significant variable in this model? Justify your answer. [4]
 
 
 :::{#boxedtext}
