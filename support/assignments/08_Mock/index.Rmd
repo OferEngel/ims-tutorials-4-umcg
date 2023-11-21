@@ -37,7 +37,13 @@ knitr::opts_chunk$set(echo = FALSE,
 
 ```
 
-## Comparing groups. 
+
+
+<span style="color: red;font-size: 14px;font-weight: bold;">
+<br/>Please submit your answers to this RA [using this form](https://bit.ly/3MSy4wi). </span>
+
+
+## Comparing groups
 
 1. Treated with In Vitro Fertilisation (IVF), women between 30 and 35 years old have a probability of success (becoming pregnant) of 0.4. Ten women between 30 and 35, all independent of each other, will be in the IVF program next year. What is the probability that exactly 4 of them will become pregnant? [3]
 
