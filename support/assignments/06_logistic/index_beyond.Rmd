@@ -305,7 +305,17 @@ plogis(-0.13504 + 0.36784)
 
 # Odds ratio male over female
 exp(0.36784)
+predictions(mdl.glm, 
+            newdata = datagrid(demog_sex = c("Male", "Female")), 
+            type = "response")
 
+
+predictions(mdl.glm, 
+            newdata = data.frame(demog_sex = c("Male", "Female")), 
+            hypothesis = "b1 = b2")
+comparisons(mdl.glm, variables = "demog_sex", by = TRUE)
+avg_comparisons(mdl.glm, variables = "demog_sex")
+avg_comparisons(mdl.glm, variables = "demog_sex")
 
 mdl.lm <- lm(mj_lifetime.numeric ~ demog_sex, data = nsduh )
 summary(mdl.lm)
@@ -313,6 +323,9 @@ summary(mdl.lm)
 0.46629
 # probability among male
 0.46629 + 0.09165 = 0.55794
+predictions(mdl.lm, 
+            newdata = datagrid(demog_sex = c("Male", "Female")))
+comparisons(mdl.lm, variables = "demog_sex", by = TRUE)
 
 # Conclusion: Males have significantly greater odds of lifetime marijuana use than females (OR = 1.44; 95% CI = 1.13, 1.86; p = .004). Males have 44% greater odds of lifetime marijuana use than females.
 

@@ -47,8 +47,8 @@ knitr::opts_chunk$set(echo = FALSE,
 
 1. Treated with In Vitro Fertilisation (IVF), women between 30 and 35 years old have a probability of success (becoming pregnant) of 0.4. Ten women between 30 and 35, all independent of each other, will be in the IVF program next year. What is the probability that exactly 4 of them will become pregnant? [3]
 
-```{r}
-dbinom(4, 10, 0.4)
+```{r ex1-solution}
+# dbinom(4, 10, 0.4) = 0.2508227
 ```
 
 
@@ -89,8 +89,8 @@ It could also be calculated as `dbinom(25:50, 50, 0.49) |> sum()`.
 2.	For 36 – 40 years old women, following this IVF program, the probability to become pregnant equals 0.3. Two women from this group, and one woman aged 32 are in the IVF program, all independent of each other. What is the probability that exactly two of these three women will become pregnant? [6]
 
 ```{r}
-dbinom(2, 2, .3)*dbinom(0, 1, .4) + 
-  dbinom(1, 2, .3)*dbinom(1, 1, .4)
+# dbinom(2, 2, .3)*dbinom(0, 1, .4) + 
+#   dbinom(1, 2, .3)*dbinom(1, 1, .4) = 0.222 or about 2/9
 ```
 
 
@@ -167,7 +167,7 @@ pchisq(chi.sq, df = 1, lower.tail = TRUE)
 
 ```{r ex3-solution}
 pchisq((15 - 5)^2 / (15 + 5), df = 1, lower.tail = FALSE)
-
+# 0.02534732
 ```
 
 
@@ -176,7 +176,15 @@ pchisq((15 - 5)^2 / (15 + 5), df = 1, lower.tail = FALSE)
 
 ```{r ex-4}
 
-# They could use a chisquare or a binomial test
+# They could use a chi-square test
+# One group n1 = 44 receive medicine A, 33 found it helpful and 11 unhelpful
+# Second group n2 = 44 medicine B, 23 found it helpful and 21 unhelpful
+M <- as.table(rbind(c(33, 11), c(23, 21)))
+dimnames(M) <- list(
+  medicine = c("A", "B"), 
+  status = c("helpful", "unhelpful")
+  )
+chisq.test(M)
 
 ```
 
@@ -193,7 +201,7 @@ If we know that a variable has a normal distribution in the population with mean
 ```{r ex5-solution}
 # 100 - 95 - 5 / 2
 pnorm(109, 115, 15 / sqrt(25))
-
+# 0.02275013
 ```
 
 
@@ -436,8 +444,7 @@ $\hat{Y} = b_0 + b_1X_{chd} + b_2X_{age} + \ldots$
 
 
 ```{r ex11}
-
-# \hat{Y} = b_0 + b_1X_{chd} + b_2X_{age}
+# \hat{Y} = b0 + b1*X_{chd} + b2*X_{age} + b3*X_{BMI} - b4*X_{BMI}*X_{chd} + b5*X_{BMI}^2
 
 ```
 
@@ -458,6 +465,7 @@ knitr::include_graphics("img/Q3_OR.png")
 ```{r ex12-solution}
 
 (22 / 28) / (45 / 17)
+# 0.2968254
 
 ```
 
@@ -487,7 +495,7 @@ Try to do this twice, and see if you get the same result:
 -   Second, use R to calculate the result using the following code... 
 
 
-```{r ex14}
+```{r ex14, echo=TRUE}
 df <- tribble(
   ~area, ~infect, ~freq, 
   0, 0, 28, 
@@ -505,7 +513,7 @@ glm(infect ~ area, data = df, family = binomial) |>
 
 ```{r ex14-solution}
 
-exp(1.21 + .403*c(-1.96, 1.96))
+exp(1.21 + c(-1.96, 1.96)*.403)
 
 tribble(
   ~area, ~infect, ~freq, 
@@ -544,12 +552,21 @@ knitr::include_graphics("img/Q3_logit_2.png")
 
 15. What is the Wald value of Area of residence in this model? [3]
 
+```{r}
+# (1.389 / .485)^2
+# 8.202024
+```
+
 
 :::{#boxedtext}
 
 There is a slight difference between the test statistic we use in R and the Wald statistic, in that the test statistic we use is simply the ratio of the estimate and the standard error. The square of that ratio is the Wald statistic. In order to calculate the Wald statistic, simply take the ratio and square it.
 
 :::
+
+```{r ex15}
+
+```
 
 
 16.	Is sex a significant variable in this model? Justify your answer. [4]
