@@ -25,6 +25,7 @@ library(janitor)
 library(lmtest)
 library(datawizard)
 library(extrafont) 
+library(marginaleffects)
 
 knitr::opts_chunk$set(echo = FALSE, 
                       fig.align = "center", 
@@ -77,10 +78,10 @@ knitr::include_graphics("logistic.png")
 
 Probability, odds and odds ratio are different ways of expressing the same thing, but on different scales.
 
--   If the probability is greater than 0.5, the odds are greater than 1 and the log odds are positive
+-   If the probability is greater than 0.5, the odds are greater than 1 and the log odds are positive.
 -   If the probability is less than 0.5, the odds are less than 1 and the log odds are negative.
 -   You can transform probability into odds $\text{odds} = \frac{p}{1-p}$
--   You can transform odds to probability by hand using $p = \frac{\text{odds}}{1+\text{odds}}$. 
+-   You can transform odds to probability $p = \frac{\text{odds}}{1+\text{odds}}$. 
 -   Transforming log odds to probability in R, you can use the `plogis` function. For example, if the log-odds is zero, the probability is equal to `plogis(0) = 0.5`.
 
 $$
@@ -89,7 +90,7 @@ $$
 
 Assuming you have your model, here is the interpretation
 
--   The intercept is the log-odds of the outcome when all (continuous) predictors are at 0 at their reference level . The odds of the outcome is $\text{odds} = \exp(\beta_0)$ and the probability is $\frac{\text{odds}}{1+\text{odds}}= \frac{\exp(\beta_0)}{1+\exp(\beta_0)}$
+-   The intercept is the log-odds of the outcome when all continuous predictors are 0 and categorical variables are at their reference level. The odds of the outcome is $\text{odds} = \exp(\beta_0)$ and the probability is $\frac{\text{odds}}{1+\text{odds}}= \frac{\exp(\beta_0)}{1+\exp(\beta_0)}$
 
 -   For a continuous predictor, the regression coefficient $\beta_k$ is the log of the odds ratio, comparing individuals who differ in that predictor by one unit, holding the other predictors fixed.
 
@@ -120,7 +121,7 @@ The teaching dataset `nsduh` includes a random subset of 1000 observations of ad
 You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/446537){target="_blank"}.
 
 
-We will be using R Markdown to create reproducible lab reports. In RStudio, you will find the file `lab06.Rmd` in the `Files` panel. Double click it to show the script in the code panel.
+We will be using R Markdown to create reproducible lab reports. In RStudio, you will need to create the file your `Rmd` file. 
 
 -   In the file, update the YAML with your name, the date and the name of the lab.
 -   Load the `tidyverse`, `broom`, `table1`, `GGally`, `car`, `easystats`, `gt`, `janitor`, `lmtest`, `datawizard`, `marginaleffects` and the `modelsummary`  packages.
@@ -163,19 +164,21 @@ nsduh |>
   adorn_title()
 
 
-# Replace the 0's below with appropriate values
+# Replace the blankss below with appropriate values
 tribble(
-  ~` `, ~General, ~Female, ~Male, 
+  ~Prediction, ~General, ~Female, ~Male, 
   "Probability", ___, ___, ___, 
-  "Odds",        ___, ___, ___
+  "Odds",        ___, ___, ___, 
+  "Log Odds",    ___, ___, ___
 ) |> gt()
 
-# Replace the 0's below with appropriate values
+# Replace the blanks below with appropriate values
 tribble(
-  ~` `, ~`Males vs. Females`, 
+  ~Contrast, ~`Males vs. Females`, 
   "Risk difference", ___, 
   "Risk Ratio",      ___,
-  "Odds ratio",      ___
+  "Odds ratio",      ___, 
+  "Log odds ratio",  ___
 ) |> gt()
 
 ```
@@ -229,16 +232,18 @@ tribble(
 
 ```{r ex-2, echo=TRUE, eval=FALSE}
 
+# Using a logistic regression
 mdl.glm.null <- glm(
   mj_lifetime ~ 1, 
   data = nsduh, 
-  family = "binomial"
+  family = binomial
   )
 summary(___)
 
 # probability of lifetime marijuana (everyone)
 plogis(___)
 
+# Using a linear regression, violating assumptions
 mdl.lm.null <- lm(mj_lifetime.numeric ~ 1, data = nsduh )
 summary(___)
 # probability of lifetime marijuana (everyone)
@@ -273,18 +278,18 @@ ___ + ___ = ___
 
 ```{r ex-2-noshow, echo=FALSE, eval=FALSE}
 
-mdl.glm.null <- glm(mj_lifetime ~ 1, data = nsduh, family = "binomial")
+mdl.glm.null <- glm(mj_lifetime ~ 1, data = nsduh, family = binomial)
 mdl.glm.null |> 
-  tidy(conf.int = TRUE) |> 
+  tidy(conf.int = TRUE, exponentiate = FALSE) |> 
   mutate(
     estimate = plogis(estimate), 
     conf.low = plogis(conf.low), 
     conf.high = plogis(conf.high), .keep = "none")
-
-
+# lifetime mj is 50.9% and between 47.8% and 54%
 
 mdl.lm.null <- 
-  lm(mj_lifetime.numeric ~ 1, data = nsduh )
+  lm(mj_lifetime.numeric ~ 1, data = nsduh)
+
 mdl.lm.null |> 
   tidy(conf.int = TRUE) |> 
   mutate(estimate, conf.low, conf.high, .keep = "none")
