@@ -354,12 +354,14 @@ map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr),
 
 6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create ONE of the [dumbell plots](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) shown below, illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. **Hint:** We will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots. You need only to create one of the plots, but bonus for creating ALL the plots. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)  
 
-```{r dumbellplot-MEDUC, out.width="100%"}
 
+
+```{r dumbellplot-MEDUC, out.width="100%"}
 # M.FULL_int.ctr <- lm(formula = DBWT ~ . , data = natality.ctr)
 # M.FULL_int.ctr <- lm(formula = DBWT ~ . + (CIG_REC + MEDUC + MRACEHISP)^2, data = natality.ctr)
 # 
 # M.FULL_int.ctr <- lm(formula = DBWT ~ . + (CIG_REC + MEDUC + MRACEHISP)^3, data = natality.ctr)
+# M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC:MRACEHISP, data = natality.ctr)
 M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC:MRACEHISP, data = natality.ctr)
 
 # anova(M.FULL.ctr, M.FULL_int.ctr, test = "LRT")
@@ -378,15 +380,15 @@ predictions(M.FULL_int.ctr,
   as.data.frame() |> 
   pivot_wider(id_cols = c(MEDUC, MRACEHISP), names_from = CIG_REC, names_prefix = "smoke_", values_from = estimate) |>  
   ggplot() + 
-  geom_point(aes(x = "No",  y = smoke_No,  color = MEDUC), size = 5) +
-  geom_point(aes(x = "Yes", y = smoke_Yes, color = MEDUC), size = 5) +
+  geom_point(aes(x = "No",  y = smoke_No,  color = MEDUC), size = 3, alpha=.7) +
+  geom_point(aes(x = "Yes", y = smoke_Yes, color = MEDUC), size = 3, alpha=.7) +
   geom_segment(aes(
     x = "No", 
     y = smoke_No, 
     xend = "Yes", 
     yend=smoke_Yes, 
     color = MEDUC
-    ), linewidth = 2) + 
+    ), linewidth = 1) + 
   scale_x_discrete(labels = c("no smoking", "smoking")) + 
   scale_y_continuous(breaks = seq(-1, 1, 0.15)) +
   labs(x = NULL, y = "Birth weight (centred, scaled)", color = "Mother's education") + 
@@ -394,11 +396,63 @@ predictions(M.FULL_int.ctr,
   theme_minimal() + 
   theme(legend.position = "bottom", text = element_text(size = 14)) 
 
+
+preds <- predictions(
+  M.FULL_int.ctr, 
+  newdata = datagrid(
+    model = M.FULL_int.ctr,
+    MRACEHISP = c("NH White", "NH Black", "NH Other", "Hispanic"),
+    MEDUC   = c("lower", "HS", "Some college", "Uni"),
+    CIG_REC = c("No", "Yes")
+    )
+  ) |> select(rowid, estimate, MRACEHISP, CIG_REC, MEDUC) |> 
+  as.data.frame() |> 
+  pivot_wider(id_cols = c(MEDUC, MRACEHISP), names_from = CIG_REC, names_prefix = "smoke_", values_from = estimate) |> 
+  mutate(
+    Estimate = smoke_Yes - smoke_No, 
+    MEDUC = as.character(MEDUC), 
+    MRACEHISP = as.character(MRACEHISP)
+    )
+
+# comps <- comparisons(
+#   M.FULL_int.ctr, 
+#   variables = "CIG_REC", 
+#   by = c("MRACEHISP", "MEDUC")
+#   ) |>  mutate(
+#     MEDUC = as.character(MEDUC), 
+#     MRACEHISP = as.character(MRACEHISP)
+#     )
+# 
+# preds |> inner_join(comps, by = c("MEDUC", "MRACEHISP"))
+# # CIG_REC mean(Yes) - mean(No)  Hispanic lower         -0.0693     0.3409 -0.203
+# # CIG_REC mean(Yes) - mean(No)  Hispanic HS             0.1733     0.3406  0.509
+# # CIG_REC mean(Yes) - mean(No)  Hispanic Some college  -0.2902     0.3415 -0.850
+# # CIG_REC mean(Yes) - mean(No)  Hispanic Uni            0.4886     0.3432  1.424
+# 
+# 
+# avg_predictions(M.FULL_int.ctr, 
+#             newdata = datagrid(
+#               model = M.FULL_int.ctr,
+#               MRACEHISP = c("NH White", "NH Black", "NH Other", "Hispanic"),
+#               MEDUC   = c("lower", "HS", "Some college", "Uni"),
+#               CIG_REC = c("No", "Yes")
+#               )
+#             ) |> select(rowid, estimate, MRACEHISP, CIG_REC, MEDUC) |> 
+#   as.data.frame() |> 
+#   pivot_wider(id_cols = c(MEDUC, MRACEHISP), names_from = CIG_REC, names_prefix = "smoke_", values_from = estimate)
+
+
+
 ```
 
 
 
 ```{r testing-stuff, echo=FALSE, eval=FALSE}
+M.FULL_int.ctr <- 
+  natality.ctr |> 
+  mutate(MRACEHISP = factor(MRACEHISP)) |> 
+  lm(formula = DBWT ~ CIG_REC:MEDUC:MRACEHISP, data = _)
+
 M.FULL_int.ctr <- 
   natality.ctr |> 
   mutate(MRACEHISP = factor(MRACEHISP)) |> 
@@ -434,7 +488,7 @@ To create the dumbell figure, you will need to predict the birth weight for smok
 ```{r dumbells-prep, echo=TRUE, eval=FALSE}
 
 library(marginaleffects)
-M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC * MEDUC, data = natality.ctr)
+M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC:MRACEHISP, data = natality.ctr)
 
 predictions(M.FULL_int.ctr, 
             newdata = datagrid(
