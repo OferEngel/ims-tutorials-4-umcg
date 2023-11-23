@@ -2103,35 +2103,36 @@ sample?</li>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co"># Replace the blankss below with appropriate values</span></span>
 <span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="fu">tribble</span>(</span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  <span class="sc">~</span><span class="st">`</span><span class="at">Indicators of chance</span><span class="st">`</span>, <span class="sc">~</span>General, <span class="sc">~</span>Female, <span class="sc">~</span>Male, </span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  <span class="sc">~</span>Prediction, <span class="sc">~</span>General, <span class="sc">~</span>Female, <span class="sc">~</span>Male, </span>
 <span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>  <span class="st">&quot;Probability&quot;</span>, ___, ___, ___, </span>
 <span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>  <span class="st">&quot;Odds&quot;</span>,        ___, ___, ___, </span>
 <span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  <span class="st">&quot;Log Odds&quot;</span>,    ___, ___, ___</span>
 <span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">gt</span>()</span>
 <span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co"># Replace the 0&#39;s below with appropriate values</span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co"># Replace the blanks below with appropriate values</span></span>
 <span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="fu">tribble</span>(</span>
-<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>  <span class="sc">~</span><span class="st">`</span><span class="at">Indicators of contrast</span><span class="st">`</span>, <span class="sc">~</span><span class="st">`</span><span class="at">Males vs. Females</span><span class="st">`</span>, </span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>  <span class="sc">~</span>Contrast, <span class="sc">~</span><span class="st">`</span><span class="at">Males vs. Females</span><span class="st">`</span>, </span>
 <span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>  <span class="st">&quot;Risk difference&quot;</span>, ___, </span>
 <span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>  <span class="st">&quot;Risk Ratio&quot;</span>,      ___,</span>
 <span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>  <span class="st">&quot;Odds ratio&quot;</span>,      ___, </span>
 <span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>  <span class="st">&quot;Log odds ratio&quot;</span>,  ___</span>
 <span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">gt</span>()</span></code></pre></div>
-<p>To answer the question, please fill in the tables below.</p>
-<div id="ipjeoxqstt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ipjeoxqstt table {
+<p>To answer the question, create the tables shown below, and fill in
+the gaps with the appropriate values</p>
+<div id="hircsvkckc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hircsvkckc table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#ipjeoxqstt thead, #ipjeoxqstt tbody, #ipjeoxqstt tfoot, #ipjeoxqstt tr, #ipjeoxqstt td, #ipjeoxqstt th {
+#hircsvkckc thead, #hircsvkckc tbody, #hircsvkckc tfoot, #hircsvkckc tr, #hircsvkckc td, #hircsvkckc th {
 border-style: none;
 }
-#ipjeoxqstt p {
+#hircsvkckc p {
 margin: 0;
 padding: 0;
 }
-#ipjeoxqstt .gt_table {
+#hircsvkckc .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -2156,11 +2157,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_caption {
+#hircsvkckc .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#ipjeoxqstt .gt_title {
+#hircsvkckc .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -2171,7 +2172,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#ipjeoxqstt .gt_subtitle {
+#hircsvkckc .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -2182,7 +2183,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#ipjeoxqstt .gt_heading {
+#hircsvkckc .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -2193,12 +2194,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_bottom_border {
+#hircsvkckc .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_col_headings {
+#hircsvkckc .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2212,7 +2213,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_col_heading {
+#hircsvkckc .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2231,7 +2232,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#ipjeoxqstt .gt_column_spanner_outer {
+#hircsvkckc .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2242,13 +2243,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#ipjeoxqstt .gt_column_spanner_outer:first-child {
+#hircsvkckc .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#ipjeoxqstt .gt_column_spanner_outer:last-child {
+#hircsvkckc .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#ipjeoxqstt .gt_column_spanner {
+#hircsvkckc .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -2259,10 +2260,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#ipjeoxqstt .gt_spanner_row {
+#hircsvkckc .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#ipjeoxqstt .gt_group_heading {
+#hircsvkckc .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2287,7 +2288,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#ipjeoxqstt .gt_empty_group_heading {
+#hircsvkckc .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -2301,13 +2302,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#ipjeoxqstt .gt_from_md > :first-child {
+#hircsvkckc .gt_from_md > :first-child {
 margin-top: 0;
 }
-#ipjeoxqstt .gt_from_md > :last-child {
+#hircsvkckc .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#ipjeoxqstt .gt_row {
+#hircsvkckc .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2325,7 +2326,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#ipjeoxqstt .gt_stub {
+#hircsvkckc .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2337,7 +2338,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#ipjeoxqstt .gt_stub_row_group {
+#hircsvkckc .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2350,13 +2351,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#ipjeoxqstt .gt_row_group_first td {
+#hircsvkckc .gt_row_group_first td {
 border-top-width: 2px;
 }
-#ipjeoxqstt .gt_row_group_first th {
+#hircsvkckc .gt_row_group_first th {
 border-top-width: 2px;
 }
-#ipjeoxqstt .gt_summary_row {
+#hircsvkckc .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2365,14 +2366,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#ipjeoxqstt .gt_first_summary_row {
+#hircsvkckc .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_first_summary_row.thick {
+#hircsvkckc .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#ipjeoxqstt .gt_last_summary_row {
+#hircsvkckc .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2381,7 +2382,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_grand_summary_row {
+#hircsvkckc .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2390,7 +2391,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#ipjeoxqstt .gt_first_grand_summary_row {
+#hircsvkckc .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2399,7 +2400,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_last_grand_summary_row_top {
+#hircsvkckc .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2408,10 +2409,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_striped {
+#hircsvkckc .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#ipjeoxqstt .gt_table_body {
+#hircsvkckc .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2419,7 +2420,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_footnotes {
+#hircsvkckc .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2432,7 +2433,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_footnote {
+#hircsvkckc .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -2440,7 +2441,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#ipjeoxqstt .gt_sourcenotes {
+#hircsvkckc .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2453,57 +2454,57 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#ipjeoxqstt .gt_sourcenote {
+#hircsvkckc .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#ipjeoxqstt .gt_left {
+#hircsvkckc .gt_left {
 text-align: left;
 }
-#ipjeoxqstt .gt_center {
+#hircsvkckc .gt_center {
 text-align: center;
 }
-#ipjeoxqstt .gt_right {
+#hircsvkckc .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#ipjeoxqstt .gt_font_normal {
+#hircsvkckc .gt_font_normal {
 font-weight: normal;
 }
-#ipjeoxqstt .gt_font_bold {
+#hircsvkckc .gt_font_bold {
 font-weight: bold;
 }
-#ipjeoxqstt .gt_font_italic {
+#hircsvkckc .gt_font_italic {
 font-style: italic;
 }
-#ipjeoxqstt .gt_super {
+#hircsvkckc .gt_super {
 font-size: 65%;
 }
-#ipjeoxqstt .gt_footnote_marks {
+#hircsvkckc .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#ipjeoxqstt .gt_asterisk {
+#hircsvkckc .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#ipjeoxqstt .gt_indent_1 {
+#hircsvkckc .gt_indent_1 {
 text-indent: 5px;
 }
-#ipjeoxqstt .gt_indent_2 {
+#hircsvkckc .gt_indent_2 {
 text-indent: 10px;
 }
-#ipjeoxqstt .gt_indent_3 {
+#hircsvkckc .gt_indent_3 {
 text-indent: 15px;
 }
-#ipjeoxqstt .gt_indent_4 {
+#hircsvkckc .gt_indent_4 {
 text-indent: 20px;
 }
-#ipjeoxqstt .gt_indent_5 {
+#hircsvkckc .gt_indent_5 {
 text-indent: 25px;
 }
 </style>
@@ -2535,20 +2536,20 @@ text-indent: 25px;
   
 </table>
 </div>
-<div id="iruputitxe" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#iruputitxe table {
+<div id="ryskkkipfz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ryskkkipfz table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#iruputitxe thead, #iruputitxe tbody, #iruputitxe tfoot, #iruputitxe tr, #iruputitxe td, #iruputitxe th {
+#ryskkkipfz thead, #ryskkkipfz tbody, #ryskkkipfz tfoot, #ryskkkipfz tr, #ryskkkipfz td, #ryskkkipfz th {
 border-style: none;
 }
-#iruputitxe p {
+#ryskkkipfz p {
 margin: 0;
 padding: 0;
 }
-#iruputitxe .gt_table {
+#ryskkkipfz .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -2573,11 +2574,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#iruputitxe .gt_caption {
+#ryskkkipfz .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#iruputitxe .gt_title {
+#ryskkkipfz .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -2588,7 +2589,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#iruputitxe .gt_subtitle {
+#ryskkkipfz .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -2599,7 +2600,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#iruputitxe .gt_heading {
+#ryskkkipfz .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -2610,12 +2611,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#iruputitxe .gt_bottom_border {
+#ryskkkipfz .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#iruputitxe .gt_col_headings {
+#ryskkkipfz .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2629,7 +2630,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#iruputitxe .gt_col_heading {
+#ryskkkipfz .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2648,7 +2649,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#iruputitxe .gt_column_spanner_outer {
+#ryskkkipfz .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2659,13 +2660,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#iruputitxe .gt_column_spanner_outer:first-child {
+#ryskkkipfz .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#iruputitxe .gt_column_spanner_outer:last-child {
+#ryskkkipfz .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#iruputitxe .gt_column_spanner {
+#ryskkkipfz .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -2676,10 +2677,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#iruputitxe .gt_spanner_row {
+#ryskkkipfz .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#iruputitxe .gt_group_heading {
+#ryskkkipfz .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2704,7 +2705,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#iruputitxe .gt_empty_group_heading {
+#ryskkkipfz .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -2718,13 +2719,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#iruputitxe .gt_from_md > :first-child {
+#ryskkkipfz .gt_from_md > :first-child {
 margin-top: 0;
 }
-#iruputitxe .gt_from_md > :last-child {
+#ryskkkipfz .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#iruputitxe .gt_row {
+#ryskkkipfz .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2742,7 +2743,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#iruputitxe .gt_stub {
+#ryskkkipfz .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2754,7 +2755,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#iruputitxe .gt_stub_row_group {
+#ryskkkipfz .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2767,13 +2768,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#iruputitxe .gt_row_group_first td {
+#ryskkkipfz .gt_row_group_first td {
 border-top-width: 2px;
 }
-#iruputitxe .gt_row_group_first th {
+#ryskkkipfz .gt_row_group_first th {
 border-top-width: 2px;
 }
-#iruputitxe .gt_summary_row {
+#ryskkkipfz .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2782,14 +2783,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#iruputitxe .gt_first_summary_row {
+#ryskkkipfz .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#iruputitxe .gt_first_summary_row.thick {
+#ryskkkipfz .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#iruputitxe .gt_last_summary_row {
+#ryskkkipfz .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2798,7 +2799,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#iruputitxe .gt_grand_summary_row {
+#ryskkkipfz .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2807,7 +2808,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#iruputitxe .gt_first_grand_summary_row {
+#ryskkkipfz .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2816,7 +2817,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#iruputitxe .gt_last_grand_summary_row_top {
+#ryskkkipfz .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2825,10 +2826,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#iruputitxe .gt_striped {
+#ryskkkipfz .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#iruputitxe .gt_table_body {
+#ryskkkipfz .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2836,7 +2837,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#iruputitxe .gt_footnotes {
+#ryskkkipfz .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2849,7 +2850,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#iruputitxe .gt_footnote {
+#ryskkkipfz .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -2857,7 +2858,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#iruputitxe .gt_sourcenotes {
+#ryskkkipfz .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2870,57 +2871,57 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#iruputitxe .gt_sourcenote {
+#ryskkkipfz .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#iruputitxe .gt_left {
+#ryskkkipfz .gt_left {
 text-align: left;
 }
-#iruputitxe .gt_center {
+#ryskkkipfz .gt_center {
 text-align: center;
 }
-#iruputitxe .gt_right {
+#ryskkkipfz .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#iruputitxe .gt_font_normal {
+#ryskkkipfz .gt_font_normal {
 font-weight: normal;
 }
-#iruputitxe .gt_font_bold {
+#ryskkkipfz .gt_font_bold {
 font-weight: bold;
 }
-#iruputitxe .gt_font_italic {
+#ryskkkipfz .gt_font_italic {
 font-style: italic;
 }
-#iruputitxe .gt_super {
+#ryskkkipfz .gt_super {
 font-size: 65%;
 }
-#iruputitxe .gt_footnote_marks {
+#ryskkkipfz .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#iruputitxe .gt_asterisk {
+#ryskkkipfz .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#iruputitxe .gt_indent_1 {
+#ryskkkipfz .gt_indent_1 {
 text-indent: 5px;
 }
-#iruputitxe .gt_indent_2 {
+#ryskkkipfz .gt_indent_2 {
 text-indent: 10px;
 }
-#iruputitxe .gt_indent_3 {
+#ryskkkipfz .gt_indent_3 {
 text-indent: 15px;
 }
-#iruputitxe .gt_indent_4 {
+#ryskkkipfz .gt_indent_4 {
 text-indent: 20px;
 }
-#iruputitxe .gt_indent_5 {
+#ryskkkipfz .gt_indent_5 {
 text-indent: 25px;
 }
 </style>
@@ -2949,57 +2950,108 @@ text-indent: 25px;
 <ol start="3" style="list-style-type: decimal">
 <li>You will now estimate the same measures from the previous question,
 but this time using two types of regressions: a <strong>logistic
-regression</strong> and a regular <strong>linear regression</strong>. To
-those measures add the 95% confidence intervals associated. Show your
-code and present your results in a table, just as you’ve done above.
-Explain your findings: what are the differences between the three
-approaches (using a contingency table as in the question above, using
-logistic regression and using linear regression)? What explains these
-differences (or lack thereof)? What are the advantages/drawbacks of
-using one approach over the other?</li>
+regression</strong> and a regular <strong>linear regression</strong>.
+The advantage of using the regression models is that they provide the
+standard errors and the confidence intervals (which we do not observe in
+the contingency table). Show your code and present your results in a
+table adding the confidence intervals (see below). Explain your
+findings: what are the differences between the three approaches (using a
+contingency table as in the question above, using logistic regression
+and using linear regression)? What explains these differences (or lack
+thereof)? What are the advantages/drawbacks of using one approach over
+the other?</li>
 </ol>
 <div id="boxedtext">
 <p><strong>Hint:</strong> Use the two null models to calculate
-probability and odds at the population level. Use the regression models
-with a single predictor to calculate the probabilities and odds for
-males and females as well as risk difference, risk ratio and odds
-ratio.</p>
+probability and odds at the general population level. Use the regression
+models with a single predictor to calculate the probabilities and odds
+for males and females as well as risk difference, risk ratio and odds
+ratio. Create your tables using the following pattern.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Replace the blanks below with appropriate values</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">tribble</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="sc">~</span>Prediction, <span class="sc">~</span>General, <span class="sc">~</span>Female, <span class="sc">~</span>Male, </span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="st">&quot;Probability&quot;</span>, XX CI [XX, XX], XX CI [XX, XX], XX CI [XX, XX], </span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="st">&quot;Odds&quot;</span>,        XX CI [XX, XX], XX CI [XX, XX], XX CI [XX, XX], </span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="st">&quot;Log Odds&quot;</span>,    XX CI [XX, XX], XX CI [XX, XX], XX CI [XX, XX]</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">gt</span>()</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co"># Replace the blanks below with appropriate values</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">tribble</span>(</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="sc">~</span>Contrast, <span class="sc">~</span><span class="st">`</span><span class="at">Males vs. Females</span><span class="st">`</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="st">&quot;Risk difference&quot;</span>, XX CI [XX, XX], </span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="st">&quot;Risk Ratio&quot;</span>,      XX CI [XX, XX],</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="st">&quot;Odds ratio&quot;</span>,      XX CI [XX, XX], </span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="st">&quot;Log odds ratio&quot;</span>,  XX CI [XX, XX]</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">gt</span>()</span></code></pre></div>
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>mdl.glm.null <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  mj_lifetime <span class="sc">~</span> <span class="dv">1</span>, </span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">data =</span> nsduh, </span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  )</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">summary</span>(___)</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co"># probability of lifetime marijuana (everyone)</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="fu">plogis</span>(___)</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>mdl.lm.null <span class="ot">&lt;-</span> <span class="fu">lm</span>(mj_lifetime.numeric <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> nsduh )</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="fu">summary</span>(___)</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co"># probability of lifetime marijuana (everyone)</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>___</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>mdl.glm <span class="ot">&lt;-</span> <span class="fu">glm</span>(___ <span class="sc">~</span> ___, <span class="at">data =</span> ___, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="fu">summary</span>(___)</span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co"># probability lifetime marijuana (females)</span></span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="fu">plogis</span>(___)</span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co"># probability lifetime marijuana (males)</span></span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="fu">plogis</span>(___ <span class="sc">+</span> ___)</span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co"># Odds ratio male over female</span></span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="fu">exp</span>(___)</span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>mdl.lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(___ <span class="sc">~</span> ___, <span class="at">data =</span> nsduh )</span>
-<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="fu">summary</span>(___)</span>
-<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co"># probability among female</span></span>
-<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>___</span>
-<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co"># probability among males</span></span>
-<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>___ <span class="sc">+</span> ___ <span class="ot">=</span> ___</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Using a logistic regression</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>mdl.glm.null <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  mj_lifetime <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">data =</span> nsduh, </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">family =</span> binomial</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  )</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">summary</span>(___)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># probability of lifetime marijuana (everyone)</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="fu">plogis</span>(___)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co"># Using a linear regression, violating assumptions</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>mdl.lm.null <span class="ot">&lt;-</span> <span class="fu">lm</span>(mj_lifetime.numeric <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> nsduh )</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="fu">summary</span>(___)</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co"># probability of lifetime marijuana (everyone)</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>___</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>mdl.glm <span class="ot">&lt;-</span> <span class="fu">glm</span>(___ <span class="sc">~</span> ___, <span class="at">data =</span> ___, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="fu">summary</span>(___)</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co"># probability lifetime marijuana (females)</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="fu">plogis</span>(___)</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co"># probability lifetime marijuana (males)</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="fu">plogis</span>(___ <span class="sc">+</span> ___)</span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co"># Odds ratio male over female</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="fu">exp</span>(___)</span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>mdl.lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(___ <span class="sc">~</span> ___, <span class="at">data =</span> nsduh )</span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="fu">summary</span>(___)</span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co"># probability among female</span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>___</span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co"># probability among males</span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>___ <span class="sc">+</span> ___ <span class="ot">=</span> ___</span></code></pre></div>
+<div id="boxedtext">
+<p>You should be able to find the confidence intervals of your log odds
+ratio from the logistic regression easily, using the following code:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>mdl.glm <span class="sc">|&gt;</span> <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>And the confidence interval of the odds ratio by exponentiating the
+appropriate values, or by running the following code:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mdl.glm <span class="sc">|&gt;</span> <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">exponentiate =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>But how will you calculate the confidence intervals of the risk
+ratio? Or the risk difference? To do that, we will be using the
+<code>avg_comparison</code> function in the <code>marginaleffects</code>
+package. Here is how this works:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">avg_comparisons</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">model =</span> ____, </span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">variables =</span> <span class="st">&quot;demog_sex&quot;</span>, <span class="co"># This is the exposure variable</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">comparison =</span> <span class="st">&quot;____&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>)</span></code></pre></div>
+<ul>
+<li>For the <code>model</code> argument you can use <code>mdl.glm</code>
+or <code>mdl.lm</code>, and compare between the results you get from the
+two models.</li>
+<li>For the comparison argument you can use a variety of contrast
+indicators. Use <code>lnor</code> to estimate the log odds ratio (and
+its standard error and confidence interval). Use <code>ratio</code> for
+the risk ratio and <code>difference</code> for the probability
+difference. Compare different approaches and see if you get similar
+results!</li>
+</ul>
+</div>
 <ol start="4" style="list-style-type: decimal">
 <li>Write up your results using the template shown below.</li>
 </ol>

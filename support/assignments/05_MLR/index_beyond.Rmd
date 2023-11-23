@@ -352,7 +352,9 @@ map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr),
 
 ## Exploring interactions
 
-6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create ONE of the [dumbell plots](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) shown below, illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. **Hint:** We will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots. You need only to create one of the plots, but bonus for creating ALL the plots. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)  
+6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create a  [dumbell plot](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) like the ones shown below, illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. 
+
+**Notes:** You may get a different plot than the ones shown below, depending on the way you set your models. We will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots. You need only to create one of the plots, but bonus for creating ALL the plots. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)  
 
 
 
@@ -362,7 +364,8 @@ map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr),
 # 
 # M.FULL_int.ctr <- lm(formula = DBWT ~ . + (CIG_REC + MEDUC + MRACEHISP)^3, data = natality.ctr)
 # M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC:MRACEHISP, data = natality.ctr)
-M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC:MRACEHISP, data = natality.ctr)
+M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC:MRACEHISP, 
+                     data = natality.ctr)
 
 # anova(M.FULL.ctr, M.FULL_int.ctr, test = "LRT")
 # options(width = 10000)
@@ -483,12 +486,12 @@ pc |>
 
 
 :::{#boxedtext}
-To create the dumbell figure, you will need to predict the birth weight for smoking and non-smoking mums with different education levels. Here is the code for the calculations you need: 
+To create the dumbbell figure, you will need to predict the birth weight for smoking and non-smoking mums with different education levels. Here is the code for the calculations you can use (this uses a three-way interaction, which is not strictly requested in the question above): 
 
 ```{r dumbells-prep, echo=TRUE, eval=FALSE}
 
 library(marginaleffects)
-M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC:MRACEHISP, data = natality.ctr)
+M.FULL_int.ctr <- lm(formula = DBWT ~  ___, data = natality.ctr)
 
 predictions(M.FULL_int.ctr, 
             newdata = datagrid(

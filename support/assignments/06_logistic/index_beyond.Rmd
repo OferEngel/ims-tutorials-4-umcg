@@ -133,7 +133,7 @@ We will be using R Markdown to create reproducible lab reports. In RStudio, you 
 
 1. Create a `table1` and use `GGally::ggpairs` to explore your data. 
 
-```{r}
+```{r ex1, eval=TRUE, echo=FALSE}
 label(nsduh$mj_lifetime) <- "Marijuana (lifetime)"
 label(nsduh$alc_agefirst) <- "Alcohol (age first used)"
 label(nsduh$demog_age_cat6) <- "Age"
@@ -149,7 +149,7 @@ table1(~ demog_sex + alc_agefirst + demog_age_cat6  + demog_income | mj_lifetime
 
 2.  Use the contingency table below to calculate (a) probability of lifetime marijuana among sample subjects (independent of sex), among sample females and among sample males, (b) Odds of lifetime marijuana use among sample subjects, among sample females and among sample males. (c) What is the risk difference, the risk ratio and the odds ratio when comparing lifetime marijuana use among males and females in our sample?
 
-```{r ex-1-sex-lifetime, echo=TRUE, eval=FALSE}
+```{r ex-2-sex-lifetime, echo=TRUE, eval=FALSE}
 
 # Showing absolute numbers
 nsduh |> 
@@ -184,9 +184,7 @@ tribble(
 ```
 
 
-
-
-To answer the question, please fill in the tables below.
+To answer the question, create the tables shown below, and fill in the gaps with the appropriate values
 
 ```{r ex-1-tables, out.width="50%"}
 
@@ -223,11 +221,36 @@ tribble(
 
 
 
-3.  You will now estimate the same measures from the previous question, but this time using two types of regressions: a **logistic regression** and a regular **linear regression**. To those measures add the 95% confidence intervals associated. Show your code and present your results in a table, just as you've done above. Explain your findings: what are the differences between the three approaches (using a contingency table as in the question above, using logistic regression and using linear regression)? What explains these differences (or lack thereof)? What are the advantages/drawbacks of using one approach over the other? 
+3.  You will now estimate the same measures from the previous question, but this time using two types of regressions: a **logistic regression** and a regular **linear regression**. The advantage of using the regression models is that they provide the standard errors and the confidence intervals (which we do not observe in the contingency table).  Show your code and present your results in a table adding the confidence intervals (see below). Explain your findings: what are the differences between the three approaches (using a contingency table as in the question above, using logistic regression and using linear regression)? What explains these differences (or lack thereof)? What are the advantages/drawbacks of using one approach over the other? 
 
 
 :::{#boxedtext}
-**Hint:** Use the two null models to calculate probability and odds at the population level. Use the regression models with a single predictor to calculate the probabilities and odds for males and females as well as risk difference, risk ratio and odds ratio. 
+**Hint:** Use the two null models to calculate probability and odds at the general population level. Use the regression models with a single predictor to calculate the probabilities and odds for males and females as well as risk difference, risk ratio and odds ratio. Create your tables using the following pattern. 
+
+
+
+```{r ex-1-sex-lifetime-ci, echo=TRUE, eval=FALSE}
+
+# Replace the blanks below with appropriate values
+tribble(
+  ~Prediction, ~General, ~Female, ~Male, 
+  "Probability", "XX CI [XX, XX]", "XX CI [XX, XX]", "XX CI [XX, XX]", 
+  "Odds",        "XX CI [XX, XX]", "XX CI [XX, XX]", "XX CI [XX, XX]", 
+  "Log Odds",    "XX CI [XX, XX]", "XX CI [XX, XX]", "XX CI [XX, XX]"
+) |> gt()
+
+# Replace the blanks below with appropriate values
+tribble(
+  ~Contrast, ~`Males vs. Females`, 
+  "Risk difference", "XX CI [XX, XX]", 
+  "Risk Ratio",      "XX CI [XX, XX]",
+  "Odds ratio",      "XX CI [XX, XX]", 
+  "Log odds ratio",  "XX CI [XX, XX]"
+) |> gt()
+
+```
+
+
 :::
 
 ```{r ex-2, echo=TRUE, eval=FALSE}
@@ -276,6 +299,7 @@ ___ + ___ = ___
 
 
 
+
 ```{r ex-2-noshow, echo=FALSE, eval=FALSE}
 
 mdl.glm.null <- glm(mj_lifetime ~ 1, data = nsduh, family = binomial)
@@ -294,28 +318,29 @@ mdl.lm.null |>
   tidy(conf.int = TRUE) |> 
   mutate(estimate, conf.low, conf.high, .keep = "none")
 
-mdl.glm <- glm(mj_lifetime ~ demog_sex, data = nsduh, family = "binomial")
+mdl.glm <- 
+  glm(mj_lifetime ~ demog_sex, data = nsduh, family = "binomial")
 summary(mdl.glm)
+# demog_sexMale  0.36784    0.12738   2.888  0.00388 **
 
 # probability among female
 plogis(-0.13504)
 
 # probability among male
 plogis(-0.13504 + 0.36784)
+plogis(-0.13504 + 0.36784) - plogis(-0.13504)
+
+avg_comparisons(mdl.glm, variables = "demog_sex", comparison = "difference")
+avg_comparisons(mdl.lm, variables = "demog_sex", comparison = "difference")
+avg_comparisons(mdl.glm, variables = "demog_sex", comparison = "ratio")
+avg_comparisons(mdl.lm, variables = "demog_sex", comparison = "ratio")
+avg_comparisons(mdl.glm, variables = "demog_sex", comparison = 	\(hi, lo) ((hi/(1 - hi))/(lo/(1 - lo))))
+avg_comparisons(mdl.lm, variables = "demog_sex", comparison = 	\(hi, lo) ((hi/(1 - hi))/(lo/(1 - lo))))
+
 
 # Odds ratio male over female
 exp(0.36784)
-predictions(mdl.glm, 
-            newdata = datagrid(demog_sex = c("Male", "Female")), 
-            type = "response")
 
-
-predictions(mdl.glm, 
-            newdata = data.frame(demog_sex = c("Male", "Female")), 
-            hypothesis = "b1 = b2")
-comparisons(mdl.glm, variables = "demog_sex", by = TRUE)
-avg_comparisons(mdl.glm, variables = "demog_sex")
-avg_comparisons(mdl.glm, variables = "demog_sex")
 
 mdl.lm <- lm(mj_lifetime.numeric ~ demog_sex, data = nsduh )
 summary(mdl.lm)
@@ -323,13 +348,56 @@ summary(mdl.lm)
 0.46629
 # probability among male
 0.46629 + 0.09165 = 0.55794
+
+
 predictions(mdl.lm, 
             newdata = datagrid(demog_sex = c("Male", "Female")))
 comparisons(mdl.lm, variables = "demog_sex", by = TRUE)
 
 # Conclusion: Males have significantly greater odds of lifetime marijuana use than females (OR = 1.44; 95% CI = 1.13, 1.86; p = .004). Males have 44% greater odds of lifetime marijuana use than females.
 
+
+
+
 ```
+
+
+
+:::{#boxedtext}
+
+You should be able to find the confidence intervals of your log odds ratio from the logistic regression easily, using the following code: 
+
+```{r echo=TRUE, eval=FALSE}
+library(broom)
+mdl.glm |> tidy(conf.int = TRUE)
+```
+
+And the confidence interval of the odds ratio by exponentiating the appropriate values, or by running the following code:
+
+
+```{r echo=TRUE, eval=FALSE}
+library(broom)
+mdl.glm |> tidy(conf.int = TRUE, exponentiate = TRUE)
+```
+
+But how will you calculate the confidence intervals of the risk ratio? Or the risk difference? 
+To do that, we will be using the `avg_comparison` function in the `marginaleffects` package. Here is how this works: 
+
+```{r echo=TRUE, eval=FALSE}
+library(marginaleffects)
+avg_comparisons(
+  model = ____, 
+  variables = "demog_sex", # This is the exposure variable
+  comparison = "____"
+)
+```
+
+
+-   For the `model` argument you can use `mdl.glm` or `mdl.lm`, and compare between the results you get from the two models. 
+-   For the comparison argument you can use a variety of contrast indicators. Use `lnor` to estimate the log odds ratio (and its standard error and confidence interval). Use `ratio` for the risk ratio and `difference` for the probability difference. Compare different approaches and see if you get similar results! 
+
+:::
+
 
 
 4. Write up your results using the template shown below. 
@@ -338,6 +406,9 @@ comparisons(mdl.lm, variables = "demog_sex", by = TRUE)
 
 
 For this simple case with a binary outcome and a binary predictor, the OR is exactly the same as that obtained via the cross-product from a 2 x 2 contingency table. An advantage of using logistic regression, however, is that it provides the ability to adjust for other predictors to obtain an adjusted OR (AOR). Next, we are going to fit a logistic regression with a continuous predictor.
+
+
+
 
 ## Adjusted logistic regression
 
