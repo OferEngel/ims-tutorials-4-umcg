@@ -159,7 +159,7 @@ $$
 To calculate the p-value associated with your $\chi^2$, simply use R as follows: 
 
 ```{r ex3-mcnemar, echo=TRUE}
-pchisq(chi.sq, df = 1, lower.tail = TRUE)
+pchisq(chi.sq, df = 1, lower.tail = FALSE)
 ```
 
 
@@ -220,7 +220,7 @@ knitr::include_graphics("img/Q2_lm.png")
 # Null hypothesis: the interaction coefficient is not signifiant
 # Yes it is 
 2*pt(-2.227, df = 3154 - 1)
-2*pt(2.227, df = 3154 - 1, lower.tail = FALSE)
+2*pt(2.227,  df = 3154 - 1, lower.tail = FALSE)
 
 n <- 20
 tibble(x1 = rnorm(n), x2 = rnorm(n) , x3 = rnorm(n), 
@@ -513,7 +513,7 @@ glm(infect ~ area, data = df, family = binomial) |>
 
 ```{r ex14-solution}
 
-exp(1.21 + c(-1.96, 1.96)*.403)
+exp(1.21 + c(-1.96, 1.96) * .403)
 
 tribble(
   ~area, ~infect, ~freq, 
