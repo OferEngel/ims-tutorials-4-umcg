@@ -431,7 +431,7 @@ fit.ex6.3 <- glm(mj_lifetime ~ alc_agefirst, family = binomial, data = nsduh)
 
 Just as you can move from simple to multiple linear regression by adding more predictors, so you can move from simple to multiple logistic regression. When there are multiple predictors in a logistic regression model, the resulting odds ratios are called adjusted odds ratios (AOR).
 
-6. What is the association between lifetime marijuana use (mj_lifetime) and age at first use of alcohol (`alc_agefirst`), adjusted for age (`demog_age_cat6`), sex (`demog_sex`), and income (`demog_income`)? Fit a model with and without an interaction term (`alc_agefirst:demog_sex`) and compute the AOR, its 95% CI, and the p-value that tests the significance of age at first use of alcohol. Report also their AORs of the other predictors, their 95% CIs and p-values. Since there are some categorical predictors with more than two levels, use `car::Anova()` function to compute p-values for multiple degrees of freedom. In your answer, fill in the following template. 
+6. What is the association between lifetime marijuana use (mj_lifetime) and age at first use of alcohol (`alc_agefirst`), adjusted for age (`demog_age_cat6`), sex (`demog_sex`), and income (`demog_income`)? Fit a model with and without an interaction term (`alc_agefirst:demog_sex`) and compute the AOR, its 95% CI, and the p-value that tests the significance of age at first use of alcohol. Report also their AORs of the other predictors, their 95% CIs and p-values. Since there are some categorical predictors with more than two levels, use `car::Anova(model, type = 3)` function to compute p-values for multiple degrees of freedom. In your answer, fill in the following template. 
 
 ::: {#boxedtext}
 The Type III tests output contains the multiple df Wald tests for categorical predictors with more than two levels. For continuous predictors, or for categorical predictors with exactly two levels, the Type III Wald test p-values are identical to those in the Coefficients table.
@@ -443,6 +443,7 @@ fit.ex6.3.adj <- glm(mj_lifetime ~ alc_agefirst + demog_age_cat6 + demog_sex +  
 tidy(fit.ex6.3.adj, exponentiate = TRUE)
 
 fit.ex6.3.int.adj <- glm(mj_lifetime ~ alc_agefirst + demog_age_cat6 + demog_sex +  demog_income + alc_agefirst:demog_sex, family = binomial, data = nsduh)
+
 
 # Regression coefficient table
 tidy(fit.ex6.3.int.adj, exponentiate = TRUE)

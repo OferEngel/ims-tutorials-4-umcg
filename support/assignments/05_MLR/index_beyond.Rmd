@@ -367,6 +367,8 @@ map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr),
 M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC:MRACEHISP, 
                      data = natality.ctr)
 
+# M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC, data = natality.ctr)
+
 # anova(M.FULL.ctr, M.FULL_int.ctr, test = "LRT")
 # options(width = 10000)
 # options(marginaleffects_print_column_names = FALSE)
@@ -556,7 +558,7 @@ M.OPT_int.ctr <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE 
 
 
 newdata <- data.frame(
-    BMI       = rep(c(0, 2), 4),  
+    BMI       = rep(c(0, 0.5), 4),  
     MRACEHISP = rep(c("NH White", "NH Black", "NH Other", "Hispanic"), each = 2) 
     ) |> 
   mutate(
@@ -582,14 +584,14 @@ newdata |>
     size = 5
     ) +
   geom_point(
-    aes(x = "mean(BMI) + sd(BMI)", y = BMI_2, color = MRACEHISP), 
+    aes(x = "mean(BMI) + sd(BMI)", y = BMI_0.5, color = MRACEHISP), 
     size = 5
     ) +
   geom_segment(
     aes(x = "mean(BMI)", 
         y = BMI_0, 
         xend = "mean(BMI) + sd(BMI)", 
-        yend = BMI_2, 
+        yend = BMI_0.5, 
         color = MRACEHISP), 
     linewidth = 2
     ) + 
@@ -610,7 +612,73 @@ newdata |>
 
 8. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)
 
+
 ```{r dumbellplot-MAGER, eval=TRUE, out.width="75%"}
+
+
+
+M.FULL_int.ctr <- 
+  lm(formula = DBWT ~ . + BMI : MAGER, data = natality.ctr)
+
+
+MAGER.szd <- standardize(data.frame(MAGER = c(20, 30, 40)), two.sd = TRUE, reference = natality) |> mutate(MAGER = MAGER/2) |> pull(MAGER) |> as.numeric()
+
+# anova(M.FULL.ctr, M.FULL_int.ctr)
+
+# summary(M.FULL_int.ctr)
+newdata <- data.frame(
+    BMI   = rep(c(0, .25, .5), 3),  
+    MAGER = rep(MAGER.szd, each = 3) 
+    ) |> 
+  mutate(
+    CIG_REC = "No",
+    risks = "No", 
+    MRACEHISP = "NH White",
+    DMAR = "Married", 
+    MEDUC = "lower", 
+    PRIORLIVE = "0", 
+    PRIORDEAD = "0" 
+    )
+
+newdata |> 
+  mutate(
+    DBWT = predict(
+      M.FULL_int.ctr, 
+      newdata
+      )
+  ) |> select(BMI, MAGER, DBWT) |> 
+  pivot_wider(id_cols = MAGER, names_from = BMI, names_prefix = "BMI_", values_from = DBWT) |> 
+  mutate(MAGER = factor(c("20", "30", "40"))) |> 
+  ggplot() + 
+  geom_point(
+    aes(x = "mean(BMI)", y = BMI_0, color = MAGER), 
+    size = 5
+    ) +
+  geom_point(
+    aes(x = "mean(BMI) + sd(BMI)", y = BMI_0.5, color = MAGER), 
+    size = 5
+    ) +
+  geom_segment(
+    aes(x = "mean(BMI)", 
+        y = BMI_0, 
+        xend = "mean(BMI) + sd(BMI)", 
+        yend = BMI_0.5, 
+        color = MAGER), 
+    linewidth = 2
+    ) + 
+  scale_x_discrete(labels = c("mean(BMI)",  "mean(BMI) + sd(BMI)")) + 
+  scale_y_continuous(breaks = seq(-3, 0.5, 0.5)) +
+  labs(x = NULL, y = "Birth weight (centred, scaled)", color = "Mother’s age") + 
+  theme_minimal() + 
+  theme(legend.position = "bottom", text = element_text(size = 14)) 
+  
+
+```
+
+
+
+
+```{r dumbellplot-MAGER-old, eval=FALSE, out.width="75%"}
 
 M.FULL_int.ctr <- 
   lm(formula = DBWT ~ . + BMI : MAGER, data = natality.ctr)
@@ -687,13 +755,30 @@ M.OPT <- step(M.NULL,
      data=natality.ctr)
 summary(M.OPT)
 
-MAGER.szd <- standardize(data.frame(MAGER = c(20, 30, 40)), two.sd = TRUE, reference = natality) |> pull(MAGER) |> as.numeric()
+MAGER.szd <- standardize(data.frame(MAGER = c(20, 30, 40)), two.sd = TRUE, reference = natality) |> mutate(MAGER = MAGER/2) |> pull(MAGER) |> as.numeric()
+
+mean(natality$MAGER)
+sd(natality$MAGER)
+
+standardize(
+  data.frame(
+    MAGER = c(
+      mean(natality$MAGER), 
+      mean(natality$MAGER) + sd(natality$MAGER)
+      )
+    ), 
+  two.sd = FALSE, 
+  reference = natality
+  ) |> 
+  pull(MAGER) |> 
+  as.numeric()
+
 
 unique(natality$MRACEHISP)
 
 comparisons(
   M.OPT, 
-  variables = list(BMI = c(0, 2)), 
+  variables = list(BMI = c(0, .5)), 
   # condition = "MAGER"
   # CIG_REC = c("No", "Yes"), 
 )
