@@ -628,7 +628,11 @@ MAGER.szd <- standardize(data.frame(MAGER = c(20, 30, 40)), two.sd = TRUE, refer
 # summary(M.FULL_int.ctr)
 newdata <- data.frame(
     BMI   = rep(c(0, .25, .5), 3),  
-    MAGER = rep(MAGER.szd, each = 3) 
+    MAGER = rep(
+      MAGER.szd,  
+      # c(20, 30, 40), 
+      each = 3
+      ) 
     ) |> 
   mutate(
     CIG_REC = "No",

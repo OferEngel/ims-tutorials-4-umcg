@@ -117,41 +117,69 @@ The first rule of any data analysis is to plot the data. It's a common saying th
 We are going to look at predicting the height of birds' beaks based on their measured wing length. And we have measurements for a variety of species. Fitting a single linear regression to these data would produce this plot:
 
 
-```{r one-model}
+```{r one-model, eval=FALSE, echo=TRUE}
 ggplot(finches, aes(wingl, beakh)) +
-  geom_point(aes(colour = species), alpha = .7) +
-  geom_smooth(method = "lm", color = "grey", alpha = .2)  + theme_clean() + 
-  labs(x = "wing length (mm)", y = "Beak height (mm)")
+  geom_point(aes(colour = species)) +
+  geom_smooth(method = "lm", color = "grey")  
 
 ```
 
-We can immediately see that some species (e.g., `magnirostris`) appear to be concentrated above the linear regression much more frequently than other species. This becomes clearer if we facet according to species
 
 
-```{r facet-species-no-fixed, eval=TRUE}
+```{r one-model-noshow, eval=TRUE, echo=FALSE}
+ggplot(finches, aes(wingl, beakh)) +
+  geom_point(aes(colour = species), alpha = .7) +
+  geom_smooth(method = "lm", color = "grey", alpha = .2)  + theme_clean() + 
+  labs(x = "wing length (mm)", y = "Beak height (mm)", title = "Figure 1: Simple Linear Least Squares Regression (LLSR)")
+
+```
+
+The first thing we see is that the linear regression line tries to capture all the birds, but it doesn't really capture the pattern we see in the species: its intercept is much lower than the species and the slope is much steeper than what we expect from the species. 
+
+Similar to Simpson's paradox, the linear regression may capture the entire population, but it does not really capture the trend that we see in each species. 
+
+There is another concern: some species (e.g., `magnirostris`) appear to be concentrated above the linear regression much more frequently than other species. This becomes clearer if we facet according to species
+
+
+```{r facet-species-no-fixed, eval=FALSE, echo=TRUE}
+
+m1 <- lm(beakh ~ wingl, finches)
+
+ggplot(finches, aes(wingl, beakh)) +
+  geom_point(alpha= 0.5, (aes(color = species))) +
+  geom_smooth(
+    data = augment(m1), 
+    aes(x=wingl, y = beakh), 
+    method = "lm"
+    ) + 
+  facet_wrap(~species) 
+
+```
+
+
+
+```{r facet-species-no-fixed-noshow, eval=TRUE, echo=FALSE}
 
 m1 <- lm(beakh ~ wingl, finches)
 ggplot(finches, aes(wingl, beakh)) +
   geom_point(alpha= 0.5, (aes(color = species))) +
-  geom_abline(intercept = coef(m1)[1], slope = coef(m1)[2], color = "grey") + 
+  geom_smooth(
+    data = augment(m1), 
+    aes(x=wingl, y = beakh), 
+    method = "lm", 
+    color = "grey", 
+    alpha = .5
+    ) + 
   facet_wrap(~species) + theme_clean() + 
-  labs(x = "beak height (mm)", y = "residuals")
+  labs(x = "beak height (mm)", y = "residuals", title = "Figure 2: Each species separated against the linear regression line")
 
 ```
+
 
 And even more so if we look at the residuals per species...
 
-```{r resid-no-fe, eval=TRUE}
-finches$resid <- residuals(m1)
-ggplot(finches, aes(wingl, resid, color = species)) +
-  geom_hline(yintercept = 0, lty = 2) +
-  geom_point(alpha = .5) +
-  facet_wrap(~species, scales = "free_x") + theme_clean() + 
-  labs(x = "beak height (mm)", y = "residuals")
-```
 
-
-```{r resid-show, eval=FALSE}
+```{r resid-show, eval=FALSE, echo=TRUE}
 finches$resids <- residuals(m1)
 ggplot(___, aes(___, ___)) +
   geom_hline(yintercept = 0, lty = 2) +
@@ -160,9 +188,20 @@ ggplot(___, aes(___, ___)) +
  
 ```
 
-To deal with this, we could also use the parallel slope model, which is a fixed effects for the species, so that each species has its own intercept. The result is the following: 
+```{r resid-no-fe, eval=TRUE}
+finches$resid <- residuals(m1)
+ggplot(finches, aes(wingl, resid, color = species)) +
+  geom_hline(yintercept = 0, lty = 2) +
+  geom_point(alpha = .5) +
+  facet_wrap(~species, scales = "free_x") + theme_clean() + 
+  labs(x = "beak height (mm)", y = "residuals", title = "Figure 3: Plotting the residuals for each species separately")
+```
+
+
+To deal with this, we could also use the parallel slope model, which is a fixed effects for the species, so that each species has its own intercept. The formula we will be modelling is `beakh ~ wingl + species`, and the result is the following: 
 
 ```{r fe-int, eval=TRUE}
+
 
 p_fe <- finches |> 
   lm(beakh ~ wingl + species, data = _) |> 
@@ -170,7 +209,7 @@ p_fe <- finches |>
 ggplot(aes(wingl, beakh, colour = species, group = species)) +
   geom_point(alpha = .5) +
   geom_line(aes(wingl, .fitted), size = 1, alpha = .5) + theme_clean() +
-  labs(x = "wing length (mm)", y = "beak height (mm)", title = "Fixed intercept model", subtitle = "Each species has its own intercept")
+  labs(x = "wing length (mm)", y = "beak height (mm)", title = "Figure 4: Fixed intercept model", subtitle = "Each species has its own intercept")
 
 p_fe
 
@@ -187,18 +226,18 @@ ggplot(aes(wingl, .resid, colour = species)) +
   geom_hline(yintercept = 0, lty = 2) +
   facet_wrap(~species, scales = "free_x") + 
   theme_clean() +   
-  labs(x = "wing length (mm)", y = "residuals")
+  labs(x = "wing length (mm)", y = "residuals", title = "Figure 5: Residuals for the fixed intercept model")
 ```
 
 
-
-This looks a bit better, for example the residuals of the `magnirostris` are centered nicely. But we can see that forcing the lines to be parallel makes them fit some species better than others. For example, in the `fuliginosa` species and the `difficilis` species we can see a pattern that suggests that we need to tilt the linear model a bit, i.e., that we would need different slopes for the different species. We could, of course, fit a model for each species separately, such that each species would have their own unique intercept *and* slope. This would then be the result: 
+This looks a bit better, for example the residuals of the `magnirostris` are centered much better than in Figure 3. But we can see that forcing the lines to be parallel makes them fit some species better than others. For example, in the `fuliginosa` species and the `difficilis` species we can see a pattern that suggests that we need to tilt the linear model a bit, i.e., that we would need different slopes for the different species. We could, of course, fit a model for each species separately, such that each species would have their own unique intercept *and* slope. This would then be the result: 
 
 ```{r fe-int-slope, eval=TRUE}
 
 ggplot(finches, aes(wingl, beakh, color = species, group = species)) +
   geom_point(alpha = .7) +
-  geom_smooth(method = "lm", alpha = .2)  + theme_clean() + 
+  geom_smooth(method = "lm", alpha = .2)  + 
+  theme_clean() + 
   labs(x = "wing length (mm)", y = "beak height (mm)", title = "Fixed effects: intercepts and slopes", 
        subtitle = "Intercepts and slopes are calculated separatly for each species")
 
@@ -234,6 +273,26 @@ You can find extensive details in the documentation `?lme4::lmer`.
 m_lmer <-  lmer(beakh ~ wingl + (1 | species), data = finches)
 ```
 
+
+```{r lmer-noshow-test, eval=FALSE, echo=FALSE}
+finches |> 
+  lm(beakh ~  wingl, data = _) |> 
+  summary()
+
+lm.coef <- finches |> 
+  lm(beakh ~ 1 + wingl + species, data = _) |> 
+  tidy() |> mutate(term = stringr::str_replace(term, "species", "")) |> 
+  mutate(term = stringr::str_replace(term, "\\(Intercept\\)", "conirostris"))
+
+lmer(beakh ~ wingl + (1 | species), data = finches)
+summary(m_lmer)
+ranef(m_lmer) |> as.data.frame() |> 
+mutate(total.int = condval -3.819 ) |> 
+  select(grp, total.int)
+
+```
+
+
 Notice the new piece `+ (1 | species)`. The `1` refers to "intercept" and the `| species` tells the function that you want to let the intercept vary by the values in the `species` column.
 
 ### Plotting the predictions
@@ -267,7 +326,7 @@ ggplot(aes(___, ___, colour = ___)) +
 ```
 
 
-There is another kind of prediction we can make with a mixed effects model. We can make a prediction at the "population" level. This is our expectation if we sampled a new taxon of unknown identity. With the lme4 package, we can do that by adding the argument `re.form = NA` to the `predict` function:
+There is another kind of prediction we can make with a mixed effects model. We can make a prediction at the "population" level. This is our expectation if we sampled a new species of unknown identity. With the lme4 package, we can do that by adding the argument `re.form = NA` to the `predict` function:
 
 ```{r pred-pop-show, echo=TRUE, eval=TRUE}
 finches$predict_lmer_population <- 
