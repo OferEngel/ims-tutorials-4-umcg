@@ -562,7 +562,7 @@ fit.ex6.3.int.adj.ctr %>%
 ```
 
 
-9.  We want to continue exploring the association between age of first alcohol use and lifetime marijuana use, and how this association varies between males and females. Try to replicate the following graphs, and interpret what you see. Note also that something interesting happens at the age of 18. What is special about that age, according to the two graphs? 
+9.  We want to continue exploring the association between age of first alcohol use and lifetime marijuana use, and how this association varies between males and females. Try to replicate the following graphs, and interpret what you see. Note also that something interesting happens at the age of 18. What is special about that age, according to the two graphs? Is the difference between the predicted outcomes of males and females significant at any age bracket? If so, what is the age bracket? 
 
 ```{r ex9-nowshow, echo=FALSE, eval=TRUE}
 
