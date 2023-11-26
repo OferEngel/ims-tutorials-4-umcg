@@ -1,0 +1,134 @@
+---
+title: 'Readiness Assurance Week 10'
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    css: ../lab.css
+    toc: true
+    toc_float: true
+---
+
+
+```{r global_options, include=FALSE}
+library(emo)
+library(tidyverse)
+library(broom)
+library(infer)
+library(santoku)
+library(car)
+library(GGally)
+library(modelsummary)
+library(easystats)
+library(table1)
+library(gt)
+library(datawizard)
+library(marginaleffects)
+library(janitor)
+
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.align = "center", 
+                      # fig.height = 3, 
+                      # fig.width = 5,
+                      warning = FALSE, 
+                      message = FALSE, 
+                      eval = FALSE)
+
+
+
+
+```
+
+## Categorical response
+
+In a certain population, data were collected in 900 randomly chosen individuals. Participants were asked if they tested at least once positive on the COVID self-tests they took last year.
+
+
+
+
+```{r ex-1-01-img, eval=TRUE, out.width="150%"}
+knitr::include_graphics("img/Q1_01.png")
+```
+
+
+1. Give a 95% confidence interval for the proportion of individuals who tested at least once positive on the COVID self-tests in this population, based on this information if we can assume that these 900 individuals are representative for the total population. [4]
+
+```{r ex-1}
+
+binom.test(180, 900)
+prop.test(180, 900)
+
+```
+
+
+2. One individual is chosen randomly from this table. What is the probability that this person is younger than 20 years if we know that this person tested positive on the COVID self-test twice? [4]
+
+```{r ex-2}
+
+binom.test(45, 180)
+prop.test(45, 180)
+
+df <- tribble(
+  ~status, ~predicted, ~freq, 
+  "true +", "pred +", 990, 
+  "true +", "pred -", 10, 
+  "true -", "pred +", 90, 
+  "true -", "pred -", 8910 
+) |> uncount(freq)
+
+df |> 
+  tabyl(status, predicted) |> 
+  adorn_totals(where = c("row", "col")) |> 
+  adorn_title()
+
+# sensitivity: prob(pred+ | true+) = 99%
+# specificity: prob(pred- | true-) = 99%
+# ppv: prob(true+ | pred-) = 990 / 1080 = 91.66667%
+binom.test(990, 1080)
+
+
+df <- tribble(
+  ~status, ~predicted, ~freq, 
+  "true +", "pred +", 99, 
+  "true +", "pred -", 1, 
+  "true -", "pred +", 99, 
+  "true -", "pred -", 9801 
+) |> uncount(freq)
+
+df |> 
+  tabyl(status, predicted) |> 
+  adorn_totals(where = c("row", "col")) |> 
+  adorn_title()
+
+# sensitivity: prob(pred+ | true+) = 99%
+# specificity: prob(pred- | true-) = 99%
+# ppv: prob(true+ | pred-) = 99 / 198 = 50%
+binom.test(99, 198)
+
+```
+
+$$
+\text{ppv} = p(\text{status}|\text{pred}) = \\
+\frac{p(\text{pred}|\text{status})\cdot~p(\text{status})}{p(\text{pred})}=\\
+\frac{p(\text{pred}|\text{status})\cdot~p(\text{status})}{p(\text{pred}|\text{status})\cdot~p(\text{status}) + p(\text{pred}|\text{~status})\cdot~p(\text{~status})}
+$$
+
+
+
+
+
+3. From the 900 individuals in the sample, randomly 3 individuals were chosen for in-depth interviews. What is the probability that all three are younger than 40 years? [4]
+
+
+4. In another (very large) population, 15% tested at least once positive. A random sample of 10 individuals was taken. What is the probability that exactly 7 individuals in this sample tested negative on all tests?
+
+5. In this second population, there is information on the age distribution and the prevalences of negative / positive testing. From this very large population, randomly 3 individuals are chosen, one from each age group. One of these three individuals tested positive at least once, the other two did not. What is the probability that the individual who tested positive is younger than 20? [6]
+
+
+
+```{r ex-1-02-img, eval=TRUE, out.width="150%"}
+knitr::include_graphics("img/Q1_02.png")
+```
+
+
+

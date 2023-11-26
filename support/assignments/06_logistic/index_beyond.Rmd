@@ -1,5 +1,5 @@
 ---
-title: 'BMLR LAB 2: Logistic regression - DRAFT'
+title: 'BMLR LAB 2: Logistic regression'
 output:
   html_document:
     theme: cerulean
@@ -221,12 +221,10 @@ tribble(
 
 
 
-3.  You will now estimate the same measures from the previous question, but this time using two types of regressions: a **logistic regression** and a regular **linear regression**. The advantage of using the regression models is that they provide the standard errors and the confidence intervals (which we do not observe in the contingency table).  Show your code and present your results in a table adding the confidence intervals (see below). Explain your findings: what are the differences between the three approaches (using a contingency table as in the question above, using logistic regression and using linear regression)? What explains these differences (or lack thereof)? What are the advantages/drawbacks of using one approach over the other? 
-
+3.  You will now estimate the same measures from the previous question, but this time using two types of regressions: a **logistic regression** and a regular **least squares linear regression**.  Show your code and present your results in a table adding the confidence intervals (see below). Explain your findings: what are the differences between the three approaches (using a contingency table as in the question above, using logistic regression and using linear regression)? What explains these differences (or lack thereof)? What are the advantages/drawbacks of using one approach over the other? 
 
 :::{#boxedtext}
 **Hint:** Use the two null models to calculate probability and odds at the general population level. Use the regression models with a single predictor to calculate the probabilities and odds for males and females as well as risk difference, risk ratio and odds ratio. Create your tables using the following pattern. 
-
 
 
 ```{r ex-1-sex-lifetime-ci, echo=TRUE, eval=FALSE}
@@ -251,48 +249,65 @@ tribble(
 ```
 
 
+
 :::
 
 ```{r ex-2, echo=TRUE, eval=FALSE}
+#################
+# The null model 
+#################
 
-# Using a logistic regression
+# Using logistic regression
 mdl.glm.null <- glm(
   mj_lifetime ~ 1, 
   data = nsduh, 
   family = binomial
   )
-summary(___)
 
-# probability of lifetime marijuana (everyone)
-plogis(___)
+summary(mdl.glm.null)
 
-# Using a linear regression, violating assumptions
+# Log - odds for lifetime marijuana (everyone)
+tidy(
+  mdl.glm.null, 
+  conf.int = TRUE
+  )
+
+# Odds of lifetime marijuana (everyone)
+tidy(
+  mdl.glm.null, 
+  exponentiate = TRUE,
+  conf.int = TRUE
+  )
+
+# Probability of lifetime marijuana (everyone)
+tidy(
+  mdl.glm.null, 
+  conf.int = TRUE
+  ) |> 
+  select(estimate, conf.low, conf.high) |> 
+  mutate_all(plogis)
+
+
+#################
+# Now let us use a linear regression
+# Notice: we will be violating assumptions. Oh no! 😱
 mdl.lm.null <- lm(mj_lifetime.numeric ~ 1, data = nsduh )
-summary(___)
-# probability of lifetime marijuana (everyone)
-___
 
+# Probability of lifetime marijuana (everyone) using linear regression
+tidy(
+  mdl.lm.null, 
+  conf.int = TRUE
+  ) 
 
-mdl.glm <- glm(___ ~ ___, data = ___, family = "binomial")
-summary(___)
+########################
+# The unadjusted model
+#######################
 
-# probability lifetime marijuana (females)
-plogis(___)
-
-# probability lifetime marijuana (males)
-plogis(___ + ___)
-
-# Odds ratio male over female
-exp(___)
-
-
-mdl.lm <- lm(___ ~ ___, data = nsduh )
-summary(___)
-# probability among female
-___
-# probability among males
-___ + ___ = ___
-
+# Now use the logistic and linear model, but this time 
+# Using the formula `mj_lifetime.numeric ~ demog_sex` 
+mdl.glm <- ___ 
+mdl.lm  <- ___ 
+  
 
 
 ```
@@ -301,6 +316,25 @@ ___ + ___ = ___
 
 
 ```{r ex-2-noshow, echo=FALSE, eval=FALSE}
+
+# To calculate the confidence intervals, use the `avg_comparisons` function
+mdl |> 
+  avg_comparisons(
+    variables = "demog_sex", 
+    comparison = "___"
+    )
+
+# For the comparison argument you can use (among others):
+# 1 "difference" for probability difference (incl. confidence intervals)
+# 2 "ratio" for risk ratio
+# 3 "lnor"  for for log odds ratio
+# 4 Odds Ratio - Can you find out how to calculate the CI?
+
+# Check the help file for the avg_comparisons 
+# for more types of comparison!
+# Compare your results when using the 
+# the logistic model vs. the linear model
+
 
 mdl.glm.null <- glm(mj_lifetime ~ 1, data = nsduh, family = binomial)
 mdl.glm.null |> 
@@ -320,7 +354,16 @@ mdl.lm.null |>
 
 mdl.glm <- 
   glm(mj_lifetime ~ demog_sex, data = nsduh, family = "binomial")
-summary(mdl.glm)
+tidy(mdl.glm, conf.int = TRUE, exponentiate = TRUE)
+tidy(mdl.glm, conf.int = TRUE)
+
+
+
+mdl.lm <- 
+  lm(mj_lifetime.numeric ~ demog_sex, data = nsduh)
+summary(mdl.lm)
+
+
 # demog_sexMale  0.36784    0.12738   2.888  0.00388 **
 
 # probability among female
@@ -334,6 +377,8 @@ avg_comparisons(mdl.glm, variables = "demog_sex", comparison = "difference")
 avg_comparisons(mdl.lm, variables = "demog_sex", comparison = "difference")
 avg_comparisons(mdl.glm, variables = "demog_sex", comparison = "ratio")
 avg_comparisons(mdl.lm, variables = "demog_sex", comparison = "ratio")
+avg_comparisons(mdl.glm, variables = "demog_sex", comparison = "lnor")
+avg_comparisons(mdl.lm, variables = "demog_sex", comparison = "lnor")
 avg_comparisons(mdl.glm, variables = "demog_sex", comparison = 	\(hi, lo) ((hi/(1 - hi))/(lo/(1 - lo))))
 avg_comparisons(mdl.lm, variables = "demog_sex", comparison = 	\(hi, lo) ((hi/(1 - hi))/(lo/(1 - lo))))
 
@@ -365,22 +410,25 @@ comparisons(mdl.lm, variables = "demog_sex", by = TRUE)
 
 :::{#boxedtext}
 
-You should be able to find the confidence intervals of your log odds ratio from the logistic regression easily, using the following code: 
+The confidence intervals is provided as follows:
 
 ```{r echo=TRUE, eval=FALSE}
 library(broom)
-mdl.glm |> tidy(conf.int = TRUE)
+mdl |> 
+  tidy(conf.int = TRUE)
 ```
 
-And the confidence interval of the odds ratio by exponentiating the appropriate values, or by running the following code:
+For the confidence interval of the odds ratio, you will need to exponentiate the appropriate values, either manually or by running the following code:
 
 
 ```{r echo=TRUE, eval=FALSE}
 library(broom)
-mdl.glm |> tidy(conf.int = TRUE, exponentiate = TRUE)
+# You will use exponentiate only with the glm model!
+mdl.glm |> 
+  tidy(conf.int = TRUE, exponentiate = TRUE)
 ```
 
-But how will you calculate the confidence intervals of the risk ratio? Or the risk difference? 
+But how will you calculate the confidence intervals of the risk ratio and the risk difference? 
 To do that, we will be using the `avg_comparison` function in the `marginaleffects` package. Here is how this works: 
 
 ```{r echo=TRUE, eval=FALSE}
@@ -394,7 +442,7 @@ avg_comparisons(
 
 
 -   For the `model` argument you can use `mdl.glm` or `mdl.lm`, and compare between the results you get from the two models. 
--   For the comparison argument you can use a variety of contrast indicators. Use `lnor` to estimate the log odds ratio (and its standard error and confidence interval). Use `ratio` for the risk ratio and `difference` for the probability difference. Compare different approaches and see if you get similar results! 
+-   For the comparison argument you can use a variety of contrast indicators. Use `lnor` to calculate the log odds ratio (and its standard error and confidence interval). Use `ratio` for the risk ratio and `difference` for the probability difference. What do you need to do in order to estimate the odds ratio? How do different approaches compare? Did you get similar results? Why or why not? 
 
 :::
 
@@ -404,17 +452,10 @@ avg_comparisons(
 
 > Conclusion: Males have significantly ___ (higher/lower) odds of lifetime marijuana use than females (OR = ___ ; 95% CI = ___ , ___ p = ___ ). Males have ___% (higher/lower) odds of lifetime marijuana use than females.
 
-
-For this simple case with a binary outcome and a binary predictor, the OR is exactly the same as that obtained via the cross-product from a 2 x 2 contingency table. An advantage of using logistic regression, however, is that it provides the ability to adjust for other predictors to obtain an adjusted OR (AOR). Next, we are going to fit a logistic regression with a continuous predictor.
-
+For this simple case with a binary outcome and a binary predictor, the odds ratio you calculated should be the same as the odds ratio obtained via the cross-product from a 2 x 2 contingency table. But what if your predictor variable is not binary, but continuous? 
 
 
-
-## Adjusted logistic regression
-
-The main reason we add additional predictors is to mitigate confounding bias. Confounding bias occurs when a predictor affects both outcome and exposure. Adding a confounder to as a predictor to the model removes this bias. 
-
-5. Using the 2019 National Survey of Drug Use and Health (NSDUH) teaching dataset, explore the association between lifetime marijuana use `mj_lifetime` and age at first use of alcohol `alc_agefirst`? Fit a logistic regression and interpret the results, using the template shown below. 
+5. Whereas in the previous questions we explored the relationship between lifetime marijuana use and sex, we will now explore the association between lifetime marijuana use (`mj_lifetime`) and age at first use of alcohol (`alc_agefirst`)? Fit a logistic regression and interpret the results, using the template shown below. 
 
 ```{r ex6.3, eval=TRUE, echo=FALSE}
 fit.ex6.3 <- glm(mj_lifetime ~ alc_agefirst, family = binomial, data = nsduh)
@@ -429,13 +470,15 @@ fit.ex6.3 <- glm(mj_lifetime ~ alc_agefirst, family = binomial, data = nsduh)
 > Age at first alcohol use is significantly ___ (negatively/positively) associated with lifetime marijuana use (OR = ___ ; 95% CI = ___ , ___ ; p < ___ ). Individuals who first used alcohol at age 19 years have ___ % ___ (lower/higher) odds of having ever used marijuana than those who first used alcohol at age 18 years. In contrast, the reduction in odds associated with starting drinking alcohol **3 years later** is ___ % ___ (lower/higher) odds.
 
 
-Just as you can move from simple to multiple linear regression by adding more predictors, so you can move from simple to multiple logistic regression. When there are multiple predictors in a logistic regression model, the resulting odds ratios are called adjusted odds ratios (AOR).
 
-6. What is the association between lifetime marijuana use (mj_lifetime) and age at first use of alcohol (`alc_agefirst`), adjusted for age (`demog_age_cat6`), sex (`demog_sex`), and income (`demog_income`)? Fit a model with and without an interaction term (`alc_agefirst:demog_sex`) and compute the AOR, its 95% CI, and the p-value that tests the significance of age at first use of alcohol. Report also their AORs of the other predictors, their 95% CIs and p-values. Since there are some categorical predictors with more than two levels, use `car::Anova(model, type = 3)` function to compute p-values for multiple degrees of freedom. In your answer, fill in the following template. 
 
-::: {#boxedtext}
-The Type III tests output contains the multiple df Wald tests for categorical predictors with more than two levels. For continuous predictors, or for categorical predictors with exactly two levels, the Type III Wald test p-values are identical to those in the Coefficients table.
-:::
+## Adjusted logistic regression
+
+The main reason for combining multiple predictors is to address the problem of confounding bias. Confounding bias occurs when a predictor affects both outcome and exposure. Adding a confounder to as a predictor to the model removes this bias. 
+
+With multiple predictors in a logistic regression model, the resulting odds ratios are called Adjusted Odds Ratio (AOR).
+
+6. What is the association between lifetime marijuana use (`mj_lifetime`) and age at first use of alcohol (`alc_agefirst`), adjusted for age (`demog_age_cat6`), sex (`demog_sex`), and income (`demog_income`)? Fit a model with and without an interaction term (`alc_agefirst:demog_sex`) and compute the AOR, its 95% CI, and the p-value that tests the significance of age at first use of alcohol. Report also their AORs of the other predictors, their 95% CIs and p-values. Since there are some categorical predictors with more than two levels, use `car::Anova(model, type = 3)` function to compute p-values for multiple degrees of freedom. In your answer, fill in the template below. 
 
 ```{r ex-5-no-show, include=FALSE}
 fit.ex6.3.adj <- glm(mj_lifetime ~ alc_agefirst + demog_age_cat6 + demog_sex +  demog_income, family = binomial, data = nsduh)
@@ -457,12 +500,21 @@ lrtest(fit.ex6.3, fit.ex6.3.adj, fit.ex6.3.int.adj)
 
 > The AOR for our primary predictor `alc_agefirst` is ___. This represents the OR for lifetime marijuana use comparing those with a one-year difference in age at first use of alcohol, adjusted for age, sex, and income.
 
-> The remaining AORs compare levels of categorical predictors to their reference level, adjusted for the other predictors in the model. For example, comparing individuals with the same age of first alcohol use, sex, and income, 35-49 year-olds have ___ %  (lower/higher) odds of lifetime marijuana use than 18-25 year-olds (OR = ___ ; 95% CI = ___ , ___ ; p = ___ ). An overall, 4 df p-value for age, can be read from the Type III Test table (p = ___ ).
+> The remaining AORs compare levels of categorical predictors to their reference level, adjusted for the other predictors in the model. For example, comparing individuals with the same age of first alcohol use, sex, and income, 35-49 year-olds have ___ %  (lower/higher) odds of lifetime marijuana use than 18-25 year-olds (OR = ___ ; 95% CI = ___ , ___ ; p = ___ ). An overall 4 df p-value for age can be read from the Type III Test table. It (is/is not) significant at p = ___ . An overall, 3 df p-value for income (is/is not) significant at (p = ___ ).
 
 
 > Conclusion: After adjusting for age, sex, and income, age at first alcohol use is significantly ___ (negatively/positively) associated with lifetime marijuana use (AOR = ___ ; 95% CI = ___ , ___ ; p < ___ ). Individuals who first used alcohol at a given age have ___ % (lower/higher) odds of having ever used marijuana than those who first used alcohol one year earlier. The association between age of first alcohol use and lifetime marijuana use differs significantly between males and females (p = ___ ). A likelihood ratio test shows that the adjusted model with the interaction is ___ (superior/not superior) to the one without the interaction (p = ___)
 
-7. Replicate the model summary and the forest plot shown below (the forest plot using a centralized variable `alc_agefirst`, scaled such that its standard deviation is 0.5). 
+
+::: {#boxedtext}
+Use `car::Anova(mdl, type = 3)` to test whether all the regression coefficients associated with a single term in the model (e.g., a single predictor, a single interaction) are simultaneously zero. For binary categorical predictors, continuous predictors, and interactions between them, the `car::Anova()` output is redundant with the regression coefficient table output from `summary()` since each such term only has one corresponding regression coefficient. 
+
+However, you must use `car::Anova()` to test the significance of a categorical predictor with more than two levels or of an interaction that involves a categorical predictor with more than two levels. `car::Anova()` carries out comparisons for each of a set of specific pairs of nested models – each comparison is between the full model and a reduced model with one predictor (or interaction) removed.
+
+:::
+
+
+7. Replicate the model summary shown below, and discuss its main features. Use the likelihood ratio test to determine which model is best, and discuss the association between age of first alcohol and lifetime marijuana use, when comparing males to females.  
 
 ```{r ex-7}
 
@@ -477,7 +529,23 @@ nsduh.ctr <- nsduh |>
   standardize(two_sd = TRUE)
 
 
-fit.ex6.3.int.adj.ctr <- glm(mj_lifetime ~ alc_agefirst + demog_age_cat6 + demog_sex +  demog_income + alc_agefirst:demog_sex, family = binomial, data = nsduh.ctr)
+fit.ex6.3.int.adj.ctr <- glm(
+  mj_lifetime ~ alc_agefirst + 
+    demog_age_cat6 + 
+    demog_sex +  
+    demog_income + 
+    alc_agefirst:demog_sex, 
+  family = binomial, 
+  data = nsduh.ctr
+  )
+
+```
+
+
+
+8. Replicate the forest plot shown below, using centralized variables scaled such that standard deviations are 0.5 (you can use the function `datawizard::standardize(two_sd = TRUE)`. What is the advantage of this plot compared to the model summary tables shown above? 
+
+```{r}
 
 # modelsummary(list(non_c = fit.ex6.3.int.adj, 
 # c = fit.ex6.3.int.adj.ctr), stars = TRUE)
@@ -490,6 +558,69 @@ fit.ex6.3.int.adj.ctr %>%
   labs(x = "Log-Odds (standardized)") +
   theme(legend.position = "bottom")
 
+
 ```
 
 
+9.  We want to continue exploring the association between age of first alcohol use and lifetime marijuana use, and how this association varies between males and females. Try to replicate the following graphs, and interpret what you see. Note also that something interesting happens at the age of 18. What is special about that age, according to the two graphs? 
+
+```{r ex9-nowshow, echo=FALSE, eval=TRUE}
+
+library(patchwork)
+p1 <- plot_predictions(fit.ex6.3.int.adj, 
+                 condition = c("alc_agefirst", "demog_sex")) + 
+  theme_clean() + 
+  labs(x = "Alcohol (age first used)", y = "Probability of lifetime marijuana use", color = NULL, fill = NULL) +
+  theme(legend.position = "bottom") + 
+  scale_x_continuous(breaks = c(seq(5, 40, 5), 18)) 
+
+
+p2 <- plot_comparisons(
+  fit.ex6.3.int.adj, 
+  variables = list(
+    demog_sex = c("Male", "Female")
+    ), 
+  condition = "alc_agefirst") + 
+  geom_hline(yintercept = 0, lty = 2) +
+  theme_clean() + 
+  scale_x_continuous(breaks = c(seq(5, 40, 5), 18)) + 
+  labs(x = "Alcohol (age first used)", y = "Pr(Female) - Pr(Male)", title = "Lifetime Marijuana use: Female vs. Male") +
+  theme(legend.position = "bottom")
+
+
+p1 + p2
+```
+
+::: {#boxedtext}
+
+The first graph compares the predicted probabilities for males and females along time of alcohol's first use. The code to create it looks something like the following:
+
+```{r ex9-predict, echo=TRUE, eval=FALSE}
+
+mdl.int <- glm(mj_lifetime ~ ___, family = ___, data = ___)
+
+
+plot_predictions(mdl.int, 
+                 condition = c("alc_agefirst", "demog_sex"))
+
+
+
+```
+
+The second graph shows the difference between the predicted probabilities for males and females along age of alcohol's first use. The code to create it looks something like the following:
+
+```{r ex9-compare, echo=TRUE, eval=FALSE}
+
+plot_comparisons(
+  ___, 
+  variables = list(
+    demog_sex = c("Male", "Female")
+    ), 
+  condition = "alc_agefirst")
+
+
+
+```
+
+
+:::

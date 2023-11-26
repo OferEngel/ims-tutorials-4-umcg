@@ -275,20 +275,56 @@ m_lmer <-  lmer(beakh ~ wingl + (1 | species), data = finches)
 
 
 ```{r lmer-noshow-test, eval=FALSE, echo=FALSE}
-finches |> 
+
+library(datawizard)
+library(broom)
+library(stringr)
+finches.c <- datawizard::standardise(finches)
+finches.c <- finches
+
+
+finches.c |> 
   lm(beakh ~  wingl, data = _) |> 
   summary()
+finches.c |> 
+  lm(beakh ~  0 + wingl + species,, data = _) |> 
+  summary()
+lmer(beakh ~ wingl + (1 | species), data = finches.c) |> 
+  summary()
 
-lm.coef <- finches |> 
-  lm(beakh ~ 1 + wingl + species, data = _) |> 
-  tidy() |> mutate(term = stringr::str_replace(term, "species", "")) |> 
-  mutate(term = stringr::str_replace(term, "\\(Intercept\\)", "conirostris"))
 
-lmer(beakh ~ wingl + (1 | species), data = finches)
-summary(m_lmer)
-ranef(m_lmer) |> as.data.frame() |> 
-mutate(total.int = condval -3.819 ) |> 
-  select(grp, total.int)
+# Fixed effects 
+f.int <- finches.c |> 
+  lm(beakh ~  0 + wingl + species,, data = _) |> 
+  tidy() |> select(term, estimate) |> filter(term !="wingl") |> 
+  mutate(species = gsub("species", "", term), f.int = estimate, .keep = "none")
+  
+
+
+# random effects 
+ref <- lmer(beakh ~ wingl + (1 | species), data = finches.c) |> 
+  ranef() 
+r.int <- ref$species |> mutate(r.int = `(Intercept)` + 1.142e-01) |> 
+   rownames_to_column() |> mutate(species = rowname) |> 
+  select(-1, -2) |> select(2, 1)
+r.int <- ref$species |> mutate(r.int = `(Intercept)` + -3.819) |> 
+   rownames_to_column() |> mutate(species = rowname) |> 
+  select(-1, -2) |> select(2, 1)
+
+# data 
+dt <- finches.c |> summarise(
+  mn.bk = mean(beakh), 
+  sd.bk = sd(beakh), 
+  mn.wg = mean(wingl), 
+  sd.wg = sd(wingl), 
+  n = n(), 
+  .by = species
+  )
+
+jn <- f.int |> inner_join(r.int, by = "species") |> 
+  inner_join(dt, by = "species")
+jn |> 
+summarise(weighted.mean(f.int, n))
 
 ```
 
