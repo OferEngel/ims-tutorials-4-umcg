@@ -564,31 +564,94 @@ fit.ex6.3.int.adj.ctr %>%
 
 9.  We want to continue exploring the association between age of first alcohol use and lifetime marijuana use, and how this association varies between males and females. Try to replicate the following graphs, and interpret what you see. Note also that something interesting happens at the age of 18. What is special about that age, according to the two graphs? Is the difference between the predicted outcomes of males and females significant at any age bracket? If so, what is the age bracket? 
 
-```{r ex9-nowshow, echo=FALSE, eval=TRUE}
+```{r ex9-nowshow, echo=FALSE, eval=TRUE, fig.height=15, fig.align='center', fig.width=10}
+
+# Which ages are significantly different?
+# avg_comparisons(fit.ex6.3.int.adj, 
+#             variables = "demog_sex",
+#                  newdata = datagrid(
+#                    alc_agefirst = seq(0, 50, 1)
+#                  ), 
+#             by = "alc_agefirst"
+#             ) |> as.data.frame() |> select(
+#               "alc_agefirst", "estimate", "std.error", "statistic", "p.value", "conf.low", "conf.high", "predicted_lo", "predicted_hi", "predicted" 
+#             ) |> mutate_all(format, digits = 3) |> 
+#   filter(p.value < 0.05)
 
 library(patchwork)
-p1 <- plot_predictions(fit.ex6.3.int.adj, 
+p_predict <- plot_predictions(fit.ex6.3.int.adj, 
                  condition = c("alc_agefirst", "demog_sex")) + 
   theme_clean() + 
-  labs(x = "Alcohol (age first used)", y = "Probability of lifetime marijuana use", color = NULL, fill = NULL) +
+  labs(x = "Alcohol (age first used)", y = "Probability of lifetime marijuana use", color = NULL, fill = NULL, title = "Predicted probability") +
   theme(legend.position = "bottom") + 
   scale_x_continuous(breaks = c(seq(5, 40, 5), 18)) 
 
 
-p2 <- plot_comparisons(
+p_diff <- plot_comparisons(
   fit.ex6.3.int.adj, 
   variables = list(
     demog_sex = c("Male", "Female")
     ), 
-  condition = "alc_agefirst") + 
+  condition = "alc_agefirst", 
+  comparison = "difference") + 
   geom_hline(yintercept = 0, lty = 2) +
   theme_clean() + 
   scale_x_continuous(breaks = c(seq(5, 40, 5), 18)) + 
-  labs(x = "Alcohol (age first used)", y = "Pr(Female) - Pr(Male)", title = "Lifetime Marijuana use: Female vs. Male") +
+  labs(x = "Alcohol (age first used)", y = "Pr(Female) - Pr(Male)", title = "Probability difference") +
+  theme(legend.position = "bottom")
+
+p_or <- plot_comparisons(
+  fit.ex6.3.int.adj, 
+  variables = list(
+    demog_sex = c("Male", "Female")
+    ), 
+  condition = "alc_agefirst", 
+  comparison = \(hi, lo) ((hi/(1 - hi))/(lo/(1 - lo)))
+  ) + 
+  geom_hline(yintercept = 1, lty = 2) +
+  theme_clean() + 
+  scale_y_continuous(breaks = c(seq(-1, 15, 2))) + 
+  scale_x_continuous(breaks = c(seq(5, 40, 5), 18)) + 
+  labs(x = "Alcohol (age first used)", y = "Odds(Female)/ Odds(Male)", title = "Odds ratio") +
+  theme(legend.position = "bottom")
+
+p_lor <- plot_comparisons(
+  fit.ex6.3.int.adj, 
+  variables = list(
+    demog_sex = c("Male", "Female")
+    ), 
+  condition = "alc_agefirst", 
+  comparison = \(hi, lo) log((hi/(1 - hi))/(lo/(1 - lo)))
+  ) + 
+  geom_hline(yintercept = 0, lty = 2) +
+  theme_clean() + 
+  scale_x_continuous(breaks = c(seq(5, 40, 5), 18)) + 
+  labs(x = "Alcohol (age first used)", y = "log(Odds(Female)/ Odds(Male))", title = "Log odds ratio") +
   theme(legend.position = "bottom")
 
 
-p1 + p2
+p_rr <- plot_comparisons(
+  fit.ex6.3.int.adj, 
+  variables = list(
+    demog_sex = c("Male", "Female")
+    ), 
+  condition = "alc_agefirst", 
+  comparison = "ratio"
+  ) + 
+  geom_hline(yintercept = 1, lty = 2) +
+  theme_clean() + 
+  scale_y_continuous(breaks = c(seq(0, 1.2, .2))) + 
+  scale_x_continuous(breaks = c(seq(5, 40, 5), 18)) + 
+  labs(x = "Risk ratio: alcohol (age first used)", y = "Pr(Female) / Pr(Male)", title = "Risk ratio") +
+  theme(legend.position = "bottom")
+
+library(patchwork)
+pwk <- (p_predict + p_diff) / (p_or + p_lor) / (p_rr)
+pwk  + plot_annotation(
+  title = 'Lifetime marijuana use, predictions and comparisons',
+  subtitle = 'Females vs. Males',
+  caption = 'Different ways of communicating the effect of first use of alcohol on lifetime use of marijuana'
+)
 ```
 
 ::: {#boxedtext}
@@ -600,8 +663,10 @@ The first graph compares the predicted probabilities for males and females along
 mdl.int <- glm(mj_lifetime ~ ___, family = ___, data = ___)
 
 
-plot_predictions(mdl.int, 
-                 condition = c("alc_agefirst", "demog_sex"))
+plot_predictions(
+  mdl.int, 
+  condition = c("alc_agefirst", "demog_sex")
+  )
 
 
 
@@ -616,11 +681,11 @@ plot_comparisons(
   variables = list(
     demog_sex = c("Male", "Female")
     ), 
+  comparison = ___,
   condition = "alc_agefirst")
-
-
 
 ```
 
+For the `comparison` argument you can choose a variety of indicators, indicators for log-odd ratios, difference in probability, odds ratio and many more. Please consult the help files for more information. 
 
 :::

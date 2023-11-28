@@ -1,5 +1,5 @@
 ---
-title: 'Readiness Assurance Week 10'
+title: 'CPE Winter 2023: Final exam'
 output:
   html_document:
     theme: cerulean
@@ -26,27 +26,43 @@ library(datawizard)
 library(marginaleffects)
 library(janitor)
 
-knitr::opts_chunk$set(echo = FALSE,
+library(extrafont) 
+library(marginaleffects)
+library(faux)
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      eval = TRUE,
                       fig.align = "center", 
                       # fig.height = 3, 
                       # fig.width = 5,
                       warning = FALSE, 
-                      message = FALSE, 
-                      eval = FALSE)
+                      message = FALSE)
+
+
+theme_clean <- function() {
+  theme_minimal(base_family = "Barlow Semi Condensed") +
+    theme(panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white", color = NA),
+          plot.title = element_text(face = "bold"),
+          axis.title = element_text(face = "bold"),
+          strip.text = element_text(face = "bold", size = rel(0.8), hjust = 0),
+          strip.background = element_rect(fill = "grey80", color = NA),
+          legend.title = element_text(face = "bold"))
+}
 
 
 
 
 ```
 
-## Categorical response
+## Binomial probability
 
 In a certain population, data were collected in 900 randomly chosen individuals. Participants were asked if they tested at least once positive on the COVID self-tests they took last year.
 
 
 
 
-```{r ex-1-01-img, eval=TRUE, out.width="150%"}
+```{r ex-1-01-img, eval=TRUE, out.width="80%", echo=FALSE}
 knitr::include_graphics("img/Q1_01.png")
 ```
 
@@ -65,70 +81,244 @@ prop.test(180, 900)
 
 ```{r ex-2}
 
-binom.test(45, 180)
+# binom.test(45, 180)
 prop.test(45, 180)
 
-df <- tribble(
-  ~status, ~predicted, ~freq, 
-  "true +", "pred +", 990, 
-  "true +", "pred -", 10, 
-  "true -", "pred +", 90, 
-  "true -", "pred -", 8910 
-) |> uncount(freq)
-
-df |> 
-  tabyl(status, predicted) |> 
-  adorn_totals(where = c("row", "col")) |> 
-  adorn_title()
-
-# sensitivity: prob(pred+ | true+) = 99%
-# specificity: prob(pred- | true-) = 99%
-# ppv: prob(true+ | pred-) = 990 / 1080 = 91.66667%
-binom.test(990, 1080)
-
-
-df <- tribble(
-  ~status, ~predicted, ~freq, 
-  "true +", "pred +", 99, 
-  "true +", "pred -", 1, 
-  "true -", "pred +", 99, 
-  "true -", "pred -", 9801 
-) |> uncount(freq)
-
-df |> 
-  tabyl(status, predicted) |> 
-  adorn_totals(where = c("row", "col")) |> 
-  adorn_title()
-
-# sensitivity: prob(pred+ | true+) = 99%
-# specificity: prob(pred- | true-) = 99%
-# ppv: prob(true+ | pred-) = 99 / 198 = 50%
-binom.test(99, 198)
 
 ```
-
-$$
-\text{ppv} = p(\text{status}|\text{pred}) = \\
-\frac{p(\text{pred}|\text{status})\cdot~p(\text{status})}{p(\text{pred})}=\\
-\frac{p(\text{pred}|\text{status})\cdot~p(\text{status})}{p(\text{pred}|\text{status})\cdot~p(\text{status}) + p(\text{pred}|\text{~status})\cdot~p(\text{~status})}
-$$
-
-
 
 
 
 3. From the 900 individuals in the sample, randomly 3 individuals were chosen for in-depth interviews. What is the probability that all three are younger than 40 years? [4]
 
+```{r ex3}
+# prob that one is younger than 40
+# 250 + 300
+
+dbinom(3, 3, (250 + 300)/900)
+
+```
+
+
 
 4. In another (very large) population, 15% tested at least once positive. A random sample of 10 individuals was taken. What is the probability that exactly 7 individuals in this sample tested negative on all tests?
+
+```{r ex4}
+
+dbinom(7, 10, .85)
+
+```
+
 
 5. In this second population, there is information on the age distribution and the prevalences of negative / positive testing. From this very large population, randomly 3 individuals are chosen, one from each age group. One of these three individuals tested positive at least once, the other two did not. What is the probability that the individual who tested positive is younger than 20? [6]
 
 
 
-```{r ex-1-02-img, eval=TRUE, out.width="150%"}
+```{r ex-5-01-img, eval=TRUE, out.width="90%", echo=FALSE}
 knitr::include_graphics("img/Q1_02.png")
 ```
 
+```{r ex5}
+0.07*.87*.80 / (0.07*.87*.80 + .83*.13*.80 + .83*.87*.20)
 
+```
+
+
+## Categorical response
+
+The Titanic was a British passenger liner that sank in the North Atlantic Ocean in 1912. Out of 2201 individuals who were on board (1316 passengers and 885 crew) only 711 survived the accident. From all passengers, it is known whether they traveled first, second or third class.
+
+
+
+```{r ex-6-01-img, eval=TRUE, out.width="90%", echo=FALSE}
+knitr::include_graphics("img/titanic-1.png")
+```
+
+6. Calculate the Odds Ratio to survive the accident for Females compared to Male passengers. [5]
+
+
+```{r ex6}
+
+prop.test(c(367, 344), c(1731, 470))
+(344 / 126) / (367 / 1364) 
+
+
+```
+
+
+```{r ex-7-02-img, eval=TRUE, out.width="90%", echo=FALSE}
+knitr::include_graphics("img/titanic-2.png")
+```
+
+
+7. Test, based on the table above, if surviving the accident is independent of sex when comparing first class passengers compared to third class passengers. [4]
+
+```{r ex7}
+prop.test(c(203, 178), c(325, 706))
+(203/325 - 203) / (178/706 - 178)
+
+```
+
+
+
+A logistic regression was performed with outcome survival of the accident (0 = no, 1 = yes):
+
+```{r ex-8-03-img, eval=TRUE, out.width="90%"}
+knitr::include_graphics("img/titanic-3.png")
+```
+
+8. Interpret the intercept (constant) and the coefficients for Sex, Class(1), Class(2), Class(3) in the table above. Compare the coefficient for Sex with your findings in question 6, and highlight which variables are significant predictors for survival? Motivate your answers. [3]
+
+```{r ex-8}
+
+# Const 
+# odds survival for male crew member is 0.291, 
+# prob is 0.2254067, plogis(-1.234) = 0.2254821
+
+# Sex
+# exp(2.421) = 11.261 odds ratio
+# (344/126) / (367/1364)
+
+# Class 1
+# Odds are 2.413 times than crew
+
+# Class 2 - no siginficant difference to crew
+
+# Class 3
+# Odds are 0.460 times than crew
+
+
+
+```
+
+
+9. 	What is, based on this model, the OR of surviving for a female in the first class compared to male crew member?  [4]
+
+```{r ex-9}
+# exp(2.421 + .881) = 27.16692
+
+```
+
+
+10.	Give a 95% CI for the OR, when comparing two passengers of different sex that are travelling in the same class. [4]
+
+```{r ex-10}
+
+exp(2.421 + c(-1.96, 1.96)*.139)
+
+```
+
+
+A second Model was tested, including the same variables as in the last model plus an extra variable, the interaction between sex and class. 
+
+11. 	The -2 log likelihood of this new model is 2163.7. Test if this new model is significantly better than the first model. Describe your steps clearly.[3]
+
+```{r ex11}
+
+pchisq(2228.9 - 2163.7, df = 1, lower.tail = FALSE)
+
+```
+
+
+
+## Linear regression
+
+In a study on the effect of eating fish on bleeding time, 84 male volunteers from three cities were randomly divided over two groups: fish diet and meat diet. (Variable `fish`: coded as 0 for meat diet and 1 for fish diet). The bleeding time (volunteers were made to bleed and the time was recorded in minutes until it stopped bleeding) was measured twice: at baseline (the variable `bt0`) and after six weeks of diet (`bt6`). For the linear regression, two dummy variables (d1 and d2) were created as follows:
+
+
+
+```{r ex-12-01-img, eval=TRUE, out.width="40%"}
+knitr::include_graphics("img/lm-1.png")
+```
+
+12.	In a simple linear regression, the researchers estimated the relationship between bt6 and bt0. Match the scatter plot with the attributes shown below: 
+
+a1. Pearson’s correlation coefficient is 1 and the estimated slope is 1
+a2. Pearson’s correlation coefficient is 0.3 and the estimated slope is 1
+a3. Pearson’s correlation coefficient is 1 and the estimated slope is 0.3 
+a4. Pearson’s correlation coefficient is 0.3 and the estimated slope is 0.3 [6]
+
+
+```{r ex12}
+
+# cor = 1, b = 1
+df <- rnorm_multi(100, 2, mu = c(0 + 3, 4 + 3), sd = 1, r = .999, varnames = c("bt0", "bt1"), empirical = TRUE) |> 
+  mutate(facet = "Figure 2") 
+  
+
+# cor = .3, b = 1
+df <- rnorm_multi(100, 2, mu = c(0 + 3, 4 + 3), sd = c(3/4, 10/4), .3, varnames = c("bt0", "bt1"), empirical = TRUE) |> 
+  mutate(facet = "Figure 4") |> add_row(df) 
+
+
+# cor = 1, b = 0.3
+df <- rnorm_multi(100, 2, mu = c(0 + 3, 4 + 3), sd = c(10/4, 3/4), 0.999, varnames = c("bt0", "bt1"), empirical = TRUE)  |> 
+  mutate(facet = "Figure 1") |> add_row(df)  
+
+
+# cor = 0.3, b = 0.3
+df <- rnorm_multi(100, 2, mu = 0, sd = 1, 0.3, varnames = c("bt0", "bt1"), empirical = TRUE)  |> 
+  mutate(facet = "Figure 3") |> add_row(df)  
+
+df |> ggplot(aes(bt0, bt1)) +
+  geom_point() +
+  geom_smooth(method="lm") + 
+  facet_wrap(~facet, scales = "free") +
+  theme_clean() + 
+  labs(x = "Bleeding time (baseline)", y = "Bleeding time (six weeks)") + 
+  theme(text = element_text(size = 18))
+
+
+```
+
+13.	The researchers had SPSS to run three linear regression analyses (see below). In the third model, int1 and int2 are two interaction terms, between fish and d1 and d2 respectively. What is the null hypothesis you test, if you compare model 3 with model 2? [4]
+
+
+```{r ex-13-img, eval=TRUE, out.width="90%"}
+knitr::include_graphics("img/lm-2.png")
+knitr::include_graphics("img/lm-3.png")
+
+```
+
+
+
+```{r ex13}
+# H0: int1 = int2 = 0
+
+```
+
+
+14.	Is model 2 a significantly better model than model 1? Please explain your answer. [5]
+
+
+```{r ex14}
+# Yes the change statistic is significant
+
+```
+
+
+15.	For this question, take the results of model 2. What is the predicted bleeding time after 6 weeks for a male in Tromsö on a fish diet with a bleeding time of 5 minutes at baseline? [3]
+
+```{r ex15}
+# Original: For this question, please use the estimations of M2. 
+# What is the predicted mean bleeding time after 6 weeks for 
+# males in Zeist on a fish diet with a bleeding time 
+# of 9 minutes at baseline?
+
+# 4.912 + 2.024 + .448*5 -1.406 
+# 7.77 minutes
+
+
+```
+
+
+
+16.	Give the 95% confidence interval for the coefficient of bleeding time at baseline according to model 2. [4]
+
+
+```{r ex16}
+
+# .448 + c(-1.96, 1.96)*0.093 = 0.26572 0.63028
+
+```
 
