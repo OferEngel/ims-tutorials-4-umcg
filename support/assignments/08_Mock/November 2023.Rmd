@@ -55,6 +55,14 @@ theme_clean <- function() {
 
 ```
 
+
+
+
+<span style="color: red;font-size: 14px;font-weight: bold;">INDIVIDUAL WORK - DEADLINE  29-Nov-23 at 16:00. 
+<br/>Please submit your final report [using this form](https://bit.ly/3N4Hox6). </span>
+
+
+
 ## Binomial probability
 
 In a certain population, data were collected in 900 randomly chosen individuals. Participants were asked if they tested at least once positive on the COVID self-tests they took last year.
@@ -518,10 +526,10 @@ $$
 
 The following commands in R could be helpful: 
 
--   `plogis(x)` How do you transform log-odds into a probability? Very simple! After calculating the log odds, use the function `plogis` to turn any number, negative, positive, small or large into a probability!
 -   `prop.test(x, n)` You have a sample proportion and you want to say something about the population proportion? For example, you sampled 10 left-handed people in a sample of 100? You will find that the 95% confidence interval in the population is between 5% and 18% using  `prop.test(10, 100)`.
 -   Use `prop.test(x, n, p)` to test whether a proportion is equal to a hypothesized value, `p`. For example, if you sampled 100 children and found that 55 of them are girls, you can test whether the proportion in the population is possibly 49% by running `prop.test(x = 60, n = 100, p = 0.49)`
 - `prop.test(x = c(x1, x2), n = (n1, n2))` You can use the two-sample proportion to check whether the proportions of the two populations is equal to one another. For example, if you sample 120 males and find 10 of them to be colour blind, and you sample 200 women and find 4  of them to be color blind. To test whether the proportion among the populations is equal, you run `prop.test(x = c(10, 4), n = c(120, 200))`
+-   `plogis(x)` How do you transform log-odds into a probability? Very simple! After calculating the log odds, use the function `plogis` to turn any number, negative, positive, small or large into a probability!
 -   `pchisq(x, df, lower.tail = FALSE)` Use it to test various p-values. For example, for the log likelihood test, every model is associated with a $-2$ log likelihood. To test whether a complex model is better than a reduced model, the `x` in the `pchisq` function is the (absolute) difference between the two models, the `df` is the difference in the number of parameters, and the result is the p-value associated with the likelihood ratio test. 
 -   `dbinom(k, n, prob)` What is the probability of observing 8 girls in a sample of 10 children, if the proportion of girls in the population is 49%? Calculate the probability by using the function `dbinom(8, 10, .49)`. 
 
