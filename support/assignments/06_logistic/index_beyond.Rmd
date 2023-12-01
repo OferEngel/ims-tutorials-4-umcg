@@ -308,6 +308,17 @@ tidy(
 mdl.glm <- ___ 
 mdl.lm  <- ___ 
   
+# To calculate the predicted probabilities male and female
+# You can then transform the probability estimations 
+# and the confidence intervals to calculate the odds 
+predictions(
+  mdl.lm, 
+  newdata = datagrid(demog_sex = c("Male", "Female")))
+predictions(
+  mdl.glm, 
+  newdata = datagrid(demog_sex = c("Male", "Female"))
+  )
+
 
 
 ```
@@ -340,8 +351,8 @@ mdl.glm.null <- glm(mj_lifetime ~ 1, data = nsduh, family = binomial)
 mdl.glm.null |> 
   tidy(conf.int = TRUE, exponentiate = FALSE) |> 
   mutate(
-    estimate = plogis(estimate), 
-    conf.low = plogis(conf.low), 
+    estimate  = plogis(estimate), 
+    conf.low  = plogis(conf.low), 
     conf.high = plogis(conf.high), .keep = "none")
 # lifetime mj is 50.9% and between 47.8% and 54%
 
@@ -354,10 +365,14 @@ mdl.lm.null |>
 
 mdl.glm <- 
   glm(mj_lifetime ~ demog_sex, data = nsduh, family = "binomial")
-tidy(mdl.glm, conf.int = TRUE, exponentiate = TRUE)
-tidy(mdl.glm, conf.int = TRUE)
 
 
+glm(mj_lifetime ~ 0 + demog_sex, 
+      data = nsduh, 
+      family = "binomial")  |> 
+  tidy(
+    conf.int = TRUE, exponentiate = TRUE
+  )
 
 mdl.lm <- 
   lm(mj_lifetime.numeric ~ demog_sex, data = nsduh)
@@ -372,6 +387,9 @@ plogis(-0.13504)
 # probability among male
 plogis(-0.13504 + 0.36784)
 plogis(-0.13504 + 0.36784) - plogis(-0.13504)
+
+
+avg_predictions(mdl.glm, variables = "demog_sex")
 
 avg_comparisons(mdl.glm, variables = "demog_sex", comparison = "difference")
 avg_comparisons(mdl.lm, variables = "demog_sex", comparison = "difference")
@@ -397,6 +415,9 @@ summary(mdl.lm)
 
 predictions(mdl.lm, 
             newdata = datagrid(demog_sex = c("Male", "Female")))
+predictions(mdl.glm, 
+            newdata = datagrid(demog_sex = c("Male", "Female")))
+
 comparisons(mdl.lm, variables = "demog_sex", by = TRUE)
 
 # Conclusion: Males have significantly greater odds of lifetime marijuana use than females (OR = 1.44; 95% CI = 1.13, 1.86; p = .004). Males have 44% greater odds of lifetime marijuana use than females.
