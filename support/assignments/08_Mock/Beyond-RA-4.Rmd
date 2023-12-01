@@ -112,7 +112,7 @@ label(md$mpqab) <- "MPQ (absorption)"
 label(md$female) <- "Sex"
 
 md |> mutate(female = fct_recode(female, Female = "1", Male = "0")) |> 
-table1(~pa + mpqab + female | audience, data = _, overall = FALSE, title = "Table 1: Variables and their properties, stratified by type of audience")
+table1(~pa + mpqab + female | audience, data = _, overall = FALSE, caption = "Table 1: Variables and their properties, stratified by type of audience")
 
 ```
 
@@ -125,21 +125,21 @@ table1(~pa + mpqab + female | audience, data = _, overall = FALSE, title = "Tabl
 
 The relationship between every pair of variables can reveal hidden associations and links in the data. These can be gleaned from the figure below: 
 
-```{r ggpairs}
+```{r ggpairs, fig.width=12, fig.height=10}
 
 
 md %>% select(-id) %>%  
   ggpairs(
     mapping = ggplot2::aes(color = female), 
   upper = list(#continuous = wrap("density", alpha = 0.9), 
-               combo = "facethist", discrete = wrap("colbar", size = 2)),
+               combo = "facethist", discrete = wrap("colbar", size = 3)),
   lower = list(continuous = wrap("cor"), combo = NULL),
   diag = list(continuous = wrap("densityDiag", alpha = .6, color = "white")),
-    title = "Emotional state of musicians before performances", 
+    title = "Figure 1: Emotional state of musicians before performances", 
     legend = c(3,5)
   ) + 
   theme_clean()  + 
-  theme(text = element_text(size = 13), legend.position = "bottom")
+  theme(text = element_text(size = 15), legend.position = "bottom")
 ```
 
 
@@ -147,7 +147,7 @@ md %>% select(-id) %>%
 
 Below the distribution of the pre-performance happiness level (the response variable) shown across performers and performances on the left. On the right you can see the distribution of performers' mean pre-performance happiness levels.
 
-```{r ranef-residual}
+```{r ranef-residual, fig.width=7, fig.height=4, fig.align='center'}
 # The marginal distribution of the response variable... 
 p1 <- ggplot(md) + 
   geom_histogram(aes(pa, after_stat(density)), 
@@ -164,13 +164,16 @@ p2 <- md.byid %>%
   geom_function(fun=dnorm, 
                 args=list(mean=mean(md.byid$mn.pa), 
                           sd=sd(md.byid$mn.pa))) + 
-  labs(x="Happiness", title = "Performers' mean (distribution)", y = NULL) + theme_clean()
+  labs(x="Happiness", title = "Performers' mean distribution", y = NULL) + theme_clean()
 
 
 gg_axis <- cowplot::get_plot_component(ggplot() +
   labs(x = "Happiness"), "xlab-b")
 
-(p1 + p2 & labs(x = NULL, y = NULL)) / gg_axis + plot_layout(heights = c(40, 1))
+(p1 + p2 & labs(x = NULL, y = NULL)) / gg_axis + 
+  plot_layout(heights = c(40, 1))  + plot_annotation(
+  title = 'Figure 2: The distribution of happiness across performances and musicians'
+)
 
 ```
 
@@ -181,14 +184,13 @@ gg_axis <- cowplot::get_plot_component(ggplot() +
 <br/>
 
 
-The distribution of pre-performance happiness level for each type of audience.
 
-```{r pa-vs-audience}
+```{r pa-vs-audience, fig.width=5, fig.height=4, fig.align='center'}
 #| eval: true
 md %>% 
   ggplot(aes(pa, audience)) + 
   geom_boxplot() + 
-  ylab("Positive affect") + xlab("") + 
+  labs(x = NULL, y = "Happiness (positive affect)", title = "Figure3: pre-performance happiness levels by audience" ) + 
   theme_clean()
 ```
 
