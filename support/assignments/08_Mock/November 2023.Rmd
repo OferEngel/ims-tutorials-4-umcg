@@ -118,7 +118,7 @@ dbinom(7, 10, .85)
 ```
 
 
-5. In this second population, there is information on the age distribution and the prevalence of negative / positive testing. From this very large population, randomly 3 individuals are chosen, one from each age group. What is the probability that one of these three individuals tested positive at least once, the other two did not? [6] [6]
+5. In this second population, there is information on the age distribution and the prevalence of negative / positive testing. From this very large population, randomly 3 individuals are chosen, one from each age group. What is the probability that one of these three individuals tested positive at least once, the other two did not? [6] 
 
 
 

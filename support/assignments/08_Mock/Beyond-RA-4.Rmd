@@ -1,0 +1,289 @@
+---
+title: 'Beyond MLR: RA number 4'
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    css: ../lab.css
+    toc: true
+    toc_float: true
+---
+
+
+```{r global_options, include=FALSE}
+library(emo)
+library(tidyverse)
+library(broom)
+library(infer)
+library(santoku)
+library(car)
+library(GGally)
+library(modelsummary)
+# library(easystats)
+library(table1)
+library(gt)
+# library(datawizard)
+library(marginaleffects)
+library(janitor)
+library(cowplot)
+library(extrafont) 
+library(marginaleffects)
+library(faux)
+library(wesanderson)
+library(patchwork)
+cols <- wes_palette("GrandBudapest1", 3)
+
+knitr::opts_chunk$set(echo = FALSE, 
+                      eval = TRUE,
+                      fig.align = "center", 
+                      # fig.height = 3, 
+                      # fig.width = 5,
+                      warning = FALSE, 
+                      message = FALSE)
+
+
+theme_clean <- function() {
+  theme_minimal(base_family = "Barlow Semi Condensed") +
+    theme(panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white", color = NA),
+          plot.title = element_text(face = "bold"),
+          axis.title = element_text(face = "bold"),
+          strip.text = element_text(face = "bold", size = rel(0.8), hjust = 0),
+          strip.background = element_rect(fill = "grey80", color = NA),
+          legend.title = element_text(face = "bold"))
+}
+
+
+md <- read_csv("https://oferengel.quarto.pub/umcg-beyond-mlr/data/musicdata.csv", show_col_types = FALSE) %>% dplyr::select(-1) %>% mutate(female = as.factor(ifelse(gender=="Female",1,0)))  %>% 
+   mutate(
+      students   = 
+        as.factor(ifelse(audience=="Student(s)",1,0)),
+      instructor = 
+        as.factor(ifelse(audience=="Instructor",1,0))) %>% 
+  select(id, pa, female, students, 
+         instructor, mpqab, audience) %>% 
+  mutate(mpqab = mpqab - median(mpqab), 
+         audience   = factor(audience)) 
+
+levels(md$audience) <- c("instructor", "other", "other", "students")
+
+
+```
+
+
+
+<span style="color: red;font-size: 14px;font-weight: bold;">INDIVIDUAL WORK - DEADLINE  29-Nov-23 at 16:00. 
+<br/>Please submit your final report [using this form](https://bit.ly/3RoNoDG). </span>
+
+
+
+
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r img-fright, echo=FALSE, fig.align="right", out.width=300}
+knitr::include_graphics("img/stage-fright.jpeg")
+```
+</div>
+
+
+
+## Case study {.smaller}
+
+Sadler and Miller (2010) studied the emotional state of musicians before performances and factors which may affect their emotional state. Data was collected by having 37 undergraduate music majors from a competitive undergraduate music program fill out diaries prior to performances over the course of an academic year. In particular, before every performance, musicians filled in an instrument to measure their positive affect (`pa`, a state measure of happiness).
+
+### The data
+
+The data we will be using includes the following variables:
+
+-   `pa` this response variable (aka the dependent variable) is a measure of the musician's pre-performance level of happiness. The values range from 10 to 50
+-   `instructor` a dummy variable that has the value one if the audience consists of instructors, and is otherwise zero.
+-   `students` a dummy variable with the value one if the audience consists of students, and is otherwise zero.
+-   `female` a dummy variable with the value one if the musician is female, and is otherwise zero.
+-   `mpqab` absorption sub-scale of the MPQ instrument, a measure of a personality trait associated with one's openness to absorbing sensory and imaginative experiences. The variable is centered around its median value and its values range between $-16$ and $4$.
+
+## Exploratory data analysis (EDA)
+
+The following figures summarize the variables, their distributions and their associations in various ways. This is a first step before we begin any analysis, is to get acquainted with your data, to understand the patterns it presents, confirming any assumptions and testing assumptions or prejudices we might have about the data. 
+
+```{r eda}
+
+label(md$pa) <- "Positive affect (pre-performance)"
+label(md$mpqab) <- "MPQ (absorption)"
+label(md$female) <- "Sex"
+
+md |> mutate(female = fct_recode(female, Female = "1", Male = "0")) |> 
+table1(~pa + mpqab + female | audience, data = _, overall = FALSE, title = "Table 1: Variables and their properties, stratified by type of audience")
+
+```
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+The relationship between every pair of variables can reveal hidden associations and links in the data. These can be gleaned from the figure below: 
+
+```{r ggpairs}
+
+
+md %>% select(-id) %>%  
+  GGally::ggpairs(
+    mapping = ggplot2::aes(color = female), 
+  upper = list(#continuous = wrap("density", alpha = 0.9), 
+               combo = "facethist", discrete = wrap("colbar")),
+  lower = list(continuous = wrap("cor"), combo = NULL),
+  diag = list(continuous = wrap("densityDiag", alpha = .6, color = "white")),
+    title = "Emotional state of musicians before performances", 
+    legend = c(3,5)
+  ) + 
+  theme_clean()  + 
+  theme(legend.position = "bottom")
+```
+
+
+
+
+Below the distribution of the pre-performance happiness level (the response variable) shown across performers and performances on the left. On the right you can see the distribution of performers' mean pre-performance happiness levels.
+
+```{r ranef-residual}
+# The marginal distribution of the response variable... 
+p1 <- ggplot(md) + 
+  geom_histogram(aes(pa, after_stat(density)), 
+                 binwidth = 2) + 
+  geom_function(fun=dnorm, 
+                args=list(mean=mean(md$pa), sd=sd(md$pa))) + labs(x="Happiness", title = "Pre-performance distribution") + theme_clean()
+
+md.byid <- md %>% group_by(id) %>% 
+  summarise(mn.pa=mean(pa)) 
+
+p2 <- md.byid %>% 
+  ggplot()  + 
+  geom_histogram(aes(x=mn.pa, y=after_stat(density)), binwidth = 3) + 
+  geom_function(fun=dnorm, 
+                args=list(mean=mean(md.byid$mn.pa), 
+                          sd=sd(md.byid$mn.pa))) + 
+  labs(x="Happiness", title = "Performers' mean (distribution)", y = NULL) + theme_clean()
+
+
+gg_axis <- cowplot::get_plot_component(ggplot() +
+  labs(x = "Happiness"), "xlab-b")
+
+(p1 + p2 & labs(x = NULL, y = NULL)) / gg_axis + plot_layout(heights = c(40, 1))
+
+```
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+The distribution of pre-performance happiness level for each type of audience.
+
+```{r pa-vs-audience}
+#| eval: true
+md %>% 
+  ggplot(aes(pa, audience)) + 
+  geom_boxplot() + 
+  ylab("Positive affect") + xlab("") + 
+  theme_clean()
+```
+
+
+
+
+## The models
+
+We will be looking at four different models as follows To begin, run the following models:
+
+**Model A** = The unconditional means model, also known as the random intercepts model. In this model, there are no predictors (variables) at either level, only one random intercept representing the mean pre-performance happiness level for each performer.
+
+**Model B** = This model expands the previous model by using two more random effects, one associated with an indicator for audience consisting of instructors and one associated with an indicator for audiences consisting of students, both indicators at Level One. This model has no level two predictors.
+
+**Model C** = This model expands the previous model, retaining an indicator for instructor audience type and an indicator for student audience type at Level One. We also include a centred MPQ absorption sub-scale as Level Two predictor for the intercept and all slope terms
+
+**Model D** = This model expands the previous model, retaining an indicator for instructor audience type and indicator for student audience type at level one; the centred MPQ absorption sub-scale and a female indicator as Level Two predictors for the intercept and all slope terms.
+
+Please go ahead and answer the quiz questions pertaining to the models section.
+
+### Equation sets
+
+The models above can be represented by a set of structural equations and a set of variance components which you can find below. Your job is to find which model matches which sets
+
+#### Equation set 1
+
+$$
+\begin{align}
+\text{pa}_{ij}&=a_i+b_{i}\cdot\text{instructor}+c_{i}\cdot\text{student}+\epsilon_{ij} \\
+a_i&=\alpha_0+\alpha_1\cdot \text{mpqab}+\alpha_2\cdot \text{female} +u_i\\
+b_{i}&=\beta_0+\beta_1\cdot \text{mpqab}+\beta_2\cdot \text{female}+v_i\\
+c_{i}&=\gamma_0+\gamma_1\cdot \text{mpqab} +\gamma_2\cdot \text{female}+w_i\\
+\end{align}
+$$
+
+#### Equation set 2
+
+$$
+\begin{align}
+\epsilon_{ij}&\sim\mathcal{N}(0,\sigma^2)\\
+u_i&\sim\mathcal{N}(0,\sigma_u^2)
+\end{align}
+$$
+
+#### Equation set 3
+
+$$
+\begin{align}
+\begin{pmatrix}
+u_i\\v_i\\w_i\\
+\end{pmatrix}&=\mathcal{N}
+\begin{bmatrix}
+\begin{pmatrix}
+0\\0\\0\\
+\end{pmatrix}, 
+\begin{pmatrix}
+\sigma_u^2 & \rho_{uv}\cdot u\cdot v & \rho_{uw}\cdot u\cdot w\\
+\cdots&\sigma_v^2&\rho_{vw}\cdot v\cdot w\\
+& \cdots & \sigma_w^2\\
+\end{pmatrix}
+\end{bmatrix}\\
+\\
+\\
+\epsilon_{ij}&\sim\mathcal{N}(0,\sigma^2)\\
+\end{align}
+$$
+
+#### Equation set 4
+
+$$
+\begin{align}
+\text{pa}_{ij}&=a_i+b_{i}\cdot\text{instructor}+c_{i}\cdot\text{student}+\epsilon_{ij} \\
+a_i&=\alpha_0+u_i\\
+b_{i}&=\beta_0+v_i\\
+c_{i}&=\gamma_0+w_i\\
+\end{align}
+$$
+
+#### Equation set 5
+
+$$
+\begin{align}
+\text{pa}_{ij}&=a_i+b_{i}\cdot\text{instructor}+c_{i}\cdot\text{student}+\epsilon_{ij} \\
+a_i&=\alpha_0+\alpha_1\cdot \text{mpqab} +u_i\\
+b_{i}&=\beta_0+\beta_1\cdot \text{mpqab}+v_i\\
+c_{i}&=\gamma_0+\gamma_1\cdot \text{mpqab}+w_i\\
+\end{align}
+$$
+
+#### Equation set 6
+
+$$
+\begin{align}
+\text{pa}_{ij}&=a_i+\epsilon_{ij} \\
+a_i&=\alpha_0+u_i\\
+\end{align}
+$$
+
