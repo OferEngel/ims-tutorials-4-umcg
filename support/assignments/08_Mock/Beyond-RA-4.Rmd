@@ -1,5 +1,5 @@
 ---
-title: 'Beyond MLR: RA number 4'
+title: "Beyond MLR: Case study on musicians' stage fright"
 output:
   html_document:
     theme: cerulean
@@ -72,7 +72,7 @@ levels(md$audience) <- c("instructor", "other", "other", "students")
 
 
 
-<span style="color: red;font-size: 14px;font-weight: bold;">INDIVIDUAL WORK - DEADLINE  29-Nov-23 at 16:00. 
+<span style="color: red;font-size: 14px;font-weight: bold;">INDIVIDUAL WORK - DEADLINE  5-Dec-23 at 8:00. 
 <br/>Please submit your final report [using this form](https://bit.ly/3RoNoDG). </span>
 
 
@@ -129,17 +129,17 @@ The relationship between every pair of variables can reveal hidden associations 
 
 
 md %>% select(-id) %>%  
-  GGally::ggpairs(
+  ggpairs(
     mapping = ggplot2::aes(color = female), 
   upper = list(#continuous = wrap("density", alpha = 0.9), 
-               combo = "facethist", discrete = wrap("colbar")),
+               combo = "facethist", discrete = wrap("colbar", size = 2)),
   lower = list(continuous = wrap("cor"), combo = NULL),
   diag = list(continuous = wrap("densityDiag", alpha = .6, color = "white")),
     title = "Emotional state of musicians before performances", 
     legend = c(3,5)
   ) + 
   theme_clean()  + 
-  theme(legend.position = "bottom")
+  theme(text = element_text(size = 13), legend.position = "bottom")
 ```
 
 
