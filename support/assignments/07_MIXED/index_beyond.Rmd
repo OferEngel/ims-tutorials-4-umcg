@@ -289,8 +289,8 @@ modelsummary(
     `Multilevel model` = md_pp
     ), 
   stars = TRUE, 
-  note = "+ p < 0.1, * p < 0.05, ** p < 0.01, *** p < 0.001", 
-  coef_omit = c(-1, -2, -(22:25)), 
+  note = "Note: Cluster fixed effects are omitted. + p < 0.1, * p < 0.05, ** p < 0.01, *** p < 0.001", 
+  coef_omit = c(-1, -2, -(42:45)), 
   estimate  = "{estimate} ({std.error}){stars}", 
   statistic = NULL, 
   gof_omit = "Marg|Log|F"
@@ -298,7 +298,7 @@ modelsummary(
 
 ```
 
-2. Use your models to create a catterpillar plot for the intercepts and lattice or spaghetti plots to show the features of your multilevel models. Describe and discuss the plots: what new light do they shed? What are the advantages or disadvantages of presenting the models using these plots? 
+2. Use your models to create a caterpillar plot for the intercepts and lattice or spaghetti plots to show the features of your multilevel models. Describe and discuss the plots: what new light do they shed? What are the advantages or disadvantages of presenting the models using these plots? 
 
 
 
@@ -654,9 +654,10 @@ pred.lvl12 |>
 
 
 
-
 :::{#boxedtext}
 
 Hints for creating the plots will be available in the following few days. Thank you for your patience.
 
 :::
+
+7. Using the simulation techniques in questions 1 and 2, generate a synthetic dataset that would be similar to the radon data, in the sense that if you fitted the three models to your simulated dataset, you would get similar parameter estimations to the ones you got when fitting your models to the real Radon dataset. Explore your synthetic data using similar visualisations, and comment on similarities or differences between the Radon dataset and your simulated dataset.   
