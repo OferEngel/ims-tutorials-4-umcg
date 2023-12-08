@@ -22,6 +22,8 @@ library(faux)
 library(lmerTest)
 library(patchwork)
 library(extrafont)
+library(gtExtras)
+library(gt)
 
 knitr::opts_chunk$set(echo = FALSE, 
                       eval = FALSE,
@@ -44,7 +46,6 @@ theme_clean <- function() {
     theme(legend.position = "bottom")
 }
 
-radon <- read_rds("https://bit.ly/BMLR-Radon")
 
 
 ```
@@ -88,8 +89,6 @@ radon <- read_rds("https://bit.ly/BMLR-Radon")
 -   For each question, please add the text of the question, the code chunks and your answer. 
 
 
-
-
 ## Simulating the data
 
 Simulating data is an important step when analyzing data, as it serves a range of purposes. First, it helps clarify our assumptions and expectations regarding treatment effects we might realistically observe, the types of interactions we should consider, the size and features of the data we need to establish the claims we want to make. We can work in a "clean" environment where variables are truly normal, there are no missing values and data is "well behaved". Once we grapple with an ideal world we can slowly add complexities and see how they change the picture.
@@ -110,7 +109,7 @@ In the first part of this lab we are going to replicate some of the ideas presen
 We are going to use the `faux` package to simulate nested data (observations nested within clusters). First, we define the number of clusters `n_cluster` and the number of observations in each cluster, `obs_per_cluster`. For example, we might want to have 20 clusters with 4 observations in each cluster (to keep things simple, let's stick to  a "balanced" data-set). 
 
 
-```{r faux-1, echo=TRUE}
+```{r faux-1, echo=TRUE, eval=FALSE}
 obs_per_cluster <-  4
 n_cluster <-  20
 
@@ -142,30 +141,30 @@ As you can see, in this stage we have only one predictor at level one $X$. We ha
 Feel free to change these values if you would like to simulate different data.
 
 
-```{r faux-2, echo=TRUE}
+```{r faux-2, echo=TRUE, eval=FALSE}
 # Fixed intercept
-alpha_0 <-  1  
+alpha_0 <-  ___ # choose a number you like, e.g. 1  
 
 # Fixed slope
-beta_0 <- .5  
+beta_0 <- ___ #  e.g. 0.5
 
 # Residuals st.dev (level 1) 
-sig  <-  1
+sig  <-  ___ #  e.g. 1
 
 # Random intercept st.dev (level 2) 
-sig_u <-  .5
+sig_u <-  ___ #  e.g. 0.5
 
 # Random slope st.dev (level 2)
-sig_v <-  .25
+sig_v <-  ___ #  e.g. 0.25
 
 # Independent random effects
-cor <-  0
+cor <- ___ #  e.g. 0.5
 
 ```
 
 Finally, here is the code that simulates our data in several steps. Run every step separately, and observe the data frame `View(df)` to its contents
 
-```{r faux-3, echo=TRUE}
+```{r faux-3, echo=TRUE, eval=FALSE}
 
 # Create a dataset that can be reproduced
 set.seed(888)  
@@ -225,86 +224,159 @@ df |>
 
 ```
 
-So now we have our final observations: the clusters, the x and the y. Before continuing, please go back, set `obs_per_cluster` and `n_cluster` to larger numbers, to make sure our models work. 
-For example, you might want to create a data set with 100 clusters and 10 observations per cluster. You may want to experiment with other sample or cluster sizes or change the six population parameters. Feel free to experiment. 
+So now we have our final observations: the clusters, the predictor x and the outcome y. Before continuing, please go back, set `obs_per_cluster` and `n_cluster` to larger numbers, to make sure our models work.
 
 :::
 
 
 We will then test the data against three types of models: 
 
--   `Complete pooling`: Here we ignore the structure of the data, and pretend that all the observations are uncorrelated and independent of one another. The model disregards the clusters and is oblivious to the observations within clusters being more similar to one another than observations between clusters. We will be estimating just two fixed population parameters: the one intercept and one slope.  
--   `No pooling`: Here we estimate **two** dummy variable for each cluster (except the reference cluster): one for the intercept and one for the slope. For example, if we had 100 clusters we would be estimating one intercept and 99 dummy variables (fixed effects), which is essentially like having 100 different intercepts, one for each cluster. 
--   `Partial pooling`: Here we estimate **two** dummy variable for each cluster (except the reference cluster): one for the intercept and one for the slope. For example, if we had 100 clusters we would be estimating one intercept and 99 dummy variables (fixed effects), which is essentially like having 100 different intercepts, one for each cluster. 
+-   `Complete pooling`: This model ignores the structure of the data, taking all observations to be uncorrelated and independent of one another. The model estimates just two fixed population parameters: the global intercept $\beta_0$ and the global slope $\beta_1$, and the formula you will use in your linear regression model is `y ~ x`.
+-   `No pooling`: This model expands on the previous one. In addition to the global intercept and slope, we add the cluster (categorical) variable and estimate a coefficient for **each cluster**. In effect, each cluster is associated with a cluster specific intercept. Since we know that there is a variation in the slopes, you may also test a model with an interaction between the clusters and the predictor, x. The formula you will use in your linear regression model is `y ~ x + cluster`  for the model without the interaction and `y ~ x + cluster + x:cluster` for the model with the interaction.
+-   `Multilevel model (partial pooling)`: This model also expands on the `Complete pooling` model to account for the correlated observations within the clusters. But instead of using fixed (dummy) variables, this model uses a random intercept (and, optionally, a random slope). The formula you will use for the random intercept model is `y ~ x + (1 | cluster)` and the formula or the random intercept and slope model is `y ~ x + (x | cluster)`.
 
-1. Adjust the parameters, simulate your clustered data and present the results of the three models using the `modelsummary` package. Interpret the three models and compare the estimations with each of the six parameters you use in order to create your dataset. Is there one single model that is superior to all the rest in terms of estimating the parameters? If so which is it? If not, Which model works best for what purpose? In your answer, please pay attention to the estimated Intraclass Correlation Coefficient (ICC) of your multilevel model. What does the ICC mean? How much does it deviate from what you would expect?  
+1. Adjust the parameters, simulate your clustered data and present the results of the three types of models using the `modelsummary` package. Interpret your models and compare the estimations with each other, and with the six parameters used to simulate your data. Is there one single model that is superior to all the rest in terms of estimating the parameters? If so which is it, and what makes it better? If not, Which model works best for what purpose? In your answer, please pay attention to the estimated Intraclass Correlation Coefficient (ICC) of your multilevel model(s). What does the ICC mean? How much does it deviate from what you would expect? For more about the ICC, please see below. 
+
+:::{#boxedtext}
+
+**Further exploration:** Use your imagination (and curiousity) to explore your simulations and your models. For example, you may want to compare multiple simulations with the same parameters, and see how they vary. You may want to change the sample size (the number of clusters and observations in each cluster), or you might want to increase the parameters, turn some of them to be negative, or just run multiple simulations with the same parameters, comparing the variation between one simulation and the next. Do the estimates vary a lot between simulations? Does increasing the sample size increase accuracy of the estimates? Does it influence the standard errors? Is there one single model that is superior to all the rest in terms of estimating the parameters? If so which model is it and in what way is it better? If not, which model works best for what purpose? 
+
+**Calculating the ICC:** The calculation of the ICC is straightforward when we only have random intercepts. [Taking the random slopes](https://stats.stackexchange.com/questions/115526/intraclass-correlation-coefficient-in-mixed-model-with-random-slopes) into account complicates the situation because in that case, the ICC varies with the predictors. Luckily, in our case, the predictor is normally distributed around zero. In this case, the calculation of the ICC when the predictors are zero reduces to the regular form of the ICC, that does not take the random variable into account.     
+
+For example, I fitted the models shown below to a simulation with 30 clusters, 20 observations per cluster, a global intercept of $2$ and a global slope of $1.5$, the variance of the (level-one) residual is $1$, the variance of the random intercept and the random slope are $1.5^2$ and $1.8^2$ respectively, and the correlation coefficient is $0.5$. 
+
+You can see that the no-pooling models have larger standard errors for the intercept, probably because the estimation is based on data from one single cluster (the reference cluster with 20 observations and a small number of residual degrees of freedom). The no-pooling model with interactions is suffering from relatively large standard errors (most probably due to a small number of residual degrees of freedom).
+
+:::
 
 ```{r sim-nowshow, eval=TRUE}
-obs_per_cluster <-  20
-n_cluster <-  40
+obs_per_cluster <-  20 # 20
+n_cluster <-  30 #40
 # Fixed intercept
-alpha_0 <-  1  
+alpha_0 <-  2  
 # Fixed slope
-beta_0 <- .5  
-# Residuals st.dev (level 1) 
-sig  <-  1
+beta_0 <- 1.5  
 # Random intercept st.dev (level 2) 
-sig_u <-  .5
+sig_u <-  1.5
 # Random slope st.dev (level 2)
-sig_v <-  .25
+sig_v <-  1.8
 # Independent random effects
-cor <-  0
+cor <-  0.5
+# Residual standard deviation
+sig <- 1
+
 
 # Create a dataset that can be reproduced
-set.seed(888)  
-# step 1: create the units 
-df <- add_random(
-    cluster = n_cluster,  # first the clusters
-    obs = obs_per_cluster # second, the observations
-    )  |>
-  add_ranef(
-    "cluster",
-    u_i = sig_u,
-    v_i = sig_v,
-    .cors = cor
-    ) |> mutate(
-      a_i = alpha_0 + u_i, 
-      b_i = beta_0  + v_i
-    ) |>
-  mutate(
-    x       = rnorm(n_cluster * obs_per_cluster),
-    epsilon = rnorm(n_cluster * obs_per_cluster, 0, sig),
-    y = a_i + b_i * x + epsilon
-    )  |> 
-  select(cluster, x, y)
+simulate_df <- function(seed = 123) {
+  if(!is.na(seed)) set.seed(seed)
+  df <- NA
+    add_random(
+      cluster = n_cluster,  # first the clusters
+      obs = obs_per_cluster # second, the observations
+      )  |>
+    add_ranef(
+      "cluster",
+      u_i = sig_u,
+      v_i = sig_v,
+      .cors = cor
+      ) |> mutate(
+        a_i = alpha_0 + u_i, 
+        b_i = beta_0  + v_i
+      ) |>
+    mutate(
+      x       = rnorm(n_cluster * obs_per_cluster),
+      epsilon = rnorm(n_cluster * obs_per_cluster, 0, sig),
+      y.ideal = a_i + b_i * x,
+      y       = a_i + b_i * x + epsilon
+      )  |> 
+    dplyr::select(cluster, x, y, y.ideal) |> 
+    mutate(cluster = factor(cluster))
+}
 
 
-md_cp <- lm(y ~ x, df) 
-md_np <- lm(y ~ x + cluster, df) 
-md_pp <- lmer(y ~ x + (x|cluster), df) 
-modelsummary(
-  list(
-    `Complete pooling` = md_cp, 
-    `No pooling` = md_np, 
-    `Multilevel model` = md_pp
-    ), 
-  stars = TRUE, 
-  note = "Note: Cluster fixed effects are omitted. + p < 0.1, * p < 0.05, ** p < 0.01, *** p < 0.001", 
-  coef_omit = c(-1, -2, -(42:45)), 
-  estimate  = "{estimate} ({std.error}){stars}", 
-  statistic = NULL, 
-  gof_omit = "Marg|Log|F"
-  )
+
+sim_and_model <- function() {
+  
+  coef_rename <- function(x) {
+    return(gsub("(cluster)(.*)", "\\2", x))
+  }
+  
+  df <- simulate_df()
+    
+    md_cp <- lm(y ~ x, df) 
+    md_np <- lm(y ~ x + cluster, df) 
+    md_np_plus <- lm(y ~ x + cluster + x:cluster, df) 
+    md_pp <- lmer(y ~ x + (1 | cluster), df) 
+    md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
+    modelsummary(
+      list(
+        `Complete pooling` = md_cp, 
+        `No pooling*` = md_np, 
+        `No pooling + interaction*` = md_np_plus, 
+        `Multilevel model` = md_pp,
+        `Multilevel model + random slopes` = md_pp_plus
+        ), 
+      stars = TRUE, 
+      note = "*Only a small sample of cluster level fixed effects shown", 
+      coef_omit = c(
+        -(1:4), 
+        - seq(n_cluster + 2, n_cluster + 6),
+        - seq(n_cluster + 2, n_cluster + 4),
+        - seq(2 * n_cluster + 1, 2 * n_cluster + 4)
+      ),
+      estimate  = "{estimate} ({std.error}){stars}", 
+      statistic = NULL, 
+      gof_omit = "Marg|Log|F"
+      , output = "gt"
+      , coef_rename = coef_rename
+      ) |> 
+      cols_add(
+        `Simulation parameter` = 
+        c(paste("α_0 =", alpha_0),
+        # Fixed slope
+        paste("β_0 =", beta_0),   
+        rep("", 7),
+        # Random intercept st.dev (level 2) 
+        paste("σ_u =", sig_u),   
+        # Random slope st.dev (level 2) 
+        paste("σ_v =", sig_v),
+        # Independent random effects
+        paste("ρ =", cor),
+        # Residual standard deviation
+        paste("σ =", sig),   
+        rep("", 8)), 
+        .after = 1
+      ) |> 
+      fmt_markdown(columns = 1) |> 
+      gtExtras::gt_theme_espn()
+
+}
+
+sim_and_model()
+
+# md_pp
+# md_pp_plus
+# 0.188^2 / (.188^2 + .281^2)
 
 ```
 
-2. Use your models to create a caterpillar plot for the intercepts and lattice or spaghetti plots to show the features of your multilevel models. Describe and discuss the plots: what new light do they shed? What are the advantages or disadvantages of presenting the models using these plots? 
+<br/>
+<br/>
+<br/>
+
+
+2. Use your models to create a caterpillar plot for the intercepts and lattice and/or spaghetti plots to show the features of your multilevel models. Describe and discuss the plots: what new light do they shed? What are the advantages or disadvantages of presenting the models using these plots? 
+
 
 
 
 
 ```{r catterpillar, eval=TRUE}
 
+
+
+df <- simulate_df()
+md_pp <- lmer(y ~ x + (x | cluster), df) 
 cols <- ranef(md_pp)$cluster |> 
   rownames() 
 
@@ -335,6 +407,140 @@ md_pp |>
   labs(y=NULL, x = "Cluster intercepts", title = "Random effects caterpillar plot (Intercepts)")
 
 ```
+
+
+
+```{r caterpillar-run-1, eval=FALSE}
+
+df <- simulate_df()
+md_pp <- lmer(y ~ x + (x | cluster), df) 
+clusters <- levels(df$cluster)
+# summary(md_pp)
+
+
+
+ranef(md_pp) |> 
+  augment() |> 
+  as_tibble() |> dplyr::filter(level=="cluster01") |> 
+  mutate(estimate = estimate + 1.8173, lb = lb  + 1.8173, ub = ub + 1.8173 )
+
+
+predictInterval(md_pp, 
+        newdata = data.frame(cluster = clusters, x = 0), 
+        level = .95) |> 
+  add_column(
+    estimate.fit = predict(md_pp, 
+        newdata = data.frame(cluster = clusters, x = 0)), 
+    .before = "fit"    
+  ) |> mutate(diff = fit - estimate.fit)
+
+
+md_pp |> 
+    predictions(
+      # by = "cluster", 
+      newdata = data.frame(x = 0, cluster = clusters)
+      ) |> 
+    as_tibble()
+
+md_pp |> 
+    avg_predictions(
+      by = "cluster"
+      ) |> 
+    as_tibble()
+
+
+n_data <- df |> 
+  select(cluster) |> 
+  unique() |> 
+  add_contrast(
+    "cluster", 
+    contrast = "treatment", 
+    colnames = cols[-1]
+    ) |> 
+  mutate(x = 0)
+
+md_pp |> 
+  predictions(
+    newdata = n_data, 
+    by = "cluster",
+    draw = FALSE
+    ) |> 
+  as_tibble() |> 
+  select(cluster, estimate, conf.low, conf.high) |> 
+  arrange(estimate) |> 
+  mutate(cluster = fct_inorder(cluster)) |> 
+  ggplot(aes(x = conf.low, xend = conf.high, y = cluster, yend = cluster)) + 
+  geom_segment() + 
+  geom_point(aes(x=estimate)) + 
+  theme_clean() + 
+  labs(y=NULL, x = "Cluster intercepts", title = "Random effects caterpillar plot (Intercepts)")
+
+```
+
+
+
+```{r caterpillar-2, eval=FALSE}
+df <- simulate_df()
+md_np <- lm(y ~ x + cluster, df) 
+md_np_plus <- lm(y ~ x + cluster + x:cluster, df) 
+md_pp <- lmer(y ~ x + (1 | cluster), df) 
+md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
+
+
+
+
+
+
+
+
+md_np |> 
+    predictions(
+      variables = c("cluster", "y"),
+      ) |> 
+    as_tibble() |> select(cluster, x, y, estimate)
+
+
+get_pred <- function(mdl) {
+  mdl |> 
+    predictions(
+      by = "cluster"
+      ) |> 
+    as_tibble() |>
+    select(cluster, estimate, conf.low, conf.high) |> 
+    arrange(estimate) 
+}
+
+get_pred(md_np) |> 
+    mutate(mdl = "no pooling") |> 
+  add_row(
+    get_pred(md_np_plus) |>
+      mutate(mdl = "no pooling + int")
+    ) |> 
+  add_row(
+    get_pred(md_pp) |>
+      mutate(mdl = "multilevel R-Int")
+    ) |>
+  add_row(
+    get_pred(md_np) |>
+      mutate(mdl = "multilevel R-Int + R-Slope")
+    ) |> 
+  mutate(cluster = fct_inorder(cluster)) |> 
+  ggplot(
+    aes(
+      x = conf.low, 
+      xend = conf.high, 
+      y = cluster, 
+      yend = cluster
+      )
+    ) + 
+  geom_segment() + 
+  geom_point(aes(x=estimate)) + 
+  facet_wrap(~mdl) + 
+  theme_clean() + NULL
+  labs(y=NULL, x = "Cluster intercepts", title = "Random effects caterpillar plot (Intercepts)")
+
+```
+
 
 
 
@@ -377,6 +583,9 @@ You will now visualize the estimated and confidence interval for the average log
 4. Replicate the figures below and explain why the counties with fewer measurements have more variable estimates and larger higher standard errors. What is the main advantage and disadvantage of no-pooling analysis, as illustrated in the plot on the left compared with the multilevel model? Explain. 
 
 ```{r ex-4, eval=TRUE}
+
+# radon <- read_rds("https://bit.ly/BMLR-Radon")
+
 
 radon_mn <- read_rds("radon.rds") |> 
   filter(state == "MN") |>

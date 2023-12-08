@@ -627,7 +627,8 @@ p_or <- plot_comparisons(
     demog_sex = c("Male", "Female")
     ), 
   condition = "alc_agefirst", 
-  comparison = \(hi, lo) ((hi/(1 - hi))/(lo/(1 - lo)))
+  comparison = "lnor", 
+  transform = "exp"
   ) + 
   geom_hline(yintercept = 1, lty = 2) +
   theme_clean() + 

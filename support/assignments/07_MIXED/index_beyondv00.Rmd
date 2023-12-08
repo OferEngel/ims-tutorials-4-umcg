@@ -1,0 +1,684 @@
+---
+title: 'BMLR Final project: Mixed effects'
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    css: ../lab.css
+    toc: true
+    toc_float: true
+---
+
+```{r global_options, include=FALSE}
+
+library(tidyverse)
+library(broom)
+library(broom.mixed)
+library(GGally)
+library(modelsummary)
+library(marginaleffects)
+library(table1)
+library(faux)
+library(lmerTest)
+library(patchwork)
+library(extrafont)
+
+knitr::opts_chunk$set(echo = FALSE, 
+                      eval = FALSE,
+                      fig.align = "center", 
+                      # fig.height = 3, 
+                      # fig.width = 5,
+                      warning = FALSE, 
+                      message = FALSE)
+
+# https://fonts.google.com/specimen/Barlow+Semi+Condensed
+theme_clean <- function() {
+  theme_minimal(base_family = "Barlow Semi Condensed") +
+    theme(panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white", color = NA),
+          plot.title = element_text(face = "bold"),
+          axis.title = element_text(face = "bold"),
+          strip.text = element_text(face = "bold", size = rel(0.8), hjust = 0),
+          strip.background = element_rect(fill = "grey80", color = NA),
+          legend.title = element_text(face = "bold")) + 
+    theme(legend.position = "bottom")
+}
+
+
+
+```
+
+
+
+<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  15-Dec-23. 
+<br/>Please submit your final report [using this form](https://forms.gle/JB5c9apmkx3wD8WG7). </span>
+
+
+
+
+<div style="float: right;width: 400px;margin: 5px 5px 5px 5px">
+```{r img-logistic, echo=FALSE, eval=TRUE, fig.align='center'}
+knitr::include_graphics("radon.gif")
+```
+</div>
+
+Radon, a natural radioactive gas, is a known carcinogen that can cause lung cancer, especially in high concentrations. In the United States, it's estimated to lead to thousands of lung cancer deaths annually. Radon levels in homes across the country vary significantly, with some houses having dangerously high concentrations.
+
+To pinpoint areas with high radon exposure, the Environmental Protection Agency conducted radon measurements in over 80,000 randomly selected houses nationwide. Our objective in analyzing this data was to estimate the range of radon levels in each of the approximately 3000 U.S. counties. This information would help homeowners decide whether to measure or reduce radon in their houses based on local conditions.
+
+For the analysis, we organized the data hierarchically: houses within counties. If we were to consider multiple measurements within houses, it would create a three-level hierarchy of measurements, houses, and counties.
+
+
+
+## Creating a reproducible lab report
+
+
+This time, you will need to use your own RStudio environment. You can also use one of the spaces you used for a previous lab, if you like! 
+
+-   Load the `tidyverse`, `table1`, `GGally`, `broom`, `broom.mixed`, `lmerTest`, `faux`, `marginaleffects` and the `modelsummary`  packages, and any other packages you might deem useful. 
+-   Load the `radon.rds` data set into your workspace, and assign it into an object called `finches`. 
+
+```{r load-data, echo=TRUE}
+radon <- read_rds("https://bit.ly/BMLR-Radon")
+
+```
+
+-   Knit your file to see that everything is working. 
+-   For each question, please add the text of the question, the code chunks and your answer. 
+
+
+
+
+## Simulating the data
+
+Simulating data is an important step when analyzing data, as it serves a range of purposes. First, it helps clarify our assumptions and expectations regarding treatment effects we might realistically observe, the types of interactions we should consider, the size and features of the data we need to establish the claims we want to make. We can work in a "clean" environment where variables are truly normal, there are no missing values and data is "well behaved". Once we grapple with an ideal world we can slowly add complexities and see how they change the picture.
+
+Secondly, simulating "fake" data is a general method to understand how statistical methods work when repeatedly sampling data. By automating the sampling processes, we can evaluate the model's performance. We can define the parameters in our "fake" population and compare the models estimations and predictions with those true values, and we can include  features to challenge our assumptions and improve our understanding. We simulate in order to test and validate our models before applying them to real data. 
+
+
+Third, simulating fake data helps find issues in our code. If your model struggles to recover true parameters with large samples or low data variance, it could signal a coding or conceptual problem. Overlaying simulated data with assumed and fitted models can aid in identifying these issues.
+
+Finally, simulating  synthetic data is crucial when planning new studies or collecting data. It provides a basis for what to expect, ensuring a better understanding of potential outcomes. 
+
+
+
+:::{#boxedtext}
+
+In the first part of this lab we are going to replicate some of the ideas presented in [a post](https://bit.ly/47IqpJj) written by Michael Clark. You may consider reading the post before continuing. 
+
+We are going to use the `faux` package to simulate nested data (observations nested within clusters). First, we define the number of clusters `n_cluster` and the number of observations in each cluster, `obs_per_cluster`. For example, we might want to have 20 clusters with 4 observations in each cluster (to keep things simple, let's stick to  a "balanced" data-set). 
+
+
+```{r faux-1, echo=TRUE}
+obs_per_cluster <-  4
+n_cluster <-  20
+
+```
+
+Now, let's generate some data, where (level 1) observed outcomes are related to predictors in the following manner: 
+
+$$
+Y = a_i + b_i\cdot X + \epsilon \\
+\text{where:}~~~ \epsilon \sim \mathcal{N}(0, \sigma^2)
+$$
+ 
+But rather than being regular population parameters,  $a_i$ and $b_i$ are random intercepts and slopes, such that each cluster has its own, unique intercept and slope. The random intercept is a level 2 random effect: 
+
+$$
+a_i = \alpha_0 + u_i \\
+\text{where:}~~~u_i \sim \mathcal{N}(0, \sigma_u^2)\\
+$$
+And the random slope is a level 2 random effect: 
+
+$$
+b_i = \beta_0 + v_i \\
+\text{where:}~~~v_i \sim \mathcal{N}(0, \sigma_v^2)\\
+$$
+To keep things simple, we will make sure that the random intercepts and slopes  are independent, that is, the correlation between $u_i, v_i$ is zero  $\rho_{u,v}=0$. 
+
+As you can see, in this stage we have only one predictor at level one $X$. We have no predictor at level 2. We also have to define six different population parameters: $\alpha_0 =1, \beta_0=0.5$ and three different standard deviations: $\sigma=1, \sigma_u=0.5, \sigma_v=0.25, \rho_{u,v}=0$. 
+
+Feel free to change these values if you would like to simulate different data.
+
+
+```{r faux-2, echo=TRUE}
+# Fixed intercept
+alpha_0 <-  1  
+
+# Fixed slope
+beta_0 <- .5  
+
+# Residuals st.dev (level 1) 
+sig  <-  1
+
+# Random intercept st.dev (level 2) 
+sig_u <-  .5
+
+# Random slope st.dev (level 2)
+sig_v <-  .25
+
+# Independent random effects
+cor <-  0
+
+```
+
+Finally, here is the code that simulates our data in several steps. Run every step separately, and observe the data frame `View(df)` to its contents
+
+```{r faux-3, echo=TRUE}
+
+# Create a dataset that can be reproduced
+set.seed(888)  
+# step 1: create the units 
+df <- add_random(
+    cluster = n_cluster,  # first the clusters
+    obs = obs_per_cluster # second, the observations
+    ) 
+
+# Print the result 
+# try to figure out what just happened
+df |> 
+  print(n = 15)
+
+# step 2: Add anything at level 2
+# Here we have random intercept/slope 
+df <- df |>
+  add_ranef(
+    "cluster",
+    u_i = sig_u,
+    v_i = sig_v,
+    .cors = cor
+    ) |> mutate(
+      a_i = alpha_0 + u_i, 
+      b_i = beta_0  + v_i
+    )
+
+# Print the result 
+# try to figure out what just happened
+df |> 
+  print(n = 15)
+
+
+# step 3: add anything at level 1
+df <- df |>
+  mutate(
+    x       = rnorm(n_cluster * obs_per_cluster),
+    epsilon = rnorm(n_cluster * obs_per_cluster, 0, sig),
+    y = a_i + b_i * x + epsilon
+    )
+
+
+# Print the result 
+# try to figure out what just happened
+df |> 
+  print(n = 20)
+
+# For the models, we really only need 
+# the cluster id, the y and the x
+
+df  <- df |> select(cluster, x, y)
+
+# Print the result 
+# try to figure out what just happened
+df |> 
+  print(n = 20)
+
+```
+
+So now we have our final observations: the clusters, the x and the y. Before continuing, please go back, set `obs_per_cluster` and `n_cluster` to larger numbers, to make sure our models work. 
+For example, you might want to create a data set with 100 clusters and 10 observations per cluster. You may want to experiment with other sample or cluster sizes or change the six population parameters. Feel free to experiment. 
+
+:::
+
+
+We will then test the data against three types of models: 
+
+-   `Complete pooling`: Here we ignore the structure of the data, and pretend that all the observations are uncorrelated and independent of one another. The model disregards the clusters and is oblivious to the observations within clusters being more similar to one another than observations between clusters. We will be estimating just two fixed population parameters: the one intercept and one slope.  
+-   `No pooling`: Here we estimate **two** dummy variable for each cluster (except the reference cluster): one for the intercept and one for the slope. For example, if we had 100 clusters we would be estimating one intercept and 99 dummy variables (fixed effects), which is essentially like having 100 different intercepts, one for each cluster. 
+-   `Partial pooling`: Here we estimate **two** dummy variable for each cluster (except the reference cluster): one for the intercept and one for the slope. For example, if we had 100 clusters we would be estimating one intercept and 99 dummy variables (fixed effects), which is essentially like having 100 different intercepts, one for each cluster. 
+
+1. Adjust the parameters, simulate your clustered data and present the results of the three models using the `modelsummary` package. Interpret the three models and compare the estimations with each of the six parameters you use in order to create your dataset. Is there one single model that is superior to all the rest in terms of estimating the parameters? If so which is it? If not, Which model works best for what purpose? In your answer, please pay attention to the estimated Intraclass Correlation Coefficient (ICC) of your multilevel model. What does the ICC mean? How much does it deviate from what you would expect?  
+
+```{r sim-nowshow, eval=TRUE}
+obs_per_cluster <-  20
+n_cluster <-  40
+# Fixed intercept
+alpha_0 <-  1  
+# Fixed slope
+beta_0 <- .5  
+# Residuals st.dev (level 1) 
+sig  <-  1
+# Random intercept st.dev (level 2) 
+sig_u <-  .5
+# Random slope st.dev (level 2)
+sig_v <-  .25
+# Independent random effects
+cor <-  0
+
+# Create a dataset that can be reproduced
+set.seed(888)  
+# step 1: create the units 
+df <- add_random(
+    cluster = n_cluster,  # first the clusters
+    obs = obs_per_cluster # second, the observations
+    )  |>
+  add_ranef(
+    "cluster",
+    u_i = sig_u,
+    v_i = sig_v,
+    .cors = cor
+    ) |> mutate(
+      a_i = alpha_0 + u_i, 
+      b_i = beta_0  + v_i
+    ) |>
+  mutate(
+    x       = rnorm(n_cluster * obs_per_cluster),
+    epsilon = rnorm(n_cluster * obs_per_cluster, 0, sig),
+    y = a_i + b_i * x + epsilon
+    )  |> 
+  select(cluster, x, y)
+
+
+md_cp <- lm(y ~ x, df) 
+md_np <- lm(y ~ x + cluster, df) 
+md_pp <- lmer(y ~ x + (x | cluster), df) 
+modelsummary(
+  list(
+    `Complete pooling` = md_cp, 
+    `No pooling` = md_np, 
+    `Multilevel model` = md_pp
+    ), 
+  stars = TRUE, 
+  note = "Note: Cluster fixed effects are omitted. + p < 0.1, * p < 0.05, ** p < 0.01, *** p < 0.001", 
+  coef_omit = c(-1, -2, -(42:45)), 
+  estimate  = "{estimate} ({std.error}){stars}", 
+  statistic = NULL, 
+  gof_omit = "Marg|Log|F"
+  )
+
+```
+
+2. Use your models to create a caterpillar plot for the intercepts and lattice or spaghetti plots to show the features of your multilevel models. Describe and discuss the plots: what new light do they shed? What are the advantages or disadvantages of presenting the models using these plots? 
+
+
+
+
+```{r catterpillar, eval=TRUE}
+
+cols <- ranef(md_pp)$cluster |> 
+  rownames() 
+
+n_data <- df |> 
+  select(cluster) |> 
+  unique() |> 
+  add_contrast(
+    "cluster", 
+    contrast = "treatment", 
+    colnames = cols[-1]
+    ) |> 
+  mutate(x = 0)
+
+md_pp |> 
+  predictions(
+    newdata = n_data, 
+    by = "cluster",
+    draw = FALSE
+    ) |> 
+  as_tibble() |> 
+  select(cluster, estimate, conf.low, conf.high) |> 
+  arrange(estimate) |> 
+  mutate(cluster = fct_inorder(cluster)) |> 
+  ggplot(aes(x = conf.low, xend = conf.high, y = cluster, yend = cluster)) + 
+  geom_segment() + 
+  geom_point(aes(x=estimate)) + 
+  theme_clean() + 
+  labs(y=NULL, x = "Cluster intercepts", title = "Random effects caterpillar plot (Intercepts)")
+
+```
+
+
+```{r testing}
+
+
+md_pp |> 
+  predictions(
+    newdata = n_data, 
+    by = "cluster",
+    draw = FALSE
+    ) |> as_tibble() |>
+  select(cluster, estimate, conf.low, conf.high)
+
+md_pp |> 
+  predictions(
+    by = "cluster"
+    ) |> as_tibble() |>
+  select(cluster, estimate, conf.low, conf.high)
+
+
+```
+
+
+:::{#boxedtext}
+
+Hints for creating the plots will be available in the following few days. Thank you for your patience.
+
+:::
+
+
+## Radon in the home: a case study
+
+Our aim in examining this data is to estimate how radon levels are distributed across the approximately 3000 counties in the United States. This information can empower homeowners to decide whether to test and address radon in their homes, using the best local knowledge available.
+
+To conduct this analysis, we view the data hierarchically: houses (level one) within counties (level 2). If we were to delve deeper into multiple measurements within houses, we could create a three-tier hierarchy: measurements (level 1), houses (level 2), and counties (level 3). During the analysis, we consider an important factor: **where** the measurement was taken, whether in the **basement** or on the **first floor**. Radon, originating underground, can more readily enter homes built into the ground.
+
+Additionally, at the county level, we used a a measurement of soil uranium available for each county. This hierarchical model enables us to create a regression model for individual measurements while accommodating consistent, unexplained variations among the 3000 counties. 
+
+This section closely follows chapter 12 in Gellman and Hill's influential book *Data analysis using regression and multilevel/hierarchical models*. You will find [the chapter](https://bit.ly/4a4wcdI) available as an optional reading (link also available through Brightspace). The chapter is available on Perusall to allow you to share code, discuss, or ask questions. I will be looking at the discussion from time to time, so if  you need help, please do not hesitate to #tag me `r emo::ji("call_me_hand") `
+
+
+In that chapter you will find the background for the study, and an explanation of the variables. The original dataset and the code used to produce the book is [available here](http://www.stat.columbia.edu/~gelman/arm/examples/radon/). 
+
+The dataset consists of a large number of measurements of the gas Radon, and so in this document we will be including only the measurements from the state of Minnesota. 
+Feel free to choose a different state if you like. 
+
+```{r echo = TRUE}
+radon_mn <- read_rds("radon.rds") |> 
+  filter(state == "MN") |>
+  # drop counties without measurements
+  mutate(county = fct_drop(county))
+```
+
+
+3. Create a `table1` and use `GGally::ggpairs` to explore your data. 
+
+You will now visualize the estimated and confidence interval for the average log Radon across different counties, against the (jittered) number of measurements taken in said county. We will use the estimation to compare between two models: the `no pooling model` and the `multilevel model` with partial pooling, both without predictors. The horizontal line in each plot represents an estimate of the average radon level across all counties. This is a replication of figure 12.1 in the above mentioned chapter. 
+
+
+4. Replicate the figures below and explain why the counties with fewer measurements have more variable estimates and larger higher standard errors. What is the main advantage and disadvantage of no-pooling analysis, as illustrated in the plot on the left compared with the multilevel model? Explain. 
+
+```{r ex-4, eval=TRUE}
+
+radon <- read_rds("https://bit.ly/BMLR-Radon")
+
+radon_mn <- read_rds("radon.rds") |> 
+  filter(state == "MN") |>
+  # drop counties without measurements
+  mutate(county = fct_drop(county))
+
+m.comp_pool <- radon_mn |>
+  lm(log.radon ~ 1, data = _)
+m.no_pool <- radon_mn |>
+  lm(log.radon ~ 0 + county, data = _)
+m.partial_pool <- radon_mn |>
+  lmer(log.radon ~ (1|county), data = _)
+
+
+m.comp_pool.prep <- predictions(m.comp_pool)[1, ] |>
+     as.data.frame()
+
+
+radon_mn_count <- radon_mn |>
+  count(county, name = "n.obs")
+
+get_radon_vs_n_obs <- function (mdl) {
+  set.seed(888)
+  x.seq <- c(1 , seq(2, 10, 2), 10, seq(20, 100,20))
+  p <- mdl  |>
+    predictions(newdata = datagrid(county = unique)) |>
+    inner_join(radon_mn_count, by = "county") |>
+    mutate(
+      n.obs.jitter = rnorm(
+        nrow(radon_mn_count)
+        , n.obs
+        , n.obs / 10
+        )
+      ) |>
+    ggplot(
+      aes(
+        x = n.obs.jitter,
+        xend = n.obs.jitter,
+        y = conf.low,
+        yend = conf.high
+        )
+      ) +
+    geom_point(aes(y = estimate)) +
+    geom_segment() +
+    scale_x_log10(breaks = x.seq) +
+    geom_hline(
+      yintercept = c(m.comp_pool.prep$estimate)
+      ) +
+    labs(x = "Number of observations", y = "Estimated log radon in the county", subtitle = "Estimated log Radon vs. number of observations")
+  return(p)
+}
+library(patchwork)
+p1 <- get_radon_vs_n_obs(m.no_pool) +
+  labs( title = "Radon measurements in in Minnesota (no pooling)") + 
+  theme_clean()
+p2 <- get_radon_vs_n_obs(m.partial_pool) +
+  labs( title = "Radon measurements in in Minnesota (multilevel, partial pooling)")+ 
+  theme_clean()
+
+p1 / p2
+
+```
+
+
+
+:::{#boxedtext}
+
+Hints for creating the plots will be available in the following few days. Thank you for your patience.
+
+:::
+
+5. In this exercise, you will replicate a set of models as shown below. This illustration is based on the ideas shown in figure 12.4 in the book. Please replicate this illustration with a twist: for example, you may choose a different set of counties than the one shown below or the one shown in the book, or you may try something different. Please explain the graphs. What do the dashed red and black lines show? What is the blue line? What determines whether the blue line would be more similar to the red line or the black line? How is this figure compare to the one shown in chapter 12 of the book?
+
+
+:::{#boxedtext}
+
+**Hints** The three lines show the predictions of the three models: the complete pooling, the no pooling and the multilevel (partial pooling) models. Further hints for creating the plots will be available in the following few days. Thank you for your patience.
+
+:::
+
+```{r ex-5, eval=TRUE}
+
+
+my.counties <- radon_mn |>
+  count(county) |>
+  filter(n>0) |>
+  filter(
+    str_detect(
+      county,
+      "PARLE|BLUE|KOOCH|DOUG|CLAY|STEAR|RAMS|LOUI|MCLEOD|DAKO|OTTER|MOWER|RICE|SCOTT|MILLE LACS|REDWOOD"
+      )
+    ) |>
+  pull(county) |>
+  as.character() |>
+  as.factor()
+
+# radon_mn |> count(county, first_floor) |>
+#   pivot_wider(id_cols = county, names_from = first_floor, values_from = n) |>
+#   print(n=1000)
+
+# m.ff.c_pool <- radon_mn |>
+#   lm(log.radon ~ first_floor, data = _)
+# summary(m.ff.c_pool)
+# m.ff.no_pool <- radon_mn |>
+#   lm(log.radon ~ first_floor + county, data = _)
+# m.ff.prtl_pool <- radon_mn |>
+#   lmer(log.radon ~ first_floor + (1|county), data = _)
+
+
+m.ff.c_pool <- radon_mn |>
+  lm(log.radon ~ first_floor, data = _)
+# summary(m.ff.c_pool)
+m.ff.no_pool <- radon_mn |>
+  lm(log.radon ~ (first_floor + county)^2, data = _)
+# summary(m.ff.no_pool)
+m.ff.prtl_pool <- radon_mn |>
+  lmer(log.radon ~ first_floor + (first_floor|county), data = _)
+# ranef(m.ff.prtl_pool) |> as_tibble() |> mutate(t = condval/condsd) |>
+# arrange(t) |> print(n = 1000)
+
+
+
+# m.ff.c_pool |>
+#   predictions(
+#     newdata = datagrid(
+#       first_floor = c(0, 1))
+#     ) |> select(first_floor, estimate, conf.low, conf.high) |> as_tibble() |> mutate(mdl = "c_pool", .before = first_floor)
+
+
+
+m.ff.c_pool |>
+  predictions(
+    newdata = datagrid(
+      first_floor = c(0, 1))
+  )  |>
+  mutate(mdl = "c_pool") |>
+  pivot_wider(id_cols = mdl, names_from = first_floor, values_from = estimate, names_prefix = "floor = ") |> mutate(n = length(my.counties)) |> uncount(n) |>
+  mutate(county = my.counties, .after = mdl) -> c_pool_pred
+
+# tidy(m.ff.no_pool) |> arrange(estimate) |>
+#   print(n = 1000)
+
+m.ff.no_pool |>
+  predictions(
+    newdata = datagrid(
+      first_floor = c(0, 1),
+      county = my.counties
+    )
+  ) |> select(county, first_floor, estimate, conf.low, conf.high) |> as_tibble()  |>
+  pivot_wider(id_cols = county, names_from = first_floor, values_from = estimate, names_prefix = "floor = ") |> mutate(mdl = "no_pool", .before = county) ->  np_pred
+
+
+
+m.ff.prtl_pool |>
+  predictions(
+    newdata = datagrid(
+      first_floor = c(0, 1),
+      county = my.counties
+    )
+  ) |> select(county, first_floor, estimate, conf.low, conf.high) |> as_tibble()  |>
+  pivot_wider(id_cols = county, names_from = first_floor, values_from = estimate, names_prefix = "floor = ") |> mutate(mdl = "prtl_pool", .before = county) ->
+  partl_pool
+
+library(extrafont)
+theme_clean <- function() {
+  theme_minimal(base_family = "Barlow Semi Condensed") +
+    theme(panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white", color = NA),
+          plot.title = element_text(face = "bold"),
+          axis.title = element_text(face = "bold"),
+          strip.text = element_text(face = "bold", size = rel(0.8), hjust = 0),
+          strip.background = element_rect(fill = "grey80", color = NA),
+          legend.title = element_text(face = "bold")) +
+    theme(legend.position = "bottom")
+}
+
+
+
+
+
+radon_mn |> filter(county %in% my.counties) |>
+  mutate(first_floor = if_else(first_floor == 0, "floor = 0", "floor = 1")) |>
+  ggplot(aes(x = first_floor, y = log.radon)) +
+  geom_point() +
+  geom_segment(
+    data = c_pool_pred,
+    aes(
+      x = "floor = 0",
+      xend = "floor = 1",
+      y = `floor = 0`,
+      yend = `floor = 1`
+      ),
+    color = "red",
+    linetype = "dashed",
+    linewidth = 1
+    ) +
+  geom_segment(
+    data = np_pred,
+    aes(
+      x = "floor = 0",
+      xend = "floor = 1",
+      y = `floor = 0`,
+      yend = `floor = 1`
+    ),
+    linetype = "dashed"
+  ) +
+  geom_segment(
+    data = partl_pool,
+    aes(
+      x = "floor = 0",
+      xend = "floor = 1",
+      y = `floor = 0`,
+      yend = `floor = 1`
+    ),
+    color = "blue"
+  ) +
+  facet_wrap(~county, scales = "free_y") +
+  theme_clean() +
+  labs(x = NULL, y = "Log Radon level")  +
+  scale_x_discrete(expand=expansion(mult=0.1)) +
+  theme(text = element_text(size = 12))
+
+
+```
+
+
+6. Finally, we are going to add a fixed effect at the county level (level 2). This illustration is based on figure 12.6 in the book, and it shows the estimated county level coefficients, plotted vs. county level uranium levels, along with estimated multilevel regression line at level 2. After replicating this graph, please explain it briefly. 
+
+```{r ex-6, eval=TRUE}
+
+
+### Group level Uranium
+###
+
+md.lm <- radon_mn |>
+  lm(log.radon ~ u , data = _)
+
+md.lvl12 <- radon_mn |>
+  lmer(log.radon ~ u +  (1|county), data = _)
+# summary(md.lvl12)
+
+df  <- radon_mn |>
+  select(county, u) |> unique() # |> mutate(first_floor = 0)
+
+pred.lm <- predictions(
+  md.lm,
+  by = "u"
+  )
+
+pred.lvl12 <- predictions(
+  md.lvl12,
+  newdata = df,
+  by = "u"
+)
+
+
+pred.lvl12 |>
+  ggplot(aes(x = u, xend = u, y = conf.low, yend = conf.high)) +
+  geom_segment() +
+  geom_point(aes(y = estimate)) +
+  geom_line(
+    data = pred.lm,
+    aes(x = u, y = estimate),
+    linetype  = "dashed"
+    ) +
+  geom_ribbon(
+    data = pred.lm,
+    aes(x = u, ymin = conf.low, ymax = conf.high),
+    alpha  = .2
+  ) + theme_clean() + 
+  labs(x = "Uranium (county level)", y = "County level coefficients")
+
+
+```
+
+
+
+:::{#boxedtext}
+
+Hints for creating the plots will be available in the following few days. Thank you for your patience.
+
+:::
+
+7. Using the simulation techniques in questions 1 and 2, generate a synthetic dataset that would be similar to the radon data, in the sense that if you fitted the three models to your simulated dataset, you would get similar parameter estimations to the ones you got when fitting your models to the real Radon dataset. Explore your synthetic data using similar visualisations, and comment on similarities or differences between the Radon dataset and your simulated dataset.   
