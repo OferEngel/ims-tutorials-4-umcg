@@ -136,7 +136,7 @@ b_i = \beta_0 + v_i \\
 $$
 To keep things simple, we will make sure that the random intercepts and slopes  are independent, that is, the correlation between $u_i, v_i$ is zero  $\rho_{u,v}=0$. 
 
-As you can see, in this stage we have only one predictor at level one $X$. We have no predictor at level 2. We also have to define six different population parameters: $\alpha_0 =1, \beta_0=0.5$ and three different standard deviations: $\sigma=1, \sigma_u=0.5, \sigma_v=0.25, \rho_{u,v}=0$. 
+As you can see, in this stage we have only one predictor at level one $X$. We have no predictor at level 2. We also have to define six different population parameters. For example, we can choose $\alpha_0 = 1, \beta_0 = 0.5$ and three different standard deviations: $\sigma = 1, \sigma_u = 0.5, \sigma_v = 0.25, \rho_{u,v} = 0$. 
 
 Feel free to change these values if you would like to simulate different data.
 
@@ -235,19 +235,32 @@ We will then test the data against three types of models:
 -   `No pooling`: This model expands on the previous one. In addition to the global intercept and slope, we add the cluster (categorical) variable and estimate a coefficient for **each cluster**. In effect, each cluster is associated with a cluster specific intercept. Since we know that there is a variation in the slopes, you may also test a model with an interaction between the clusters and the predictor, x. The formula you will use in your linear regression model is `y ~ x + cluster`  for the model without the interaction and `y ~ x + cluster + x:cluster` for the model with the interaction.
 -   `Multilevel model (partial pooling)`: This model also expands on the `Complete pooling` model to account for the correlated observations within the clusters. But instead of using fixed (dummy) variables, this model uses a random intercept (and, optionally, a random slope). The formula you will use for the random intercept model is `y ~ x + (1 | cluster)` and the formula or the random intercept and slope model is `y ~ x + (x | cluster)`.
 
-1. Adjust the parameters, simulate your clustered data and present the results of the three types of models using the `modelsummary` package. Interpret your models and compare the estimations with each other, and with the six parameters used to simulate your data. Is there one single model that is superior to all the rest in terms of estimating the parameters? If so which is it, and what makes it better? If not, Which model works best for what purpose? In your answer, please pay attention to the estimated Intraclass Correlation Coefficient (ICC) of your multilevel model(s). What does the ICC mean? How much does it deviate from what you would expect? For more about the ICC, please see below. 
+1. Adjust the parameters, simulate your clustered data and present the results of the three types of models using the `modelsummary` package. Interpret your models and compare the estimations with each other, and with the six parameters used to simulate your data. Is there one single model that is superior to all the rest in terms of estimating the parameters? If so which is it, and what makes it better? If not, Which model works best for what purpose? In your answer, please pay attention to the standard errors and the Intraclass Correlation Coefficient (ICC) of your multilevel model(s). What does the ICC mean? How much does it deviate from what you would expect? For more about the ICC, please see below. 
 
 :::{#boxedtext}
 
-**Further exploration:** Use your imagination (and curiousity) to explore your simulations and your models. For example, you may want to compare multiple simulations with the same parameters, and see how they vary. You may want to change the sample size (the number of clusters and observations in each cluster), or you might want to increase the parameters, turn some of them to be negative, or just run multiple simulations with the same parameters, comparing the variation between one simulation and the next. Do the estimates vary a lot between simulations? Does increasing the sample size increase accuracy of the estimates? Does it influence the standard errors? Is there one single model that is superior to all the rest in terms of estimating the parameters? If so which model is it and in what way is it better? If not, which model works best for what purpose? 
+**Further explanation and exploration:** Use your imagination (and curiosity) to explore your simulations and your models. For example, you may want to compare multiple simulations with the same parameters, and see how they vary. You may want to change the sample size (the number of clusters and observations in each cluster), or you might want to increase the parameters, turn some of them to be negative, or just run multiple simulations with the same parameters, comparing the variation between one simulation and the next. Do the estimates vary a lot between simulations? Does increasing the sample size increase accuracy of the estimates? Does it influence the standard errors? Is there one single model that is superior to all the rest in terms of estimating the parameters? If so which model is it and in what way is it better? If not, which model works best for what purpose? 
 
-**Calculating the ICC:** The calculation of the ICC is straightforward when we only have random intercepts. [Taking the random slopes](https://stats.stackexchange.com/questions/115526/intraclass-correlation-coefficient-in-mixed-model-with-random-slopes) into account complicates the situation because in that case, the ICC varies with the predictors. Luckily, in our case, the predictor is normally distributed around zero. In this case, the calculation of the ICC when the predictors are zero reduces to the regular form of the ICC, that does not take the random variable into account.     
+**Calculating the ICC:** The calculation of the ICC is straightforward when we only have random intercepts. [Taking the random slopes](https://stats.stackexchange.com/questions/115526/intraclass-correlation-coefficient-in-mixed-model-with-random-slopes) into account complicates the situation because in that case, the ICC varies with the predictors. Because here the predictor is normally distributed around zero, the calculation of the ICC (at $x=0$) reduces to the regular form of the ICC, which need not take the random slope into account.     
 
-For example, I fitted the models shown below to a simulation with 30 clusters, 20 observations per cluster, a global intercept of $2$ and a global slope of $1.5$, the variance of the (level-one) residual is $1$, the variance of the random intercept and the random slope are $1.5^2$ and $1.8^2$ respectively, and the correlation coefficient is $0.5$. 
+For example, in the example below, data is simulated with 30 clusters, 20 observations per cluster, a global intercept of $2$ and a global slope of $1.5$, the variance of the (level-one) residual is $1$, the variance of the random intercept and the random slope are $1.5^2$ and $1.8^2$ respectively, and the correlation coefficient is $0.5$. 
 
-You can see that the no-pooling models have larger standard errors for the intercept, probably because the estimation is based on data from one single cluster (the reference cluster with 20 observations and a small number of residual degrees of freedom). The no-pooling model with interactions is suffering from relatively large standard errors (most probably due to a small number of residual degrees of freedom).
+You can see that the no-pooling models have larger standard errors for the intercept, probably because the estimation is based on data from one single cluster (the reference cluster with 20 observations and a small number of residual degrees of freedom). The no-pooling model with interactions is suffering from relatively large standard errors (most probably due to a small number of residual degrees of freedom). 
+Also, note that for the no-pooling model, the global intercept is associated with the intercept of the reference cluster. So you are bound to get an estimate that is in effect the sum of the global intercept and the random intercept of the first cluster ($=\alpha_0 + u_1$) 
 
 :::
+
+
+
+:::{#info-box}
+
+You will **not** necessarily get the same estimations as in the table below! Every simulation can be different, therefore the estimates will be slightly different, leading to different results. 
+
+
+:::
+
+
+
 
 ```{r sim-nowshow, eval=TRUE}
 obs_per_cluster <-  20 # 20
@@ -267,7 +280,7 @@ sig <- 1
 
 
 # Create a dataset that can be reproduced
-simulate_df <- function(seed = 123) {
+simulate_df <- function(seed = 888) {
   if(!is.na(seed)) set.seed(seed)
   df <- NA
     add_random(
@@ -369,17 +382,180 @@ sim_and_model()
 
 
 
-
-
-```{r catterpillar, eval=TRUE}
-
-
+```{r caterpillar, eval=TRUE}
 
 df <- simulate_df()
-md_pp <- lmer(y ~ x + (x | cluster), df) 
-cols <- ranef(md_pp)$cluster |> 
-  rownames() 
+md_cp <- lm(y ~ x, df) 
+md_np <- lm(y ~ x + cluster, df) 
+md_np_plus <- lm(y ~ x + cluster + x:cluster, df) 
+md_pp <- lmer(y ~ x + (1 | cluster), df) 
+md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
+clusters <- levels(df$cluster)
 
+
+# md_pp_plus |> 
+#     predictions(
+#       # by = "cluster", 
+#       newdata = data.frame(x = 0, cluster = clusters)
+#       ) |> 
+#     as_tibble()
+
+
+ranef(md_pp) |> 
+  augment() |> 
+  as_tibble() |> 
+  filter(variable == "(Intercept)") |> 
+  arrange(estimate) |> 
+  mutate(cluster = fct_inorder(level)) |> 
+  ggplot(aes(x = lb, xend = ub, y = cluster, yend = cluster)) + 
+  geom_segment() + 
+  geom_point(aes(x=estimate)) + 
+  theme_clean() + 
+  labs(
+    y=NULL, 
+    x = "Cluster intercepts", 
+    title = "Random effects caterpillar plot (Intercepts)"
+    )
+
+```
+
+
+
+```{r caterpillar-experiments, eval=FALSE}
+
+df <- simulate_df()
+md_cp <- lm(y ~ x, df) 
+md_np <- lm(y ~ x + cluster, df) 
+md_np_plus <- lm(y ~ x + cluster + x:cluster, df) 
+md_pp <- lmer(y ~ x + (1 | cluster), df) 
+md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
+clusters <- levels(df$cluster)
+# summary(md_pp)
+# df
+
+ranef(md_pp) |> 
+  augment() |> 
+  as_tibble() |> select(-qq, -grp) |> 
+  mutate(diff = ub - lb)
+arm::se.ranef(md_pp)
+
+
+# Two ways to calculate the ranef 
+# Giving us one prediction for each cluster 
+# 1. with `predictInterval` which gives us the (HUGE) conf-int
+# 2. with predict vanilla
+############## Calculating RANEF
+merTools::predictInterval(md_pp, 
+        newdata = data.frame(cluster = clusters, x = 0), 
+        level = .95) |> 
+  as_tibble() |> 
+     rename_with(~str_c("predInt_", .), .cols = everything()) |> 
+  add_column(
+    pred = predict(md_pp, 
+        newdata = data.frame(cluster = clusters, x = 0)), 
+    .before = "predInt_fit"    
+  ) |> 
+  as_tibble()  |> 
+  mutate(
+    diff.preds = predInt_fit - pred, 
+    .after = "predInt_fit" 
+    ) |> 
+  mutate(
+    uncty.rg = predInt_upr - predInt_lwr,
+    ) 
+
+
+
+
+
+# Now a third way using `marginaleffects` predictions
+# The conf.ints are *much* narrower than those provided by predictInterval
+# It also gives us the exact same std error, same uncertainty range
+p1 <- md_pp |> 
+    predictions(
+      newdata = data.frame(x = 0, cluster = clusters)
+      ) |> 
+    as_tibble() |> 
+  select(-statistic, -p.value, -s.value, -x, -y)  |> 
+  mutate(uncty.rg = conf.high - conf.low)
+
+# A fourth way is by aggregating / stratifying on the cluster.
+# p2 and p3 appears to be the same
+p2 <- md_pp |> 
+predictions(
+      by = "cluster"
+      ) |> 
+  as_tibble() |> 
+  select(-statistic, -p.value, -s.value)  |> 
+  mutate(uncty.rg = conf.high - conf.low)
+
+# This is the same using avg_predictions
+# It is the same as in the above
+p3 <- md_pp |> avg_predictions(
+      by = "cluster"
+      ) |> 
+  as_tibble() |> 
+  select(-statistic, -p.value, -s.value)  |> 
+  mutate(uncty.rg = conf.high - conf.low)
+
+
+# Comparing the predictions with the stratification
+p1 |> 
+  inner_join(p2, by = "cluster") |> 
+  select(
+    ex = estimate.x, 
+    ey = estimate.y, 
+    sex = std.error.x, 
+    sey = std.error.y, 
+    rgx = uncty.rg.x, 
+    rgy = uncty.rg.y, 
+    clx = conf.low.x, 
+    chx = conf.high.x, 
+    cly = conf.low.y, 
+    chy = conf.high.y, 
+    cluster
+    ) |> 
+  inner_join(p3, by = "cluster") |> 
+  mutate(rgz = conf.high - conf.low) |> 
+  select(
+    ex, 
+    ey, 
+    ez = estimate, 
+    sex, 
+    sey, 
+    sez = std.error, 
+    rgx, 
+    rgy, 
+    rgz,
+    clx, 
+    chx, 
+    cly, 
+    chy, 
+    cluster
+    ) |>  print(n = 30)
+  
+
+# Now a fourth way using `marginaleffects` avg_predictions
+# This way marginalizes over our data, I suspect?
+md_pp |> 
+    avg_predictions(
+      by = "cluster"
+      ) |> 
+    as_tibble() |> 
+  select(
+    cluster, 
+    estimate, conf.low, conf.high) |> 
+  mutate(uncty.range = conf.high - conf.low)
+
+# The avg_prediction is the same as the following:
+df |> 
+  add_column(
+   y_hat = predict(md_pp)
+  ) |> group_by(cluster) |> 
+  summarise(mn.y = mean(y_hat))
+
+
+# This does the same but in a crazy way...
 n_data <- df |> 
   select(cluster) |> 
   unique() |> 
@@ -398,41 +574,19 @@ md_pp |>
     ) |> 
   as_tibble() |> 
   select(cluster, estimate, conf.low, conf.high) |> 
-  arrange(estimate) |> 
-  mutate(cluster = fct_inorder(cluster)) |> 
-  ggplot(aes(x = conf.low, xend = conf.high, y = cluster, yend = cluster)) + 
-  geom_segment() + 
-  geom_point(aes(x=estimate)) + 
-  theme_clean() + 
-  labs(y=NULL, x = "Cluster intercepts", title = "Random effects caterpillar plot (Intercepts)")
+  mutate(diff = conf.high - conf.low)
 
-```
+library(lattice)
+md_cp <- lm(y ~ x, df) 
+md_np <- lm(y ~ x + cluster, df) 
+md_np_plus <- lm(y ~ x + cluster + x:cluster, df) 
+md_pp <- lmer(y ~ x + (1 | cluster), df) 
+md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
 
+randoms <- ranef(md_pp_plus) |> as_tibble()
 
+dotplot(randoms)
 
-```{r caterpillar-run-1, eval=FALSE}
-
-df <- simulate_df()
-md_pp <- lmer(y ~ x + (x | cluster), df) 
-clusters <- levels(df$cluster)
-# summary(md_pp)
-
-
-
-ranef(md_pp) |> 
-  augment() |> 
-  as_tibble() |> dplyr::filter(level=="cluster01") |> 
-  mutate(estimate = estimate + 1.8173, lb = lb  + 1.8173, ub = ub + 1.8173 )
-
-
-predictInterval(md_pp, 
-        newdata = data.frame(cluster = clusters, x = 0), 
-        level = .95) |> 
-  add_column(
-    estimate.fit = predict(md_pp, 
-        newdata = data.frame(cluster = clusters, x = 0)), 
-    .before = "fit"    
-  ) |> mutate(diff = fit - estimate.fit)
 
 
 md_pp |> 
@@ -440,113 +594,63 @@ md_pp |>
       # by = "cluster", 
       newdata = data.frame(x = 0, cluster = clusters)
       ) |> 
-    as_tibble()
-
-md_pp |> 
-    avg_predictions(
-      by = "cluster"
-      ) |> 
-    as_tibble()
-
-
-n_data <- df |> 
-  select(cluster) |> 
-  unique() |> 
-  add_contrast(
-    "cluster", 
-    contrast = "treatment", 
-    colnames = cols[-1]
-    ) |> 
-  mutate(x = 0)
-
-md_pp |> 
-  predictions(
-    newdata = n_data, 
-    by = "cluster",
-    draw = FALSE
-    ) |> 
-  as_tibble() |> 
-  select(cluster, estimate, conf.low, conf.high) |> 
+    as_tibble() |> 
   arrange(estimate) |> 
   mutate(cluster = fct_inorder(cluster)) |> 
   ggplot(aes(x = conf.low, xend = conf.high, y = cluster, yend = cluster)) + 
   geom_segment() + 
   geom_point(aes(x=estimate)) + 
   theme_clean() + 
-  labs(y=NULL, x = "Cluster intercepts", title = "Random effects caterpillar plot (Intercepts)")
+  labs(
+    y=NULL, 
+    x = "Cluster intercepts", 
+    title = "Random effects caterpillar plot (Intercepts)"
+    )
 
 ```
-
-
-
-```{r caterpillar-2, eval=FALSE}
-df <- simulate_df()
-md_np <- lm(y ~ x + cluster, df) 
-md_np_plus <- lm(y ~ x + cluster + x:cluster, df) 
-md_pp <- lmer(y ~ x + (1 | cluster), df) 
-md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
-
-
-
-
-
-
-
-
-md_np |> 
-    predictions(
-      variables = c("cluster", "y"),
-      ) |> 
-    as_tibble() |> select(cluster, x, y, estimate)
-
-
-get_pred <- function(mdl) {
-  mdl |> 
-    predictions(
-      by = "cluster"
-      ) |> 
-    as_tibble() |>
-    select(cluster, estimate, conf.low, conf.high) |> 
-    arrange(estimate) 
-}
-
-get_pred(md_np) |> 
-    mutate(mdl = "no pooling") |> 
-  add_row(
-    get_pred(md_np_plus) |>
-      mutate(mdl = "no pooling + int")
-    ) |> 
-  add_row(
-    get_pred(md_pp) |>
-      mutate(mdl = "multilevel R-Int")
-    ) |>
-  add_row(
-    get_pred(md_np) |>
-      mutate(mdl = "multilevel R-Int + R-Slope")
-    ) |> 
-  mutate(cluster = fct_inorder(cluster)) |> 
-  ggplot(
-    aes(
-      x = conf.low, 
-      xend = conf.high, 
-      y = cluster, 
-      yend = cluster
-      )
-    ) + 
-  geom_segment() + 
-  geom_point(aes(x=estimate)) + 
-  facet_wrap(~mdl) + 
-  theme_clean() + NULL
-  labs(y=NULL, x = "Cluster intercepts", title = "Random effects caterpillar plot (Intercepts)")
-
-```
-
 
 
 
 :::{#boxedtext}
 
-Hints for creating the plots will be available in the following few days. Thank you for your patience.
+To create the caterpillar plot, you can use the following code. Don't forget to fill in the gaps!
+
+```{r show-caterpillar, echo=TRUE}
+# First, we need the list of clusters
+clusters <- df |> 
+  pull(cluster) |> 
+  unique()
+
+# Now let's fit our multilevel model
+mdl_multilevel <- lmer(y ~ x + (x | cluster), df) 
+
+# predictions of y for each cluster at x = 0
+predict_y <- mdl_multilevel |> 
+  ranef() |> 
+  augment() |> 
+  as_tibble() |> 
+  filter(variable == "(Intercept)") |> 
+  # Now we order the results by ascending estimates
+  arrange(estimate) |> 
+  mutate(cluster = fct_inorder(level)) 
+
+# Finally, let's plot our caterpillar!
+predict_y |> 
+  ggplot(aes(xmin = ___, xmax = ___, y = ___, x = ___)) + 
+    geom_pointrange( ) + 
+    labs(x = "Estimate of the intercept (Y_hat when X=0)", y = NULL)
+
+```
+
+```{r no-show-caterpillar}
+
+predict_y |> 
+  ggplot(aes(xmin = lb, xmax = ub, y = cluster, x = estimate)) + 
+    geom_pointrange( ) + 
+    labs(x = "Estimate of the intercept (Y_hat when X=0)", y = NULL)
+
+```
+
 
 :::
 
@@ -559,7 +663,7 @@ To conduct this analysis, we view the data hierarchically: houses (level one) wi
 
 Additionally, at the county level, we used a a measurement of soil uranium available for each county. This hierarchical model enables us to create a regression model for individual measurements while accommodating consistent, unexplained variations among the 3000 counties. 
 
-This section closely follows chapter 12 in Gellman and Hill's influential book *Data analysis using regression and multilevel/hierarchical models*. You will find [the chapter](https://bit.ly/4a4wcdI) available as an optional reading (link also available through Brightspace). The chapter is available on Perusall to allow you to share code, discuss, or ask questions. I will be looking at the discussion from time to time, so if  you need help, please do not hesitate to #tag me `r emo::ji("call_me_hand") `
+This section closely follows chapter 12 in Gelman and Hill's influential book *Data analysis using regression and multilevel/hierarchical models*. You will find [the chapter](https://bit.ly/4a4wcdI) available as an optional reading (link also available through Brightspace). The chapter is available on Perusall to allow you to share code, discuss, or ask questions. I will be looking at the discussion from time to time, so if  you need help, please do not hesitate to `@tag` me `r emo::ji("call_me_hand") `
 
 
 In that chapter you will find the background for the study, and an explanation of the variables. The original dataset and the code used to produce the book is [available here](http://www.stat.columbia.edu/~gelman/arm/examples/radon/). 
@@ -567,8 +671,8 @@ In that chapter you will find the background for the study, and an explanation o
 The dataset consists of a large number of measurements of the gas Radon, and so in this document we will be including only the measurements from the state of Minnesota. 
 Feel free to choose a different state if you like. 
 
-```{r echo = TRUE}
-radon_mn <- read_rds("radon.rds") |> 
+```{r show-MN, echo = TRUE}
+radon_mn <- read_rds("https://bit.ly/BMLR-Radon") |> 
   filter(state == "MN") |>
   # drop counties without measurements
   mutate(county = fct_drop(county))
@@ -600,8 +704,17 @@ m.partial_pool <- radon_mn |>
   lmer(log.radon ~ (1|county), data = _)
 
 
-m.comp_pool.prep <- predictions(m.comp_pool)[1, ] |>
-     as.data.frame()
+m.comp_pool.prep <- 
+  predictions(m.comp_pool)[1, ] |>
+  as.data.frame()
+
+# predict(
+#   m.comp_pool, 
+#   se.fit = TRUE, 
+#   interval = "confidence"
+#   )$fit |> 
+#   as_tibble() |> 
+#   slice(1)
 
 
 radon_mn_count <- radon_mn |>
@@ -613,23 +726,25 @@ get_radon_vs_n_obs <- function (mdl) {
   p <- mdl  |>
     predictions(newdata = datagrid(county = unique)) |>
     inner_join(radon_mn_count, by = "county") |>
-    mutate(
-      n.obs.jitter = rnorm(
-        nrow(radon_mn_count)
-        , n.obs
-        , n.obs / 10
-        )
-      ) |>
+    # mutate(
+    #   n.obs.jitter = rnorm(
+    #     nrow(radon_mn_count)
+    #     , n.obs
+    #     , n.obs / 10
+    #     )
+    #   ) |>
     ggplot(
       aes(
-        x = n.obs.jitter,
-        xend = n.obs.jitter,
-        y = conf.low,
-        yend = conf.high
+        x = n.obs,
+        y = estimate,
+        ymin = conf.low,
+        ymax = conf.high
         )
       ) +
-    geom_point(aes(y = estimate)) +
-    geom_segment() +
+    geom_pointrange(
+      position = position_jitter(height = 0, width = .5), 
+      size = .3
+      ) +
     scale_x_log10(breaks = x.seq) +
     geom_hline(
       yintercept = c(m.comp_pool.prep$estimate)
@@ -653,7 +768,38 @@ p1 / p2
 
 :::{#boxedtext}
 
-Hints for creating the plots will be available in the following few days. Thank you for your patience.
+First, we need to associate each county with the number of observations. 
+
+```{r ex-4-show, echo=TRUE}
+
+radon_mn_count <- radon_mn |>
+  count(county, name = "n.obs")
+
+m.no_pool <- radon_mn |>
+  lm(log.radon ~ 0 + county, data = _)
+
+m.partial_pool <- radon_mn |>
+  lmer(log.radon ~ (1|county), data = _)
+
+m.no_pool |> 
+  predictions(newdata = datagrid(county = unique)) |> 
+  as_tibble() |> inner_join(radon_mn_count, by = "county") |> 
+  select(county, estimate, conf.low, conf.high, n.obs) |> 
+  ggplot(
+    aes(
+      x    = ___, 
+      y    = ___, 
+      ymin = ___, 
+      ymax = ___
+      )
+    ) + 
+  geom_pointrange(
+    position = position_jitter(width = .5, height = 0)
+    ) 
+
+
+```
+
 
 :::
 
@@ -837,7 +983,6 @@ pred.lm <- predictions(
 
 pred.lvl12 <- predictions(
   md.lvl12,
-  newdata = df,
   by = "u"
 )
 
@@ -863,6 +1008,123 @@ pred.lvl12 |>
 
 
 
+```{r testing-uranium}
+
+library(tidyverse)
+library(marginaleffects)
+library(lmerTest)
+radon <- read_rds("https://bit.ly/BMLR-Radon")
+
+
+radon_mn <- radon |> 
+  filter(state == "MN") |>
+  # drop counties without measurements
+  mutate(county = fct_drop(county))
+
+md.lvl12 <- radon_mn |>
+  lmer(log.radon ~ u +  (1|county), data = _)
+
+md.lm <- radon_mn |>
+  lm(log.radon ~ u , data = _)
+
+
+radon_mn_summary <- radon_mn |> 
+  count(u, county) |> 
+  select(-n)
+
+pred.lvl12_county <- predictions(
+  md.lvl12,
+  newdata = radon_mn_summary
+  ) |> as_tibble() |> select(county, u, estimate, std.error)
+
+pred.lvl12_u <- avg_predictions(
+  md.lvl12,
+  by = "u"
+) |> as_tibble() |> select(u, estimate, std.error)
+
+pred.lvl12_county |> inner_join(pred.lvl12_u, by = "u")
+
+
+
+
+pred.lvl12 |>
+  ggplot(aes(x = u, xend = u, y = conf.low, yend = conf.high)) +
+  geom_segment() +
+  geom_point(aes(y = estimate)) +
+  geom_line(
+    data = pred.lm,
+    aes(x = u, y = estimate),
+    linetype  = "dashed"
+    ) +
+  geom_ribbon(
+    data = pred.lm,
+    aes(x = u, ymin = conf.low, ymax = conf.high),
+    alpha  = .2
+  ) + theme_minimal() + 
+  labs(x = "Uranium (county level)", y = "County level coefficients")
+
+
+reprex::reprex(venue = "gh")
+
+
+
+
+### Renee's code: 
+### 
+### 
+
+
+## model with partial pooling, random intercept, fixed slope, only uranium as predictor
+model_radon_pp_u<- lmer(log.radon ~ u + (1 | county), data=radon_mn)
+ 
+
+## predict
+radon_mn_lev2 <- data.frame(u =predictions(model_radon_pp_u, by = "u")$u)
+radon_mn_lev2$int_u3 <- predictions(model_radon_pp_u, by = "u")$estimate
+radon_mn_lev2$se_u3 <- predictions(model_radon_pp_u, by = "u")$std.error
+# pred.lvl12 |> as_tibble() |> select(1:3)
+# radon_mn_lev2 |> as_tibble()
+
+## predict
+ggplot(data=radon_mn_lev2, aes(x=u, y=int_u3)) +   geom_pointrange(aes(ymin=int_u3-se_u3, ymax=int_u3+se_u3), size=0.2, linewidth=0.2) +   scale_y_continuous(breaks=c(0.8, 1.2, 1.6)) +   labs(y="County level coefficients", x="Uranium (county level)") +   coord_cartesian(ylim=c(0.6,1.8)) +   theme_bw() +   theme(axis.title = element_text(face="bold"))
+
+
+# Renee's first code
+
+## model with partial pooling, random intercept, fixed slope, only uranium as predictor
+model_radon_pp_u<- lmer(log.radon ~ u + (1 | county), data=radon_mn)
+summary(model_radon_pp_u)
+ranef(model_radon_pp_u)
+
+# lattice::dotplot(ranef(model_radon_pp_u))
+
+# calculate the beta 0 of each county based on uranium level
+cnts <- ranef(model_radon_pp_u)$county |> row.names()
+radon_mn_lev2 <- radon_mn |> count(county, u)
+radon_mn_lev2$int_u2 <- coef(model_radon_pp_u)$county$`(Intercept)` + fixef(model_radon_pp_u)[2]*radon_mn_lev2$u
+ 
+# use se of the random effect?
+radon_mn_lev2$se_u2 <- arm::se.ranef(model_radon_pp_u)$county |> as.numeric()
+radon_mn_lev2
+
+ranef(model_radon_pp_u) |> as_tibble()
+
+pred.lvl12 <- avg_predictions(
+  md.lvl12,
+  by = "u"
+) |> as_tibble() |> select(u, estimate, std.error, conf.low, conf.high)
+
+
+radon_mn_lev2 |> inner_join(pred.lvl12, by = "u")
+
+
+# plot (--> estimates more similar to the example; however 95%CI of line still too small and geom_smooth seems not correct?)
+ggplot(data=radon_mn_lev2, aes(x=u, y=int_u2)) +   geom_pointrange(aes(ymin=int_u2-se_u2, ymax=int_u2+se_u2), size=0.2, linewidth=0.2) +   geom_smooth(method = "lm", se=TRUE) +   scale_y_continuous(breaks=c(0.8, 1.2, 1.6)) +   labs(y="County level coefficients", x="Uranium (county level)") +   coord_cartesian(ylim=c(0.6,1.8)) +   theme_bw() +   theme(axis.title = element_text(face="bold"))
+
+
+```
+
+
 :::{#boxedtext}
 
 Hints for creating the plots will be available in the following few days. Thank you for your patience.
@@ -870,3 +1132,59 @@ Hints for creating the plots will be available in the following few days. Thank 
 :::
 
 7. Using the simulation techniques in questions 1 and 2, generate a synthetic dataset that would be similar to the radon data, in the sense that if you fitted the three models to your simulated dataset, you would get similar parameter estimations to the ones you got when fitting your models to the real Radon dataset. Explore your synthetic data using similar visualisations, and comment on similarities or differences between the Radon dataset and your simulated dataset.   
+
+
+
+## Appendix 
+
+The caterpillar plots for the intercepts are shown below, calculated as the predicted value of the intercept and its confidence interval for each cluster. The confidence interval for the no-pooling model is the largest, and that the estimates preserve the rank more when comparing the no-pooling fixed effects model with the multilevel model with a random intercept.  
+
+```{r caterpillar-big, eval=TRUE, fig.align='center', fig.width=12, fig.height=15}
+df <- simulate_df()
+md_cp <- lm(y ~ x, df) 
+md_np <- lm(y ~ x + cluster, df) 
+md_np_plus <- lm(y ~ x + cluster + x:cluster, df) 
+md_pp <- lmer(y ~ x + (1 | cluster), df) 
+md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
+
+
+
+
+get_pred <- function(mdl, type) {
+  mdl |> 
+    predictions(
+      newdata = data.frame(x = 0, cluster = clusters)
+      ) |> 
+    as_tibble() |> 
+    mutate(model = type, model_cluster = str_c(cluster, model)) |> 
+    select(model_cluster, model, cluster, estimate, conf.low, conf.high) |> 
+    arrange(estimate) 
+}
+
+
+get_pred(md_np, "No pooling") |> 
+  add_row(get_pred(md_np_plus, "No pooling + interactions")) |> 
+  add_row(get_pred(md_pp, "Multilevel Random intercept")) |> 
+  add_row(get_pred(md_pp_plus, "Multilevel Random Intercept + slope")) |> 
+  mutate(cluster = fct_inorder(cluster)) |>
+  mutate(model = fct_relevel(model, "No pooling", "No pooling + interactions", "Multilevel Random intercept")) |> 
+  ggplot(
+    aes(
+      x = conf.low, 
+      xend = conf.high, 
+      y = cluster, 
+      yend = cluster
+      )
+    ) + 
+  geom_segment() + 
+  geom_point(aes(x=estimate)) + 
+  facet_wrap(~model) + 
+  theme_clean() + 
+  labs(y=NULL, x = "Cluster intercepts", title = "Caterpillar plot for fixed and random intercepts") + 
+  theme(text = element_text(size = 14))
+
+```
+
+
+
+
