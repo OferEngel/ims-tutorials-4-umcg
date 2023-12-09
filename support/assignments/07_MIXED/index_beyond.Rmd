@@ -377,9 +377,18 @@ sim_and_model()
 <br/>
 <br/>
 
+Several approaches can be used to calculate the confidence intervals of random effects in multilevel models, each with its own strengths and limitations. Here are three of the most common methods:
+
+-   **Parametric Confidence Intervals**: This approach is based on the assumption that the random effects follow a normal distribution. The standard errors of the random effects are estimated from the model and used to compute confidence intervals using the normal distribution. This method is straightforward and computationally efficient, but it may be inaccurate if the actual distribution of the random effects deviates significantly from normality. To calculate parametric confidence intervals,  use the `augment` function from the `broom.mixed` package. 
+
+-   **Bootstrap Confidence Intervals**: Bootstrapping is a non-parametric method that involves repeatedly resampling the data with replacement and refitting the model each time. The resulting distribution of the random effects from these multiple fits is used to construct bootstrap confidence intervals. This method is more robust to non-normality than parametric methods, but it can be computationally intensive, especially for large datasets. To calculate bootstrap confidence intervals, use the `predictInterval` function from the `merTools` package.
+
+-   **Bayesian Credible Intervals**: Bayesian multilevel models use a probability distribution to represent the uncertainty in the model parameters, including the random effects. Credible intervals are derived from the posterior distribution of the random effects, which reflects the combined information from the data and the prior distribution. Bayesian methods are more flexible and can handle complex hierarchical structures, but they may require more expertise and computational resources compared to frequentist methods.
+
+Each method provides a different estimate of the confidence intervals of random effects in multilevel models and there is no single "correct" approach. The choice of method should be guided by the specific characteristics of the data, the research question and the researchers philosophy. For simpler models and relatively large sample sizes, parametric methods may be sufficient. For more complex models or smaller datasets, bootstrap or Bayesian methods may be more appropriate. Additionally, the interpretation of confidence intervals for random effects depends on the type of inference being made. For example, conditional confidence intervals and marginal confidence intervals are used for different purposes. 
+
 
 2. Use your models to create a caterpillar plot for the intercepts and lattice and/or spaghetti plots to show the features of your multilevel models. Describe and discuss the plots: what new light do they shed? What are the advantages or disadvantages of presenting the models using these plots? 
-
 
 
 ```{r caterpillar, eval=TRUE}
@@ -391,14 +400,6 @@ md_np_plus <- lm(y ~ x + cluster + x:cluster, df)
 md_pp <- lmer(y ~ x + (1 | cluster), df) 
 md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
 clusters <- levels(df$cluster)
-
-
-# md_pp_plus |> 
-#     predictions(
-#       # by = "cluster", 
-#       newdata = data.frame(x = 0, cluster = clusters)
-#       ) |> 
-#     as_tibble()
 
 
 ranef(md_pp) |> 
@@ -416,6 +417,674 @@ ranef(md_pp) |>
     x = "Cluster intercepts", 
     title = "Random effects caterpillar plot (Intercepts)"
     )
+
+# See the caterpillar experiments in the appendix
+
+```
+
+
+
+:::{#boxedtext}
+
+To create the caterpillar plot, you can use the following code. Don't forget to fill in the gaps. See the appendix below for more information about the caterpillar plots, their use and their interpretation. 
+
+```{r show-caterpillar, echo=TRUE}
+# First, we need the list of clusters
+clusters <- df |> 
+  pull(cluster) |> 
+  unique()
+
+# Now let's fit our multilevel model
+mdl_multilevel <- lmer(y ~ x + (x | cluster), df) 
+
+# predictions of y for each cluster at x = 0
+predict_y <- mdl_multilevel |> 
+  ranef() |> 
+  # Used the broom.mixed::augment function 
+  # to calculate the confidence intervals
+  augment() |> 
+  # convert to a tibble
+  as_tibble() |> 
+  # Include only the random intercept
+  filter(variable == "(Intercept)") |> 
+  # Now we order the results by ascending estimates
+  arrange(estimate) |> 
+  mutate(cluster = fct_inorder(level)) 
+
+# Finally, let's plot our caterpillar!
+predict_y |> 
+  ggplot(aes(xmin = ___, xmax = ___, y = ___, x = ___)) + 
+    geom_pointrange( ) + 
+    labs(x = "Estimate of the intercept (Y_hat when X=0)", y = NULL)
+
+```
+
+```{r no-show-caterpillar}
+
+predict_y |> 
+  ggplot(aes(xmin = lb, xmax = ub, y = cluster, x = estimate)) + 
+    geom_pointrange( ) + 
+    labs(x = "Estimate of the intercept (Y_hat when X=0)", y = NULL)
+
+```
+
+
+To create the lattice plot and the spaghetti plot, you can use the code below.  See the appendix below for more information about these different plots, their use and their interpretation. 
+
+```{r show-lattice-spaghetti, echo=TRUE}
+predictions(mdl_multilevel) |>  
+  ggplot(aes(___, ___, color = ___)) + 
+  geom_point() + 
+  geom_line(aes(y = ___)) + 
+  # Use facets to create the lattice plot
+  facet_wrap(~___)
+  # Remove it to create the spaghetti plot
+
+```
+
+
+
+:::
+
+
+## Radon in the home: a case study
+
+Our aim in examining this data is to estimate how radon levels are distributed across the approximately 3000 counties in the United States. This information can empower homeowners to decide whether to test and address radon in their homes, using the best local knowledge available.
+
+To conduct this analysis, we view the data hierarchically: houses (level one) within counties (level 2). If we were to delve deeper into multiple measurements within houses, we could create a three-tier hierarchy: measurements (level 1), houses (level 2), and counties (level 3). During the analysis, we consider an important factor: **where** the measurement was taken, whether in the **basement** or on the **first floor**. Radon, originating underground, can more readily enter homes built into the ground.
+
+Additionally, at the county level, we used a a measurement of soil uranium available for each county. This hierarchical model enables us to create a regression model for individual measurements while accommodating consistent, unexplained variations among the 3000 counties. 
+
+This section closely follows chapter 12 in Gelman and Hill's influential book *Data analysis using regression and multilevel/hierarchical models*. You will find [the chapter](https://bit.ly/4a4wcdI) available as an optional reading (link also available through Brightspace). The chapter is available on Perusall to allow you to share code, discuss, or ask questions. I will be looking at the discussion from time to time, so if  you need help, please do not hesitate to `@tag` me `r emo::ji("call_me_hand") `
+
+
+In that chapter you will find the background for the study, and an explanation of the variables. The original dataset and the code used to produce the book is [available here](http://www.stat.columbia.edu/~gelman/arm/examples/radon/). 
+
+The dataset consists of a large number of measurements of the gas Radon, and so in this document we will be including only the measurements from the state of Minnesota. 
+Feel free to choose a different state if you like. 
+
+```{r show-MN, echo = TRUE}
+radon_mn <- read_rds("https://bit.ly/BMLR-Radon") |> 
+  filter(state == "MN") |>
+  # drop counties without measurements
+  mutate(county = fct_drop(county))
+```
+
+
+3. Create a `table1` and use `GGally::ggpairs` to explore your data. 
+
+You will now visualize the estimated and confidence interval for the average log Radon across different counties, against the (jittered) number of measurements taken in said county. We will use the estimation to compare between two models: the `no pooling model` and the `multilevel model` with partial pooling, both without predictors. The horizontal line in each plot represents an estimate of the average radon level across all counties. This is a replication of figure 12.1 in the above mentioned chapter. 
+
+
+4. Replicate the figures below and explain why the counties with fewer measurements have more variable estimates and larger higher standard errors. What is the main advantage and disadvantage of no-pooling analysis, as illustrated in the plot on the left compared with the multilevel model? Explain. 
+
+```{r ex-4, eval=TRUE}
+
+radon <- read_rds("https://bit.ly/BMLR-Radon")
+
+
+radon_mn <- radon |>  # read_rds("radon.rds") |> 
+  filter(state == "MN") |>
+  # drop counties without measurements
+  mutate(county = fct_drop(county))
+
+m.comp_pool <- radon_mn |>
+  lm(log.radon ~ 1, data = _)
+m.no_pool <- radon_mn |>
+  lm(log.radon ~ 0 + county, data = _)
+m.partial_pool <- radon_mn |>
+  lmer(log.radon ~ (1|county), data = _)
+
+mean.log.radon <- mean(radon_mn$log.radon)
+
+radon_mn_count <- radon_mn |> count(county, name = "n.obs")
+
+
+get_radon_vs_n_obs <- function (mdl) {
+  set.seed(888)
+  x.seq <- c(1 , seq(2, 10, 2), 10, seq(20, 100,20))
+  p <- mdl  |>
+    predictions(newdata = datagrid(county = unique)) |>
+    inner_join(radon_mn_count, by = "county") |>
+    ggplot(
+      aes(
+        x = n.obs,
+        y = estimate,
+        ymin = conf.low,
+        ymax = conf.high
+        )
+      ) +
+    geom_pointrange(
+      position = position_jitter(height = 0, width = .5), 
+      size = .3
+      ) +
+    scale_x_log10(breaks = x.seq) +
+    geom_hline(
+      yintercept = mean.log.radon
+      ) +
+    labs(y = "Estimated log radon in the county", x = NULL)
+  return(p)
+}
+
+
+library(patchwork)
+p1 <- get_radon_vs_n_obs(m.no_pool) +
+  labs( title = "No pooling (fixed effects)") + 
+  scale_x_log10(breaks = NULL) +
+  theme_clean() + 
+  labs(x = NULL)
+p2 <- get_radon_vs_n_obs(m.partial_pool) +
+  labs( title = "Partial pooling (multilevel model)")+ 
+  theme_clean() + 
+  labs(x = "Number of observations")
+
+# p1 / p2
+
+library(cowplot)
+
+
+# pwk <- p1 / p2
+# pwk  + plot_annotation(
+#   title = 'Radon measurements in in Minnesota'
+# )
+
+
+p <- ggplot() + labs(x = "Number of observations", y = "Estimated log radon in the county", title = 'Radon measurements in in Minnesota')
+x_axis <- cowplot::get_plot_component(p, "xlab-b")
+y_axis <- cowplot::get_plot_component(p, "ylab-l")
+
+design <-  "
+DA
+DB
+#C
+"
+
+list(
+  p1 + labs(x = NULL, y = NULL), # A
+  p2 + labs(x = NULL, y = NULL), # B
+  x_axis,# C
+  y_axis # D
+) |> 
+  wrap_plots() + 
+  plot_layout(heights = c(40, 40, 1), widths = c(1, 50), design = design)
+
+```
+
+
+
+:::{#boxedtext}
+
+First, we need to associate each county with the number of observations. 
+
+```{r ex-4-show, echo=TRUE}
+
+radon_mn_count <- radon_mn |>
+  count(county, name = "n.obs")
+
+m.no_pool <- radon_mn |>
+  lm(log.radon ~ 0 + county, data = _)
+
+m.partial_pool <- radon_mn |>
+  lmer(log.radon ~ (1|county), data = _)
+
+# Use here the two models - first the fixed effects (no pooling)
+# model, and then the multilevel (partial pooling) model.
+___ |> 
+  predictions(newdata = datagrid(county = unique)) |> 
+  as_tibble() |> inner_join(radon_mn_count, by = "county") |> 
+  select(county, estimate, conf.low, conf.high, n.obs) |> 
+  ggplot(
+    aes(
+      x    = ___, 
+      y    = ___, 
+      ymin = ___, 
+      ymax = ___
+      )
+    ) + 
+  geom_pointrange(
+    position = position_jitter(width = .5, height = 0)
+    ) 
+
+
+```
+
+
+:::
+
+5. In this exercise, you will replicate a set of models as shown below. This illustration is based on the ideas shown in figure 12.4 in the book. Please replicate this illustration with a twist: for example, you may choose a different set of counties than the one shown below or the one shown in the book, or you may try something different. Please explain the graphs. What do the dashed red and black lines show? What is the blue line? What determines whether the blue line would be more similar to the red line or the black line? How is this figure compare to the one shown in chapter 12 of the book?
+
+
+
+
+:::{#boxedtext}
+
+The three lines show the predictions of the three models: the complete pooling in red, the no pooling (dashed black line) and the multilevel (partial pooling) model (blue line). You can see that the complete pooling model does not vary with the county level, showing the exact same intercept and slope at each cell in the lattice. The no pooling model is very sensitive to the data in the county: even when there are just two observations, such as in the county of `Mille Lacs`, we see the no pooling model connecting the two dots. This shows how a no-pooling approach tends to over-fit the data. The multilevel model finds a compromise between the no pooling and the complete pooling models. It introduces some bias, but avoids over fitting and is more useful for generalizations. 
+
+:::
+
+```{r ex-5, eval=TRUE}
+
+
+my.counties <- radon_mn |>
+  count(county) |>
+  filter(n>0) |>
+  filter(
+    str_detect(
+      county,
+      "PARLE|BLUE|KOOCH|DOUG|CLAY|STEAR|RAMS|LOUI|MCLEOD|DAKO|OTTER|MOWER|RICE|SCOTT|MILLE LACS|REDWOOD"
+      )
+    ) |>
+  pull(county) |>
+  as.character() |>
+  as.factor()
+
+
+m.ff.c_pool <- radon_mn |>
+  lm(log.radon ~ first_floor, data = _)
+# summary(m.ff.c_pool)
+m.ff.no_pool <- radon_mn |>
+  lm(log.radon ~ (first_floor + county)^2, data = _)
+# summary(m.ff.no_pool)
+m.ff.prtl_pool <- radon_mn |>
+  lmer(log.radon ~ first_floor + (first_floor|county), data = _)
+
+
+
+m.ff.c_pool |>
+  predictions(
+    newdata = datagrid(
+      first_floor = c(0, 1))
+  )  |>
+  mutate(mdl = "c_pool") |>
+  pivot_wider(id_cols = mdl, names_from = first_floor, values_from = estimate, names_prefix = "floor = ") |> mutate(n = length(my.counties)) |> uncount(n) |>
+  mutate(county = my.counties, .after = mdl) -> c_pool_pred
+
+# tidy(m.ff.no_pool) |> arrange(estimate) |>
+#   print(n = 1000)
+
+m.ff.no_pool |>
+  predictions(
+    newdata = datagrid(
+      first_floor = c(0, 1),
+      county = my.counties
+    )
+  ) |> select(county, first_floor, estimate, conf.low, conf.high) |> as_tibble()  |>
+  pivot_wider(id_cols = county, names_from = first_floor, values_from = estimate, names_prefix = "floor = ") |> mutate(mdl = "no_pool", .before = county) ->  np_pred
+
+
+
+m.ff.prtl_pool |>
+  predictions(
+    newdata = datagrid(
+      first_floor = c(0, 1),
+      county = my.counties
+    )
+  ) |> select(county, first_floor, estimate, conf.low, conf.high) |> as_tibble()  |>
+  pivot_wider(id_cols = county, names_from = first_floor, values_from = estimate, names_prefix = "floor = ") |> mutate(mdl = "prtl_pool", .before = county) ->
+  partl_pool
+
+radon_mn |> 
+  filter(county %in% my.counties) |>
+  mutate(first_floor = if_else(first_floor == 0, "floor = 0", "floor = 1")) |>
+  ggplot(aes(x = first_floor, y = log.radon)) +
+  geom_point() +
+  geom_segment(
+    data = c_pool_pred,
+    aes(
+      x = "floor = 0",
+      xend = "floor = 1",
+      y = `floor = 0`,
+      yend = `floor = 1`
+      ),
+    color = "red",
+    linetype = "dashed",
+    linewidth = 1
+    ) +
+  geom_segment(
+    data = np_pred,
+    aes(
+      x = "floor = 0",
+      xend = "floor = 1",
+      y = `floor = 0`,
+      yend = `floor = 1`
+    ),
+    linetype = "dashed"
+  ) +
+  geom_segment(
+    data = partl_pool,
+    aes(
+      x = "floor = 0",
+      xend = "floor = 1",
+      y = `floor = 0`,
+      yend = `floor = 1`
+    ),
+    color = "blue"
+  ) +
+  facet_wrap(~county, scales = "free_y") +
+  theme_clean() +
+  labs(x = NULL, y = "Log Radon level")  +
+  scale_x_discrete(expand=expansion(mult=0.1)) +
+  theme(text = element_text(size = 12))
+
+
+```
+
+
+
+:::{#boxedtext}
+
+**Hints** To create the figure, you will need to plot the data itself as dots using the 'geom_point()` layer, and then add the three models, one layer at a time. To simplify, I will provide the code for one model and you can add the rest yourselves. 
+
+```{r ex-5-show, echo=TRUE}
+
+# Fit the model (you will need to fit all three models)
+mdl_multilevel <- radon_mn |>
+  lmer(log.radon ~ first_floor + (first_floor|county), data = _)
+
+# Collect the predictions
+pred_multi <- mdl_multilevel |>
+  predictions(
+    newdata = datagrid(
+      first_floor = c(0, 1),
+      county = c("CLAY", "RICE", "SCOTT")
+    )
+  ) |> 
+  select(county, first_floor, estimate, conf.low, conf.high) |> 
+  as_tibble( )  
+
+radon_mn |> 
+  filter(county %in% c("CLAY", "RICE", "SCOTT")) |>
+  ggplot(aes(x = first_floor, y = log.radon)) +
+  geom_point() + 
+  geom_line(data = pred_multi, aes(first_floor, estimate))  + 
+  facet_wrap(~county) 
+
+```
+
+
+
+
+:::
+
+
+6. In this exercise you are going to add a fixed effect at the county level (level 2). This illustration is based on figure 12.6 in the book, and it shows the estimated county level coefficients, plotted vs. county level uranium levels, along with estimated multilevel regression line at level 2. After replicating this graph, please explain it briefly. 
+
+```{r ex-6, eval=TRUE}
+
+
+### Group level Uranium
+###
+
+md.lm <- radon_mn |>
+  lm(log.radon ~ u , data = _)
+
+md.lvl12 <- radon_mn |>
+  lmer(log.radon ~ u +  (1|county), data = _)
+# summary(md.lvl12)
+
+df  <- radon_mn |>
+  select(county, u) |> unique() # |> mutate(first_floor = 0)
+
+pred.lm <- predictions(
+  md.lm,
+  by = "u"
+  )
+
+pred.lvl12 <- predictions(
+  md.lvl12,
+  by = "u"
+)
+
+
+pred.lvl12 |>
+  ggplot(aes(x = u, xend = u, y = conf.low, yend = conf.high)) +
+  geom_segment() +
+  geom_point(aes(y = estimate)) +
+  geom_line(
+    data = pred.lm,
+    aes(x = u, y = estimate),
+    linetype  = "dashed"
+    ) +
+  geom_ribbon(
+    data = pred.lm,
+    aes(x = u, ymin = conf.low, ymax = conf.high),
+    alpha  = .2
+  ) + theme_clean() + 
+  labs(x = "Uranium (county level)", y = "County level coefficients")
+
+
+```
+
+
+
+```{r testing-uranium}
+
+library(tidyverse)
+library(marginaleffects)
+library(lmerTest)
+radon <- read_rds("https://bit.ly/BMLR-Radon")
+
+
+radon_mn <- radon |> 
+  filter(state == "MN") |>
+  # drop counties without measurements
+  mutate(county = fct_drop(county))
+
+md.lvl12 <- radon_mn |>
+  lmer(log.radon ~ u +  (1|county), data = _)
+
+md.lm <- radon_mn |>
+  lm(log.radon ~ u , data = _)
+
+
+radon_mn_summary <- radon_mn |> 
+  count(u, county) |> 
+  select(-n)
+
+pred.lvl12_county <- predictions(
+  md.lvl12,
+  newdata = radon_mn_summary
+  ) |> as_tibble() |> select(county, u, estimate, std.error)
+
+pred.lvl12_u <- avg_predictions(
+  md.lvl12,
+  by = "u"
+) |> as_tibble() |> select(u, estimate, std.error)
+
+pred.lvl12_county |> inner_join(pred.lvl12_u, by = "u")
+
+
+
+
+pred.lvl12 |>
+  ggplot(aes(x = u, xend = u, y = conf.low, yend = conf.high)) +
+  geom_segment() +
+  geom_point(aes(y = estimate)) +
+  geom_line(
+    data = pred.lm,
+    aes(x = u, y = estimate),
+    linetype  = "dashed"
+    ) +
+  geom_ribbon(
+    data = pred.lm,
+    aes(x = u, ymin = conf.low, ymax = conf.high),
+    alpha  = .2
+  ) + theme_minimal() + 
+  labs(x = "Uranium (county level)", y = "County level coefficients")
+
+
+reprex::reprex(venue = "gh")
+
+
+
+
+### Renee's code: 
+### 
+### 
+
+
+## model with partial pooling, random intercept, fixed slope, only uranium as predictor
+model_radon_pp_u<- lmer(log.radon ~ u + (1 | county), data=radon_mn)
+ 
+
+## predict
+radon_mn_lev2 <- data.frame(u =predictions(model_radon_pp_u, by = "u")$u)
+radon_mn_lev2$int_u3 <- predictions(model_radon_pp_u, by = "u")$estimate
+radon_mn_lev2$se_u3 <- predictions(model_radon_pp_u, by = "u")$std.error
+# pred.lvl12 |> as_tibble() |> select(1:3)
+# radon_mn_lev2 |> as_tibble()
+
+## predict
+ggplot(data=radon_mn_lev2, aes(x=u, y=int_u3)) +   geom_pointrange(aes(ymin=int_u3-se_u3, ymax=int_u3+se_u3), size=0.2, linewidth=0.2) +   scale_y_continuous(breaks=c(0.8, 1.2, 1.6)) +   labs(y="County level coefficients", x="Uranium (county level)") +   coord_cartesian(ylim=c(0.6,1.8)) +   theme_bw() +   theme(axis.title = element_text(face="bold"))
+
+
+# Renee's first code
+
+## model with partial pooling, random intercept, fixed slope, only uranium as predictor
+model_radon_pp_u<- lmer(log.radon ~ u + (1 | county), data=radon_mn)
+summary(model_radon_pp_u)
+ranef(model_radon_pp_u)
+
+# lattice::dotplot(ranef(model_radon_pp_u))
+
+# calculate the beta 0 of each county based on uranium level
+cnts <- ranef(model_radon_pp_u)$county |> row.names()
+radon_mn_lev2 <- radon_mn |> count(county, u)
+radon_mn_lev2$int_u2 <- coef(model_radon_pp_u)$county$`(Intercept)` + fixef(model_radon_pp_u)[2]*radon_mn_lev2$u
+ 
+# use se of the random effect?
+radon_mn_lev2$se_u2 <- arm::se.ranef(model_radon_pp_u)$county |> as.numeric()
+radon_mn_lev2
+
+ranef(model_radon_pp_u) |> as_tibble()
+
+pred.lvl12 <- avg_predictions(
+  md.lvl12,
+  by = "u"
+) |> as_tibble() |> select(u, estimate, std.error, conf.low, conf.high)
+
+
+radon_mn_lev2 |> inner_join(pred.lvl12, by = "u")
+
+
+# plot (--> estimates more similar to the example; however 95%CI of line still too small and geom_smooth seems not correct?)
+ggplot(data=radon_mn_lev2, aes(x=u, y=int_u2)) +   geom_pointrange(aes(ymin=int_u2-se_u2, ymax=int_u2+se_u2), size=0.2, linewidth=0.2) +   geom_smooth(method = "lm", se=TRUE) +   scale_y_continuous(breaks=c(0.8, 1.2, 1.6)) +   labs(y="County level coefficients", x="Uranium (county level)") +   coord_cartesian(ylim=c(0.6,1.8)) +   theme_bw() +   theme(axis.title = element_text(face="bold"))
+
+
+```
+
+
+:::{#boxedtext}
+
+To create the plot, we will need to fit two models: the linear slope is created with the linear model showing the expected log-radon outcome as a function of the county's uranium level. The 
+
+
+```{r ex-6-show, echo=TRUE}
+
+# The simple linear model for the general relationship between 
+# Radon measurements and county level uranium
+md.lm <- radon_mn |>
+  lm(log.radon ~ u , data = _)
+
+# The multilevel model for the radon as a function of level-2 uranium
+md.lvl12 <- radon_mn |>
+  lmer(log.radon ~ u +  (1|county), data = _)
+
+
+# Predictions for the linear model
+pred.lm <- predictions(
+  md.lm,
+  )
+
+# predictions for the multilevel model
+# stratified by the level of uranium
+pred.lvl12 <- predictions(
+  md.lvl12,
+  by = "u"
+)
+
+
+pred.lvl12 |>
+  ggplot(aes(x = u, xend = u, y = conf.low, yend = conf.high)) +
+  geom_segment() +
+  geom_point(aes(y = estimate)) +
+  geom_line(
+    data = pred.lm,
+    aes(x = u, y = estimate),
+    ) 
+
+
+
+```
+
+
+:::
+
+7. Using the simulation techniques in questions 1 and 2, generate a synthetic dataset that would be similar to the radon data, in the sense that if you fitted the three models to your simulated dataset, you would get similar parameter estimations to the ones you got when fitting your models to the real Radon dataset. Explore your synthetic data using similar visualisations, and comment on similarities or differences between the Radon dataset and your simulated dataset.   
+
+
+
+## Appendix 
+
+This appendix has several additional tables, figures and code, designed to help you develop your lab and explore the themes it introduces further. 
+
+### Caterpillar plots
+
+Caterpillar plots are graphical representations used to display random effects or individual-level estimates from the model. These plots help visualize the variation among the random effects across different levels of a categorical variable, such as groups or clusters.
+
+Caterpillar plots depict the estimated values of the random effects for each level of the grouping variable. Each 'caterpillar' in the plot represents the estimated effect for a specific group, with its length indicating the uncertainty of the estimation.
+
+**Interpretation:** The horizontal axis represents the estimated random effects or individual-level estimates.
+The vertical axis shows the different levels of the categorical variable (e.g., different groups or clusters).
+The 'caterpillars' (lines) show how the estimated random effects vary across these levels. Variability in the positions of the lines indicates the extent of differences between groups. Lines varying widely in length or spread, suggests substantial variation in the random effects or the uncertainty across the different levels of the categorical variable.
+
+Caterpillar plots are helpful for understanding how much variation exists at the individual level (random effects) within different groups or clusters, providing insights into the impact of these group-level differences in mixed models. They're valuable tools for visualizing and interpreting the distribution and variability of random effects.
+
+The caterpillar plots for the intercepts are shown below, calculated as the predicted value of the intercept and its confidence interval for each cluster. The confidence interval for the no-pooling model is the largest, and that the estimates preserve the rank more when comparing the no-pooling fixed effects model with the multilevel model with a random intercept.  
+
+```{r caterpillar-big, eval=TRUE, fig.align='center', fig.width=12, fig.height=15}
+df <- simulate_df()
+md_cp <- lm(y ~ x, df) 
+md_np <- lm(y ~ x + cluster, df) 
+md_np_plus <- lm(y ~ x + cluster + x:cluster, df) 
+md_pp <- lmer(y ~ x + (1 | cluster), df) 
+md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
+
+
+
+
+get_pred <- function(mdl, type) {
+  mdl |> 
+    predictions(
+      newdata = data.frame(x = 0, cluster = clusters)
+      ) |> 
+    as_tibble() |> 
+    mutate(model = type, model_cluster = str_c(cluster, model)) |> 
+    select(model_cluster, model, cluster, estimate, conf.low, conf.high) |> 
+    arrange(estimate) 
+}
+
+
+get_pred(md_np, "No pooling") |> 
+  add_row(get_pred(md_np_plus, "No pooling + interactions")) |> 
+  add_row(get_pred(md_pp, "Multilevel Random intercept")) |> 
+  add_row(get_pred(md_pp_plus, "Multilevel Random Intercept + slope")) |> 
+  mutate(cluster = fct_inorder(cluster)) |>
+  mutate(model = fct_relevel(model, "No pooling", "No pooling + interactions", "Multilevel Random intercept")) |> 
+  ggplot(
+    aes(
+      x = conf.low, 
+      xend = conf.high, 
+      y = cluster, 
+      yend = cluster
+      )
+    ) + 
+  geom_segment() + 
+  geom_point(aes(x=estimate)) + 
+  facet_wrap(~model) + 
+  theme_clean() + 
+  labs(y=NULL, x = "Cluster intercepts", title = "Caterpillar plot for fixed and random intercepts") + 
+  theme(text = element_text(size = 14))
 
 ```
 
@@ -610,536 +1279,17 @@ md_pp |>
 ```
 
 
+### Spaghetti and lattice plots
 
-:::{#boxedtext}
+Spaghetti and lattice plots are graphical representations that display individual trajectories or changes over time for each participant or subject in a study. These plots are particularly useful when examining longitudinal data or repeated measures where observations are taken at multiple time points for each individual. The x-axis typically represents time or the repeated measurements.
+The y-axis represents the outcome variable or response being measured. Each line (or "spaghetti strand") represents the path or trajectory of one individual's responses across time.
 
-To create the caterpillar plot, you can use the following code. Don't forget to fill in the gaps!
+Spaghetti plots are valuable for understanding the variation and patterns within individual trajectories over time, providing a visual means to explore longitudinal data in multilevel models and identify potential relationships or trends within the dataset.
 
-```{r show-caterpillar, echo=TRUE}
-# First, we need the list of clusters
-clusters <- df |> 
-  pull(cluster) |> 
-  unique()
 
-# Now let's fit our multilevel model
-mdl_multilevel <- lmer(y ~ x + (x | cluster), df) 
 
-# predictions of y for each cluster at x = 0
-predict_y <- mdl_multilevel |> 
-  ranef() |> 
-  augment() |> 
-  as_tibble() |> 
-  filter(variable == "(Intercept)") |> 
-  # Now we order the results by ascending estimates
-  arrange(estimate) |> 
-  mutate(cluster = fct_inorder(level)) 
-
-# Finally, let's plot our caterpillar!
-predict_y |> 
-  ggplot(aes(xmin = ___, xmax = ___, y = ___, x = ___)) + 
-    geom_pointrange( ) + 
-    labs(x = "Estimate of the intercept (Y_hat when X=0)", y = NULL)
-
-```
-
-```{r no-show-caterpillar}
-
-predict_y |> 
-  ggplot(aes(xmin = lb, xmax = ub, y = cluster, x = estimate)) + 
-    geom_pointrange( ) + 
-    labs(x = "Estimate of the intercept (Y_hat when X=0)", y = NULL)
-
-```
-
-
-:::
-
-
-## Radon in the home: a case study
-
-Our aim in examining this data is to estimate how radon levels are distributed across the approximately 3000 counties in the United States. This information can empower homeowners to decide whether to test and address radon in their homes, using the best local knowledge available.
-
-To conduct this analysis, we view the data hierarchically: houses (level one) within counties (level 2). If we were to delve deeper into multiple measurements within houses, we could create a three-tier hierarchy: measurements (level 1), houses (level 2), and counties (level 3). During the analysis, we consider an important factor: **where** the measurement was taken, whether in the **basement** or on the **first floor**. Radon, originating underground, can more readily enter homes built into the ground.
-
-Additionally, at the county level, we used a a measurement of soil uranium available for each county. This hierarchical model enables us to create a regression model for individual measurements while accommodating consistent, unexplained variations among the 3000 counties. 
-
-This section closely follows chapter 12 in Gelman and Hill's influential book *Data analysis using regression and multilevel/hierarchical models*. You will find [the chapter](https://bit.ly/4a4wcdI) available as an optional reading (link also available through Brightspace). The chapter is available on Perusall to allow you to share code, discuss, or ask questions. I will be looking at the discussion from time to time, so if  you need help, please do not hesitate to `@tag` me `r emo::ji("call_me_hand") `
-
-
-In that chapter you will find the background for the study, and an explanation of the variables. The original dataset and the code used to produce the book is [available here](http://www.stat.columbia.edu/~gelman/arm/examples/radon/). 
-
-The dataset consists of a large number of measurements of the gas Radon, and so in this document we will be including only the measurements from the state of Minnesota. 
-Feel free to choose a different state if you like. 
-
-```{r show-MN, echo = TRUE}
-radon_mn <- read_rds("https://bit.ly/BMLR-Radon") |> 
-  filter(state == "MN") |>
-  # drop counties without measurements
-  mutate(county = fct_drop(county))
-```
-
-
-3. Create a `table1` and use `GGally::ggpairs` to explore your data. 
-
-You will now visualize the estimated and confidence interval for the average log Radon across different counties, against the (jittered) number of measurements taken in said county. We will use the estimation to compare between two models: the `no pooling model` and the `multilevel model` with partial pooling, both without predictors. The horizontal line in each plot represents an estimate of the average radon level across all counties. This is a replication of figure 12.1 in the above mentioned chapter. 
-
-
-4. Replicate the figures below and explain why the counties with fewer measurements have more variable estimates and larger higher standard errors. What is the main advantage and disadvantage of no-pooling analysis, as illustrated in the plot on the left compared with the multilevel model? Explain. 
-
-```{r ex-4, eval=TRUE}
-
-# radon <- read_rds("https://bit.ly/BMLR-Radon")
-
-
-radon_mn <- read_rds("radon.rds") |> 
-  filter(state == "MN") |>
-  # drop counties without measurements
-  mutate(county = fct_drop(county))
-
-m.comp_pool <- radon_mn |>
-  lm(log.radon ~ 1, data = _)
-m.no_pool <- radon_mn |>
-  lm(log.radon ~ 0 + county, data = _)
-m.partial_pool <- radon_mn |>
-  lmer(log.radon ~ (1|county), data = _)
-
-
-m.comp_pool.prep <- 
-  predictions(m.comp_pool)[1, ] |>
-  as.data.frame()
-
-# predict(
-#   m.comp_pool, 
-#   se.fit = TRUE, 
-#   interval = "confidence"
-#   )$fit |> 
-#   as_tibble() |> 
-#   slice(1)
-
-
-radon_mn_count <- radon_mn |>
-  count(county, name = "n.obs")
-
-get_radon_vs_n_obs <- function (mdl) {
-  set.seed(888)
-  x.seq <- c(1 , seq(2, 10, 2), 10, seq(20, 100,20))
-  p <- mdl  |>
-    predictions(newdata = datagrid(county = unique)) |>
-    inner_join(radon_mn_count, by = "county") |>
-    # mutate(
-    #   n.obs.jitter = rnorm(
-    #     nrow(radon_mn_count)
-    #     , n.obs
-    #     , n.obs / 10
-    #     )
-    #   ) |>
-    ggplot(
-      aes(
-        x = n.obs,
-        y = estimate,
-        ymin = conf.low,
-        ymax = conf.high
-        )
-      ) +
-    geom_pointrange(
-      position = position_jitter(height = 0, width = .5), 
-      size = .3
-      ) +
-    scale_x_log10(breaks = x.seq) +
-    geom_hline(
-      yintercept = c(m.comp_pool.prep$estimate)
-      ) +
-    labs(x = "Number of observations", y = "Estimated log radon in the county", subtitle = "Estimated log Radon vs. number of observations")
-  return(p)
-}
-library(patchwork)
-p1 <- get_radon_vs_n_obs(m.no_pool) +
-  labs( title = "Radon measurements in in Minnesota (no pooling)") + 
-  theme_clean()
-p2 <- get_radon_vs_n_obs(m.partial_pool) +
-  labs( title = "Radon measurements in in Minnesota (multilevel, partial pooling)")+ 
-  theme_clean()
-
-p1 / p2
-
-```
-
-
-
-:::{#boxedtext}
-
-First, we need to associate each county with the number of observations. 
-
-```{r ex-4-show, echo=TRUE}
-
-radon_mn_count <- radon_mn |>
-  count(county, name = "n.obs")
-
-m.no_pool <- radon_mn |>
-  lm(log.radon ~ 0 + county, data = _)
-
-m.partial_pool <- radon_mn |>
-  lmer(log.radon ~ (1|county), data = _)
-
-m.no_pool |> 
-  predictions(newdata = datagrid(county = unique)) |> 
-  as_tibble() |> inner_join(radon_mn_count, by = "county") |> 
-  select(county, estimate, conf.low, conf.high, n.obs) |> 
-  ggplot(
-    aes(
-      x    = ___, 
-      y    = ___, 
-      ymin = ___, 
-      ymax = ___
-      )
-    ) + 
-  geom_pointrange(
-    position = position_jitter(width = .5, height = 0)
-    ) 
-
-
-```
-
-
-:::
-
-5. In this exercise, you will replicate a set of models as shown below. This illustration is based on the ideas shown in figure 12.4 in the book. Please replicate this illustration with a twist: for example, you may choose a different set of counties than the one shown below or the one shown in the book, or you may try something different. Please explain the graphs. What do the dashed red and black lines show? What is the blue line? What determines whether the blue line would be more similar to the red line or the black line? How is this figure compare to the one shown in chapter 12 of the book?
-
-
-:::{#boxedtext}
-
-**Hints** The three lines show the predictions of the three models: the complete pooling, the no pooling and the multilevel (partial pooling) models. Further hints for creating the plots will be available in the following few days. Thank you for your patience.
-
-:::
-
-```{r ex-5, eval=TRUE}
-
-
-my.counties <- radon_mn |>
-  count(county) |>
-  filter(n>0) |>
-  filter(
-    str_detect(
-      county,
-      "PARLE|BLUE|KOOCH|DOUG|CLAY|STEAR|RAMS|LOUI|MCLEOD|DAKO|OTTER|MOWER|RICE|SCOTT|MILLE LACS|REDWOOD"
-      )
-    ) |>
-  pull(county) |>
-  as.character() |>
-  as.factor()
-
-# radon_mn |> count(county, first_floor) |>
-#   pivot_wider(id_cols = county, names_from = first_floor, values_from = n) |>
-#   print(n=1000)
-
-# m.ff.c_pool <- radon_mn |>
-#   lm(log.radon ~ first_floor, data = _)
-# summary(m.ff.c_pool)
-# m.ff.no_pool <- radon_mn |>
-#   lm(log.radon ~ first_floor + county, data = _)
-# m.ff.prtl_pool <- radon_mn |>
-#   lmer(log.radon ~ first_floor + (1|county), data = _)
-
-
-m.ff.c_pool <- radon_mn |>
-  lm(log.radon ~ first_floor, data = _)
-# summary(m.ff.c_pool)
-m.ff.no_pool <- radon_mn |>
-  lm(log.radon ~ (first_floor + county)^2, data = _)
-# summary(m.ff.no_pool)
-m.ff.prtl_pool <- radon_mn |>
-  lmer(log.radon ~ first_floor + (first_floor|county), data = _)
-# ranef(m.ff.prtl_pool) |> as_tibble() |> mutate(t = condval/condsd) |>
-# arrange(t) |> print(n = 1000)
-
-
-
-# m.ff.c_pool |>
-#   predictions(
-#     newdata = datagrid(
-#       first_floor = c(0, 1))
-#     ) |> select(first_floor, estimate, conf.low, conf.high) |> as_tibble() |> mutate(mdl = "c_pool", .before = first_floor)
-
-
-
-m.ff.c_pool |>
-  predictions(
-    newdata = datagrid(
-      first_floor = c(0, 1))
-  )  |>
-  mutate(mdl = "c_pool") |>
-  pivot_wider(id_cols = mdl, names_from = first_floor, values_from = estimate, names_prefix = "floor = ") |> mutate(n = length(my.counties)) |> uncount(n) |>
-  mutate(county = my.counties, .after = mdl) -> c_pool_pred
-
-# tidy(m.ff.no_pool) |> arrange(estimate) |>
-#   print(n = 1000)
-
-m.ff.no_pool |>
-  predictions(
-    newdata = datagrid(
-      first_floor = c(0, 1),
-      county = my.counties
-    )
-  ) |> select(county, first_floor, estimate, conf.low, conf.high) |> as_tibble()  |>
-  pivot_wider(id_cols = county, names_from = first_floor, values_from = estimate, names_prefix = "floor = ") |> mutate(mdl = "no_pool", .before = county) ->  np_pred
-
-
-
-m.ff.prtl_pool |>
-  predictions(
-    newdata = datagrid(
-      first_floor = c(0, 1),
-      county = my.counties
-    )
-  ) |> select(county, first_floor, estimate, conf.low, conf.high) |> as_tibble()  |>
-  pivot_wider(id_cols = county, names_from = first_floor, values_from = estimate, names_prefix = "floor = ") |> mutate(mdl = "prtl_pool", .before = county) ->
-  partl_pool
-
-library(extrafont)
-theme_clean <- function() {
-  theme_minimal(base_family = "Barlow Semi Condensed") +
-    theme(panel.grid.minor = element_blank(),
-          plot.background = element_rect(fill = "white", color = NA),
-          plot.title = element_text(face = "bold"),
-          axis.title = element_text(face = "bold"),
-          strip.text = element_text(face = "bold", size = rel(0.8), hjust = 0),
-          strip.background = element_rect(fill = "grey80", color = NA),
-          legend.title = element_text(face = "bold")) +
-    theme(legend.position = "bottom")
-}
-
-
-
-
-
-radon_mn |> filter(county %in% my.counties) |>
-  mutate(first_floor = if_else(first_floor == 0, "floor = 0", "floor = 1")) |>
-  ggplot(aes(x = first_floor, y = log.radon)) +
-  geom_point() +
-  geom_segment(
-    data = c_pool_pred,
-    aes(
-      x = "floor = 0",
-      xend = "floor = 1",
-      y = `floor = 0`,
-      yend = `floor = 1`
-      ),
-    color = "red",
-    linetype = "dashed",
-    linewidth = 1
-    ) +
-  geom_segment(
-    data = np_pred,
-    aes(
-      x = "floor = 0",
-      xend = "floor = 1",
-      y = `floor = 0`,
-      yend = `floor = 1`
-    ),
-    linetype = "dashed"
-  ) +
-  geom_segment(
-    data = partl_pool,
-    aes(
-      x = "floor = 0",
-      xend = "floor = 1",
-      y = `floor = 0`,
-      yend = `floor = 1`
-    ),
-    color = "blue"
-  ) +
-  facet_wrap(~county, scales = "free_y") +
-  theme_clean() +
-  labs(x = NULL, y = "Log Radon level")  +
-  scale_x_discrete(expand=expansion(mult=0.1)) +
-  theme(text = element_text(size = 12))
-
-
-```
-
-
-6. Finally, we are going to add a fixed effect at the county level (level 2). This illustration is based on figure 12.6 in the book, and it shows the estimated county level coefficients, plotted vs. county level uranium levels, along with estimated multilevel regression line at level 2. After replicating this graph, please explain it briefly. 
-
-```{r ex-6, eval=TRUE}
-
-
-### Group level Uranium
-###
-
-md.lm <- radon_mn |>
-  lm(log.radon ~ u , data = _)
-
-md.lvl12 <- radon_mn |>
-  lmer(log.radon ~ u +  (1|county), data = _)
-# summary(md.lvl12)
-
-df  <- radon_mn |>
-  select(county, u) |> unique() # |> mutate(first_floor = 0)
-
-pred.lm <- predictions(
-  md.lm,
-  by = "u"
-  )
-
-pred.lvl12 <- predictions(
-  md.lvl12,
-  by = "u"
-)
-
-
-pred.lvl12 |>
-  ggplot(aes(x = u, xend = u, y = conf.low, yend = conf.high)) +
-  geom_segment() +
-  geom_point(aes(y = estimate)) +
-  geom_line(
-    data = pred.lm,
-    aes(x = u, y = estimate),
-    linetype  = "dashed"
-    ) +
-  geom_ribbon(
-    data = pred.lm,
-    aes(x = u, ymin = conf.low, ymax = conf.high),
-    alpha  = .2
-  ) + theme_clean() + 
-  labs(x = "Uranium (county level)", y = "County level coefficients")
-
-
-```
-
-
-
-```{r testing-uranium}
-
-library(tidyverse)
-library(marginaleffects)
-library(lmerTest)
-radon <- read_rds("https://bit.ly/BMLR-Radon")
-
-
-radon_mn <- radon |> 
-  filter(state == "MN") |>
-  # drop counties without measurements
-  mutate(county = fct_drop(county))
-
-md.lvl12 <- radon_mn |>
-  lmer(log.radon ~ u +  (1|county), data = _)
-
-md.lm <- radon_mn |>
-  lm(log.radon ~ u , data = _)
-
-
-radon_mn_summary <- radon_mn |> 
-  count(u, county) |> 
-  select(-n)
-
-pred.lvl12_county <- predictions(
-  md.lvl12,
-  newdata = radon_mn_summary
-  ) |> as_tibble() |> select(county, u, estimate, std.error)
-
-pred.lvl12_u <- avg_predictions(
-  md.lvl12,
-  by = "u"
-) |> as_tibble() |> select(u, estimate, std.error)
-
-pred.lvl12_county |> inner_join(pred.lvl12_u, by = "u")
-
-
-
-
-pred.lvl12 |>
-  ggplot(aes(x = u, xend = u, y = conf.low, yend = conf.high)) +
-  geom_segment() +
-  geom_point(aes(y = estimate)) +
-  geom_line(
-    data = pred.lm,
-    aes(x = u, y = estimate),
-    linetype  = "dashed"
-    ) +
-  geom_ribbon(
-    data = pred.lm,
-    aes(x = u, ymin = conf.low, ymax = conf.high),
-    alpha  = .2
-  ) + theme_minimal() + 
-  labs(x = "Uranium (county level)", y = "County level coefficients")
-
-
-reprex::reprex(venue = "gh")
-
-
-
-
-### Renee's code: 
-### 
-### 
-
-
-## model with partial pooling, random intercept, fixed slope, only uranium as predictor
-model_radon_pp_u<- lmer(log.radon ~ u + (1 | county), data=radon_mn)
- 
-
-## predict
-radon_mn_lev2 <- data.frame(u =predictions(model_radon_pp_u, by = "u")$u)
-radon_mn_lev2$int_u3 <- predictions(model_radon_pp_u, by = "u")$estimate
-radon_mn_lev2$se_u3 <- predictions(model_radon_pp_u, by = "u")$std.error
-# pred.lvl12 |> as_tibble() |> select(1:3)
-# radon_mn_lev2 |> as_tibble()
-
-## predict
-ggplot(data=radon_mn_lev2, aes(x=u, y=int_u3)) +   geom_pointrange(aes(ymin=int_u3-se_u3, ymax=int_u3+se_u3), size=0.2, linewidth=0.2) +   scale_y_continuous(breaks=c(0.8, 1.2, 1.6)) +   labs(y="County level coefficients", x="Uranium (county level)") +   coord_cartesian(ylim=c(0.6,1.8)) +   theme_bw() +   theme(axis.title = element_text(face="bold"))
-
-
-# Renee's first code
-
-## model with partial pooling, random intercept, fixed slope, only uranium as predictor
-model_radon_pp_u<- lmer(log.radon ~ u + (1 | county), data=radon_mn)
-summary(model_radon_pp_u)
-ranef(model_radon_pp_u)
-
-# lattice::dotplot(ranef(model_radon_pp_u))
-
-# calculate the beta 0 of each county based on uranium level
-cnts <- ranef(model_radon_pp_u)$county |> row.names()
-radon_mn_lev2 <- radon_mn |> count(county, u)
-radon_mn_lev2$int_u2 <- coef(model_radon_pp_u)$county$`(Intercept)` + fixef(model_radon_pp_u)[2]*radon_mn_lev2$u
- 
-# use se of the random effect?
-radon_mn_lev2$se_u2 <- arm::se.ranef(model_radon_pp_u)$county |> as.numeric()
-radon_mn_lev2
-
-ranef(model_radon_pp_u) |> as_tibble()
-
-pred.lvl12 <- avg_predictions(
-  md.lvl12,
-  by = "u"
-) |> as_tibble() |> select(u, estimate, std.error, conf.low, conf.high)
-
-
-radon_mn_lev2 |> inner_join(pred.lvl12, by = "u")
-
-
-# plot (--> estimates more similar to the example; however 95%CI of line still too small and geom_smooth seems not correct?)
-ggplot(data=radon_mn_lev2, aes(x=u, y=int_u2)) +   geom_pointrange(aes(ymin=int_u2-se_u2, ymax=int_u2+se_u2), size=0.2, linewidth=0.2) +   geom_smooth(method = "lm", se=TRUE) +   scale_y_continuous(breaks=c(0.8, 1.2, 1.6)) +   labs(y="County level coefficients", x="Uranium (county level)") +   coord_cartesian(ylim=c(0.6,1.8)) +   theme_bw() +   theme(axis.title = element_text(face="bold"))
-
-
-```
-
-
-:::{#boxedtext}
-
-Hints for creating the plots will be available in the following few days. Thank you for your patience.
-
-:::
-
-7. Using the simulation techniques in questions 1 and 2, generate a synthetic dataset that would be similar to the radon data, in the sense that if you fitted the three models to your simulated dataset, you would get similar parameter estimations to the ones you got when fitting your models to the real Radon dataset. Explore your synthetic data using similar visualisations, and comment on similarities or differences between the Radon dataset and your simulated dataset.   
-
-
-
-## Appendix 
-
-The caterpillar plots for the intercepts are shown below, calculated as the predicted value of the intercept and its confidence interval for each cluster. The confidence interval for the no-pooling model is the largest, and that the estimates preserve the rank more when comparing the no-pooling fixed effects model with the multilevel model with a random intercept.  
-
-```{r caterpillar-big, eval=TRUE, fig.align='center', fig.width=12, fig.height=15}
+```{r spaghetti-plots, eval=TRUE, fig.height=6}
+# cor = 0.5
 df <- simulate_df()
 md_cp <- lm(y ~ x, df) 
 md_np <- lm(y ~ x + cluster, df) 
@@ -1148,43 +1298,49 @@ md_pp <- lmer(y ~ x + (1 | cluster), df)
 md_pp_plus <- lmer(y ~ x + (x | cluster), df) 
 
 
+sp_rand_int <- predictions(md_pp) |>  
+  ggplot(aes(x, y, color = cluster)) + 
+  geom_point() + 
+  geom_line(aes(y = estimate)) + 
+  # facet_wrap(~cluster, scales = "free") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(title = "Simulated data: spaghetti plot", subtitle ="Random intercept")
+
+sp_rand_slope <- predictions(md_pp_plus) |>  
+  ggplot(aes(x, y, color = cluster)) + 
+  geom_point() + 
+  geom_line(aes(y = estimate)) + 
+  # facet_wrap(~cluster, scales = "free") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(title = "Simulated data: spaghetti plot", subtitle ="Random intercept and random slope")
+
+sp_rand_int + sp_rand_slope
+
+predictions(md_pp) |>  
+  ggplot(aes(x, y, color = cluster)) + 
+  geom_point() + 
+  geom_line(aes(y = estimate)) + 
+  facet_wrap(~cluster, scales = "free") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(title = "Simulated data: lattice plot", subtitle = "Random intercept")
 
 
-get_pred <- function(mdl, type) {
-  mdl |> 
-    predictions(
-      newdata = data.frame(x = 0, cluster = clusters)
-      ) |> 
-    as_tibble() |> 
-    mutate(model = type, model_cluster = str_c(cluster, model)) |> 
-    select(model_cluster, model, cluster, estimate, conf.low, conf.high) |> 
-    arrange(estimate) 
-}
+predictions(md_pp_plus) |>  
+  ggplot(aes(x, y, color = cluster)) + 
+  geom_point() + 
+  geom_line(aes(y = estimate)) + 
+  facet_wrap(~cluster, scales = "free") + 
+  theme_minimal() + 
+  theme(legend.position = "none") + 
+  labs(title = "Simulated data: lattice plot", subtitle = "Random intercept and random slope")
 
 
-get_pred(md_np, "No pooling") |> 
-  add_row(get_pred(md_np_plus, "No pooling + interactions")) |> 
-  add_row(get_pred(md_pp, "Multilevel Random intercept")) |> 
-  add_row(get_pred(md_pp_plus, "Multilevel Random Intercept + slope")) |> 
-  mutate(cluster = fct_inorder(cluster)) |>
-  mutate(model = fct_relevel(model, "No pooling", "No pooling + interactions", "Multilevel Random intercept")) |> 
-  ggplot(
-    aes(
-      x = conf.low, 
-      xend = conf.high, 
-      y = cluster, 
-      yend = cluster
-      )
-    ) + 
-  geom_segment() + 
-  geom_point(aes(x=estimate)) + 
-  facet_wrap(~model) + 
-  theme_clean() + 
-  labs(y=NULL, x = "Cluster intercepts", title = "Caterpillar plot for fixed and random intercepts") + 
-  theme(text = element_text(size = 14))
+# ranef(md_pp_plus)$cluster |> rename(intpt = `(Intercept)`) |> 
+#   lm(x ~ intpt, data = _) |> summary()
 
 ```
-
-
 
 
