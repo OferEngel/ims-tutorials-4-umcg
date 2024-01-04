@@ -543,26 +543,122 @@ radon_mn_count <- radon_mn |> count(county, name = "n.obs")
 get_radon_vs_n_obs <- function (mdl) {
   set.seed(888)
   x.seq <- c(1 , seq(2, 10, 2), 10, seq(20, 100,20))
-  p <- mdl  |>
+  
+  # mdl <- m.no_pool
+  
+  coefs <- tidy(mdl) |> as_tibble() |>
+  mutate(
+    county = gsub("county", "", term),
+    est_cf = estimate,
+    se_cf = std.error,
+    .keep = "none"
+    ) |>
+    inner_join(radon_mn_count, by = "county") 
+  
+  
+  coef_compare <- mdl  |>
     predictions(newdata = datagrid(county = unique)) |>
-    inner_join(radon_mn_count, by = "county") |>
+    as_tibble() |> 
+    mutate(county, 
+           est_me = estimate, 
+           se_me = std.error, .keep = "none") |> 
+    inner_join(coefs, by = "county") |> 
+    select(county, est_me, est_cf, se_me, se_cf, n.obs)
+  
+  
+  p <- coef_compare |>
+    mutate(
+      conf.lo = est_cf - se_cf*qnorm(.975), 
+      conf.hi = est_cf + se_cf*qnorm(.975), 
+      incl.mean = 
+             ifelse(
+               (conf.lo < mean.log.radon) & 
+                 (mean.log.radon < conf.hi),
+               "incl",
+               "excl"
+               )
+      )  |>
     ggplot(
       aes(
         x = n.obs,
-        y = estimate,
-        ymin = conf.low,
-        ymax = conf.high
+        y = est_cf,
+        ymin = conf.lo,
+        ymax = conf.hi, 
+        color = incl.mean
         )
       ) +
     geom_pointrange(
       position = position_jitter(height = 0, width = .5), 
       size = .3
       ) +
+    # scale_x_log10(breaks = x.seq) +
+    geom_hline(
+      yintercept = mean.log.radon
+      )  + theme(legend.position = "none") +
+    labs(y = "Estimated log radon in the county", x = NULL) + 
+    scale_color_manual(values = c("red", "black"))
+  return(p)
+}
+
+# multilevel
+get_radon_vs_n_obs_ml <- function (mdl) {
+  set.seed(888)
+  x.seq <- c(1 , seq(2, 10, 2), 10, seq(20, 100,20))
+  # mdl <- m.partial_pool
+  
+  coef_ranef <- brms::ranef(mdl) |> as_tibble() |>
+  mutate(
+    county = grp,
+    est_rf = condval + fixef(mdl)[1],
+    se_rf = condsd,
+    .keep = "none"
+    ) |>
+    inner_join(radon_mn_count, by = "county") 
+  
+  coef_compare <- mdl  |>
+    predictions(newdata = datagrid(county = unique)) |>
+    as_tibble() |> 
+    mutate(county, 
+           est_me = estimate, 
+           se_me = std.error, .keep = "none") |> 
+    inner_join(coef_ranef, by = "county") |> 
+    select(county, est_me, est_rf, se_me, se_rf, n.obs)
+  
+  # coef_ranef |> 
+  #   lm(se_rf ~ n.obs, data = _) |> summary()
+  
+  
+  p <- coef_compare |>
+    mutate(
+      conf.lo = est_rf - se_rf*qnorm(.975), 
+      conf.hi  = est_rf + se_rf*qnorm(.975), 
+      incl.mean = 
+             ifelse(
+               (conf.lo < mean.log.radon) & 
+                 (mean.log.radon < conf.hi),
+               "incl",
+               "excl"
+               )
+      ) |> 
+    ggplot(
+      aes(
+        x = n.obs,
+        y = est_rf,
+        ymin = conf.lo,
+        ymax = conf.hi, 
+        color = incl.mean
+        )
+      ) +
+    geom_pointrange(
+      position = position_jitter(height = 0, width = .5),
+      size = .3
+      ) +
     scale_x_log10(breaks = x.seq) +
     geom_hline(
       yintercept = mean.log.radon
       ) +
-    labs(y = "Estimated log radon in the county", x = NULL)
+    labs(y = "Estimated log radon in the county", x = NULL) + 
+    scale_color_manual(values = c("red", "black"))
   return(p)
 }
 
@@ -572,11 +668,13 @@ p1 <- get_radon_vs_n_obs(m.no_pool) +
   labs( title = "No pooling (fixed effects)") + 
   scale_x_log10(breaks = NULL) +
   theme_clean() + 
-  labs(x = NULL)
-p2 <- get_radon_vs_n_obs(m.partial_pool) +
+  labs(x = NULL) + 
+  theme(legend.position = "none")
+p2 <- get_radon_vs_n_obs_ml(m.partial_pool) +
   labs( title = "Partial pooling (multilevel model)")+ 
   theme_clean() + 
-  labs(x = "Number of observations")
+  labs(x = "Number of observations") + 
+  theme(legend.position = "none")
 
 # p1 / p2
 
