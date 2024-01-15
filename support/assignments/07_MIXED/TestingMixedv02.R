@@ -5,140 +5,14 @@ library(broom.mixed)
 library(marginaleffects)
 library(faux)
 library(lmerTest)
-library(purrr)
-
+library(merTools)
+library(GGally)
 conflicted::conflicts_prefer(lmerTest::lmer)
 conflicted::conflicts_prefer(dplyr::select)
 conflicted::conflicts_prefer(dplyr::filter)
 
-a <- c(-1, 0, 1, 0)
-b <- c(0, -1, 0,  1)
 
-mean(a)
-mean(b)
-a - b
-\sigma (x - x_bar)^2
-\sigma (x - x_bar) * (y - y_bar)
-
-
-
-cov(a, b)
-var(a)
-var(b)
-var(a + b)
-var(a - b)
-
-
-# Simulate hierarchical data with 30 clusters
-# Each
 set.seed(888)
-
-n_cluster <-  30
-obs_per_cluster <-  sample(seq(20), n_cluster, replace = TRUE)
-df <- add_random(cluster = seq(n_cluster)) |>
-  add_random(
-    obs = map(seq(n_cluster), ~seq(obs_per_cluster[.x])),
-    .nested_in = "cluster"
-    ) |>
-  add_ranef("cluster", a_j = 1.5) |>
-  mutate(
-    cluster = factor(cluster),
-    obs = factor(obs),
-    x = rnorm(sum(obs_per_cluster)),
-    epsilon =  rnorm(sum(obs_per_cluster)),
-    y_hat = a_j + 1 * x,
-    y = y_hat + epsilon
-    ) |>
-  select(cluster, obs, x, a_j, y_hat, y)
-
-df_cluster <- df |> summarise(
-  mn_aj = mean(a_j),
-  mn_y = mean(y),
-  sd_y = sd(y),
-  mn_y_hat = mean(y_hat),
-  mn_x = mean(x),
-  n = n(),
-  se_y = sd_y / sqrt(n),
-  .by = cluster
-  )
-
-lm.unpooled <- df |>
-  lm(y ~ 0 + x + cluster, data = _)
-
-
-coefs <- lm.unpooled |>
-  tidy() |>
-  mutate(
-    cluster = gsub("cluster", "", term),
-    estimate,
-    std.error,
-    .keep = "none"
-    ) |>
-  slice_tail(n = nrow(df_cluster))
-
-
-cmps <- lm.unpooled |>
-  predictions(newdata = datagrid(cluster = unique, x = 0)) |>
-  as_tibble() |>
-  mutate(cluster = as.character(rowid), me = estimate, me_se = std.error, .keep = "none") |>
-  inner_join(
-    coefs,
-    by = "cluster"
-    ) |>
-  mutate(cluster, me, coef = estimate, me_se, coef_se = std.error, .keep = "none") |>
-  inner_join(df_cluster, by = "cluster") |>
-  select(me, coef, mn_aj, me_se, coef_se, se_y, n)
-
-
-cmps |>
-  lm(coef_se ~ se_y, data = _) |>
-  summary()
-
-cmps |>
-  lm(coef_se ~ n, data = _) |>
-  summary()
-
-###################
-## Multilevel
-##
-
-lm.mlvl <- df |>
-  lmer(y ~ 0 + x + (1|cluster), data = _)
-summary(lm.mlvl)
-
-ranefs <- ranef(lm.mlvl) |>
-  as_tibble() |>
-  mutate(
-    cluster = grp,
-    ranef = condval,
-    ranef_se = condsd,
-    .keep = "none"
-    )
-
-cmps <- df |>
-  lmer(y ~  x + (1|cluster), data = _) |>
-  predictions(newdata = datagrid(cluster = unique, x = 0)) |>
-  as_tibble() |>
-  mutate(
-    cluster, me = estimate,
-    me_se = std.error,
-    .keep = "none"
-    ) |>
-  inner_join(ranefs, by = "cluster") |>
-  inner_join(df_cluster, by = "cluster") |>
-  select(me, ranef, mn_aj, me_se, ranef_se, se_y, n)
-
-
-cmps |>
-  lm(mn_aj ~ me, data = _) |>
-  summary()
-
-cmps |>
-  lm(ranef_se ~ se_y, data = _) |>
-  summary()
-
-
-
 
 # y_ij = a_j[i] + b_j[i] * x_i + epsilon_i
 #
@@ -148,21 +22,200 @@ cmps |>
 # b_j[i]      | beta_0   |  rho*sig_u*sig_v, sig_v^2         |
 #              ----------------------------------------------
 
-# srrs2 <- read.table("http://www.stat.columbia.edu/~gelman/arm/examples/radon/srrs2.dat", header=TRUE, sep=",")
-# srrs2 <- read.table("../data/radon/srrs2.dat", header=TRUE, sep=",")
-# srrs2 %>%
-#   glimpse()
-# srrs2 |> mutate(county = stringr::str_trim(county)) |>
-#   mutate(across(where(is.character), as.factor)) |>
-#   readr::write_rds("srrs2.rds")
 
-srrs2 <- read_rds("srrs2.rds")
+obs_per_cluster <-  100
+n_cluster <-  100
+# Fixed intercept
+alpha_0 <-  0
+# Fixed slope
+beta_0 <- 0
+# Random intercept st.dev (level 2)
+sig_u <-  1.5
+# Random slope st.dev (level 2)
+sig_v <-  2
+# Independent random effects
+cor <-  0.5
+# Residual standard deviation
+sig <- 1
+
+
+# step 1: create the units
+df <- add_random(
+  cluster = n_cluster,  # first the clusters
+  obs = obs_per_cluster # second, the observations
+) |>
+  # step 2: Add anything at level 2
+  # Here we have random intercept/slope
+  add_ranef(
+    "cluster",
+    u_i = sig_u,
+    v_i = sig_v,
+    .cors = cor
+  ) |> mutate(
+    a_i = alpha_0 + u_i,
+    b_i = beta_0  + v_i
+  ) |>
+  # step 3: add anything at level 1
+  mutate(
+    x       = rnorm(n_cluster * obs_per_cluster),
+    epsilon = rnorm(n_cluster * obs_per_cluster, 0, sig),
+    y = a_i + b_i * x + epsilon,
+    y_hat = a_i + b_i * x
+  )
+
+
+# Print the result
+# try to figure out what just happened
+df |>
+  print(n = 20)
+
+# For the models, we really only need
+# the cluster id, the y and the x
+
+df  <- df |> select(cluster, x, y, y_hat)
+
+# Print the result
+# try to figure out what just happened
+df |>
+  print(n = 20)
+
+
+mdl <- lmer(y ~  x + (x | cluster), data = df )
+summary(mdl)
+
+p.ranef <- ranef(mdl) |>
+  as_tibble() |>
+  filter(term == "(Intercept)") |>
+  mutate(
+    cluster = grp,
+    ref.est = condval,
+    ref.se = condsd,
+    .keep = "none"
+    )
+p.me <- predictions(
+  mdl, by = "cluster"
+  ) |>
+  as_tibble() |>
+  mutate(
+    cluster = cluster,
+    me.est = estimate,
+    me.se = std.error,
+    .keep = "none"
+  )
+
+p.pe <- predictInterval(
+  mdl,
+  newdata = data.frame(
+    cluster = unique(df$cluster),
+    x = 0
+    )
+  ) |>
+  mutate(
+    pe.est = fit,
+    pe.se  = abs(lwr - upr) / (2 * 1.96),
+    cluster = unique(df$cluster),
+    .keep  = "none"
+  ) |>
+  as_tibble()
+
+
+(comp <- p.ranef |>
+    inner_join(p.me) |>
+    inner_join(p.pe))
+
+
+# Are the estimates proportional?
+ggpairs(comp, columns = c(2, 4, 6))
+
+comp |>
+  lm(me.est ~ ref.est, data = _) |>
+  summary()
+
+comp |>
+  lm(me.est ~ pe.est, data = _) |>
+  summary()
+
+comp |>
+  lm(ref.est ~ pe.est, data = _) |>
+  summary()
+
+comp |>
+  select(ref.est, me.est, pe.est) |>
+  pivot_longer(
+    1:3,
+    names_to = "method",
+    values_to = "estimate"
+  ) |>
+  ggplot(aes(method, estimate)) +
+  geom_boxplot() +
+  scale_x_discrete(
+    labels = c("marginal effects", "simulations", "random effects")
+  )
+
+
+
+##################################
+# Are the se's proportional?
+# The marginal effects are much larger than the
+comp |>
+  lm(me.se ~ ref.se, data = _) |>
+  summary()
+
+# No correlation between the marginal effects se and the
+# simulation's standard errors
+comp |>
+  lm(me.se ~ pe.se, data = _) |>
+  summary()
+
+# No correlation between the random effects se and the
+# simulation's standard errors
+comp |>
+  lm(ref.se ~ pe.se, data = _) |>
+  summary()
+
+comp |>
+  select(ref.se, me.se, pe.se) |>
+  pivot_longer(
+    1:3,
+    names_to = "method",
+    values_to = "estimate"
+  ) |>
+  ggplot(aes(method, estimate)) +
+  geom_boxplot() +
+  scale_x_discrete(
+    labels = c(
+      "marginal effects",
+      "simulations",
+      "random effects"
+    )
+  )
+
+ggpairs(comp, columns = c(3, 5, 7))
+
+
+
+#################################################
+# RADON CASE
+# https://georgewoolsey.github.io/ess575_MultilevelHierarchicalModels_GelmanHill/the-data.html#the-data
+
+# our goal in analyzing these data was to estimate the distribution of radon levels in each of the approximately 3000 counties in the United States, so that homeowners could make decisions about measuring or remediating the radon in their houses based on the best available knowledge of local conditions. For the purpose of this analysis, the data were structured hierarchically: houses within counties. If we were to analyze multiple measurements within houses, there would be a three-level hierarchy of measurements, houses, and counties. In performing the analysis, we had an important predictor—the floor on which the measurement was taken, either basement or first floor; radon comes from underground and can enter more easily when a house is built into the ground. We also had an important county-level predictor—a measurement of soil uranium that was available at the county level…The hierarchical model allows us to fit a regression model to the individual measurements while accounting for systematic unexplained variation among the 3000 counties. (p. 3)
+#
+
+srrs2 <- read.table("http://www.stat.columbia.edu/~gelman/arm/examples/radon/srrs2.dat", header=TRUE, sep=",")
 # srrs2 <- read.table("../data/radon/srrs2.dat", header=TRUE, sep=",")
-# srrs2 %>%
-#   glimpse()
-# srrs2 |> mutate(county = stringr::str_trim(county)) |>
-#   mutate(across(where(is.character), as.factor)) |>
-#   readr::write_rds("srrs2.rds")
+srrs2 %>%
+  glimpse()
+srrs2 |> mutate(county = stringr::str_trim(county)) |>
+  mutate(across(where(is.character), as.factor)) |>
+  readr::write_rds("srrs2.rds")
+
+srrs2 <- readr::read_rds("srrs2.rds")
+# srrs2 <- read.table("../data/radon/srrs2.dat", header=TRUE, sep=",")
+srrs2 %>%
+  glimpse()
+srrs2 |> mutate(county = stringr::str_trim(county)) |>
+  mutate(across(where(is.character), as.factor)) |>
+  readr::write_rds("srrs2.rds")
 
 
 # filter MN and create vars
@@ -174,11 +227,22 @@ radon_mn <- srrs2 %>%
     county = fct_drop(county)
     , radon = activity
     , log.radon = log(ifelse(radon==0, .1, radon))
-    # , y = log.radon
-    , floor = factor(floor, levels = c("0", "1")) # 0 for basement, 1 for first floor
+    , y = log.radon
+    , x = floor # 0 for basement, 1 for first floor
     , county_index = as.numeric(as.factor(county))
     , .keep = "used"
   )
+# n
+n <- nrow(radon_mn)
+
+# count
+radon_mn |>
+  count(county_index, county) |>
+  slice_head(n=10)
+y <- radon_mn$y
+x <- radon_mn$x
+county <- radon_mn$county
+county <- radon_mn$county_index
 
 
 # y_i = alpha_j[i] + epsilon_i
@@ -191,8 +255,9 @@ library(arm)
 conflicted::conflicts_prefer(dplyr::select)
 conflicted::conflicts_prefer(lmerTest::lmer)
 
-
-
+mdl <- radon_mn |>
+  lmer(log.radon ~ 1 + (1 | county ), data = _)
+summary(mdl)
 
 # mu_alpha = 1.312
 # sig_alpha = 0.3095
@@ -207,207 +272,19 @@ library(arm)
 
 # fit the models
 
-lm.pooled <- lm(log.radon ~  0 + floor, data = radon_mn)
+lm.pooled <- lm(log.radon ~ floor, data = radon_mn)
 display (lm.pooled)
 # lm(formula = log.radon ~ floor, data = radon_mn)
 # coef.est coef.se
 # (Intercept)  1.33     0.03
 # floor       -0.61     0.07
-summary(lm.pooled)
-pooled.coef <- lm.pooled |>
-  tidy( ) |>
-  mutate(floor = gsub("floor", "", term)) |>
-  select(floor, estimate, std.error)
-
-base_pred <- function(mdl, nd) {
-  base.pdct <- predict(mdl, newdata = nd,
-                       se.fit = TRUE)
-
-  base.pdct$fit |> as_tibble() |>
-    add_column(se = base.pdct$se.fit) |>
-    add_column(nd = nd[,1])
-}
-
-bp <- base_pred(lm.pooled, data.frame(floor = c("0", "1"))) |>
-  mutate(floor = nd, .keep = "unused")
-
-lm.pooled |>
-  predictions(newdata = datagrid(floor = c(0,1))) |>
-  as_tibble( ) |>
-  mutate(floor = floor, estimate, std.error, .keep = "none") |>
-  inner_join(pooled.coef, by = "floor", suffix = c("_me", "_mdl")) |>
-  select(floor, estimate_me, estimate_mdl, std.error_me, std.error_mdl) |> inner_join(bp, by = "floor") |>
-  mutate(floor, me = estimate_me, mdl = estimate_mdl, base = value,
-         se_me = std.error_me, se_mdl = std.error_mdl, se_base = se, .keep = "none")
 
 
+lm.unpooled.0 <- lm (y ~ x + county)
+display (lm.unpooled.0)
 
-################
-## UNPOOLED MODEL
-##
-
-counties <- radon_mn |>
-  summarise(n = n(), .by = "county")
-
-lm.unpooled <- lm (log.radon ~ 0 + county + floor, data = radon_mn)
+lm.unpooled <- lm (y ~ x + factor(county) - 1, data = radon_mn)
 display (lm.unpooled)
-
-unpooled.coef <- lm.unpooled |>
-  tidy() |>
-  slice_head(n = 85) |>
-  mutate(
-    county = gsub("county", "", term)
-  ) |> select(county, estimate, std.error)
-
-
-# verify equivalence of the following:
-# 1 model's unpooled.coef  --mdl
-# 2 the marginaleffects predictions -- me
-# 3 the base predictions
-bp <- base_pred(lm.unpooled, data.frame(county = counties$county, floor = "0"))
-
-(unpooled.compare <- lm.unpooled |>
-  predictions(newdata = datagrid(county = counties$county, floor = 0)) |>
-  as_tibble( ) |>
-  select(county, estimate, std.error) |>
-  inner_join(unpooled.coef,
-             by = "county",
-             suffix = c("_me", "_mdl")) |>
-  select(county, estimate_me, estimate_mdl, std.error_me, std.error_mdl) |>
-  inner_join(bp, join_by(county == nd)) |>
-  select(county, estimate_me, estimate_mdl, value,
-         std.error_me, std.error_mdl, se) |>
-  mutate(ct = county, me = estimate_me,
-         mdl = estimate_mdl, base = value,
-         se_me = std.error_me,
-         se_mdl = std.error_mdl, se_base = se,
-         .keep = "none"))
-  # YES they are!
-
-
-
-##############
-# Multilevel MODEL
-#
-lm.unpooled <- lm (log.radon ~ 0 + county + floor, data = radon_mn)
-display (lm.unpooled)
-
-lm.multilevel <- radon_mn |>
-  lmer(log.radon ~  0 + (1 | county ) + floor, data = _)
-display(lm.multilevel)
-fixef(lm.multilevel)[1]
-
-
-
-# radon_mn |>
-#   lmer(log.radon ~  (1 | county ) + floor, data = _)
-
-library(broom.mixed)
-ml.coef_rf <- brms::ranef(lm.multilevel) |> as_tibble() |>
-  mutate(
-    county = grp,
-    est_rf = condval + fixef(lm.multilevel)[1],
-    se_rf = condsd,
-    .keep = "none"
-    )
-rm(log.radon)
-log.radon <- radon_mn$log.radon
-ml.coef_bs <- merTools::predictInterval(
-  lm.multilevel,
-  newdata = datagrid(model = lm.multilevel, county = counties$county, floor = "0")) |> as_tibble() |>
-  add_column(counties) |>
-  mutate(county, est_bs = fit, se_bs = (upr - lwr)/qnorm(.975), n, .keep = "none")
-
-
-#
-# Compare multilevel marginaleffects, random effects and bootstrapping
-#
-lm.multilevel |>
-  predictions(newdata = datagrid(county = counties$county, floor = 0)) |>
-  as_tibble( ) |>
-  mutate(county = county, est_me = estimate, se_me = std.error, .keep = "none") |>
-  inner_join(ml.coef, by = "county") |>
-  inner_join(ml.coef_bs, by = "county") |>
-  select(county, n, est_me, est_rf,est_bs,  se_me, se_rf, se_bs)
-
-
-#
-# Compare multileve and unpooled
-#
-comp.unp_ml <- unpooled.coef |>
-  inner_join(
-    ml.coef,
-    by = "county",
-    suffix = c("_unpld", "_ml")
-  ) |>
-  inner_join(counties, by = "county")
-
-library(santoku)
-comp.unp_ml |>
-  mutate(n_q = factor(chop_equally(n, groups = 4))) |>
-  ggplot(aes(estimate_unpld, estimate_ml, color = n_q)) +
-  geom_point(
-    x = coef(lm.pooled)["floor0"],
-    y = coef(lm.pooled)["floor0"],
-    size = 7,
-    color = "grey",
-    alpha = .5
-  ) +
-  geom_point() +
-  geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
-  geom_smooth(method = "lm", se = FALSE)  +
-  theme_minimal() +
-  labs(x = "unpooled estimates", y = "multilevel estimates", color = "N Quantile") +
-  scale_x_continuous(breaks = seq(0.75, 3, .25)) +
-  theme(text = element_text(size = 18), legend.position  = "bottom")
-
-
-# We can nicely see here how high n
-# moves the unpooled estimates and
-# the multilevel estimates  closer together
-comp.unp_ml
-
-#
-
-
-
-
-
-
-###
-unique(radon_mn$county)
-
-nd <- radon_mn |>
-  summarise(n=n(), .by = "county") |>
-  as_tibble()
-
-set.seed(777)
-df_nopool <-
-
-
-library(marginaleffects)
-# Hardly any
-lm.unpooled |>
-  predictions(
-    newdata = data.frame(county = unique(radon_mn$county), x=0)
-  ) |>
-  as_tibble() |>
-  select(county, estimate, std.error) |>
-  mutate(
-    em.ub = estimate + std.error,
-    em.lb = estimate - std.error
-  ) |>
-  inner_join(df_nopool, by = "county") |>
-  mutate(
-    diff.estimate = (estimate  - alpha_j),
-    diff.ub = (em.ub - ub) / ub,
-    diff.lb = (em.lb - lb) / lb,
-    .keep = "none"
-  )
-# FACIT: Hardly any difference between marginal effects
-# and the estimations of the fixed effects per county
-
-
 
 # graph the data and fitted lines
 
