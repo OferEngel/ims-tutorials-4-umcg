@@ -1,0 +1,28 @@
+---
+title: 'Data Wrangling Workshop'
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    toc: true
+    toc_float: true
+---
+
+```{r global_options, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE, 
+                      fig.align = "center", 
+                      warning = FALSE, 
+                      message = FALSE)
+
+```
+
+
+Data wrangling is a crucial step in the data analysis process, involving the **transformation**, **cleaning**, and **preparation** of raw data into a format that is suitable for analysis and visualization. R, a powerful programming language for data analysis and statistics, offers a suite of libraries within the tidyverse ecosystem that streamline and simplify this data manipulation process.
+
+
+A good reference for data wrangling with R is the [data-wrangling cheat-sheet](https://bit.ly/3vDp74k). 
+
+Question 1: In your own words, try to describe what the pivot functions do, and why they are important. You may use the cheat sheet shown above or the help function in R to explore these functions.
+
+

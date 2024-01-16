@@ -1,0 +1,378 @@
+---
+title: "Storms Exploration"
+output:
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    css: ./style.css
+runtime: shiny_prerendered
+tutorial:
+  # TODO: Find and replace TUTORIAL-ID with the releative path to the tutorial
+  # e.g., lessons/noodle/dayA5-storms-exploration
+  id: "v2/case_studies/dplyr-storms"
+  version: 1.0
+description: "Practice dplyr functions by exploring hurricane data."
+glossary:
+  sources:
+    - http://glosario.rstudio.com/
+  language: en
+---
+
+```{r setup, include=FALSE}
+# Grading Packages
+library(learnr)
+library(gradethis)
+library(tblcheck)  # For table-based exercises. Remove if not needed
+
+# The ID to look for in the student document
+options(tutorial.id = "v2/case_studies/dplyr-storms", 
+        exercise.reveal_solution = FALSE)
+
+# Exercise Packages and Global Setup ----
+library(dplyr)
+
+storms <- storms %>% 
+  mutate(
+    category = cut(wind,
+      breaks = c(0, 34, 64, 83, 96, 113, 137, 500),
+      labels = c(-1, 0, 1, 2, 3, 4, 5),
+      include.lowest = TRUE, ordered = TRUE
+    )
+  )
+```
+
+
+## Welcome
+
+
+The `storms` data set in the dplyr package contains the attributes of `r n_distinct(storms$name, storms$year)` tropical storms, measured every six hours for the duration of each storm.
+
+I've loaded the dplyr package for you. **Run the code below to see the contents of storms.**
+
+```{r storms, exercise = TRUE}
+storms
+```
+
+We will explore five aspects of `storms` to help solidify your dplyr skills.
+
+## 1. Windspeed by category
+
+###
+
+Meteorologists use the speed of the wind within a storm to classify each storm into one of seven categories: 
+
+* Tropical Depression (`-1`)
+* Tropical Storm (`0`)
+* Category 1 Hurricane (`1`)
+* Category 2 Hurricane (`2`)
+* Category 3 Hurricane (`3`)
+* Category 4 Hurricane (`4`)
+* Category 5 Hurricane (`5`)
+
+But which wind speeds correspond to which categories? We can infer this data from `storms`. The table below shows the minimum and maximum `wind` speeds associated with each `category` in `storms`.
+
+```{r echo = FALSE,  ref.label = "a-solution", message = FALSE}
+
+```
+
+**Can you use `storms` to recreate the table?**
+
+```{r a, exercise = TRUE}
+
+```
+
+```{r a-hint}
+storms %>% 
+  group_by(___) %>% 
+  summarize(
+    min_wind = min(___),
+    max_wind = max(___)
+  )
+```
+
+
+```{r a-solution}
+storms %>% 
+  group_by(category) %>% 
+  summarize(
+    min_wind = min(wind),
+    max_wind = max(wind)
+  )
+```
+
+
+```{r a-check}
+grade_this_table(
+  pre_check = {
+    fail_if(
+      !("category" %in% names(.result)),
+      "It looks like you may not have grouped your data by `category` before computing the min and max wind speeds."
+    )
+    fail_if(
+      !("min_wind" %in% names(.result)),
+      "Please use the column name `min_wind` in your new table."
+    )
+    fail_if(
+      !("max_wind" %in% names(.result)),
+      "Please use the column name `max_wind` in your new table."
+    )
+  }
+)
+```
+
+## 2. Maximum categories
+
+###
+
+Let's identify the most severe category that each storm reached. For example, if Andrew began as a tropical depression and later progressed through each of the categories to reach Category 5, we will label Andrew as a Category 5 storm. 
+
+In other words, we would like to make a table that looks like this, but with data where the `?`s appear:
+
+```{r echo = FALSE, message = FALSE}
+storms %>% 
+  group_by(name, year) %>% 
+  summarize(
+    max_wind = "?",
+    max_cat = "?"
+  )
+```
+
+**Can you use `storms` to make a complete version of the table above?** Before you begin, you should know that NOAA, the body that names storms, often recycles storm names. For example, the name Andrew appears twice in the data to describe two different storms: one in 1986 and one in 1992. As a result, we must use a combination of `name` and `year` values to uniquely identify each storm in storms. 
+
+```{r b, exercise = TRUE}
+ 
+```
+
+
+```{r b-hint}
+storms %>% 
+  group_by(___, ___) %>% 
+  summarize(
+    max_wind = max(___),
+    max_cat = max(___)
+  ) 
+```
+
+```{r b-solution}
+storms %>% 
+  group_by(name, year) %>% 
+  summarize(
+    max_wind = max(wind),
+    max_cat = max(category)
+  ) 
+```
+
+```{r b-check}
+grade_this_table(
+  pre_check = {
+    r_names <- names(.result)
+    .result <- ungroup(.result)
+    .solution <- ungroup(.solution)
+    fail_if(
+      "name" %in% r_names & !("year" %in% r_names),
+      "Remember that a name my refer to more than one storm. We want to compute the maximum category for each unique storm, so we cannot group on `name` alone."
+    )
+    fail_if(
+      !("max_wind" %in% r_names),
+      "Please use the column name `max_wind` in your result."
+    )
+    fail_if(
+      !("max_cat" %in% r_names),
+      "Please use the column name `max_cat` in your result."
+    )
+  }
+)
+```
+
+## 3. Frequencies
+
+Excellent, now that we know the maximum category attained by each storm, let's compare the relative frequencies of each type of storm, similar to this:
+
+```{r echo = FALSE, message = FALSE}
+storms %>% 
+  group_by(name, year) %>% 
+  summarize(
+    max_wind = max(wind),
+    max_cat = max(category)
+  ) %>% 
+  ungroup() %>% 
+  count(max_cat) %>% 
+  mutate(n = "?")
+```
+
+**Extend the code below to count the number of storms in each category.** In other words, for each combination of year and storm name, we take the maximum category, and then look at the distribution of those categories. Note that you may need to ungroup the data before applying additional dplyr functions. Try to recreate the following: 
+
+
+```{r c, exercise = TRUE}
+storms %>% 
+  group_by(___, ___) %>% 
+  ___(
+    ___ = ___,
+    ___ = ___
+  ) 
+```
+
+```{r c-test-noeval, include=FALSE, eval=FALSE}
+storms |> 
+  count(category)
+
+storms %>% 
+  group_by(name, year) %>% 
+  summarize(
+    max_wind = max(wind),
+    max_cat = max(category)
+  ) %>% 
+  ungroup() %>% 
+  count(max_cat) 
+
+```
+
+
+```{r c-hint}
+storms %>% 
+  group_by(name, year) %>% 
+  summarize(
+    max_wind = max(wind),
+    max_cat = max(category)
+  ) %>% 
+  ungroup() %>%  
+  count(___)
+```
+
+
+```{r c-solution}
+storms %>% 
+  group_by(name, year) %>% 
+  summarize(
+    max_wind = max(wind),
+    max_cat = max(category)
+  ) %>% 
+  ungroup() %>% 
+  count(max_cat)
+```
+
+```{r c-check}
+grade_this_table(
+  pre_check = {
+    fail_if_equal(
+      x = .result,
+      y = storms %>% 
+        group_by(name, year) %>% 
+        summarize(
+          max_wind = max(wind),
+          max_cat = max(category)
+        ),
+      "Did you extend the code?"
+    )
+    fail_if(
+      "name" %in% names(.result),
+      "Did you remember to ungroup your data before counting it? The presence of a `name` column in your result suggests that dplyr may have performed a groupwise count for each name."
+    )
+    fail_if(
+      .result[1, 1] == n_distinct(storms$name, storms$year),
+      "Remember to count by values of `max_cat`. If you do not tell `count()` which column to count on, `count()` will count the number of rows in the table."
+    )
+    fail_if(
+      !("n" %in% names(.result)),
+      "Please use the column name `n` in your result."
+    )
+  },
+  correct = "The most common type of storm recorded was a tropical storm (`0`)."
+)
+```
+
+## 4. Storm durations
+
+###
+
+Next, let's record how many days each storm lasted, like this. 
+
+```{r echo = FALSE, ref.label = "d-solution", message = FALSE}
+
+```
+
+We can make this table by being clever with dplyr's `n_distinct()` function. **Fill in the blank below with one or more column names to give us the correct number of days for each storm.**
+
+```{r d, exercise = TRUE}
+storms %>% 
+  group_by(name, year) %>% 
+  summarize(n_days = n_distinct(____))
+```
+
+
+
+```{r d-solution}
+storms %>% 
+  group_by(name, year) %>% 
+  summarize(n_days = n_distinct(day))
+```
+
+```{r d-check}
+grade_this_table("Notice that counting distinct values of `day` works here, but it is a little risky. If any storm had lasted for more than 30-31 days, we would need to count distinct combinations of `month` and `day`.")
+```
+
+## 5. Biggest storms
+
+###
+
+It is rare for a storm to become a Category 5 hurricane, and even more rare for a storm to stay a Category 5 hurricane for more than a couple of days—but some storms did.
+
+```{r echo = FALSE, message = FALSE}
+storms %>% 
+  filter(category == 5) %>% 
+  group_by(name, year) %>% 
+  summarize(days_cat5 = n_distinct(day)) %>% 
+  arrange(desc(days_cat5)) %>% 
+  mutate(name = "?")
+```
+
+**Recreate the table above to reveal the names of the most formidable storms.**
+
+```{r e, exercise = TRUE}
+
+```
+
+```{r e-hint}
+storms %>% 
+  filter(___ == 5) %>% 
+  group_by(___, ___) %>% 
+  summarize(days_cat5 = n_distinct(___)) %>% 
+  arrange(desc(___))
+```
+
+
+```{r e-solution}
+storms %>% 
+  filter(category == 5) %>% 
+  group_by(name, year) %>% 
+  summarize(days_cat5 = n_distinct(day)) %>% 
+  arrange(desc(days_cat5))
+```
+```{r e-check}
+grade_this_table(
+  pre_check = {
+    .result <- ungroup(.result)
+    .solution <- ungroup(.solution)
+    
+    fail_if(
+      !("days_cat5" %in% names(.result)),
+      "Please use the column name `days_cat5` in your result."
+    )
+    fail_if(
+      .result$days_cat5[1] == 2 | .result$days_cat5[1] == 3,
+      "Be sure to sort your results by descending values of `days_cat5`."
+    )
+    fail_if(
+      .result$days_cat5[1] == 23,
+      "It looks like you counted the total number of days for each storm. Try filtering your data at the start to just the rows where a storm was a Category 5 hurricane."
+    )
+  },
+  correct = "Excellent work."
+)
+```
+
+```{r mark-tutorial-complete-render, echo=FALSE, context="render"}
+shiny::actionButton("academyMarkTutorialComplete", "Mark Tutorial Complete", icon = shiny::icon("check"), class="btn-success")
+```
+
+
