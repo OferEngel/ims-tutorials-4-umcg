@@ -41,7 +41,11 @@ Data wrangling has two main goals:
 - Make data suitable to use with a particular software
 - Reveal information in your data
 
-A good reference for data wrangling with R is the [data-wrangling cheat-sheet](https://bit.ly/3vDp74k). 
+A good reference for data wrangling with R is the [data-wrangling cheat-sheet](https://bit.ly/3vDp74k){target="_blank"}. 
+
+
+You will find all the work-space for your lab on posit cloud [using this link](https://bit.ly/3S4hCL0){target="_blank"}.
+
 
 
 ```{r img-tidyr-cheetsheet}
@@ -71,14 +75,12 @@ Now try to run the following two commands and figure out what they are doing?
 knitr::include_graphics("img/pipe.png")
 ```
 
-1. In the figure above, you can see two ways of using the select function. The first does not use a pipe, and the second uses a pipe. What is the difference in the output between these two methods? Which method is better? 
+1. The code in the figure shows two ways of using the `select` command. The first does not use a pipe, and the second uses a pipe. Run the two commands in the code-chunk below. What is the difference in the output between these two methods? Which method is better, and why? 
 
 ## The pivot functions
 
 The `pivot_longer` and `pivot_wider` functions in the dplyr package are  tools for reshaping and transforming data frames. They allow you to convert data between wide and long formats, making it easier to work with various types of data and facilitate downstream analysis and visualization. 
 
-
-2. In your own words, try to describe what the pivot functions do, and why they are important. You may use the cheat sheet shown above or the help function in R to explore these functions.
 
 
 :::{#boxedtext}
@@ -94,7 +96,6 @@ DATASETS come in many formats...
 knitr::include_graphics("img/edawr-datasets.png")
 ```
 
-3. Which of the three data sets above would be considered a "tidy" dataset? 
 
 
 ```{r img-tidy-str}
@@ -116,7 +117,7 @@ tribble(
 
 ### Pivot longer
 
-4. Now create a tidy dataset, based on the information shown above. CLUE: The new dataset will have three variables: `country`, `year` and `n`.
+2. Use the code above to create a tidy dataset, based on the information shown above. CLUE: The new dataset will have three variables: `country`, `year` and `n`.
 
 
 Of course, there is an automatic way to do this! Fill in and run the following code:
@@ -181,7 +182,7 @@ knitr::include_graphics("img/pivot_long.png")
 
 ### Pivot wider
 
-5. Let's try to re-create a small snippet of the `pollution` dataset. Now re-create the tidy form of this dataset. CLUE: Use three variables: `city`, `large`, `small`. 
+3. Let's try to re-create a small snippet of the `pollution` dataset. Now re-create the tidy form of this dataset. CLUE: Use three variables: `city`, `large`, `small`. 
 
 ```{r create-pollution, echo=TRUE, eval=FALSE}
 tribble(
@@ -196,7 +197,7 @@ tribble(
 
 ```
 
-6. Now use the `pivot_wider` function to transform the data-set automatically! Fill in the code below and run it. 
+4. Now use the `pivot_wider` function to transform the data-set automatically! Fill in the code below and run it. 
 
 ```{r create-pollution2, echo=TRUE, eval=FALSE}
 tribble(
@@ -241,7 +242,7 @@ pollution |>
     values_from = amount)
 
 pollution |> 
-  gt::gt()
+  gt()
 
 pollution |> 
   pivot_wider(
@@ -262,7 +263,7 @@ knitr::include_graphics("img/pivot_wider.png")
 
 The dataset `storm` has one variable `date` that is effectively composed of three variables: `year`, `month` and `storm`. 
 
-7. Load the `storms` dataset to separate the `date` variable into the three variables: `year`, `month` and `storm`. 
+5. Load the `storms` dataset to separate the `date` variable into the three variables: `year`, `month` and `storm`. 
 
 ```{r load-unite, eval=FALSE}
 # EDAWR::storms |> 
@@ -306,7 +307,7 @@ diamonds
 glimpse(diamonds)
 ```
 
-8. What do the variables `x`, `y` and `z` refer to? 
+6. What do the variables `x`, `y` and `z` refer to? 
 
 ```{r longer, eval=FALSE}
 diamonds |> 
@@ -333,11 +334,11 @@ In this case study, we want to answer the following questions:
 
 Plotting is one of the quickest ways to visualize and explore data. 
 
-9. Use `ggplot()` to create a histogram of `price`. Use `binwidth = 1000` to set the width of each bar to 1000.  
+7. Use `ggplot()` to create a histogram of `price`. Use `binwidth = 1000` to set the width of each bar to 1000.  
 
 
 
-10. The following figure was created by creating a logarithmic `x-axis`. Try to replicate it and explain what is the advantage of a logarithmic x-axis. Npte: add a vertical line that marks the median price value by layering `geom_vline(xintercept = median(diamonds$price))` on top of the plot. Where does the median price value lie?
+8. The following figure was created by creating a logarithmic `x-axis`. Try to replicate it and explain what is the advantage of a logarithmic x-axis. Npte: add a vertical line that marks the median price value by layering `geom_vline(xintercept = median(diamonds$price))` on top of the plot. Where does the median price value lie?
 
 ```{r diamonds-log-price}
 diamonds |> 
@@ -357,7 +358,7 @@ diamonds |>
 
 The carat or weight of a diamond is one of its most important attributes. One carat is approximately equal to 0.2 g. 
 
-11. Create another histogram that displays the distribution of `carat` in the data set using `binwidth = 0.01`. Add a vertical line that marks the median carat value by layering `geom_vline(xintercept = median(diamonds$carat))` on top of the plot. Where does the median carat value lie?
+9. Create another histogram that displays the distribution of `carat` in the data set using `binwidth = 0.01`. Add a vertical line that marks the median carat value by layering `geom_vline(xintercept = median(diamonds$carat))` on top of the plot. Where does the median carat value lie?
  
 ```{r diamonds-price, eval=FALSE}
 diamonds %>% 
@@ -368,11 +369,11 @@ diamonds %>%
 
 The carat of a diamond has a significant impact on its price. Since both `carat` and `price` are numerical variables, we can create a scatter plot to explore their relationship.
 
-12. Create a scatter plot with `carat` on the x-axis and `price` on the y-axis.
+10. Create a scatter plot with `carat` on the x-axis and `price` on the y-axis.
 
 
 
-13. In the previous plot, `geom_point()` plotted many points on top of each other, making it difficult for us to understand where most of the data lies. **Try using `geom_hex()` instead of `geom_point()` to make a more effective plot.**
+11. In the previous plot, `geom_point()` plotted many points on top of each other, making it difficult for us to understand where most of the data lies. **Try using `geom_hex()` instead of `geom_point()` to make a more effective plot.**
 
 
 
@@ -401,7 +402,7 @@ This graph shows not only that the larger the carat, the higher the price, but a
 
 There are many factors that determine the price of the diamond, including cut and color. In this data set, diamond colors are labeled D through J, where D represents a colorless or white diamond and J is slightly colored. Typically, the less color a diamond has, the higher its value. 
 
-14. Use `diamonds` to display median price and median carat by `color`. Your resulting tibble should have two columns: `color` and `median_price` and `median_carat`.
+12. Use `diamonds` to display median price and median carat by `color`. Your resulting tibble should have two columns: `color` and `median_price` and `median_carat`.
 
 ```{r cut-color}
 
@@ -427,7 +428,7 @@ Notice diamonds of color J are the most expensive, even though they are slightly
 Color and carat alone does not determine the price of a diamond. Another important attribute of a diamond is its cut, which can range from fair to ideal. Typically, the better the cut of a diamond, the higher its price. 
 
 
-15. How many diamonds of each cut are present in `j_diamonds`? Re-create the following table displaying the answer:
+13. How many diamonds of each cut are present in `j_diamonds`? Re-create the following table displaying the answer:
 
 ```{r j-diamonds-cut-display, echo=FALSE}
 diamonds %>% 
