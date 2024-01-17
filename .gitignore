@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 .RCheck/
+nogit_*
 
 *.key
 *lesson.html
