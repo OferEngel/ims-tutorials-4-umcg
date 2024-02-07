@@ -26,7 +26,7 @@ The goal of this lab is to introduce you to R and RStudio, which you'll be using
 
 
 ```{r r-r-studio, echo=FALSE, results="asis", out.width="80%"}
-knitr::include_graphics("img/R.png")
+knitr::include_graphics("img/R-and-Rstudio.png")
 ```
 
 This means that you will be working directly in the RStudio environment: all the menu points, typing and coding runs in RStudio. But the engine that performs the calculations is R, which will remain most of the time outside of view. 
@@ -66,9 +66,6 @@ knitr::include_graphics("img/global-options.jpg")
 ```
 
 :::
-
-
-1.  What command would you use to extract just the counts of girls baptized? Try it out in the console!
 
 
 
@@ -117,7 +114,12 @@ knitr::include_graphics("img/Rmarkdown-file.jpg")
 -   **The code chunks:** In an R Markdown file, `R` code appears in a gray box, which we call "code chunks." The R Markdown file knows that the gray box contains `R` code because it begins with three tick marks (\`\`\`), followed by two curly braces that contain a lowercase letter r ({r}). 
 
 
-Potentially the most important feature of R Markdown files is that they allow for us to embed our `R` code within a written report. 
+
+1.  Knit your RMarkdown file and observe the result in the form of a knitted report. Now change the following in your RMarkdown (a) In the YAML, identify the author's name and replace it with **your** name. (b) Replace the date to show **today's date**. (c) Identify the sentence "The lab specifications can be found here," and turn the word "here" into a link, (d) Add an image of the car dashboard (a metaphor for RStudio) and the car engine (a metaphor for R).
+
+
+
+One of the features of R Markdown files is that they allow for us to embed our `R` code within a written report. 
 
 Instead of typing our `R` code into the console, we encourage you to type any code you want to save in the `R` code chunk associated with each problem. You can execute the `R` code you type in these code chunks similar to how you typed code into the console and pressed enter/return. Within the code chunk there are a few ways to execute lines of `R` code: 
 
@@ -135,7 +137,7 @@ knitr::include_graphics("img/run-single-line.jpg")
 
 If at any point you need to start over and run all of the code chunks before a specific code chunk, you click on the "Fastforward" button in the upper right hand corner of that code chunk (gray upside down triangle with a bar below). This will run every code chunk that occurred *before* that code chunk, but *will not* execute the `R` code included in that code chunk.
 
-## Loading Dr. Arbuthnot's Baptism Records
+## The Arbuthnot dataset
 
 The Arbuthnot data set can be loaded into your environment and then explored, manipulated and visualized using the `read_csv` function. The data is stored in an object we call `arputhnot`. We store the data in our new object by using  an `r emo::ji("left_arrow")`.  
 
@@ -157,10 +159,12 @@ knitr::include_graphics("img/arbuth-env.jpg")
 
 
 
-
 <img style="float: right; margin: 0px 0px 20px 20px" src="img/Arbuthnot_John.jpg" alt="Portrait of John Arbuthnot by G Kneller" width="20%" height="20%">
 
-The Arbuthnot data set refers to the work of [Dr. John Arbuthnot](https://en.wikipedia.org/wiki/John_Arbuthnot), an 18<sup>th</sup> century physician, writer, and mathematician. He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. Once again, we can view the data by running the code below or by typing the name of the dataset into the console. Be careful the spelling and capitalization you use! `R` is case sensitive, so if you accidentally type `Arbuthnot` `R` will tell you that object cannot be found.
+The Arbuthnot data set refers to the work of [Dr. John Arbuthnot](https://en.wikipedia.org/wiki/John_Arbuthnot), an 18<sup>th</sup> century physician, writer, and mathematician. He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. 
+
+
+We can view the data by running the code below or by typing the name of the dataset into the console. Be careful the spelling and capitalization you use! `R` is case sensitive, so if you accidentally type `Arbuthnot` `R` will tell you that object cannot be found.
 
 
 
@@ -190,7 +194,9 @@ glimpse(arbuthnot)
 
 We can see that there are 82 observations and 3 variables in this dataset. The variable names are `year`, `boys`, and `girls`. At this point, you might notice that many of the commands in `R` look a lot like functions from math class; that is, invoking `R` commands means supplying a function with some number of inputs (what are called arguments) which the function uses to produce an output. The `glimpse()` command, for example, took a single argument, the name of a data frame and produced a display of the dataset as an output.
 
-## Some Exploration
+2. Load the `tidyverse` library into your environment, and then load the `arbuthnot` dataset. Now use the `glimpse` function to display its content, and the `dim` function to display its dimensions. Write down the variables associated with the dataset and the number of observations in your dataset.  
+
+## Data Exploration
 
 Let's start to examine the data a little more closely. We can access the data in a single column of a data frame by extracting the column with a `$`. For example, the code below extracts the `boys` column from the `arbuthnot` data frame.
 
@@ -200,7 +206,7 @@ arbuthnot$boys
 
 This command will only show the number of boys baptized each year. `R` interprets the `$` as saying "go to the data frame that comes before me, and find the variable that comes after me."
 
-1.  What command would you use to extract just the counts of girls baptized? Try it out in the console!
+3.  What command would you use to extract just the counts of girls baptized? Try it out in the console!
 
 Notice that the way `R` has printed these data is different. When we looked at the complete data frame, we saw 82 rows, one on each line of the display. These data have been extracted from the data frame, so they are no longer structured in a table with other variables. Instead, these data are displayed one right after another. Objects that print out in this way are called *vectors*; similar to the vectors you have seen in mathematics courses, vectors represent a list of numbers. `R` has added numbers displayed in [brackets] along the left side of the printout to indicate each entry's location within the vector. For example, 5218 follows `[1]`, indicating that `5218` is the first entry in the vector. If `[43]` was displayed at the beginning of a line, that indicate that the first number displayed on that line would correspond to the 43<sup>rd</sup> entry in that vector.
 
@@ -243,7 +249,7 @@ ggplot(data = arbuthnot, aes(x = year, y = girls)) +
 
 Use the plot to address the following question:
 
-1.  Is there an apparent trend in the number of girls baptized over the years? How would you describe it? (To ensure that your lab report is comprehensive, be sure to include the code needed to make the plot as well as your written interpretation.)
+4.  Create the plot and answer the following: is there an apparent trend in the number of girls baptized over the years? How would you describe it? 
 
 You might wonder how you are supposed to know the syntax for the `ggplot()` function. Thankfully, `R` documents all of its functions extensively. To learn what a function does and how to use it (e.g. the function's arguments), just type in a question mark followed by the name of the function that you're interested in into the console. Type the following in your console:
 
@@ -335,7 +341,7 @@ arbuthnot <- arbuthnot %>%
 
 Notice that rather than dividing by `boys + girls` we are using the `total` variable we created earlier in our calculations!
 
-3.  Now, generate a plot of the proportion of boys born over time. What do you see?
+5.  Now, generate a plot of the proportion of boys born over time. What do you see?
 
 <div>
 
@@ -354,7 +360,7 @@ This command adds a new variable to the `arbuthnot` data frame containing the va
 
 ## More Practice
 
-In the previous few pages, you recreated some of the displays and preliminary analysis of Arbuthnot's baptism data. Your assignment involves repeating these steps, but for present day birth records in the United States. The data are stored in a csv file within the `data` directory. Load the data frame in a similar way to 
+In the previous few pages, you recreated some of the displays and preliminary analysis of Arbuthnot's baptism data. Your assignment involves repeating these steps, but for present day birth records in the United States. The data are stored in a csv file within the `data` directory. Load the data frame in a similar way to the way we've loaded the arbuthnot dataset.
 
 ```{r load-present, eval=FALSE}
 # Here is the way we loaded the arbuthnot dataset
@@ -375,15 +381,15 @@ arbuthnot %>%
             )
 ```
 
-Answer the following questions with the `present` data frame:
+Answer the following questions with the `present` dataset:
 
-1.  What years are included in this data set? What are the dimensions of the data frame? What are the variable (column) names?
+6.  What years are included in this data set? What are the dimensions of the data frame? What are the variable names? How many observations are in your data?
 
-2.  How do these counts compare to Arbuthnot's? Are they of a similar magnitude?
+7.  How do these counts compare to Arbuthnot's? Are they of a similar magnitude?
 
-3.  Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot's observation about boys being born in greater proportion than girls hold up in the U.S.? Include the plot in your response. *Hint:* You should be able to reuse your code from Exercise 3 above, just replace the name of the data frame.
+8.  Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot's observation about boys being born in greater proportion than girls hold up in the U.S.? Include the plot in your response. *Hint:* You should be able to reuse your code from Exercise 3 above, just replace the name of the data frame.
 
-4.  In what year did we see the largest total number of births in the U.S.? *Hint:* First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the `total` column. You can do this interactively in the data viewer by clicking on the arrows next to the variable names. To include the sorted result in your report you will need to use two new functions. First we use `arrange()` to sorting the variable. Then we can arrange the data in a descending order with another function, `desc()`, for descending order. The sample code is provided below.
+9.  In what year did we see the largest total number of births in the U.S.? *Hint:* First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the `total` column. You can do this interactively in the data viewer by clicking on the arrows next to the variable names. To include the sorted result in your report you will need to use two new functions. First we use `arrange()` to sorting the variable. Then we can arrange the data in a descending order with another function, `desc()`, for descending order. The sample code is provided below.
 
 ```{r sample-arrange, eval=FALSE}
 present %>%

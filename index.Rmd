@@ -84,7 +84,10 @@ Succeeding in this course will be able to:
 -   Identify descriptive statistics for data exploration such as measures of spread and central tendency, measures of association and causation
 -   Recognize various graphical representations of data, their advantages, and disadvantages
 -   Fit a range of models such as linear least square regression (LLSR) and generalized linear models (GLM). 
--   Perform statistical inference using statistical inference, confidence intervals, and hypothesis testing procedures
+-   Perform statistical inference using statistical inference, confidence intervals, and hypothesis testing procedures. 
+
+
+Slides can all be downloaded from [this folder](https://bit.ly/3w8HEpv)
 
 
 ### Week 1 
