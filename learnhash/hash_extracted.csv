@@ -1,0 +1,222 @@
+Timestamp,Email,Name,StudentID,lesson,student_name,student_id,correct
+22/09/2023 21:10,o.engel@rug.nl,Ofer Engel,P301848,NA,error,NA,0
+27/09/2023 13:08,s.b.van.schaik@student.rug.nl,Sophie van Schaik,s3363937,1.1 Language of data,Sophie van Schaik,s3363927,5
+27/09/2023 15:36,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,1.2 Types of studies,Sophie van Schaik,s3363937,15
+27/09/2023 15:54,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,1.3 Case study,Sophie van Schaik,s3363937,3
+27/09/2023 15:57,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,S5565111,1.1 Language of data,Arturo Fermin Martinez Rodriguez,S5565111 ,5
+27/09/2023 18:34,m.l.lioliopoulou@student.rug.nl,Maria-Lydia Lioliopoulou,S5626250,1.1 Language of data,Maria-Lydia Lioliopoulou,S5626250,5
+28/09/2023 19:52,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,1.1 Language of data,Jana Wischnat,S5713072,5
+29/09/2023 10:26,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,1.2 Types of studies,Arturo Fermin Martinez Rodriguez,s5565111 ,12
+29/09/2023 22:27,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,1.2 Types of studies,Jana Wischnat,S5713072,15
+29/09/2023 22:48,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,1.3 Case study,Jana Wischnat,S5713072,3
+30/09/2023 12:42,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,1.1 Language of data,Silke Hoekstra,s3778606,5
+30/09/2023 13:16,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,1.2 Types of studies,Silke Hoekstra,s3778606,15
+30/09/2023 15:26,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,1.3 Case study,Silke Hoekstra,s3778606,3
+01/10/2023 03:05,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,1.1 Language of data,Mengqian Zhao,S5641942,5
+01/10/2023 13:45,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,1.2 Types of studies,Mengqian Zhao,S5641942,15
+01/10/2023 16:19,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,1.1 Language of data,Rina,S5709679,5
+01/10/2023 16:32,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,1.3 Case study,Mengqian Zhao,S5641942,3
+01/10/2023 17:32,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,1.2 Types of studies,Rina,S5709679,15
+01/10/2023 18:12,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,1.3 Case study,Rina,S5709679,3
+02/10/2023 09:25,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,1.3 Case study,Arturo Fermin Martinez Rodriguez,s5565111,3
+02/10/2023 17:06,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,1.1 Language of data,Jesse,s4162005,5
+02/10/2023 17:52,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,1.1 Language of data,Thi Tung Le Nguyen,S5556805,5
+02/10/2023 21:23,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,1.1 Language of data,Betty,S5476860,5
+02/10/2023 22:16,s.lemma@student.rug.nl,Sena Lemma,s4591917,1.1 Language of data,Sena Lemma ,s4591917,5
+02/10/2023 22:37,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,1.1 Language of data,Biniam S. Atnaf,S5554403,5
+03/10/2023 00:31,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,1.2 Types of studies,Biniam S. Atnaf,S5554403,11
+03/10/2023 01:16,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,1.3 Case study,Biniam S. Atnaf,S5554403,3
+03/10/2023 14:55,a.assemov@student.rug.nl,Ayat Assemov,S4767225,1.1 Language of data,Ayat Assemov,S4767225,5
+03/10/2023 15:49,a.assemov@student.rug.nl,Ayat Assemov,S4767225,1.2 Types of studies,Ayat Assemov,S4767225,15
+03/10/2023 16:17,a.assemov@student.rug.nl,Ayat Assemov,S4767225,1.3 Case study,Ayat Assemov,S4767225,3
+03/10/2023 18:11,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,1.2 Types of studies,Jesse Lindenhovius,s4162005,14
+03/10/2023 21:17,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,S4162005,1.3 Case study,Jesse Lindenhovius,S4162005,3
+03/10/2023 22:52,f.tazegun@student.rug.nl,fatima tazegun,S5621267,1.2 Types of studies,Fatima Tazegun,S5621267,13
+03/10/2023 22:56,f.tazegun@student.rug.nl,Fatima Tazegun,S5621267,1.3 Case study,Fatima Tazegun,S5621267,3
+03/10/2023 23:13,f.tazegun@student.rug.nl,fatima tazegun,S5621267,1.1 Language of data,Fatima Tazegun,S5621267,5
+04/10/2023 00:29,a.rykachevskaia@student.rug.nl,Aleksandra Rykachevskaia,s5649447,1.1 Language of data,Sasha Rykachevskaia,s5649447,5
+04/10/2023 01:34,a.rykachevskaia@student.rug.nl,Aleksandra Rykachevskaia,s5649447,1.2 Types of studies,Sasha Rykachevskaia,s5649447,15
+04/10/2023 01:51,a.rykachevskaia@student.rug.nl,Aleksandra Rykacchevskaia,s5649447,1.3 Case study,Aleksandra Rykachevskaia,s5649447,3
+04/10/2023 11:52,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,2.1 Visualizing categorical data,Sophie van Schaik,s3363937,11
+04/10/2023 19:11,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,2.1 Visualizing categorical data,Rina Sevcik,S5709679,11
+04/10/2023 23:27,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,2.1 Visualizing categorical data,Arturo Fermin Martinez Rodriguez,s5565111,11
+05/10/2023 22:00,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,2.2 Visualizing numerical data,Arturo Fermin Martinez Rodriguez,s5565111,4
+06/10/2023 00:13,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,2.1 Visualizing categorical data,Mengqian Zhao,S5641942,11
+06/10/2023 08:57,m.l.lioliopoulou@student.rug.nl,Maria Lydia Lioliopoulou,S5626250,2.1 Visualizing categorical data,Maria Lioliopoulou,S5626250,11
+06/10/2023 12:22,s.b.van.schaik@student.rug.nl,Sophie van Schaik,s3363937,2.4 Case study,Sophie van Schaik,s3363937,4
+06/10/2023 14:01,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,2.2 Visualizing numerical data,Rina Sevcik,S5709679,4
+06/10/2023 16:56,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,2.1 Visualizing categorical data,Biniam S. Atnaf,S5554403,11
+06/10/2023 17:03,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,2.3 Summarizing with statistics,Rina Sevcik,S5709679,16
+06/10/2023 21:31,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,2.2 Visualizing numerical data,Biniam S. Atnaf,S5554403,4
+07/10/2023 00:26,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,2.2 Visualizing numerical data,Mengqian Zhao,S5641942,4
+07/10/2023 10:43,m.l.lioliopoulou@student.rug.nl,Maria-Lydia Lioliopoulou,S5626250,2.2 Visualizing numerical data,Maria Lioliopoulou,S5626250,4
+07/10/2023 13:14,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,2.1 Visualizing categorical data,Silke Hoekstra,s3778606,11
+07/10/2023 13:43,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,2.1 Visualizing categorical data,Betty,S5476860,11
+07/10/2023 17:30,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,2.2 Visualizing numerical data,Silke Hoekstra,s3778606,4
+07/10/2023 19:01,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,2.2 Visualizing numerical data,Betty,S5476860,4
+08/10/2023 00:41,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,2.1 Visualizing categorical data,Thi Tung Le Nguyen,S5556805,11
+08/10/2023 12:16,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,2.1 Visualizing categorical data,Jana Wischnat,S5713072,11
+08/10/2023 13:33,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,2.2 Visualizing numerical data,Jana Wischnat,S5713072,4
+08/10/2023 18:01,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,2.3 Summarizing with statistics,Jana Wischnat,S5713072,16
+08/10/2023 20:23,m.l.lioliopoulou@student.rug.nl,Maria_Lydia Lioliopoulou,S5626250,2.3 Summarizing with statistics,Maria Lioliopoulou,S5626250,14
+08/10/2023 20:40,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,2.2 Visualizing numerical data,Thi Tung Le Nguyen,S5556805,4
+08/10/2023 21:28,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,2.4 Case study,Jana Wischnat,S5713072,4
+08/10/2023 21:29,m.l.lioliopoulou@student.rug.nl,Maria-Lydia Lioliopoulou,S5626250,2.4 Case study,Maria Lioliopoulou,S5626250,4
+08/10/2023 23:00,a.assemov@student.rug.nl,Ayat Assemov,S4767225,2.1 Visualizing categorical data,Ayat Assemov,S4767225,11
+08/10/2023 23:38,a.assemov@student.rug.nl,Ayat Assemov,S4767225,2.2 Visualizing numerical data,Ayat Assemov,S4767225,4
+08/10/2023 23:58,a.assemov@student.rug.nl,Ayat Asemov,S4767225,2.3 Summarizing with statistics,Ayat Assemov,S4767225,16
+09/10/2023 00:05,a.assemov@student.rug.nl,Ayat Assemov,S4767225,2.4 Case study,Ayat Assemov,S4767225,4
+09/10/2023 10:52,s.lemma@student.rug.nl,Sena Lemma,s4591917,2.1 Visualizing categorical data,Sena Lemma ,s4591917,11
+09/10/2023 15:00,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,2.3 Summarizing with statistics,Silke Hoekstra,s3778606,16
+09/10/2023 15:34,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,2.3 Summarizing with statistics,Thi Tung Le Nguyen,S5556805,16
+09/10/2023 15:39,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,2.4 Case study,Silke Hoekstra,s3778606,4
+09/10/2023 16:12,s.lemma@student.rug.nl,Sena Lemma,s4591917,2.2 Visualizing numerical data,Sena Lemma ,s4591917,4
+09/10/2023 16:36,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,2.3 Summarizing with statistics,Betty,S5476860,16
+09/10/2023 17:03,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,2.3 Summarizing with statistics,Biniam S. Atnaf,S5554403,16
+09/10/2023 17:24,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,2.1 Visualizing categorical data,Jesse Lindenhovius,s4162005,11
+09/10/2023 17:31,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,2.3 Summarizing with statistics,Arturo Fermin Martinez Rodriguez,s5565111,16
+09/10/2023 18:24,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,2.4 Case study,Rina Sevcik,S5709679,4
+09/10/2023 18:27,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,2.4 Case study,Thi Tung Le Nguyen,S5556805,4
+09/10/2023 18:45,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,2.3 Summarizing with statistics,Mengqian Zhao,S5641942,16
+09/10/2023 18:46,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,2.2 Visualizing numerical data,Jesse Lindenhovius,s4162005,4
+09/10/2023 19:36,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,2.4 Case study,Biniam S. Atnaf,S5554403,4
+09/10/2023 19:48,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,2.4 Case study,Arturo Fermin Martinez Rodriguez,s5565111,4
+09/10/2023 19:57,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,2.4 Case study,Mengqian Zhao,S5641942,4
+09/10/2023 21:04,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,2.4 Case study,Betty,S5476860,4
+09/10/2023 21:51,s.lemma@student.rug.nl,Sena Lemma,s4591917,2.3 Summarizing with statistics,Sena Lemma ,s4591917,15
+09/10/2023 22:15,f.tazegun@student.rug.nl,fatima tazegun,S5621267,2.1 Visualizing categorical data,Fatima Tazegun,S5621267,11
+09/10/2023 22:42,f.tazegun@student.rug.nl,Fatima tazegun,S5621267,2.2 Visualizing numerical data,Fatima Tazegun,S5621267,3
+09/10/2023 22:48,s.lemma@student.rug.nl,Sena Lemma,s4591917,2.4 Case study,Sena Lemma ,s4591917,4
+09/10/2023 23:00,f.tazegun@student.rug.nl,fatima tazegun,S5621267,2.3 Summarizing with statistics,Fatima Tazegun,S5621267,16
+09/10/2023 23:02,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,2.3 Summarizing with statistics,Jesse Lindenhovius,s4162005,16
+09/10/2023 23:08,f.tazegun@student.rug.nl,Fatima tazegun,S5621267,2.4 Case study,Fatima Tazegun,S5621267,4
+09/10/2023 23:44,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,2.4 Case study,Jesse Lindenhovius,s4162005,4
+10/10/2023 20:55,s.b.van.schaik@student.rug.nl,sophie van schaik,s336937,3.1 Sampling variability,Sophie van Schaik,s3363937,7
+14/10/2023 19:31,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,3.1 Sampling variability,Rina Sevcik,S5709679,7
+14/10/2023 21:00,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,3.1 Sampling variability,Betty,S5476860,7
+14/10/2023 21:59,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,3.1 Sampling variability,Silke Hoekstra,s3778606,7
+15/10/2023 12:44,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,3.1 Sampling variability,Mengqian Zhao,S5641942,7
+15/10/2023 20:38,m.l.lioliopoulou@student.rug.nl,Maria-Lydia Lioliopoulou,S5626250,3.1 Sampling variability,Maria Lydia Lioliopoulou,S5626150,7
+16/10/2023 18:39,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,3.1 Sampling variability,Jana Wischnat,S5713072,7
+16/10/2023 21:28,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,3.1 Sampling variability,Thi Tung Le Nguyen,S5556805,7
+16/10/2023 23:09,s.lemma@student.rug.nl,Sena Lemma,s4591917,3.1 Sampling variability,Sena Lemma ,s4591917,7
+17/10/2023 10:24,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,3.1 Sampling variability,Arturo Fermin Martinez Rodriguez,s5565111,7
+17/10/2023 16:37,a.assemov@student.rug.nl,Ayat Assemov,S4767225,3.1 Sampling variability,Ayat Assemov,S4767225,7
+17/10/2023 18:07,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,3.1 Sampling variability,Biniam S. Atnaf,S5554403,7
+17/10/2023 20:55,f.tazegun@student.rug.nl,fatima tazegun,S621267,3.1 Sampling variability,Fatima Tazegun,S5621267,7
+17/10/2023 23:21,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,3.1 Sampling variability,Jesse Lindenhovius,s4162005,7
+22/10/2023 12:22,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,4.2 Simple linear regression,Sophie van Schaik,s3363937,6
+22/10/2023 12:45,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,4.3 Interpreting regression models,Sophie van Schaik,s3363937,3
+22/10/2023 13:16,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,4.4 Model Fit,Sophie van Schaik,s3363937,4
+22/10/2023 13:33,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,4.5 Parallel slopes,Sophie van Schaik,s3363937,3
+23/10/2023 16:46,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,4.2 Simple linear regression,Thi Tung Le Nguyen,S5556805,6
+23/10/2023 19:29,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,4.2 Simple linear regression,Jana Wischnat,S5713072,6
+23/10/2023 20:09,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,4.2 Simple linear regression,Rina Sevcik,S5709679,6
+23/10/2023 20:57,m.l.lioliopoulou@student.rug.nl,Maria Lydia Lioliopoulou,S5626250,4.2 Simple linear regression,Maria Lydia Lioliopoulou,S5626250,5
+23/10/2023 22:06,m.l.lioliopoulou@student.rug.nl,Maria Lydia Lioliopoulou,S5626250,4.3 Interpreting regression models,Maria Lydia Lioliopoulou,S5626250,3
+23/10/2023 22:36,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,4.2 Simple linear regression,Betty,S5476860,6
+23/10/2023 23:33,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,4.2 Simple linear regression,Biniam S. Atnaf,S5554403,5
+24/10/2023 01:05,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,4.2 Simple linear regression,Mengqian Zhao,S5641942,6
+24/10/2023 01:43,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,4.3 Interpreting regression models,Biniam S. Atnaf,S5554403,3
+24/10/2023 10:37,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,4.3 Interpreting regression models,Mengqian Zhao,S5641942,3
+24/10/2023 11:00,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,4.2 Simple linear regression,Silke Hoekstra,s3778606,5
+24/10/2023 11:05,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,4.3 Interpreting regression models,Jana Wischnat,S5713072,3
+24/10/2023 11:35,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,4.3 Interpreting regression models,Silke Hoekstra,s3778606,3
+24/10/2023 12:40,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,4.4 Model Fit,Silke Hoekstra,s3778606,4
+24/10/2023 12:48,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,4.4 Model Fit,Jana Wischnat,S5713072,4
+24/10/2023 13:38,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,4.3 Interpreting regression models,Sophie van Schaik,s3363937,3
+24/10/2023 13:38,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,4.2 Simple linear regression,Arturo Fermin Martinez Rodriguez,s5565111,5
+24/10/2023 13:40,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,4.5 Parallel slopes,Jana Wischnat,S5713072,3
+24/10/2023 13:50,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,4.5 Parallel slopes,Silke Hoekstra,s3778606,3
+24/10/2023 16:00,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,4.3 Interpreting regression models,Arturo Fermin Martinez Rodriguez,s5565111,3
+24/10/2023 16:21,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,4.4 Model Fit,Biniam S. Atnaf,S5554403,4
+24/10/2023 16:38,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,4.4 Model Fit,Mengqian Zhao,S5641942,4
+24/10/2023 16:57,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,4.2 Simple linear regression,Jesse Lindenhovius,s4162005,5
+24/10/2023 17:01,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,4.3 Interpreting regression models,Thi Tung Le Nguyen,S5556805,3
+24/10/2023 17:13,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,4.5 Parallel slopes,Mengqian Zhao,S5641942,3
+24/10/2023 17:29,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,4.3 Interpreting regression models,Jesse Lindenhovius,s4162005,3
+24/10/2023 17:40,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,4.3 Interpreting regression models,Rina Sevcik ,S5709679,3
+24/10/2023 18:25,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,4.4 Model Fit,Jesse Lindenhovius,s4162005,4
+24/10/2023 18:41,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,4.4 Model Fit,Rina Sevcik,S5709679,4
+24/10/2023 18:50,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,4.5 Parallel slopes,Jesse Lindenhovius,s4162005,3
+24/10/2023 18:58,a.assemov@student.rug.nl,Ayat Assemov,S4767225,4.2 Simple linear regression,Ayat Assemov,S4767225,6
+24/10/2023 19:02,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,4.4 Model Fit,Arturo Fermin Martinez Rodriguez,s5565111,4
+24/10/2023 19:04,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,4.3 Interpreting regression models,Betty,S5476860,3
+24/10/2023 19:06,a.assemov@student.rug.nl,Ayat Assemov,S4767225,4.3 Interpreting regression models,Ayat Assemov,S4767225,2
+24/10/2023 19:10,a.assemov@student.rug.nl,Ayat Assemov,S4767225,4.4 Model Fit,Ayat Assemov,S4767225,4
+24/10/2023 19:15,a.assemov@student.rug.nl,Ayat Assemov,S4767225,4.5 Parallel slopes,Ayat Assemov,S4767225,3
+24/10/2023 19:34,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,4.5 Parallel slopes,Rina Sevcik,S5709679,3
+24/10/2023 20:03,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,4.4 Model Fit,Thi Tung Le Nguyen,S5556805,4
+24/10/2023 20:10,m.l.lioliopoulou@student.rug.nl,Maria Lydia Lioliopoulou,S5626250,4.4 Model Fit,Maria Lydia Lioliopoulou,S5626250,4
+24/10/2023 20:11,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,4.5 Parallel slopes,Arturo Fermin Martinez Rodriguez,s5565111,3
+24/10/2023 20:58,m.l.lioliopoulou@student.rug.nl,Maria Lydia Lioliopoulou,S5626250,4.5 Parallel slopes,Maria Lydia Lioliopoulou,S5626250,3
+24/10/2023 20:59,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,4.4 Model Fit,Betty,G5476860,4
+24/10/2023 21:51,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,4.5 Parallel slopes,Biniam S. Atnaf,S5554403,3
+24/10/2023 22:16,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,S5476860,4.5 Parallel slopes,Betty M,S5476860,3
+24/10/2023 23:02,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,4.5 Parallel slopes,Thi Tung Le Nguyen,S5556805,3
+24/10/2023 23:19,f.tazegun@student.rug.nl,fatima tazegun,S5621267,4.2 Simple linear regression,Fatima Tazegun,S5621267,4
+24/10/2023 23:27,f.tazegun@student.rug.nl,Fatima tazegun,S5621267,4.3 Interpreting regression models,Fatima Tazegun,S5621267,3
+24/10/2023 23:34,f.tazegun@student.rug.nl,Fatima tazegun,s5621267,4.4 Model Fit,Fatima Tazegun,S5621267,4
+24/10/2023 23:42,f.tazegun@student.rug.nl,fatima tazegun,s5621267,4.5 Parallel slopes,Fatima Tazegun,S5621267,3
+27/10/2023 14:33,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,4.6 Evaluating and extending parallel slopes model,Sophie van Schaik,s3363937,2
+27/10/2023 16:52,s.lemma@student.rug.nl,Sena Lemma,s4591917,4.6 Evaluating and extending parallel slopes model,Sena Lemma ,s4591917,2
+27/10/2023 17:02,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,4.7 Multiple regressions,Sophie van Schaik,s3363937,4
+27/10/2023 17:47,s.lemma@student.rug.nl,Sena Lemma,s459197,4.7 Multiple regressions,Sena Lemma ,s4591917,4
+29/10/2023 11:02,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,s5476860,4.6 Evaluating and extending parallel slopes model,Betty,S5476860,2
+29/10/2023 12:35,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,4.6 Evaluating and extending parallel slopes model,Mengqian Zhao,S5641942,2
+30/10/2023 00:11,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,4.7 Multiple regressions,Mengqian Zhao,S5641942,4
+30/10/2023 09:02,m.l.lioliopoulou@student.rug.nl,Maria Lydia Lioliopoulou,S5626250,4.6 Evaluating and extending parallel slopes model,Maria Lydia Lioliopoulou,S5626250,2
+30/10/2023 12:13,s.hoekstra.12@student.rug.nl,Silke Hoekstra,S3778606,4.6 Evaluating and extending parallel slopes model,Silke Hoekstra,s3778606,2
+30/10/2023 12:58,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,4.7 Multiple regressions,Silke Hoekstra,s3778606,4
+30/10/2023 18:22,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,4.6 Evaluating and extending parallel slopes model,Jana Wischnat,S5713072,2
+30/10/2023 22:02,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,4.6 Evaluating and extending parallel slopes model,Biniam S. Atnaf,S5554403,2
+31/10/2023 01:17,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,4.7 Multiple regressions,Biniam S. Atnaf,S5554403,4
+31/10/2023 08:41,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,s5476860,4.7 Multiple regressions,Betty,s5476860,4
+31/10/2023 10:46,m.l.lioliopoulou@student.rug.nl,Maria Lydia Lioliopoulou,S5626250,4.7 Multiple regressions,Maria Lydia Lioliopoulou,S5626250,4
+31/10/2023 13:03,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,4.6 Evaluating and extending parallel slopes model,Arturo Fermin Martinez Rodriguez,s5565111,2
+31/10/2023 18:47,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,4.6 Evaluating and extending parallel slopes model,Rina Sevcik,S5709679,2
+31/10/2023 18:47,a.assemov@student.rug.nl,Ayat Assemov,S4767225,4.6 Evaluating and extending parallel slopes model,Ayat Assemov,S4767225,2
+31/10/2023 18:56,a.assemov@student.rug.nl,Ayat Assemov,S4767225,4.7 Multiple regressions,Ayat Assemov,S4767225,4
+31/10/2023 19:54,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,4.7 Multiple regressions,Rina Sevcik,S5709679,4
+31/10/2023 20:29,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,4.6 Evaluating and extending parallel slopes model,Thi Tung Le Nguyen,S5556805,2
+31/10/2023 21:25,j.i.wischnat@student.rug.nl,Jana Isabel Wischnat,S5713072,4.7 Multiple regressions,Jana Wischnat,S5713072,4
+31/10/2023 23:04,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,4.6 Evaluating and extending parallel slopes model,Jesse Lindenhovius,s4162005,2
+31/10/2023 23:32,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,4.7 Multiple regressions,Arturo Fermin Martinez Rodriguez,s5565111,4
+31/10/2023 23:37,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,4.7 Multiple regressions,Jesse Lindenhovius,s4162005,4
+31/10/2023 23:51,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,4.7 Multiple regressions,Thi Tung Le Nguyen,S5556805,4
+01/11/2023 02:32,a.rykachevskaia@student.rug.nl,Aleksandra Rykachevskaia,s5649447,4.6 Evaluating and extending parallel slopes model,Sasha Rykachevskaia,s5649447,2
+01/11/2023 02:50,a.rykachevskaia@student.rug.nl,Aleksandra Rykachevskaia,s5649447,4.7 Multiple regressions,Sasha Rykachevskaia,s5649447,4
+05/11/2023 12:21,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,4.8 Logistic regression,Sophie van Schaik,s3363937,0
+05/11/2023 12:33,s.b.van.schaik@student.rug.nl,sophie van schaik,s3363937,4.9 Case study: Italian restaurants in NYC,Sophie van Schaik,s3363937,4
+06/11/2023 15:20,a.assemov@student.rug.nl,Ayat Assemov,S4767225,4.8 Logistic regression,Ayat Assemov,S4767225,0
+06/11/2023 15:51,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,4.8 Logistic regression,Mengqian Zhao,S5641942,0
+06/11/2023 22:26,m.l.lioliopoulou@student.rug.nl,Maria Lydia Lioliopoulou,S5626250,4.8 Logistic regression,Maria Lydia Lioliopoulou,S5626250,0
+07/11/2023 14:16,s.lemma@student.rug.nl,Sena Lemma,s4591917,4.8 Logistic regression,Sena Lemma ,s4591917,0
+07/11/2023 14:54,s.lemma@student.rug.nl,Sena Lemma,s4591917,4.9 Case study: Italian restaurants in NYC,Sena Lemma ,s4591917,4
+07/11/2023 16:36,m.zhao.15@student.rug.nl,Mengqian Zhao,S5641942,4.9 Case study: Italian restaurants in NYC,Mengqian Zhao,S5641942,4
+07/11/2023 16:39,a.assemov@student.rug.nl,Ayat Assemov,S4767225,4.9 Case study: Italian restaurants in NYC,Ayat Assemov,S4767225,4
+07/11/2023 17:17,b.s.atnaf@student.rug.nl,Biniam Solomon Atnaf,S5554403,4.8 Logistic regression,Biniam S. Atnaf,S5554403,0
+07/11/2023 18:40,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,s5476860,4.8 Logistic regression,Betty M,s5476860,0
+07/11/2023 19:47,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,4.8 Logistic regression,Rina Sevcik,S5709679,0
+07/11/2023 20:01,m.l.lioliopoulou@student.rug.nl,Maria Lydia Lioliopoulou,S5626250,4.9 Case study: Italian restaurants in NYC,Maria Lydia Lioliopoulou,S5626250,4
+07/11/2023 20:28,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba,s5476860,4.9 Case study: Italian restaurants in NYC,Betty M,s5476860,4
+07/11/2023 21:18,s.hoekstra.12@student.rug.nl,Silke Hoekstra,s3778606,4.8 Logistic regression,Silke Hoekstra,s3778606,0
+07/11/2023 21:44,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,4.8 Logistic regression,Jesse Lindenhovius,s4162005,0
+07/11/2023 21:55,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,4.8 Logistic regression,Arturo Fermin Martinez Rodriguez,s5565111,0
+07/11/2023 22:10,b.s.atnaf@student.rug.nl,Biniam S Atnaf,S5554403,4.9 Case study: Italian restaurants in NYC,Biniam S. Atnaf,S5554403,4
+07/11/2023 22:44,a.f.martinez.rodriguez@student.rug.nl,Arturo Fermin Martinez Rodriguez,s5565111,4.9 Case study: Italian restaurants in NYC,Arturo Fermin Martinez Rodriguez,s5565111,4
+07/11/2023 22:49,f.tazegun@student.rug.nl,fatima tazegun,S5621267,4.8 Logistic regression,Fatima Tazegun,S5621267,0
+07/11/2023 22:58,f.tazegun@student.rug.nl,Fatima tazegun,S5621267,4.9 Case study: Italian restaurants in NYC,Fatima Tazegun,S5621267,4
+07/11/2023 23:34,j.lindenhovius@student.rug.nl,Jesse Lindenhovius,s4162005,4.9 Case study: Italian restaurants in NYC,Jesse Lindenhovius,s4162005,4
+07/11/2023 23:57,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,4.8 Logistic regression,Thi Tung Le Nguyen,S5556805,0
+08/11/2023 00:13,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,4.9 Case study: Italian restaurants in NYC,Thi Tung Le Nguyen,S5556805,4
+09/11/2023 14:25,k.j.sevcik@student.rug.nl,Rina Sevcik,S5709679,4.9 Case study: Italian restaurants in NYC,Rina Sevcik,S5709679,4
+13/12/2023 16:01,i.r.holtman@rug.nl,Inge,P7777777,4.9 Case study: Italian restaurants in NYC,kasjncskja,eksjnvskjd,5
+04/10/2023 11:52,m.l.lioliopoulou@student.rug.nl,Maria-Lydia Lioliopoulou (email),S5626250,1.2 Types of studies,Maria Lioliopoulou,S5626250,3
+04/10/2023 11:52,m.l.lioliopoulou@student.rug.nl,Maria-Lydia Lioliopoulou (email),S5626250,1.3 Case study,Maria Lioliopoulou,S5626250,13
+04/10/2023 11:52,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba (email),S5476860,1.2 Types of studies,Betty,S5476860,15
+04/10/2023 11:52,b.m.daba@student.rug.nl,Bethlehem Mesfin Daba (email),S5476860,1.3 Case study,Betty,S5476860,3
+04/10/2023 11:52,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,1.2 Types of studies,Thi Tung Le Nguyen,S5556805,15
+04/10/2023 11:52,t.t.l.nguyen.2@student.rug.nl,Thi Tung Le Nguyen,S5556805,1.3 Case study,Thi Tung Le Nguyen,S5556805,3
+04/10/2023 11:52,s.lemma@student.rug.nl,Sena Lemma,s4591917,1.2 Types of studies,Sena Lemma ,s4591917,15
+04/10/2023 11:52,s.lemma@student.rug.nl,Sena Lemma,s4591917,1.3 Case study,Sena Lemma ,s4591917,3

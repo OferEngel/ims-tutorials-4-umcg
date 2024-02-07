@@ -83,80 +83,39 @@ Succeeding in this course will be able to:
 -   Use a modern suite of software packages for statistics and data science
 -   Identify descriptive statistics for data exploration such as measures of spread and central tendency, measures of association and causation
 -   Recognize various graphical representations of data, their advantages, and disadvantages
--   Fit a range of models such as linear least square regression (LLSR) and generalized linear models (GLM). 
+-   Fit a range of models such as the chi-square, the t-test, variance analysis, linear least square regression (LLSR) and generalized linear models (GLM). 
 -   Perform statistical inference using statistical inference, confidence intervals, and hypothesis testing procedures
 
 
-### Week 1 
 
-Preparation **Deadline:** 8 February 2024 
+### Preparation readings and videos
 
--   Readiness Assurance found [here](https://bit.ly/488ZIwV) 
+You will find all the readings and lectures in your the [Perusall course home](https://app.perusall.com/courses/cpe-medical-statistics).  
 
-In class: Lab 01 - Introduction to R and RStudio found [here](https://bit.ly/3w8DPk9)
+### Tutorials
 
+<img style="float: right; margin: 0px 0px 20px 20px" src="logo/umcg.png" alt="Tutorial illustration" width="20%" height="20%">
 
-### Week 2 
+The following tutorials are due on the Tuesday, a day before our first weekly sessions.  
 
-Preparation **Deadline:** 15 February 2024 
+-   ~~[Week 1: Introduction to data](01-data/) - **deadline 03-Oct-23**~~
+-   ~~[Week 2: Exploratory data analysis](02-explore/) - **deadline MONDAY!!! 09-Oct-23**~~
+-   ~~[Week 3: Sampling variability](https://oferengel-posit.shinyapps.io/04-01-lesson/) **deadline 17-Oct-23**~~
+-   ~~[Week 4: Simple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/03-model/)  **deadline 24-Oct-23**~~
+-   ~~[Week 5: Multiple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/03-model/index_02.html)  **deadline 31-Oct-23**~~
+-   ~~[Week 6: Generalized linear models](https://oferengel.github.io/ims-tutorials-4-umcg/03-model/index_03.html) **deadline 07-Nov-23**~~
 
--   Please complete this week's tutorials (three tutorials) [here](https://bit.ly/3OzsqAb) 
--   Watch the lecture and add your comments [here](https://bit.ly/3OvGDhy)
--   Readiness Assurance found [here](https://bit.ly/48axDW3) 
+### Labs 
 
+Only three labs are due for submission, but the rest will prepare you for them.
 
-In class: Lab 02 - Exploring numeric data
-<!-- https://www.stat.uchicago.edu/~yibi/s220/labs/lab02.html -->
-
-
-### Week 3 
-
-Preparation **Deadline:** 22 February 2024 
-
--   Please complete this week's tutorials (three tutorials)  
--   Watch the lecture and add your comments! 
--   Readiness Assurance
-
-In class: Lab 03 - Simple linear regression
-
-
-
-### Week 4 
-
-Preparation **Deadline:** 3 March 2024 
-
--   Please complete this week's tutorials (three tutorials)  
--   Watch the lecture and add your comments 
--   Readiness Assurance  
-
-In class: Lab 04 - Multiple linear regression
-
-
-
-### Week 5 
-
-Preparation **Deadline:** 13 March 2024 
-
--   Please complete this week's tutorials (three tutorials)  
--   Watch the lecture and add your comments 
--   Readiness Assurance  
-
-In class: Lab 05 - Logistic regression
-
-
-
-### Week 6 
-
-Preparation **Deadline:** 24 March 2024 
-
--   Please complete this week's tutorials (three tutorials)  
--   Watch the lecture and add your comments 
--   Readiness Assurance  
-
-In class: Lab 06 - Review and advanced topics
-
-
-
+-   ~~Lab 1: [Introduction to R and RStudio](support/assignments/01_intro_to_r/)~~ 
+-  ~~Lab 2: [Intro to data](support/assignments/02_intro_to_data/)~~
+-  ~~Lab 3: [Confidence intervals](https://oferengel-posit.shinyapps.io/LAB_Confidence_intervals/) **INDIVIDUAL deadline 20-Oct-23**~~
+-   ~~Lab 4: [Simple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/04_SLR/)  **GROUP deadline 03-Nov-23**~~
+-   ~~Lab 5: [Multiple linear least square regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/05_MLR/)~~ **GROUP deadline 10-Nov-23**  
+-   ~~Lab 6: [Generalized linear models](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/06_logistic/)~~ **GROUP deadline 17-Nov-23**
+-   Lab 7: [Multilevel models](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/07_MIXED/) **GROUP deadline 24-Nov-23**
 
 
 

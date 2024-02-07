@@ -10,21 +10,34 @@ output:
 ---
 
 ```{r global_options, include = FALSE}
-knitr::opts_chunk$set(eval = TRUE, results = "as.is", fig.align = "center", message = "false")
-library(tidyverse)
+knitr::opts_chunk$set(eval = TRUE, results = "as.is", fig.align = "center", message = "false", echo="false")
+library(tidyverse, quietly = TRUE)
+conflicted::conflicts_prefer(dplyr::filter, dplyr::lag, .quiet = TRUE)
+library(emo)
 # library(openintro)
 ```
 
 
-The goal of this lab is to introduce you to R and RStudio, which you'll be using throughout the course both to learn the statistical concepts discussed in the course and to analyze real data and come to informed conclusions. To clarify which is which: `R` is the name of the programming language itself and RStudio is a convenient interface for working with `R` .
+The goal of this lab is to introduce you to R and RStudio, which you'll be using throughout the course both to learn the statistical concepts discussed in the course and to analyze real data and come to informed conclusions. To clarify which is which: `R` is the name of the programming language itself and RStudio is a convenient interface for working with `R` . Think of it like this: 
+
+-   R is like a car’s engine,
+-   RStudio is like a car’s dashboard
+
+
+
+```{r r-r-studio, echo=FALSE, results="asis", out.width="80%"}
+knitr::include_graphics("img/R.png")
+```
+
+This means that you will be working directly in the RStudio environment: all the menu points, typing and coding runs in RStudio. But the engine that performs the calculations is R, which will remain most of the time outside of view. 
 
 We will be using a cloud version of RStudio, to do this, follow the steps below: 
 
--   Use this link to connect to [posit cloud](https://bit.ly/46plCeQ).
+-   Use this link to connect to [posit cloud](https://bit.ly/3UwdHd2).
 -   Sign up with your RUG Google account
 -   Click on "Lab 01: Introduction to R and RStudio"
 
-You should see a window that looks like the image shown below.
+You should see a window that looks more or less like the image shown below.
 
 ```{r r-interface-2023, echo=FALSE, results="asis", out.width="80%"}
 knitr::include_graphics("img/r-interface-2023.jpg")
@@ -32,19 +45,21 @@ knitr::include_graphics("img/r-interface-2023.jpg")
 
 
 
--   **Panel (1)** on the left is where the action happens. This panel is called the *console*. Every time you launch RStudio, it will have the same text at the top of the console telling you the version of R that you're running.
-    +   Below that information is the *prompt*, indicated by the `>` symbol. As its name suggests, this prompt is really a request: a request for a command. Initially, interacting with `R` is all about typing commands and interpreting the output. 
+-   **Panel (1)** on the left is where the action *happens. This panel is called the *console* or sometomes the *command window*. Every time you launch RStudio, it will have the same text at the top of the console telling you the version of R that you're running.
+    +   Below that information is the *prompt*, indicated by the `>` symbol. As its name suggests, this prompt is really a request for a command. Initially, interacting with `R` is all about typing commands and interpreting the output. In a sense, this is the most important window, because this is where R actually does stuff.
+    + Instead of a single pane, the left side of the screen can contain two panes: a *console* (on the bottom) and a *script window* at the top. The script window can contain a batch of printed commands (scripts), which you can edit and save. If you cannot see this window, you can open it by clicking on `File` `r emo::ji("point_right")` `New` `R script`. Just typing a command in the editor window does not run it. The command must get into the command window before R executes the command. If you want to run a line from the script window (or the whole script), you can click Run or press CTRL+ENTER to send it to the command window.
 
 -   **Panel (2)** in the upper right contains your *environment* as well as a history of the commands that you've previously entered.
 
 -   **Panel (3)** in the lower right contains tabs for browse the *files* in your project folder, access *help* files for `R` functions, install and manage `R` *packages*, and inspecting visualizations. By default, all data visualizations you make will appear directly below the code you used to create them. 
 
 :::{#boxedtext}
-Before starting, we recommend that you configure your RStudio environment with the follwoing global options First, go to the menu point `Tools->Global Options`. Then make sure the following checkboxes are left **unchecked**. 
+Before starting, we recommend that you configure your RStudio environment with the follwoing global options First, go to the menu point `Tools` `r emo::ji("point_right")` `Global Options`. Then make sure the following checkboxes are left **unchecked**. 
 
 -   In the `General` panel, the three `restore` options are unchecked, 
 -   In the same panel, all checkboxes in the `History` section are unchecked, and the  `Save workspace to .RData on exit` is set to `Never`.
 -   In the `R Markdown` panel, check that the `Show output inline` is also unchecked. 
+-   Finally, under `Code`  `r emo::ji("point_right")` `Display`  `r emo::ji("point_right")` `Syntax`   check `Use rainbow parantheses`.
 
 ```{r config-global-options, results='asis', fig.align='center', echo=FALSE}
 knitr::include_graphics("img/global-options.jpg")
@@ -52,6 +67,8 @@ knitr::include_graphics("img/global-options.jpg")
 
 :::
 
+
+1.  What command would you use to extract just the counts of girls baptized? Try it out in the console!
 
 
 
@@ -118,9 +135,9 @@ knitr::include_graphics("img/run-single-line.jpg")
 
 If at any point you need to start over and run all of the code chunks before a specific code chunk, you click on the "Fastforward" button in the upper right hand corner of that code chunk (gray upside down triangle with a bar below). This will run every code chunk that occurred *before* that code chunk, but *will not* execute the `R` code included in that code chunk.
 
-## Dr. Arbuthnot's Baptism Records
+## Loading Dr. Arbuthnot's Baptism Records
 
-To get started, let's take a peek at the data. The data file is 
+The Arbuthnot data set can be loaded into your environment and then explored, manipulated and visualized using the `read_csv` function. The data is stored in an object we call `arputhnot`. We store the data in our new object by using  an `r emo::ji("left_arrow")`.  
 
 ```{r load-abrbuthnot-data, error=FALSE, message=FALSE, warning=FALSE}
 arbuthnot <- read_csv("data/arbuthnot.csv")
@@ -135,13 +152,13 @@ Again, you can run the code above by:
 The single line of code included in this code chunk instructs `R` to load some data: the Arbuthnot baptism counts for boys and girls. You should see that the *Environment* tab in the upper right hand corner of the RStudio window now lists a data set called `arbuthnot` that has 82 observations on 3 variables. 
 
 ```{r img-arbuth-env, out.width="40%", echo=FALSE}
-knitr::include_graphics("img/arbuth-env.jpg")d
+knitr::include_graphics("img/arbuth-env.jpg")
 ```
 
 
 
 
-<img style="float: right; margin: 0px 0px 20px 20px" src="img/Arbuthnot_John.jpg" alt="Portrait of John Arbuthnot by G Kneller" width="10%" height="10%">
+<img style="float: right; margin: 0px 0px 20px 20px" src="img/Arbuthnot_John.jpg" alt="Portrait of John Arbuthnot by G Kneller" width="20%" height="20%">
 
 The Arbuthnot data set refers to the work of [Dr. John Arbuthnot](https://en.wikipedia.org/wiki/John_Arbuthnot), an 18<sup>th</sup> century physician, writer, and mathematician. He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. Once again, we can view the data by running the code below or by typing the name of the dataset into the console. Be careful the spelling and capitalization you use! `R` is case sensitive, so if you accidentally type `Arbuthnot` `R` will tell you that object cannot be found.
 
@@ -252,7 +269,7 @@ arbuthnot$boys + arbuthnot$girls
 
 What you will see is a list of 82 numbers. These numbers appear as a list, because we are working with vectors rather than a data frame. Each number represents the sum of how many boys and girls were baptized that year. You can take a look at the first few rows of the `boys` and `girls` columns to see if the calculation is right.
 
-### Adding a new variable to the data frame
+### Adding variables
 
 We are interested in using this new vector of the total number of baptisms to generate some plots, so we'll want to save it as a permanent column in our data frame. We can do this using the following code:
 
@@ -375,11 +392,9 @@ present %>%
 
 These data come from reports by the Centers for Disease Control. You can learn more about them by bringing up the help file using the command `?present`.
 
-## Resources for learning R and working in RStudio
+## More resources 
 
-That was a short introduction to R and RStudio, but we will provide you with more functions and a more complete sense of the language as the course progresses.
-
-In this course we will be using the suite of R packages from the **tidyverse**. The book [R For Data Science](https://r4ds.had.co.nz/) by Grolemund and Wickham is a fantastic resource for data analysis in R with the tidyverse. If you are searching for R code, make sure to also include these package names in your search query. For example, instead of searching "scatterplot in R", Goggle "scatterplot in R with the tidyverse".
+That was a short introduction to R and RStudio, but you can find more resources for learning R and RStudio on the web. Throughout the course we will be using the suite of R packages from the **tidyverse**. The book [R For Data Science](https://r4ds.had.co.nz/) by Grolemund and Wickham is a fantastic resource for data analysis in R with the tidyverse. If you are searching for R code, make sure to also include these package names in your search query. For example, instead of searching "scatterplot in R", Goggle "scatterplot in R with the tidyverse".
 
 These may come in handy throughout the semester:
 
