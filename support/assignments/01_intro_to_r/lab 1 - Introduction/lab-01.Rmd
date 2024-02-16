@@ -1,7 +1,7 @@
 ---
-title: "Lab Name"
-author: "Author Name"
-date: "`r Sys.Date()`"
+title: "Lab 1: Intro to R"
+author: "Author's Name"
+date: "Today's date here"
 output: 
   html_document:
     highlight: "pygments"
@@ -12,33 +12,191 @@ output:
     df_print: paged
 ---
 
-```{r load-packages, message=FALSE}
-library(tidyverse)
-arbuthnot <- read_csv("data/arbuthnot.csv")
-```
+
+The goal of this lab is to introduce you to R and RStudio, which you'll be using throughout the course both to learn the statistical concepts discussed in the course and to analyze real data and come to informed conclusions. The lab specifications can be found here.
+
+
+To clarify which is which: `R` is the name of the programming language itself and RStudio is a convenient interface for working with `R` . Think of it like this: 
+
+-   R is like a car’s engine,
+-   RStudio is like a car’s dashboard
+
+<!-- please insert an image below -->
+
 
 ### Exercise 1
 
-Insert any text here.
+Knit your RMarkdown file and observe the result in the form of a knitted report. Now change the following in your RMarkdown (a) In the YAML, identify the author's name and replace it with **your** name. (b) Replace the date to show **today's date**. (c) Identify the sentence "The lab specifications can be found here," and turn the word "here" into a link, (d) Add an image of the car dashboard (a metaphor for RStudio) and the car engine (a metaphor for R).
 
-```{r code-ex1}
-# Insert code for Exercise 1 here
-arbuthnot$boys
 
-```
+
+
+## The `arbuthnot` dataset
+
+The Arbuthnot data set refers to the work of [Dr. John Arbuthnot](https://en.wikipedia.org/wiki/John_Arbuthnot), an 18<sup>th</sup> century physician, writer, and mathematician. He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. 
 
 ### Exercise 2
 
-Insert any text here.
+Load the `tidyverse` library into your environment, and then load the `arbuthnot` dataset. Now use the `glimpse` function to display its content, and the `dim` function to display its dimensions. Write down the variables associated with the dataset and the number of observations in your dataset.  
 
-```{r code-code-ex2}
-# Insert code for Exercise 1 here
+
+```{r load-data, message=FALSE}
+# Load the tidyverse library below
+
+
+# load the data into the environment
+
+
+# Use `glimpse` function to inspect your dataset below
+
+
+# Use the `dim` function to see the dimensions of your dataset 
+
+
+
+
+
 ```
+
+
+**Answer**: There are _____ variables in the arbuthnot dataset. The names of the variables are: `____`, `____` and `____`. The dataset consists of ____ observations (rows).
+
+
 
 ### Exercise 3
 
-Insert any text here.
+What command would you use to extract just the counts of girls baptized? Try it out in the console!
 
-```{r code-chunk-label3}
-# Insert code for Exercise 1 here
+**Answer**: To extract the counts of baptized girls, we need to use the following command: _____________.
+
+
+### Exercise 4
+
+Create the plot and answer the following: is there an apparent trend in the number of girls baptized over the years? How would you describe it? 
+
+```{r trend-girls}
+# Insert code below
+
+
+
+
 ```
+
+
+**Answer**: ________
+
+
+### Exercise 5
+
+Now, generate a plot of the proportion of boys born over time. What do you see?
+
+```{r plot-prop-boys-arbuthnot}
+# Insert code below
+
+
+
+```
+
+
+**Answer**: ________
+
+
+
+## The`present` dataset
+
+Answer the following questions with the `present` dataset:
+
+
+
+### Exercise 6
+
+What years are included in this data set? What are the dimensions of the data frame? What are the variable names? How many observations are in your data?
+
+```{r present-dataset}
+# We already loaded the tidyverse library
+# so we do not need to do this again. 
+# However, we do need to load the new data into the environment
+# Insert code below
+
+
+
+# What years are included in the dataset?
+
+
+# What are the dimensions of the dataset?
+
+
+# What are the variable names? 
+
+
+
+
+
+```
+
+
+**Answer**: ________
+
+
+
+
+### Exercise 7
+
+How do these counts compare to Arbuthnot's? Are they of a similar magnitude?
+
+
+```{r count-compare}
+# Insert code below
+
+
+
+
+
+
+```
+
+
+
+**Answer**: ________
+
+
+
+
+### Exercise 8
+
+Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot's observation about boys being born in greater proportion than girls hold up in the U.S.? What explains the differences you observe? Include a plot in your response.
+
+```{r plot-prop-boys-present}
+# Insert code below
+
+
+
+
+
+```
+
+
+
+**Answer**: ________
+
+
+
+
+### Exercise 9
+
+In which year did we see the largest total number of births in the U.S.?
+
+
+
+```{r find-max-total}
+# Insert code below
+
+
+
+
+```
+
+
+**Answer**: ________
+
+

@@ -5,11 +5,13 @@ params:
   shiny_url: "https://oferengel-posit.shinyapps.io/"
 ---
 
-<meta http-equiv='cache-control' content='no-cache'> 
-<meta http-equiv='expires' content='0'> 
+<meta http-equiv='cache-control' content='no-cache'>
+
+<meta http-equiv='expires' content='0'>
+
 <meta http-equiv='pragma' content='no-cache'>
 
-
+```{=html}
 <style>
 .column-left{
   float: left;
@@ -57,8 +59,7 @@ params:
 
 
 </style>
-
-
+```
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(glue)
@@ -66,108 +67,93 @@ library(glue)
 shiny_url <- params$shiny_url
 ```
 
-<div style="float: right; margin: 0px 0px 20px 20px">
-<img  src="images/sperman.gif" alt="S for Superman" width="80%" height="80%">
-<br/><br/>
-$\mathbb{S}$ stands for STATISTICS
-</div>
+::: {style="float: right; margin: 0px 0px 20px 20px"}
+<img src="images/sperman.gif" alt="S for Superman" width="80%" height="80%"/> <br/><br/> $\mathbb{S}$ stands for STATISTICS
+:::
 
+Practical knowledge of statistics is a fundamental skill for medical research. The recent growth of Big Data Applications and Data Science only enhances the need for practical working knowledge of statistical analysis, helping you understand your own data as well as the analyses performed by others.
 
-Practical knowledge of statistics is a fundamental skill for medical research. The recent growth of Big Data Applications and Data Science only enhances the need for practical working knowledge of statistical analysis, helping you  understand your own data as well as the analyses performed by others.
-
-
-
-This course is designed to be a gentle introduction to the practice of solving problems in bio-statistics and epidemiology in a data driven manner. The course assumes no prior programming/coding experience. It is designed to provide the tools you need to progress according to your interest and in your time as much as possible. 
-Succeeding in this course will be able to:
+This course is designed to be a gentle introduction to the practice of solving problems in bio-statistics and epidemiology in a data driven manner. The course assumes no prior programming/coding experience. It is designed to provide the tools you need to progress according to your interest and in your time as much as possible. Succeeding in this course will be able to:
 
 -   Use a modern suite of software packages for statistics and data science
 -   Identify descriptive statistics for data exploration such as measures of spread and central tendency, measures of association and causation
 -   Recognize various graphical representations of data, their advantages, and disadvantages
--   Fit a range of models such as linear least square regression (LLSR) and generalized linear models (GLM). 
--   Perform statistical inference using statistical inference, confidence intervals, and hypothesis testing procedures. 
-
+-   Fit a range of models such as linear least square regression (LLSR) and generalized linear models (GLM).
+-   Perform statistical inference using statistical inference, confidence intervals, and hypothesis testing procedures.
 
 Slides can all be downloaded from [this folder](https://bit.ly/3w8HEpv)
 
+### Week 1
 
-### Week 1 
+Preparation **Deadline:** 8 February 2024
 
-Preparation **Deadline:** 8 February 2024 
-
--   Readiness Assurance found [here](https://bit.ly/488ZIwV) 
+-   Readiness Assurance found [here](https://bit.ly/488ZIwV)
 
 In class: Lab 01 - Introduction to R and RStudio found [here](https://bit.ly/3w8DPk9)
 
+### Week 2
 
-### Week 2 
+Preparation **Deadline:** 15 February 2024
 
-Preparation **Deadline:** 15 February 2024 
-
--   Please complete this week's tutorials (three tutorials) [here](https://bit.ly/3OzsqAb) 
+-   Complete last week's lab IN YOUR TEAM, for a class presentation
+-   Please complete this week's tutorials (three tutorials) [here](https://bit.ly/3OzsqAb)
 -   Watch the lecture and add your comments [here](https://bit.ly/3OvGDhy)
--   Readiness Assurance found [here](https://bit.ly/48axDW3) 
+-   Readiness Assurance found [here](https://bit.ly/48axDW3)
 
+In class: [Lab 02](https://bit.ly/3wdzpIy) - Exploring numeric data 
 
-In class: Lab 02 - Exploring numeric data
 <!-- https://www.stat.uchicago.edu/~yibi/s220/labs/lab02.html -->
 
+### Week 3
 
-### Week 3 
+Preparation **Deadline:** 20 February 2024
 
-Preparation **Deadline:** 22 February 2024 
+-   Complete last week's lab IN YOUR TEAM, for a class presentation
+-   Please complete this week's tutorials [Exploratory data analysis](02-explore/)
+-   Watch [these lecture](https://bit.ly/48cta58) and add your comments!
+-   Readiness Assurance you can find [here](https://bit.ly/3SK4Cuu)
 
--   Please complete this week's tutorials (three tutorials)  
--   Watch the lecture and add your comments! 
+In class: Lab 03 - Simple [linear regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/04_SLR/)
+
+
+::: {style="color:#dcdcdc;"}
+
+### Week 4
+
+Preparation **Deadline:** 3 March 2024
+
+-   Complete last week's lab IN YOUR TEAM, for a class presentation
+-   Please complete this week's tutorials (three tutorials)\
+-   Watch the lecture and add your comments
 -   Readiness Assurance
-
-In class: Lab 03 - Simple linear regression
-
-
-
-### Week 4 
-
-Preparation **Deadline:** 3 March 2024 
-
--   Please complete this week's tutorials (three tutorials)  
--   Watch the lecture and add your comments 
--   Readiness Assurance  
 
 In class: Lab 04 - Multiple linear regression
 
+### Week 5
 
+Preparation **Deadline:** 13 March 2024
 
-### Week 5 
-
-Preparation **Deadline:** 13 March 2024 
-
--   Please complete this week's tutorials (three tutorials)  
--   Watch the lecture and add your comments 
--   Readiness Assurance  
+-   Complete last week's lab IN YOUR TEAM, for a class presentation
+-   Please complete this week's tutorials (three tutorials)\
+-   Watch the lecture and add your comments
+-   Readiness Assurance
 
 In class: Lab 05 - Logistic regression
 
+### Week 6
 
+Preparation **Deadline:** 24 March 2024
 
-### Week 6 
-
-Preparation **Deadline:** 24 March 2024 
-
--   Please complete this week's tutorials (three tutorials)  
--   Watch the lecture and add your comments 
--   Readiness Assurance  
+-   Complete last week's lab IN YOUR TEAM, for a class presentation
+-   Please complete this week's tutorials (three tutorials)\
+-   Watch the lecture and add your comments
+-   Readiness Assurance
 
 In class: Lab 06 - Review and advanced topics
-
-
-
-
-
-
+:::
 
 ### Acknowledgements
 
 The tutorials in this course are adopted from the learnr tutorials supporting [OpenIntro::Introduction to Modern Statistics](https://openintro-ims.netlify.app/).
 
-
 The [original tutorials](https://openintrostat.github.io/ims-tutorials/) were forked and adapted by [Ofer Engel](https://www.rug.nl/cf/university-college-fryslan/about-ucf/dr-ofer-engel?lang=en), their content was developed by [Mine Çetinkaya-Rundel](https://github.com/mine-cetinkaya-rundel), [Jo Hardin](https://github.com/hardin47), [Ben Baumer](https://github.com/beanumber), and [Andrew Bray](https://github.com/andrewpbray) and implemented in learnr with the help of [Yanina Bellini Saibene](https://github.com/yabellini), [Florencia D’Andrea](https://github.com/flor14), [Roxana Noelia Villafañe](https://github.com/data-datum), and [Allison Theobold](https://github.com/atheobold).
-

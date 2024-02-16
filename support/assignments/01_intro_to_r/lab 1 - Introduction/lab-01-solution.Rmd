@@ -1,7 +1,7 @@
 ---
 title: "Lab 1: Intro to R"
-author: "Ofer Engel"
-date: "Today's date here"
+author: "Karl Marx"
+date: "5th May 1818"
 output: 
   html_document:
     highlight: "pygments"
@@ -12,120 +12,207 @@ output:
     df_print: paged
 ---
 
-```{r load-packages, message=FALSE}
 
-library(tidyverse)
-arbuthnot <- read_csv("data/arbuthnot.csv")
-  
-```
+The goal of this lab is to introduce you to R and RStudio, which you'll be using throughout the course both to learn the statistical concepts discussed in the course and to analyze real data and come to informed conclusions. The lab specifications can be found [here](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/01_intro_to_r/).
 
 
-The questions for this lab can be found [here](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/01_intro_to_r/).
+To clarify which is which: `R` is the name of the programming language itself and RStudio is a convenient interface for working with `R` . Think of it like this: 
+
+-   R is like a car’s engine,
+-   RStudio is like a car’s dashboard
+
+<!-- please insert an image below -->
+
+![What is the difference between R and RStudio](img/R-and-Rstudio.png)
 
 
 ### Exercise 1
-**Question:** What command would you use to extract just the counts of girls baptized? Try it out in the console!
 
-**Answer:** To extract the girls I will run the command `arbuthnot$girls`
+Knit your RMarkdown file and observe the result in the form of a knitted report. Now change the following in your RMarkdown (a) In the YAML, identify the author's name and replace it with **your** name. (b) Replace the date to show **today's date**. (c) Identify the sentence "The lab specifications can be found here," and turn the word "here" into a link, (d) Add an image of the car dashboard (a metaphor for RStudio) and the car engine (a metaphor for R).
+
+
+
+
+## The `arbuthnot` dataset
+
+The Arbuthnot data set refers to the work of [Dr. John Arbuthnot](https://en.wikipedia.org/wiki/John_Arbuthnot), an 18<sup>th</sup> century physician, writer, and mathematician. He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. 
 
 ### Exercise 2
 
-**Question:** Is there an apparent trend in the number of girls baptized over the years? How would you describe it? (To ensure that your lab report is comprehensive, be sure to include the code needed to make the plot as well as your written interpretation.)
-
-**Answer:** There appears to be a dip in the number of girls between the 1640s and the 1660s, but from the 1660s onwards there is a general increasing trend in the number of girls born. 
+Load the `tidyverse` library into your environment, and then load the `arbuthnot` dataset. Now use the `glimpse` function to display its content, and the `dim` function to display its dimensions. Write down the variables associated with the dataset and the number of observations in your dataset.  
 
 
-```{r trend-girls}
+```{r load-data, message=FALSE}
+# Load the tidyverse library below
+library(tidyverse)
 
-ggplot(data = arbuthnot, aes(x = year, y = girls)) +
-  geom_line() 
+# load the data into the environment
+arbuthnot <- read_csv("data/arbuthnot.csv")
+
+# Use `glimpse` function to inspect your dataset below
+glimpse(arbuthnot)
+
+# Use the `dim` function to see the dimensions of your dataset 
+dim(arbuthnot)
+
 
 ```
+
+
+**Answer**: There are *3 continuous* variables in the arbuthnot dataset. The names of the variables are: `year`, `boys` and `girls`. The dataset consists of 82 observations (rows), one observation for each year. 
+
 
 
 ### Exercise 3
 
-**Question:** Now, generate a plot of the proportion of boys born over time. What do you see?
+What command would you use to extract just the counts of girls baptized? Try it out in the console!
 
-**Answer:** We can see that the proportion of boys varies by 1-3 percentage points every year. On average it is roughly between 51.5% and about 52%, but it is pretty clear that among our 82 observed years, we did not observe any year that had more girls than boys.  
+**Answer**: To extract the counts of baptized girls, we need to use the following command: `arbuthnot$girls`
 
-
-```{r plot-prop-boys-arbuthnot}
-
-arbuthnot |> 
-  mutate(total = boys + girls) |> 
-  mutate(prop = boys / total) |> 
-  ggplot(aes(year, prop)) + 
-  geom_line() + 
-  geom_smooth() 
-
-```
 
 
 ### Exercise 4
 
-**Question:** What years are included in this data set? What are the dimensions of the data frame? What are the variable (column) names?
+Create the plot and answer the following: is there an apparent trend in the number of girls baptized over the years? How would you describe it? 
 
+```{r trend-girls}
 
-```{r dim-present}
-# Loading the dataset
-present <- read_csv("data/present.csv")
+# Insert code below
+ggplot(
+  data = arbuthnot, aes(x = year, y = girls)
+  ) + 
+  geom_point() + 
+  geom_smooth()
 
 ```
 
 
-**Answer:** The years included in the dataset are from `r min(present$year)` to `r max(present$year)`. The data set has `r ncol(present)` variables and `r nrow(present)` observations, each observation is a year. The names of the variables are `r names(present)` 
+**Answer**: There appears to be something of a dip in the birth of girls between the years 1640 and 1660, but the birth rate picks right up and increases steadily until the seventeen hundreds.
 
 
 ### Exercise 5
 
-**Question:** How do these counts compare to Arbuthnot’s? Are they of a similar magnitude?
+Now, generate a plot of the proportion of boys born over time. What do you see?
 
+```{r plot-prop-boys-arbuthnot, message=FALSE}
+# Insert code below
+arbuthnot |> 
+  mutate(total = boys + girls ) |> 
+  mutate(boy_ratio = boys / total) |> 
+  ggplot(aes(year, boy_ratio)) + 
+  geom_point() + 
+  geom_line() + 
+  geom_smooth()
 
-
-**Answer:** The counts in the `present` data are much larger (between about 1.1 million births and 2.2 million births) than those in the `arbuthnot` data (between 2722 births and 8426 births )
-
-```{r count-compare}
-
-summary(arbuthnot)
-summary(present)
 
 ```
+
+
+**Answer**: The proprotion varies a lot from year to year, jumping up and down but staying roughly within the interval of 0.53 and 0.51. It is hard to see a identify a clear trend in the data. 
+
+
+
+## The`present` dataset
+
+Answer the following questions with the `present` dataset:
+
 
 
 ### Exercise 6
 
-**Question:** Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot’s observation about boys being born in greater proportion than girls hold up in the U.S.? Include the plot in your response. Hint: You should be able to reuse your code from Exercise 3 above, just replace the name of the data frame.
+What years are included in this data set? What are the dimensions of the dataset? What are the variable names? How many observations are in your data?
 
-**Answer:** Yes, it appears that the proportion of boys is still larger than 50%. However, the range of the proportion is smaller. Whereas the proportions in the `arbuthnot` dataset ranges between just above 50% and about 53.5%, we can see that the variation in the US proportion ranges between about 51.1% and 51.4%.  
+```{r present-dataset, message=FALSE}
+# We already loaded the tidyverse library
+# so we do not need to do this again. 
+# However, we do need to load the new data into the environment
 
-```{r plot-prop-boys-present}
-# Insert code for Exercise 6 here
+# Insert code below
+present <- read_csv("data/present.csv")
+
+# What years are included in the dataset?
 present |> 
-  mutate(total = boys + girls) |> 
-  mutate(prop = boys / total) |> 
-  ggplot(aes(year, prop)) + 
-  geom_line() + 
-  geom_smooth() 
+  summarize(
+    min = min(year),
+    max = max(year)
+    )
 
+# What are the dimensions of the dataset?
+dim(present)
+
+# What are the variable names? 
+names(present)
 
 ```
+
+
+**Answer**: The dataset consists of data from the year 1940 to 2002. The data has three continuous variables (year, boys and girls), and 63 observations, one observation for each year. 
+
+
 
 
 ### Exercise 7
 
-**Question:** In what year did we see the largest total number of births in the U.S.? Hint: First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the total column. You can do this interactively in the data viewer by clicking on the arrows next to the variable names. To include the sorted result in your report you will need to use two new functions. First we use arrange() to sorting the variable. Then we can arrange the data in a descending order with another function, desc(), for descending order. The sample code is provided below.
+How do these counts compare to Arbuthnot's? Are they of a similar magnitude?
 
-**Answer:** The largest total number of registered births in the US was in 1961, a total of 4.27 million American babies was born. This is probably related to the [mid 20th century baby boom](https://en.wikipedia.org/wiki/Mid-20th_century_baby_boom) in America.
+
+```{r count-compare}
+# Insert code below
+ggplot(
+  data = present
+  ) + 
+  geom_point(aes(x = year, y = girls), color = "black") + 
+  geom_point(aes(x = year, y = boys), color = "green") + 
+  labs(y = "count")
+
+```
+
+
+
+**Answer**: The numbers in the `present` dataset range between about 1 and 2 million children born per year, whereas the data in the `arbuthnot` records is in the thousands, so the `present` dataset is three degrees of magnitude larger than the `arbuthnot` dataset.  
+
+
+
+
+### Exercise 8
+
+Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot's observation about boys being born in greater proportion than girls hold up in the U.S.? What explains the differences you observe? Include a plot in your response.
+
+```{r plot-prop-boys-present}
+# Insert code below
+present |> 
+  mutate(total = boys + girls ) |> 
+  mutate(boy_ratio = boys / total) |> 
+  ggplot(aes(year, boy_ratio)) + 
+  geom_point() + 
+  geom_line() + 
+  geom_smooth()
+
+```
+
+
+**Answer**: The proportions look very similar, although the range is much smaller, varying between 0.511 and 0.514, whereas in the `arbuthnot` dataset the proportion varied between about 0.51 and 0.53. It could be that this is due to the fact that the the `present` dataset is about a much larger population, and therefore the variability in the data is much smaller. 
+
+
+
+
+### Exercise 9
+
+In which year did we see the largest total number of births in the U.S.?
 
 
 
 ```{r find-max-total}
-# Insert code for Exercise 7 here
-
+# Insert code below
 present |> 
   mutate(total = boys + girls) |> 
   arrange(desc(total))
 
+
+
 ```
+
+
+**Answer**: The largest total number of registered births in the US was in 1961, a total of 4.27 million American babies was born. This is probably related to the [mid 20th century baby boom](https://en.wikipedia.org/wiki/Mid-20th_century_baby_boom) in America.
+
 

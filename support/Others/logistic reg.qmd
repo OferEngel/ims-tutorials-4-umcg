@@ -1,0 +1,124 @@
+---
+title: "logistic reg"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+n <- 1000
+tibble(
+  x = rnorm(n), 
+  y = 
+)
+
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+library(tidyverse)
+library(rvest)
+library(dplyr)
+library(lubridate)
+library(chron)
+library(readr)
+
+
+london <- read_html(
+  "https://en.wikipedia.org/wiki/List_of_deaths_due_to_COVID-19"
+)
+# london %>% html_text2()
+library(purrr)
+
+sel_4 <- function(df) df %>% mutate(Age = as.character(Age))
+
+
+
+lt <- london %>% 
+  html_elements(".wikitable") %>% 
+  html_table() %>% 
+  map(sel_4) %>% 
+  bind_rows()
+
+
+library(stringr)
+library(lubridate)
+lt %>% 
+  mutate(age = str_extract(Age, "^\\d+")) %>% 
+  filter(
+    Age != as.character(age)
+    ) %>% 
+  print(n=100)
+
+
+
+
+lt %>% 
+  mutate(age = str_extract(Age, "^\\d+")) %>% 
+  mutate(
+    age = ifelse(
+      Age != as.character(age), 
+      as.numeric(age) + 0.5, 
+      as.numeric(age)
+    )
+  ) %>% 
+  filter(is.na(age)) %>% 
+  print(n = 100)
+
+lt_1 <- lt %>% 
+  mutate(age = str_extract(Age, "^\\d+")) %>% 
+  mutate(
+    age = ifelse(
+      Age != as.character(age), 
+      as.numeric(age) + 0.5, 
+      as.numeric(age)
+    )
+  ) %>% select(-Age) %>% 
+  mutate(Date = dmy(Date)) %>% 
+  mutate(`Place of death` = factor(`Place of death`))
+
+summary(lt_1)
+
+lt_1 %>% 
+  filter(age < 20)
+
+
+lt_1 %>% 
+  mutate(dt = dmy(Date)) %>% 
+  ggplot(aes(age)) + 
+  geom_histogram(binwidth = 1)
+
+
+
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/pscl/prussian.csv'
+
+dat <- read.csv(url, stringsAsFactors = FALSE)
+
+
+# install from github
+library(remotes)
+install_github('vincentarelbundock/violets')
+library(violets)
+mod <- glm(y ~ corp + year, data = dat, family = 'poisson')
+violets(mod)
+
+
+
+
+
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
