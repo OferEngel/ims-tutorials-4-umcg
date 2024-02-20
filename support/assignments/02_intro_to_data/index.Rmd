@@ -25,7 +25,16 @@ In this lab we explore flights, specifically a random sample of domestic flights
 
 We will generate simple graphical and numerical summaries of data on these flights and explore delay times. You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/477804/content/7541654).
 
+## Presenting your work
 
+[This video](https://www.youtube.com/watch?v=uG31rF2fmEQ) presents some guidelines for presenting your lab code and report. Before you present, please make sure you publish your final report on Rpubs. [Here](https://www.youtube.com/watch?v=GJ36zamYVLg) are some instructions. Remember you may need to register and/or sign into RPubs first. Here's [another link](https://www.youtube.com/watch?v=O7DADwfZMDU) with explanations.
+
+
+
+```{r img-present-lab, out.width="50%", eval=TRUE, echo=FALSE, results = TRUE, fig.show = "show"}
+knitr::include_graphics("../../../logo/presenting-lab.png")
+
+```
 
 
 ## Getting started
@@ -73,11 +82,7 @@ glimpse(nycflights)
 
 This returns the names of the variables in this data frame.
 
-The **codebook** (description of the variables) can be accessed by pulling up the help file. Now type this in your console:
-
-```{r help, eval=FALSE}
-?nycflights
-```
+The **codebook** (description of the variables) can be found [here](https://www.openintro.org/book/statdata/index.php?data=nycflights).
 
 One of the variables refers to the carrier (i.e. airline) of the flight, which is coded according to the following system.
 
@@ -136,11 +141,13 @@ This function says to plot the `dep_delay` variable from the `nycflights` data f
 
 But the size of the bin will influence the shape of the histogram. Larger bins will include more observations. You can easily define the binwidth you want to use:
 
-```{r hist-dep-delay-bins}
+```{r hist, warning=FALSE}
 
-ggplot(data = nycflights, aes(x = dep_delay)) + geom_histogram(binwidth = 15)
+ggplot(data = nycflights, aes(x = dep_delay)) + 
+  geom_histogram(binwidth = 15)
 
-ggplot(data = nycflights, aes(x = dep_delay)) + geom_histogram(binwidth = 150)
+ggplot(data = nycflights, aes(x = dep_delay)) + 
+  geom_histogram(binwidth = 150)
 
 ```
 

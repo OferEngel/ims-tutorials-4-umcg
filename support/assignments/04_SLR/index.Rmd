@@ -115,7 +115,7 @@ It includes the following variables:
 ### Creating a reproducible lab report
 
 
-You will find all the work-space for your lab on posit cloud [using this link](https://posit.cloud/spaces/405625/content/6897866){target="_blank"}.
+You will find all the work-space for your lab on posit cloud [using this link](https://bit.ly/49CJKw6){target="_blank"}.
 
 <div style= "float:right;position: relative; margin-left: 20px">
 ```{r img-depth, echo=FALSE, fig.align="right", out.width=300}
@@ -178,8 +178,7 @@ We first want to know  the relationship between penguin weight (grams) and bill 
 Notice that each point in the graph is associated with a penguin, and for each penguin we have information about its different features: weight, bill depth, flipper length etc.
 
 
-2. Replicate the scatter plot below, coloring the  points according to the species. What can you tell about the relationship between bill depth and penguin weight? Comment on the intercepts and the slopes, associated with the three species (are they the same? similar? different).
-Does the outcome variable appear normally distributed? Why does that matter?
+2. Replicate the scatter plot below, coloring the  points according to the species. What can you tell about the relationship between bill depth and penguin weight? Comment on the intercepts and the slopes. Do different species have similar intercepts? Slopes? Does the outcome variable appear normally distributed? Why does this matter?
 
 
 ```{r plot-penguin-weight-depth-by-species, echo=FALSE, out.width="70%", warning=FALSE}
@@ -248,15 +247,15 @@ ggplot(data = penguins,
 
 ```
 
-5. In R, run a hypothesis test to see whether the flipper length and the body mass are correlated. Write down your null hypothesis, the p-value and the confidence interval, describe and interpret your findings. 
+<!-- 5. In R, run a hypothesis test to see whether the flipper length and the body mass are correlated. Write down your null hypothesis, the p-value and the confidence interval, describe and interpret your findings.  -->
 
 
-## Modelling the association between flippers and body mass
+## Modelling the association to predict body mass
 
 In our first model we will look at the association between the length of the flippers and the body mass. Can we use the length of the flippers to predict the body mass? 
 
 
-6. Use the `lm` function in R to fit a simple linear regression with one predictor. Write up your findings using the template below, and filling in the gaps in the template with the result of your model. 
+5. Use the `lm` function in R to fit a simple linear regression with one predictor. Write up your findings using the template below. Fill in the gaps in the template with the result of your model. 
 
 
 ```{r M1, echo=TRUE, eval=FALSE}
@@ -275,6 +274,9 @@ glance(M1)
 ```{r img-lm-summary, echo=FALSE, fig.align="center", out.width=600}
 knitr::include_graphics("images/lm-summary-2.jpg")
 ```
+
+
+6. Use the `lm` function in R to fit predict the body mass using a **different** explanatory variable.  Write up your findings using a similar template like the one used above. Which model is better, in your view? This one or the model in the previous question? Justify your answer.
 
 
 7. We now want to fit a model with parallel slopes, one slope for each of the three species of penguins. Run the regression as you have done above, but this time, add the `species` variable as a predictor in your model. (1) Write the equation for the linear model (you will need to replace the coefficients in the formula $b_0, b_1, b_2$ with their estimates). (2) Write up your findings in a similar manner to the template shown in the previous question. (3) Write a separate model for each of the three species. (4) Use the `augment(M2)` to see the list of residuals and show that the mean of the residuals is almost zero and its standard deviation is the residual standard error.
@@ -406,7 +408,7 @@ Anova(M2, type = 3)
 ```
 
 
-## Bonus: modelling the association between bill depth and body mass
+## Modelling the association between bill depth and body mass
 
-11. As an optional, bonus exercise, repeat exercises 6 - 10 but this time analyze the association between the bill depth and the body mass: `body_mass_g ~ bill_depth_mm + species`.
+11. Now repeat exercises 6 - 10 but this time analyze the association between the bill depth and the body mass: `body_mass_g ~ bill_depth_mm + species`.
 
