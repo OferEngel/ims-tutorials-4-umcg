@@ -133,7 +133,7 @@ In class: Lab 03 - Simple [linear regression](https://oferengel.github.io/ims-tu
 
 ### Week 4
 
-Preparation **Deadline:** 3 March 2024
+Preparation **Deadline:** 6 March 2024
 
 -   Complete last week's lab IN YOUR TEAM, for a class presentation
 -   Please complete [this week's tutorials](03-model/index.html) (**FIVE** tutorials)
