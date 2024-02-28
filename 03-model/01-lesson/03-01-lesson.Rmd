@@ -1,5 +1,5 @@
 ---
-title: "Regression modeling: 1 - Visualizing two variables"
+title: "4.1 - Visualizing two variables"
 output:
   learnr::tutorial:
     progressive: true
@@ -88,21 +88,20 @@ encoder_logic <- function(strip_output = FALSE) {
   )
 }
 
+
 hash_encoder_ui <- {
-  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID?"), renderText({
+  shiny::div("If you have completed this tutorial and are happy with all of your", "solutions, please enter your identifying information, then click the button below to generate your hash", textInput("name", "What's your name?"), textInput("studentID", "What is your student ID (Gebruikersnaam  s-/p-nummer)?"), renderText({
     input$caption
   }), )
 }
+
+
 ```
 
 
 ## Welcome
 
-In the previous tutorials, you've learned how to describe the distribution of a single variable. This is useful, but in many cases, what we are more interested in is understanding the relationship between two variables.
-
-## Visualizing two variables
-
-In particular, in these tutorials you will learn techniques for characterizing and quantifying the relationship between two numeric variables.
+In these tutorials you will learn techniques for characterizing and quantifying the relationship between two numeric variables.
 
 In a statistical model, we generally have one variable that is the output and one or more variables that are the inputs. We will refer to the output variable as the response and we will denote it with the letter $y$. In other disciplines or contexts, you may hear this quantity called the dependent variable. More generally, the response variable is a quantity that we think might be related to the input or explanatory variable in some way. In other fields, these can be called "independent" or "predictor" variables. We typically denote any explanatory variables with the letter $x$. In these tutorials, we will focus on the case of a single explanatory variable. In the next tutorials, however, we will allow for several explanatory variables.
 
@@ -135,7 +134,19 @@ By convention, we always put the response variable on the vertical, or $y$-axis,
 
 ### Scatterplot
 
-In `ggplot`, we bind the `x` and `y` aesthetics to our explanatory and response variables, and then use the `geom_point()` function to actually draw the points. Here we can see a scatterplot of the total length of a possum's body as a function of the length of its tail.
+In `ggplot`, we bind the `x` and `y` aesthetics to our explanatory and response variables, and then use the `geom_point()` function to actually draw the points. In what follows, we use data representing possums in Australia and New Guinea. A data frame with 104 observations on the following 8 variables: 
+
+-   site: The site number where the possum was trapped.
+-   pop: Population, either Vic (Victoria) or other (New South Wales or Queensland).
+-   sex: Gender, either m (male) or f (female).
+-   age: Age.
+-   head_l: Head length, in mm.
+-   skull_w: Skull width, in mm.
+-   total_l: Total length, in cm.
+-   tail_l: Tail length, in cm.
+
+
+Here we can see a scatterplot of the total length of a possum's body as a function of the length of its tail.
 
 ```{r 3, echo = TRUE}
 ggplot(data = possum, aes(y = total_l, x = tail_l)) +
@@ -222,7 +233,7 @@ Using the `ncbirths` dataset, use `ggplot()` to make a scatterplot visualizing t
 ```
 
 ```{r ex1-hint}
- In the `ggplot()` map `weeks` to the `x` aesthetic and `weight` to the `y` aesthetic. Remember to use the `ncbirths` dataset!
+# In the `ggplot()` map `weeks` to the `x` aesthetic and `weight` to the `y` aesthetic. Remember to use the `ncbirths` dataset!
 ```
 
 ```{r ex1-solution}
@@ -245,7 +256,7 @@ ncbirths <- ncbirths |>
 ```
 
 ```{r cut-ex-hint}
- The `cut()` function should cut the `weeks` variable into 4 different categories.
+# The `cut()` function should cut the `weeks` variable into 4 different categories.
 ```
 
 Next, using the new `weeks_cut` variable, make side-by-side boxplots illustrating how the birth weight of these babies varies according to the number of weeks of gestation.
@@ -262,7 +273,7 @@ ggplot(data = ___,
 ```
 
 ```{r ex2-hint}
- In the plot `x` is `weeks_cut` and `y` is `weight` from the `ncbirths` dataset.
+# In the plot `x` is `weeks_cut` and `y` is `weight` from the `ncbirths` dataset.
 ```
 
 ```{r ex2-solution}
@@ -306,13 +317,12 @@ Here we see a negative, slightly non-linear relationship between sign legibility
 This relationship may be a good candidate for fitting a regression model, but the curvature in the relationship deserves attention. Indeed, very few relationships will be truly "linear," but it is our responsibility to assess if it is reasonable to assume if a relationship is linear "enough."
 
 ```{r img1, echo=FALSE, out.width=300}
-knitr::include_graphics("http://bolt.mph.ufl.edu/files/2012/07/images-mod2-scatterplot4.gif
-")
+knitr::include_graphics("images/images-mod2-scatterplot4.gif")
 ```
 
 ### NIST
 
-Conversely, in this next scatterplot we see little evidence of any relationship at all. The direction is neither positive nor negative, nor is there any clearly identifiable form. Any perceived relationship would be exceptionally weak.
+Conversely, in this next scatterplot we see little evidence of any relationship at all. The direction is neither positive nor negative, nor %>% is there any clearly identifiable form. Any perceived relationship would be exceptionally weak.
 
 ```{r img2, echo=FALSE, out.width=300}
 # http://www.itl.nist.gov/div898/handbook/eda/section3/gif/scatplo1.gif
@@ -360,19 +370,45 @@ First, using the `mammals` dataset, create a scatterplot illustrating how the br
 ```
 
 ```{r ex3-hint-1}
-ggplot(data = mammals, aes(x = ___, y = ___)) +
-  geom_point()
+
+# ggplot(data = mammals, aes(x = ___, y = ___)) +
+#   geom_point()
+
 ```
 
 ```{r ex3-hint-2}
-ggplot(data = mammals, aes(x = body_wt, y = ___)) +
-  geom_point()
+
+# ggplot(data = mammals, aes(x = body_wt, y = ___)) +
+#   geom_point()
+
 ```
 
-```{r ex3-solution}
+```{r ex3-solution, eval=FALSE, echo=FALSE}
 ggplot(data = mammals, aes(x = body_wt, y = brain_wt)) +
-  geom_point()
+   geom_point()
+
 ```
+
+
+Now update the code created above to produce a scatterplot on the log-scale, both on the x-axis and on the y-axis. Use `scale_x_log10()` and  `scale_y_log10()`.  
+The result should look as follows: 
+
+
+
+```{r ex3_5_sol, echo=FALSE}
+ggplot(data = mammals, aes(x = body_wt, y = brain_wt)) +
+  geom_point() + scale_x_log10()  + scale_y_log10()
+```
+
+
+Use the code chunk below to recreate the figure above:
+
+```{r ex3_5, exercise = TRUE}
+# Mammals scatterplot using the log scale
+
+```
+
+
 
 ###
 
@@ -384,19 +420,25 @@ Next, using the `mlbbat10` dataset, create a scatterplot illustrating how the sl
 ```
 
 ```{r ex4-hint-1}
-ggplot(data = mlbbat10, aes(x = ___, y = ___)) +
-  geom_point()
+
+# ggplot(data = mlbbat10, aes(x = ___, y = ___)) +
+#   geom_point()
+
 ```
 
 ```{r ex4-hint-2}
-ggplot(data = mlbbat10, aes(x = obp, y = ___)) +
-  geom_point()
+
+# ggplot(data = mlbbat10, aes(x = obp, y = ___)) +
+#   geom_point()
+
 ```
 
 
 ```{r ex4-solution}
-ggplot(data = mlbbat10, aes(x = obp, y = slg)) +
-  geom_point()
+
+# ggplot(data = mlbbat10, aes(x = obp, y = slg)) +
+#   geom_point()
+
 ```
 
 ###
@@ -407,27 +449,52 @@ Next, using the `bdims` dataset, create a scatterplot illustrating how a person'
 
 ```{r ex5, exercise = TRUE}
 
+
 ```
 
 ```{r ex5-hint-1}
-ggplot(data = bdims, aes(x = ___, y = ___, color = ___)_ +
-  geom_point()
+
+# ggplot(data = bdims, aes(x = ___, y = ___, color = ___)_ +
+#   geom_point()
+  
 ```
 
 ```{r ex5-hint-2}
-ggplot(data = bdims, aes(x = hgt, y = ___, color = ___)_ +
-  geom_point()
+
+# ggplot(data = bdims, aes(x = hgt, y = ___, color = ___) +
+#   geom_point()
+  
 ```
 
 ```{r ex5-hint}
-ggplot(data = bdims, aes(x = hgt, y = wgt, color = ___)_ +
-  geom_point()
+
+# ggplot(data = bdims, aes(x = hgt, y = wgt, color = ___) +
+#   geom_point()
+  
 ```
 
 ```{r ex5-solution}
-ggplot(data = bdims, aes(x = hgt, y = wgt, color = as.factor(sex))) +
+
+ggplot(
+  data = bdims, 
+  aes(x = hgt, y = wgt, color = as.factor(sex))
+  ) +
   geom_point()
+
 ```
+
+
+
+
+```{r ex5_mc1}
+question("What happens if we use `color = sex` instead of `color = as.factor(sex)` in `aes(...)`?",
+  answer("Nothing much, the colors will stay the same."),
+  answer("Sex will be treated as a continuous variable rather than a binary variable.", correct = TRUE, message = "Remember that the `factor` function tells R to treat the variable as categorical, associating each value with a qualitatively different color."),
+  answer("Sex will be treated as a categorical variable rather than a continuous variable."),
+  allow_retry = TRUE
+)
+```
+
 
 ###
 
@@ -438,18 +505,19 @@ Finally, using the `smoking` dataset, create a scatterplot illustrating how the 
 ```
 
 ```{r ex6-hint-1}
-ggplot(data = smoking, aes(x = ___, y = ___)) +
+# ggplot(data = smoking, aes(x = ___, y = ___)) +
   geom_point()
 ```
 
 ```{r ex6-hint-2}
-ggplot(data = smoking, aes(x = age, y = ___)) +
-  geom_point()
+# ggplot(data = smoking, aes(x = age, y = ___)) +
+#   geom_point()
 ```
 
 ```{r ex6-solution}
 ggplot(data = smoking, aes(x = age, y = amt_weekdays)) +
-  geom_point()
+  geom_point() + 
+  geom_smooth()
 ```
 
 ### Characterizing scatterplots
@@ -457,8 +525,13 @@ ggplot(data = smoking, aes(x = age, y = amt_weekdays)) +
 This scatterplot shows the relationship between the poverty rates and high school graduation rates of counties in the United States.
 
 ```{r plotmc1}
-ggplot(data = county_complete, aes(x = hs_grad_2010, y = poverty_2010)) +
+ggplot(
+  data = county_complete, 
+  aes(x = hs_grad_2010, y = poverty_2010)
+  ) +
   geom_point()
+
+
 ```
 
 ```{r mc1}
@@ -488,10 +561,11 @@ Fist, let's use the `coord_trans()` function to modify our original scatterplot,
  ggplot(data = mammals, aes(x = body_wt, y = brain_wt)) +
   geom_point() +
   ___(x = "log10", y = "log10")
+
 ```
 
 ```{r ex7-hint}
- The function you want to use is `coord_trans()`!
+ # The function you want to use is `coord_trans()`!
 ```
 
 ```{r ex7-solution}
@@ -512,7 +586,7 @@ ggplot(data = mammals, aes(x = body_wt, y = brain_wt)) +
 ```
 
 ```{r ex8-hint}
- Add in the `scale_x_log10()` and `scale_y_log10()` to transform the x- and y-axis!
+# Add in the `scale_x_log10()` and `scale_y_log10()` to transform the x- and y-axis!
 ```
 
 ```{r ex8-solution}
@@ -634,42 +708,11 @@ ab_gt_200 |>
 
 
 
+
 ## Congratulations!
 
-You have successfully completed Lesson 1 in Tutorial 3: Regression modeling.
-If you need to generate a hash for submission, click "Next Topic".
+You have successfully completed Tutorial 4.1.  To generate a hash for submission, see below.
 
-What's next?
-
-`r emo::ji("ledger")` [Full list of tutorials supporting OpenIntro::Introduction to Modern Statistics](https://openintrostat.github.io/ims-tutorials/)
-
-`r emo::ji("spiral_notepad")` [Tutorial 3: Regression modeling](https://openintrostat.github.io/ims-tutorials/03-model/)
-
-`r emo::ji("one")` [Tutorial 3 - Lesson 1: Visualizing two variables](https://openintro.shinyapps.io/ims-03-model-01/)
-
-`r emo::ji("two")` [Tutorial 3 - Lesson 2: Correlation](https://openintro.shinyapps.io/ims-03-model-02/)
-
-`r emo::ji("three")` [Tutorial 3 - Lesson 3: Simple linear regression](https://openintro.shinyapps.io/ims-03-model-03/)
-
-`r emo::ji("four")` [Tutorial 3 - Lesson 4: Interpreting regression models](https://openintro.shinyapps.io/ims-03-model-04/)
-
-`r emo::ji("five")` [Tutorial 3 - Lesson 5: Model fit](https://openintro.shinyapps.io/ims-03-model-05/)
-
-`r emo::ji("six")` [Tutorial 3 - Lesson 6: Parallel slopes](https://openintro.shinyapps.io/ims-03-model-06/)
-
-`r emo::ji("seven")` [Tutorial 3 - Lesson 7: Evaluating and extending parallel slopes model](https://openintro.shinyapps.io/ims-03-model-07/)
-
-`r emo::ji("eight")` [Tutorial 3 - Lesson 8: Multiple regression](https://openintro.shinyapps.io/ims-03-model-08/)
-
-`r emo::ji("nine")` [Tutorial 3 - Lesson 9: Logistic regression](https://openintro.shinyapps.io/ims-03-model-09/)
-
-`r emo::ji("keycap_ten")` [Tutorial 3 - Lesson 10: Case study: Italian restaurants in NYC](https://openintro.shinyapps.io/ims-03-model-10/)
-
-`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
-
-
-
-## Submit
 
 ```{r, echo=FALSE, context="server"}
 encoder_logic()
@@ -678,3 +721,10 @@ encoder_logic()
 ```{r encode, echo=FALSE}
 learnrhash::encoder_ui(ui_before = hash_encoder_ui)
 ```
+
+
+
+
+### Submit your hash in a form
+
+After creating the hash, please copy it, navigate to [this form](https://forms.gle/ajEDfePc1jcTukyB7) and fill it in and submit. You will need to submit the form once for every lesson you complete in this tutorial.

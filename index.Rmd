@@ -129,8 +129,8 @@ Preparation **Deadline:** 20 February 2024
 
 -   Complete last week's lab IN YOUR TEAM, for a class presentation
 -   Please complete this week's tutorials <!--[Exploratory data analysis](02-explore/) -->
--   Watch [these lecture](https://bit.ly/48cta58) and add your comments!
--   Readiness Assurance you can find [here](https://bit.ly/3SK4Cuu)
+-   Watch lectures <!--[these lecture](https://bit.ly/48cta58) and add your comments! -->
+-   Readiness Assurance <!-- you can find [here](https://bit.ly/3SK4Cuu) -->
 
 :::
 
