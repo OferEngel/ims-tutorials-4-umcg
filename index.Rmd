@@ -108,7 +108,12 @@ Preparation **Deadline:** 8 February 2024
 
 -   Readiness Assurance <!-- found [here](https://bit.ly/488ZIwV) -->
 
-In class: Lab 01 - Introduction to R and RStudio <!-- found [here](https://bit.ly/3w8DPk9) -->
+:::
+
+In class: [Lab 01 - Introduction to R and RStudio](https://bit.ly/3w8DPk9) 
+
+::: {style="color:#dcdcdc;"}
+
 
 ### Week 2
 
@@ -119,7 +124,12 @@ Preparation **Deadline:** 15 February 2024
 -   Watch the lecture and add your comments <!-- [here](https://bit.ly/3OvGDhy) -->
 -   Readiness Assurance found <!-- [here](https://bit.ly/48axDW3) -->
 
-In class: <!-- [Lab 02](https://bit.ly/3wdzpIy) --> - Exploring numeric data 
+:::
+
+In class: [Lab 02 - Exploring numeric data](https://bit.ly/3wdzpIy) 
+
+
+::: {style="color:#dcdcdc;"}
 
 <!-- https://www.stat.uchicago.edu/~yibi/s220/labs/lab02.html -->
 
@@ -134,7 +144,7 @@ Preparation **Deadline:** 20 February 2024
 
 :::
 
-In class: Lab 03 - Simple [linear regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/04_SLR/)
+In class: [Lab 03 - Simple linear regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/04_SLR/)
 
 
 ### Week 4
@@ -142,11 +152,11 @@ In class: Lab 03 - Simple [linear regression](https://oferengel.github.io/ims-tu
 Preparation **Deadline:** 6 March 2024
 
 -   Complete last week's lab IN YOUR TEAM, for a class presentation
--   Please complete [this week's tutorials](03-model/index.html) (**FOUR** tutorials)
+-   Please complete [this week's tutorials](03-model/index.html) (**FIVE** tutorials)
 -   Watch [the lecture](https://bit.ly/3OQQkXP) and add your comments
 -   Readiness Assurance you can find [here](https://bit.ly/3SHJbdD)
 
-In class: Lab 04 - Multiple linear regression you can find [here](https://bit.ly/48pbV0D)
+In class: [Lab 04 - Multiple linear regression](https://bit.ly/48pbV0D)
 
 
 
