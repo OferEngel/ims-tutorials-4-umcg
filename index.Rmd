@@ -1,17 +1,17 @@
 ---
 title: "Medical Statistics - Resources"
-output: html_document
+output:
+  html_document:
+    css: ./support/assignments/lab.css
 params:
   shiny_url: "https://oferengel-posit.shinyapps.io/"
 ---
 
 <meta http-equiv='cache-control' content='no-cache'>
-
 <meta http-equiv='expires' content='0'>
-
 <meta http-equiv='pragma' content='no-cache'>
 
-```{=html}
+```{r html, eval=FALSE, echo=FALSE}
 <style>
 .column-left{
   float: left;
@@ -59,6 +59,8 @@ params:
 
 
 </style>
+
+
 ```
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -100,19 +102,18 @@ knitr::include_graphics("logo/presenting-lab.png")
 
 
 
-::: {style="color:#dcdcdc;"}
+::: {#greyedtext}
 
 ### Week 1
 
 Preparation **Deadline:** 8 February 2024
 
--   Readiness Assurance <!-- found [here](https://bit.ly/488ZIwV) -->
+-   Readiness Assurance found [here](https://bit.ly/488ZIwV)
 
-:::
+
 
 In class: [Lab 01 - Introduction to R and RStudio](https://bit.ly/3w8DPk9) 
 
-::: {style="color:#dcdcdc;"}
 
 
 ### Week 2
@@ -120,16 +121,13 @@ In class: [Lab 01 - Introduction to R and RStudio](https://bit.ly/3w8DPk9)
 Preparation **Deadline:** 15 February 2024
 
 -   Complete last week's lab IN YOUR TEAM, for a class presentation
--   Please complete this week's tutorials (three tutorials) <!-- [here](https://bit.ly/3OzsqAb)-->
--   Watch the lecture and add your comments <!-- [here](https://bit.ly/3OvGDhy) -->
--   Readiness Assurance found <!-- [here](https://bit.ly/48axDW3) -->
-
-:::
+-   Please complete [this week's tutorials](https://bit.ly/3OzsqAb) (three tutorials)
+-   Watch the [lectures and add your comments](https://bit.ly/3OvGDhy)
+-   [Readiness Assurance](https://bit.ly/48axDW3) 
 
 In class: [Lab 02 - Exploring numeric data](https://bit.ly/3wdzpIy) 
 
 
-::: {style="color:#dcdcdc;"}
 
 <!-- https://www.stat.uchicago.edu/~yibi/s220/labs/lab02.html -->
 
@@ -138,9 +136,9 @@ In class: [Lab 02 - Exploring numeric data](https://bit.ly/3wdzpIy)
 Preparation **Deadline:** 20 February 2024
 
 -   Complete last week's lab IN YOUR TEAM, for a class presentation
--   Please complete this week's tutorials <!--[Exploratory data analysis](02-explore/) -->
--   Watch lectures <!--[these lecture](https://bit.ly/48cta58) and add your comments! -->
--   Readiness Assurance <!-- you can find [here](https://bit.ly/3SK4Cuu) -->
+-   Please complete this week's tutorials [Exploratory data analysis](02-explore/) 
+-   Watch [these lecture](https://bit.ly/48cta58) and add your comments!
+-   [Readiness Assurance](https://bit.ly/3SK4Cuu)
 
 :::
 
@@ -161,7 +159,8 @@ In class: [Lab 04 - Multiple linear regression](https://bit.ly/48pbV0D)
 
 
 
-::: {style="color:#dcdcdc;"}
+
+::: {#greyedtext}
 
 ### Week 5
 
@@ -184,6 +183,7 @@ Preparation **Deadline:** 24 March 2024
 -   Readiness Assurance
 
 In class: Lab 06 - Review and advanced topics
+
 :::
 
 ### Acknowledgements

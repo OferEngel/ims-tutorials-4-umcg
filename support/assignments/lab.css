@@ -67,6 +67,35 @@ div#boxedtext {
     font-size: 10pt;
 }
 
+
+div#greyedtext {
+    color:#dcdcdc;
+    /* unvisited link */
+    a:link {
+      color: #dcdcdc;
+      text-decoration: underline;
+    }
+
+    /* visited link */
+    a:visited {
+      color: #dcdcdc;
+      text-decoration: underline;
+    }
+
+    /* mouse over link */
+    a:hover {
+      color: #dcdcdc;
+      text-decoration: underline overline;
+    }
+
+    /* selected link */
+    a:active {
+      color: #dcdcdc;
+      text-decoration: underline;
+    }
+    /*    background-color: rgba(86, 155, 189, 0.2); */
+}
+
 div#template {
     margin-top: 30px;
     margin-bottom: 30px;
