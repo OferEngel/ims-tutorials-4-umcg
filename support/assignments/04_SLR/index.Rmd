@@ -81,7 +81,7 @@ write_rds(penguins, "data/penguins.rds")
 
 
 
-<span style="color: red;font-size: 14px;font-weight: bold;">DEADLINE FOR COMPLETING THIS LAB: Wednesday, 13rd March (midnight) 
+<span style="color: red;font-size: 14px;font-weight: bold;">DEADLINE FOR COMPLETING THIS LAB: Wednesday, 6th March (midnight) 
 <br/>GROUP WORK. One member of your group submits your final report [using this form](https://forms.gle/59RskJpiznEtc9US8). </span>
 
 
