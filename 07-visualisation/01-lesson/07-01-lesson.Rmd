@@ -1,5 +1,5 @@
 ---
-title: "2.1 Exploring categorical data"
+title: "7.1 Visualisations I"
 output: 
   learnr::tutorial:
     progressive: true
@@ -167,11 +167,11 @@ pressure
 
 Use the code chunk below to plot the distribution of the `color` variable in the `diamonds` data set, which comes in the ggplot2 package.
 
-```{r r1, exercise = TRUE}
+```{r bcr1, exercise = TRUE}
 
 ```
 
-```{r r1solution, eval=FALSE}
+```{r bcr1-solution, eval=FALSE}
 ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = color))
 ```
@@ -184,7 +184,7 @@ ggplot(data = diamonds) +
   ggtitle("Distribution of diamond cuts")
 ```
 
-```{r r2, echo = FALSE}
+```{r bcr2, echo = FALSE}
 quiz(caption = "Bar charts",
   question("What is the most common type of cut in the `diamonds` dataset?",
            answer("Fair"),
@@ -208,14 +208,28 @@ quiz(caption = "Bar charts",
 
 Diagnose the error below and then fix the code chunk to make a plot.
 
-```{r r3, exercise = TRUE, exercise.eval = TRUE, error = TRUE}
+```{r bcr3, exercise = TRUE, exercise.eval = TRUE, error = TRUE}
 ggplot(data = pressure) +
   geom_bar(mapping = aes(x = temperature, y = pressure))
 ```
 
-```{r r3solution, eval=FALSE}
+```{r bcr3-solution, echo=FALSE}
 ggplot(data = pressure) +
   geom_col(mapping = aes(x = temperature, y = pressure))
+```
+
+
+
+```{r bcr3-quiz, echo = FALSE}
+quiz(caption = "",
+  question("Which arguments are needed in `aes(...)`?",
+           answer("`geom_bar` needs `aes(x = ...)`", correct = TRUE),
+           answer("`geom_bar` needs `aes(x = ..., y = ...)`"),
+           answer("`geom_col` needs `aes(x = ...)`"),
+           answer("`geom_col` needs `aes(x = ..., y = ...)`", correct = TRUE),
+           allow_retry = TRUE
+  )
+)
 ```
 
 
@@ -223,16 +237,18 @@ ggplot(data = pressure) +
 
 Recreate the bar graph of `color` from exercise one, but this time first use `count()` to manually compute the heights of the bars. Then use `geom_col()` to plot the results as a bar graph. Does your graph look the same as in exercise one?
 
-```{r r4, exercise = TRUE}
+```{r bcr4, exercise = TRUE}
 
 ```
 
-```{r r4solution, eval=FALSE}
+```{r bcr4-solution, eval=FALSE}
 diamonds %>% 
   count(color) %>% 
   ggplot() +
     geom_col(mapping = aes(x = color, y = n))
 ```
+
+
 
 ###  
 
@@ -289,11 +305,11 @@ Notice that width is a _parameter_, not an aesthetic mapping. Hence, you should 
 
 Create a colored bar chart of the `class` variable from the `mpg` data set, which comes with ggplot2. Map the interior color of each bar to `class`.
 
-```{r r5, exercise = TRUE}
+```{r bcr5, exercise = TRUE}
 
 ```
 
-```{r r5solution, eval=FALSE}
+```{r bcr5-solution, eval=FALSE}
 ggplot(data = mpg) +
   geom_bar(mapping = aes(x = class, fill = class))
 ```
@@ -342,7 +358,7 @@ ggplot(data = diamonds) +
 
 This makes it easy to _compare proportions_. For example, you can scan across the bars to see how the proportion of `IF` diamonds changes from cut to cut. 
 
-### What is a position adjustment?
+## What is a position adjustment?
 
 Every geom function in ggplot2 takes a `position` argument that is preset to a reasonable default. You can use `position` to determine how a geom should adjust objects that would otherwise overlap with each other. 
 
@@ -350,8 +366,10 @@ For example, in our plot, each value of `cut` is associated with eight rectangle
 
 Here's what that would look like if you could peek around the side of the graph.
 
-```{r echo = FALSE, out.width = "80%"}
-knitr::include_graphics("www/images/positions.png")
+![](img/positions.png){width="80%"}
+
+```{r echo = FALSE, out.width = "80%", eval=FALSE}
+knitr::include_graphics("img/positions.png")
 ```
 
 ### Position = "identity"
@@ -374,11 +392,11 @@ ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = color, fill = clarity), position = "fill", width = 1)
 ```
 
-```{r r6, exercise = TRUE}
+```{r bcr6, exercise = TRUE}
 
 ```
 
-```{r r6solution, eval=FALSE}
+```{r bcr6-solution, eval=FALSE}
 ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = color, fill = clarity), position = "fill", width = 1)
 ```
@@ -392,11 +410,11 @@ ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = color, fill = cut), position = "dodge")
 ```
 
-```{r r7, exercise = TRUE}
+```{r bcr7, exercise = TRUE}
 
 ```
 
-```{r r7solution, eval=FALSE}
+```{r bcr7-solution, eval=FALSE}
 ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = color, fill = cut), position = "dodge")
 ```
@@ -516,30 +534,1131 @@ Bar charts are an excellent way to display the distribution of a categorical var
 
 
 
+## Exploratory Data Analysis
 
+
+This tutorial will show you how to explore your data in a systematic way, a task that statisticians call **exploratory data analysis**, or **EDA** for short. In the tutorial you will:
+
+* Learn a strategy for exploring data
+* Practice finding patterns in data
+* Get tips about how to use different types of plots to explore data
+
+The tutorial is excerpted from _R for Data Science_ by Hadley Wickham and Garrett Grolemund, published by O’Reilly Media, Inc., 2016, ISBN: 9781491910399. You can purchase the book at [shop.oreilly.com](http://shop.oreilly.com/product/0636920034407.do).
+
+### What is EDA?
+
+EDA is an iterative cycle that helps you understand what your data says. When you do EDA, you:
+
+1. Generate questions about your data
+
+1. Search for answers by visualising, transforming, and/or modeling your data
+
+1. Use what you learn to refine your questions and/or generate new questions
+
+EDA is an important part of any data analysis. You can use EDA to make discoveries about the world; or you can use EDA to ensure the quality of your data, asking questions about whether the data meets your standards or not.
+
+### The EDA mindset
+
+EDA is not a formal process with a strict set of rules. More than anything, EDA is a state of mind. During the initial phases of EDA, you should feel free to investigate every idea that occurs to you. Some of these ideas will pan out, and some will be dead ends. As your exploration continues, you will home in on lines of inquiry that reveal insights worth writing up and communicating to others.
+
+### Questions
+
+Your goal during EDA is to develop an understanding of your data. The easiest way to do this is to use questions as tools to guide your investigation. When you ask a question, the question focuses your attention on a specific part of your dataset and helps you decide which graphs, models, or transformations to make.
+
+> "Far better an approximate answer to the right question, which is often
+> vague, than an exact answer to the wrong question, which can always be made
+> precise." --- John Tukey
+
+### Quantity vs Quality
+
+EDA is, fundamentally, a creative process. And like most creative processes, the key to asking _quality_ questions is to generate a large _quantity_ of questions. It is difficult to ask revealing questions at the start of your analysis because you do not know what insights are contained in your dataset. On the other hand, each new question that you ask will highlight a new aspect of your data and increase your chance of making a discovery. You can quickly drill down into the most interesting parts of your data---and develop a set of thought-provoking questions---if you follow up each question with a new question based on what you find.
+
+> "There are no routine statistical questions, only questionable statistical
+> routines." --- Sir David Cox
+
+### Two useful questions
+
+There is no rule about which questions you should ask to guide your research. However, two types of questions will always be useful for making discoveries within your data. You can loosely word these questions as:
+
+1. What type of **variation** occurs **within** my variables?
+
+1. What type of **covariation** occurs **between** my variables?
+
+The rest of this tutorial will look at these two questions. To make the discussion easier, let's define some terms...
+
+### Definitions
+
+*   A __variable__ is a quantity, quality, or property that you can measure. 
+
+*   A __value__ is the state of a variable when you measure it. The value of a
+    variable may change from measurement to measurement.
+  
+*   An __observation__ or __case__ is a set of measurements made under similar conditions (you usually make all of the measurements in an observation at the same time and on the same object). An observation will contain several values, each associated with a different variable. I'll sometimes refer to an observation as a case or data point.
+
+*   __Tabular data__ is a table of values, each associated with a variable and an observation. Tabular data is __tidy__ if each value is placed in its own cell, each variable in its own column, and each observation in its own row. 
+    
+    So far, all of the data that you've seen has been tidy. In real-life, most data isn't tidy, so we'll come back to these ideas again in [Data Wrangling]().
+    
+### Review 1 - Discovery or Confirmation?
+
+You can think of science as a process with two steps: _discovery_ and _confirmation_. Scientists first observe the world to discover a hypothesis to test. Then, they devise a test to confirm the hypotheses against new data. If a hypothesis survives many tests, scientists begin to trust that it is a reliable explanation of the data.
+
+The separation between discovery and confirmation is especially important for data scientists. It is easy for patterns to appear in data by coincidence. As a result, data scientists first look for patterns, and then try to confirm that the patterns exist in the real world. Sometimes this confirmation requires computing the probability that the pattern is due to random chance, a task that often involves collecting new data.
+
+```{r eda-q1, echo = FALSE}
+question("Is EDA a tool for discovery or confirmation?",
+         answer("Discovery", correct = TRUE, message = "EDA is a tool for discovery; in fact, EDA is one of the most fruitful tools for discovery in science. We'll focus on discovery throughout this primer, but remember that you should test any pattern that you discover before you rely on it."),
+         answer("Confirmation", message = "EDA reveals patterns, but it does not confirm that those patterns exist beyond your data set."),
+         allow_retry = TRUE
+)
+```
+
+### Review 2 - Quality or Quantity?
+
+```{r eda-q2, echo = FALSE}
+question("When you begin to explore data, is it better to formulate one or two high-quality questions to ask, or many, many questions to explore?",
+         answer("One or two high-quality questions", message = "It is hard to spot useful questions ahead of time because you don't know which discoveries are waiting in your data."),
+         answer("Many, many questions", correct = TRUE, message = "Each question you ask creates a new opportunity to discover something surprising. You can lead yourself to high-value questions by iterating on questions that reveal unexpected results."),
+         allow_retry = TRUE
+)
+```
+
+### Review 3 - Definitions
+
+`iris` is a famous toy data set that comes with R. The data set describes 150 iris flowers. Each row in `iris` displays a flower's sepal and petal dimensions. You can use these measurements to deduce the flower's species, which is also displayed in `iris`.
+
+```{r}
+iris
+```
+
+```{r eda-q3, echo = FALSE}
+quiz(caption = "Variables, values, and observations",
+     question("Which of these is a variable in the `iris` dataset?",
+              answer("setosa"),
+              answer("Sepal.Length", correct = TRUE),
+              answer("flowers"),
+              answer("5.1"),
+              allow_retry = TRUE,
+              random_answer_order = TRUE),
+     question("Which of these is a value in the `iris` dataset?",
+              answer("3.5", correct = TRUE),
+              answer("Petal.Length", message = "This is the name of one of the variables in the data set."),
+              answer("flowers"),
+              answer("Species", message = "This is the name of one of the variables in the data set."),
+              allow_retry = TRUE,
+              random_answer_order = TRUE),
+     question("Which of these is an observation in the `iris` dataset?",
+              answer("The collection of measurements, `5.1`, `3.5`, `1.4`, `0.2`, and `setosa`, which describe the first flower in the data set.", correct = TRUE, message = "These measurements were all collected under similar circumstances: on the same flower, presumably at the same time. If a relationship exists between the variables that these values describe, we would expect the relationship to also exist between these values."),
+              answer("The collection of names, `Sepal.Length`, `Sepal.Width`, `Petal.Length`, `Petal.Width`, and `Species`.", message = "These names describe the variables in the data set."),
+              answer("The collection of measurements, `5.1`, `4.9`, `4.7`, and so on, which are all of the values in the Sepal.Length column.", message = "These are the values of the Sepal.Length variable."),
+              allow_retry = TRUE,
+              random_answer_order = TRUE)
+)
+```
+
+
+
+### What is variation?
+
+**Variation** is the tendency of the values of a variable to change from measurement to measurement. You can see variation easily in real life; if you measure any continuous variable twice---and precisely enough---you will get two different results. This is true even if you measure quantities that are constant, like the speed of light. Each of your measurements will include a small amount of error that varies from measurement to measurement. Categorical variables can also vary if you measure across different objects (e.g. the eye colors of different people), or different times (e.g. the energy levels of an electron at different moments). 
+
+Every variable has its own pattern of variation, which can reveal useful information. The best way to understand that pattern is to visualise the distribution of the variable's values. How you visualise the distribution of a variable will depend on whether the variable is **categorical** or **continuous**. 
+
+### Categorical variables
+
+A variable is **categorical** if it can take only one of a small set of values. In R, categorical variables are usually saved as factors or character vectors. You can visualize the distribution of a categorical variable with a bar chart, like the one below. 
+
+```{r echo = FALSE, out.width = "100%"}
+ggplot(data = mpg) +
+  geom_bar(aes(x = class)) + 
+  ggtitle("Classes of cars in mpg")
+```
+
+Don't worry if you cannot make or interpret a bar chart. We'll survey several types of charts in this tutorial, as we create a strategy for EDA. You'll learn how to build each type of chart in the tutorials that follow.
+
+### Continuous variables
+
+A variable is **continuous** if it can take any of an infinite set of smooth, ordered values. Here, smooth means that if you order the values on a line, an infinite number of values would exist between any two points on the line. For example, an infinite number of values exists between 0 and 1, e.g. 0.9, 0.99, 0.999, and so on. 
+
+Numbers and date-times are two examples of continuous variables. You can visualize the distribution of a continuous variable with a histogram, like the one below:
+
+```{r echo = FALSE, message = FALSE, out.width = "100%"}
+ggplot(data = faithful) +
+  geom_histogram(aes(x = eruptions), binwidth = 0.25) + 
+  ggtitle("Lengths of 272 eruptions of Old Faithful")
+```
+
+### Frequencies
+
+In both bar charts and histograms, tall bars show the common values of a variable, i.e. the values that appear frequently. Shorter bars show less-common values, i.e. values that appear infrequently. Places that do not have bars reveal values that were not seen in your data. To turn this information into useful questions, look for anything unexpected:
+
+* Which values are the most common? Why?
+
+* Which values are rare? Why? Does that match your expectations?
+
+* Can you see any unusual patterns? What might explain them?
+
+* Are there any **outliers**, which are points that don't fit the pattern or fall far away from the rest of the data? Are they the result of data entry errors or something else?
+
+Many of the questions above will prompt you to explore a relationship *between* variables, to see if the values of one variable can explain the values of another variable. We'll get to that shortly.
+
+### Review 4 - Frequencies
+
+The bar chart below visualises the distribution of the `class` variable in the `mpg` data set, which comes in the ggplot2 package. The height of the bars reveal how many cars in the data set come from each class. 
+
+```{r echo = FALSE, out.width = "100%"}
+ggplot(data = mpg) +
+  geom_bar(aes(x = class)) + 
+  ggtitle("Classes of cars in mpg")
+```
+
+```{r eda-fq1, echo = FALSE}
+
+quiz(caption = "The distribution of class in `mpg`",
+  question("What is the most common type of car in the `mpg` data set?",
+           answer("2seater"),
+           answer("compact"),
+           answer("midsize"),
+           answer("minivan"),
+           answer("pickup"),
+           answer("subcompact"),
+           answer("suv", correct = TRUE),
+           allow_retry = TRUE
+  ),
+  question("What is the least common type of car in the `mpg` data set?",
+           answer("2seater", correct = TRUE),
+           answer("compact"),
+           answer("midsize"),
+           answer("minivan"),
+           answer("pickup"),
+           answer("subcompact"),
+           answer("suv"),
+           allow_retry = TRUE
+  ), 
+  question("Does the distribution of cars in the `mpg` dataset seem to reflect the distribution of cars that you see on the road? Would your answer shape how you use this data?",
+           answer("I have my answers", correct = TRUE) 
+  )
+)
+```
+
+### Clusters
+
+For continuous variables, clusters of similar values suggest that subgroups exist in your data. To understand the subgroups, ask:
+
+* How are the observations within each cluster similar to each other?
+
+* How are the observations in separate clusters different from each other?
+
+* How can you explain or describe the clusters?
+
+* Why might the appearance of clusters be misleading?
+
+
+### Review 5 - Clusters
+
+The histogram below shows the distribution of the `eruptions` variable in the `faithful` data set, which comes with R. `eruptions` shows the lengths (in minutes) of 272 eruptions of the Old Faithful geyser in Yellowstone National Park.
+
+To interpret the histogram, look first at the x axis, which displays the lengths of eruptions recorded in the data. The range of the x axis shows that the shortest eruptions lasted for about one minute and the longest for about five minutes. 
+
+To see how many eruptions lasted for a specific length of time, find the length of time on the x axis and then look at the height of the bar above the length of time. For example, according to the histogram, 30 eruptions lasted for about two minutes, but only three lasted for about three minutes (the height of the bar above two is 30, the height of the bar above three is three).
+
+```{r echo = FALSE, message = FALSE, out.width = "100%"}
+ggplot(data = faithful) +
+  geom_histogram(aes(x = eruptions), binwidth = 0.25) + 
+  ggtitle("Lengths of 272 eruptions of Old Faithful")
+```
+
+```{r eda-cq1, echo = FALSE}
+question("Do the eruption lengths cluster into groups? How many?",
+           answer("No. There are no clusters."),
+           answer("Yes. Two clusters.", correct = TRUE, message = "Eruption lengths appear to be clustered into two groups: there are short eruptions (of around 2 minutes) and long eruptions (4-5 minutes), but few eruptions in between."),
+           answer("Yes. Three clusters."),
+           answer("Yes. Four clusters."),
+           allow_retry = TRUE
+  )
+```
+
+
+### What is covariation?
+
+If variation describes the behavior _within_ a variable, covariation describes the behavior _between_ variables. **Covariation** is the tendency for the values of two or more variables to vary together in a related way. The best way to spot covariation is to visualise the relationship between two or more variables. How you do that should again depend on whether your variables are categorical or continuous.
+
+### Two categorical variables
+
+You can plot the relationship between two categorical variables with a heatmap or with geom_count:
+
+```{r echo = FALSE, out.width = "50%"}
+diamonds %>% 
+  count(color, cut) %>% 
+  ggplot(mapping = aes(x = color, y = cut)) +
+    geom_tile(mapping = aes(fill = n)) +
+    ggtitle("Color grade vs. cut quality for 53940 diamonds")
+
+ggplot(diamonds) +
+  geom_count(aes(color, cut)) +
+    ggtitle("Color grade vs. cut quality for 53940 diamonds")
+```
+
+Again, don't be concerned if you do not know how to make these graphs. For now, let's focus on the strategy of how to use visualizations in EDA. You'll learn how to make different types of plots in the tutorials that follow. 
+
+### One continuous and one categorical variable
+
+You can plot the relationship between one continuous and one categorical variable with a boxplot:
+
+```{r echo = FALSE, out.width = "100%"}
+ggplot(mpg) +
+  geom_boxplot(aes(reorder(class, hwy, median), hwy)) +
+    ggtitle("Pickup trucks and SUVs display the lowest fuel efficiency") +
+    labs(x = "class")
+```
+
+### Two continuous variables
+
+You can plot the relationship between two continuous variables with a scatterplot:
+
+```{r echo = FALSE, message = FALSE, out.width = "100%"}
+ggplot(data = faithful) +
+  geom_point(aes(x = eruptions, y = waiting)) + 
+  ggtitle("Length of eruption vs wait time before eruption")
+```
+
+### Patterns
+
+Patterns in your data provide clues about relationships. If a systematic relationship exists between two variables it will appear as a pattern in the data. If you spot a pattern, ask yourself:
+
++ Could this pattern be due to coincidence (i.e. random chance)?
+
++ How can you describe the relationship implied by the pattern?
+
++ How strong is the relationship implied by the pattern?
+
++ What other variables might affect the relationship?
+
++ Does the relationship change if you look at individual subgroups of the data?
+
+Remember that clusters and outliers are also a type of pattern. Two dimensional plots can reveal clusters and outliers that would not be visible in a one dimensional plot. If you spot either, ask yourself what they imply.
+
+### Review 6 - Patterns
+
+The scatterplot below shows the relationship between the length of an eruption of Old Faithful and the wait time before the eruption (i.e. the amount of time that passed between it and the previous eruption).
+
+```{r echo = FALSE, message = FALSE, out.width = "100%"}
+ggplot(data = faithful) +
+  geom_point(aes(x = eruptions, y = waiting)) + 
+  ggtitle("Length of eruption vs wait time before eruption")
+```
+
+```{r pq1, echo = FALSE}
+question("Does the scatterplot above reveal a pattern that helps to explain the variation in lengths of Old Faithful eruptions?",
+         answer("No. There is no pattern."),
+         answer("Yes. Long eruptions are associated with a _short_ wait before the eruption"),
+         answer("Yes. Long eruptions are associated with a _long_ wait before the eruption", correct = TRUE, message = "The data seems to suggest that a long build up before an eruption is associated with a long eruption. The plot also shows the two clusters that we saw before: there are long eruptions with a long build up and short eruptions with a short build up."),
+         allow_retry = TRUE
+)
+```
+
+### Uncertainty 
+
+Patterns provide a useful tool for data scientists because they reveal covariation. If you think of variation as a phenomenon that creates uncertainty, covariation is a phenomenon that reduces it. When two variables covary, you can use the values of one variable to make better predictions about the values of the second. If the covariation is due to a causal relationship (a special case), you can use the value of one variable to control the value of the second.
+
+
+
+### A note on observations
+
+Observations are one of the trickiest ideas in data science, but they are easy to understand in the light of covariation. As scientists, we want to discover covariation, or more generally, the relationships between variables. Think of an observation as _a tool for discovering relationships between variables_. Here's how it works:
+
+An observation is a set of values, but not all sets of values are observations. To be an observation, a set of values will need a specific property: _If a relationship exists between the variables that the values describe, then the relationship will also exist between the values themselves_. If this is true, then each observation will give us a glimpse of the relationship. If we visualize many observations, we can see the shape of the relationship---literally.
+
+Not every combination of values will have this property. For example, if you pair the wait time before a geyser eruption that occurs today with the length of a geyser eruption that occurs tomorrow, the combination will tell you little about the relationship between the wait time before an eruption and the length of the eruption.
+
+### Which combination?
+
+The correct combination of values to use will depend on the relationship that you are trying to discover. 
+
+
+### A note on observations
+
+Observations are one of the trickiest ideas in data science, but they are easy to understand in the light of covariation. As data scientists, we want to discover covariation, or more generally, the relationships between variables. Think of an observation as _a piece of evidence_ about a relationship between variables_. Here's how it works:
+
+An observation is a set of values, but not all sets of values are observations. To be an observation, a set of values needs to supply evidence about a relationship. This can only happen if the set of values has a specific property: _If a relationship exists between the variables that the values describe, then the relationship will also exist between the values themselves_. If this is true, then each observation will give us a glimpse of the relationship. If we visualize many observations, we can see the shape of the relationship---literally.
+
+Not every combination of values will have this property. For example, if you pair the wait time before a geyser eruption that occurs today with the length of a geyser eruption that occurs tomorrow, the combination will tell you little about the relationship between the wait time before an eruption and the length of the eruption.
+
+
+
+### Recap
+
+You've learned a lot in this tutorial. Here's what you should keep with you:
+
+* EDA is an iterative cycle built around asking and refining questions.
+* These two questions are always useful:
+    1. What type of variation occurs _within_ my variables?
+    1. What type of covariation occurs _between_ my variables?
+* Remember the definitions of _variables_, _values_, _observations_, _variation_, _covariation_, _categorical_, and _continuous_. You'll see them again. Frequently.
+
+Throughout the tutorial, you also encountered several recommendations for plots that visualize variation and covariation for categorical and continuous variables. Plots are a bit like questions in EDA: you should make many quickly and try anything that strikes your fancy. You can refine your plots later to share with others. A lot of refinement will occur naturally as you iterate during EDA. 
+
+The suggestions below can serve as starting point for visualizing data. In the tutorials that follow, you will learn how to make each type of plot, as well as how to use best practices and advanced skills when visualizing data.
+
+```{r echo = FALSE, out.width = "100%"}
+knitr::include_graphics("img/plots-table.png")
+```
+
+
+
+
+## Histograms
+
+**Histograms** are the most popular way to visualize continuous distributions. Here we will look at them and their derivatives. You will learn how to:
+
+* Make and interpret histograms
+* Adjust the **binwidth** of a histogram to reveal new information
+* Use geoms that are similar to histograms, such as __dotplots__, __frequency polygons__, and __densities__
+
+The tutorial is adapted from _R for Data Science_ by Hadley Wickham and Garrett Grolemund, published by O’Reilly Media, Inc., 2016, ISBN: 9781491910399. You can purchase the book at [shop.oreilly.com](http://shop.oreilly.com/product/0636920034407.do).
+
+The tutorial uses the ggplot2 and dplyr packages, which have been pre-loaded for your convenience.
+
+
+![](https://vimeo.com/221607341)
+
+### How to make a histogram
+
+To make a histogram with ggplot2, add `geom_histogram()` to the [ggplot2 template](https://tutorials.shinyapps.io/02-Vis-Basics/). For example, the code below plots a histogram of the `carat` variable in the `diamonds` dataset, which comes with ggplot2. 
+
+```{r hist1, exercise = TRUE, out.width = "80%", message = FALSE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat))
+```
+
+### The y variable
+
+As with `geom_bar()`, you do not need to give `geom_histogram()` a $y$ variable. `geom_histogram()` will construct its own $y$ variable by counting the number of observations that fall into each bin on the $x$ axis. `geom_histogram()` will then map the counts to the $y$ axis. 
+
+```{r out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat))
+```
+
+As a result, you can glance at a bar to determine how many observations fall within a bin. Bins with tall bars highlight common values of the $x$ variable.
+
+### Exercise 1 - Interpretation
+
+```{r out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat))
+```
+
+```{r r1, echo = FALSE}
+question("According to the chart, which is the most common carat size in the data?",
+         answer("Approximately 0.3 or 0.4 carats", correct = TRUE, message = "More than 15,000 diamonds in the data have a value in the bin near 0.3 and 0.4. That's more than any other bin. How do we know? because the bar above 0.3 to 0.4 goes to 15,000, higher than any other bar in the plot."),
+         answer("Approximately 1 carat"),
+         answer("Approximately 1.5 carat"),
+         answer("Approximately 2 carats"),
+         allow_retry = TRUE
+)
+```
+
+### binwidth
+
+By default, ggplot2 will choose a binwidth for your histogram that results in about 30 bins. You can set the binwidth manually with the `binwidth` argument, which is interpreted in the units of the x axis:
+
+```{r hist2, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 1)
+```
+
+### bins
+
+Alternatively, you can set the binwidth with the `bins` argument which takes the total number of bins to use:
+
+```{r hist3, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), bins = 10)
+```
+
+It can be hard to determine what the actual binwidths are when you use `bins`, since they may not be round numbers.
+
+### boundary
+
+You can move the bins left and right along the $x$ axis with the `boundary` argument. `boundary` takes an $x$ value to use as the boundary between two bins (ggplot2 will align the rest of the bins accordingly): 
+
+```{r hist4, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), bins = 10, boundary = 0)
+```
+
+### Exercise 2 - binwidth
+
+When you use `geom_histogram()`, you should always experiment with different binwidths because different size bins reveal different types of information.
+
+To see an example of this, make a histogram of the `carat` variable in the `diamonds` dataset. Use a bin size of 0.5 carats. What does the overall shape of the distribution look like?
+
+```{r hist-r2, exercise = TRUE}
+
+```
+
+```{r hist-r2-check}
+"Good job! The most common diamond size is about 0.5 carats. Larger sizes become progressively less frequent as carat size increases. This accords with general knowledge about diamonds, so you may be prompted to stop exploring the distribution of carat size. But should you?"
+```
+
+```{r hist-r2-solution}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.5)
+```
+
+### Exercise 3 - another binwidth
+
+Recreate your histogram of `carat` but this time use a binwidth of 0.1. Does your plot reveal new information? Look closely. Is there more than one peak? Where do the peaks occur?
+
+```{r hist-r3, exercise = TRUE}
+
+```
+
+```{r hist-r3-check}
+"Good job! The new binwidth reveals a new phenomena: carat sizes like 0.5, 0.75, 1, 1.5, and 2 are much more common than carat sizes that do not fall near a common fraction. Why might this be?"
+```
+
+```{r hist-r3-solution}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.1)
+```
+
+### Exercise 4 - another binwidth
+
+Recreate your histogram of `carat` a final time, but this time use a binwidth of 0.01 and set the first boundary to zero. Try to find one new pattern in the results.
+
+```{r hist-r4, exercise = TRUE}
+
+```
+
+```{r hist-r4-check}
+"Good job! The new binwidth reveals another phenomena: each peak is very right skewed. In other words, diamonds that are 1.01 carats are much more common than diamonds that are .99 carats. Why would that be?"
+```
+
+```{r hist-r4-solution}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.01, boundary = 0)
+```
+
+### aesthetics
+
+Visually, histograms are very similar to bar charts. As a result, they use the same aesthetics: _alpha_, _color_, _fill_, _linetype_, and _size_.
+
+They also behave in the same odd way when you use the color aesthetic. Do you remember what happens?
+
+```{r hist-q1, echo = FALSE}
+question("Which aesthetic would you use to color the interior fill of each bar in a histogram?",
+         answer("color", message = 'For histograms, color controls color of the outline of each bar.'),
+         answer("fill", correct = TRUE, message = 'For geoms with "substance", like bars, fill controls the color of the interior of the geom. Color controls the outline.'),
+         allow_retry = TRUE)
+```
+
+### Exercise 5 - Putting it all together
+
+Recreate the histogram below. 
+
+```{r out.width = "100%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = price, fill = cut), binwidth = 1000, boundary = 0)
+```
+
+```{r hist-r5, exercise = TRUE}
+
+```
+
+```{r hist-r5-check}
+"Good job! Did you ensure that each binwidth is 1000 and that the first boundary is zero?"
+```
+
+```{r hist-r5-solution}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = price, fill = cut), binwidth = 1000, boundary = 0)
+```
+
+
+### Similar geoms: A problem
+
+By adding a fill color to our histogram below, we've divided the data into five "sub-distributions": the distribution of price for Fair cut diamonds, for Good cut diamonds, for Very Good cut diamonds, for Premium cut diamonds, and for Ideal cut diamonds.
+
+```{r out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = price, fill = cut), binwidth = 1000, boundary = 0)
+```
+
+But this display has some shortcomings:
+
+* it is difficult to see the "shapes" of the individual distributions
+* it is difficult to compare the individual distributions, because they do not share a common baseline value for $y$.
+
+### A solution
+
+We can improve the plot by using a different geom to display the distributions of price values. ggplot2 includes three geoms that display the same information as a histogram, but in different ways:
+
+1. `geom_freqpoly()`
+1. `geom_density()`
+1. `geom_dotplot()`
+
+### geom_freqpoly()
+
+`geom_freqpoly()` plots a _frequency polygon_, which uses a line to display the same information as a histogram. You can think of a frequency polygon as a line that would connect the top of each bar that appears in a histogram, like this:
+
+```{r out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.25, boundary = 0, fill = "grey50") +
+  geom_freqpoly(mapping = aes(x = carat), binwidth = 0.25, boundary = 0, size = 0.7)
+```
+
+Note that the bars are not part of the frequency polygon; they are just there for reference. `geom_freqpoly()` recognizes the same parameters as `geom_histogram()`, such as `bins`, `binwidth`, and `boundary`.
+
+### Exercise 6 - Frequency polygons
+
+Create the frequency polygon depicted above. It has a binwidth of 0.25 and starts at the boundary zero.
+
+```{r hist-r6, exercise = TRUE}
+
+```
+
+```{r hist-r6-check}
+"Good job! By using a line instead of bars, frequency polygons can sometimes do things that histograms cannot."
+```
+
+```{r hist-r6-solution}
+ggplot(data = diamonds) +
+  geom_freqpoly(mapping = aes(x = carat), binwidth = 0.25, boundary = 0)
+```
+
+### Exercise 7 - Multiple frequency polygons
+
+Use a frequency polygon to recreate our chart of price and cut. Since lines do not have "substance" like bars, you will want to use the color aesthetic instead of the fill aesthetic.
+
+```{r out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = price, fill = cut), binwidth = 1000, boundary = 0)
+```
+
+```{r hist-r7, exercise = TRUE}
+
+```
+
+```{r hist-r7-check}
+"Good job! Since lines do not occlude each other, `geom_freqpoly()` plots each sub-group against the same baseline: y = 0 (i.e. it unstacks the sub-groups). This makes it easier to compare the distributions. You can now see that for almost every price value, there are more Ideal cut diamonds than there are other types of diamonds."
+```
+
+```{r hist-r7-solution}
+ggplot(data = diamonds) +
+  geom_freqpoly(mapping = aes(x = price, color = cut), binwidth = 1000, boundary = 0)
+```
+
+### geom_density()
+
+Our frequency polygon highlights a second shortcoming with our graph: it is difficult to compare the shapes of the distributions because some sub-groups contain more diamonds than others. This compresses smaller subgroups into the bottom of the graph.
+
+```{r out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_freqpoly(mapping = aes(x = price, color = cut), binwidth = 1000, boundary = 0)
+```
+
+You can avoid this with `geom_density()`.
+
+### Density curves
+
+`geom_density()` plots a kernel density estimate (i.e. a density curve) for each distribution. This is a smoothed representation of the data, analogous to a smoothed histogram. 
+
+Density curves do not plot count on the $y$ axis but _density_, which is analagous to the count divided by the total number of observations. Densities makes it easy to compare the distributions of sub-groups. When you plot multiple sub-groups, each density curve will contain the same area under its curve.
+
+```{r out.width = "50%", echo = FALSE, message = FALSE}
+data <- data.frame(data = c(rnorm(1000), rnorm(500, mean = 3), rnorm(100, mean = 6)),
+                   group = c(rep("A", 1000), rep("B", 500), rep("C", 100)))
+ggplot(data = data) +
+  geom_freqpoly(mapping = aes(x = data, color = group)) +
+  ggtitle("Data with counts")
+
+ggplot(data = data) +
+  geom_density(mapping = aes(x = data, color = group)) + 
+  ggtitle("Same data with densities")
+```
+
+### Exercise 8 - Density curves
+
+Re-draw our plot with density curves. How do you interpret the results?
+
+```{r out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = price, fill = cut), binwidth = 1000, boundary = 0)
+```
+
+```{r hist-r8, exercise = TRUE}
+
+```
+
+```{r hist-r8-check}
+"Good job! You can now compare the most common prices for each sub-group. For example, the plot shows that the most common price for most diamonds is near $1000. However, the most common price for Fair cut diamonds is significantly higher, about $2500. We will come back to this oddity in a later tutorial."
+```
+
+```{r hist-r8-solution}
+ggplot(data = diamonds) +
+  geom_density(mapping = aes(x = price, color = cut))
+```
+
+### Density parameters
+
+Density plots do not take `bin`, `binwidth`, and `boundary` parameters. Instead they recognize kernel and smoothing parameters that are used in the density fitting algorithm, which is fairly sophisticated. 
+
+In practice, you can obtain useful results quickly with the default parameters of `geom_density()`. If you'd like to learn more about density estimates and their tuning parameters, begin with the help page at `?geom_density()`.
+
+### geom_dotplot()
+
+ggplot2 provides a final geom for displaying one dimensional distributions: `geom_dotplot()`. `geom_dotplot()` represents each observation with a dot and then stacks dots within bins to create the semblance of a histogram.
+
+Dotplots can provide an intuitive display of the data, but they have several shortcomings. Dotplots are not ideal for large data sets like `diamonds`, and provide meaningless $y$ axis labels. I also find that the tuning parameters of `geom_dotplot()` make dotplots too slow to work with for EDA.
+
+```{r dotplot, exercise = TRUE, exercise.eval = TRUE, message = FALSE}
+ggplot(data = mpg) +
+  geom_dotplot(mapping = aes(x = displ), dotsize = 0.5, stackdir = "up", stackratio = 1.1)
+```
+
+### Exercise 9 - Facets
+
+Instead of changing geoms, you can make the sub-groups in our original plot easier to compare by facetting the data. Extend the code below to facet by cut.
+
+```{r hist-r9, exercise = TRUE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = price, fill = cut), binwidth = 1000, boundary = 0)
+```
+
+```{r hist-r9-check}
+"Good job! Facets make it easier to compare sub-groups, but at the expense of separating the data. You may decide that frequency polygons and densities allow more direct comparisons."
+```
+
+```{r hist-r9-solution}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = price, fill = cut), binwidth = 1000, boundary = 0) +
+  facet_wrap( ~cut)
+```
+
+### Recap
+
+In this tutorial, you learned how to visualize distributions with histograms, frequency polygons, and densities. But what should you look for in these visualizations?
+
+* **Look for places with lots of data.** Tall bars reveal the most common values in your data; you can expect these values to be the "typical values" for your variable.
+
+* **Look for places with little data.** Short bars reveal uncommon values. These values appear rarely and you might be able to figure out why.
+
+* **Look for outliers.** Bars that appear away from the bulk of the data are outliers, special cases that may reveal unexpected insights. 
+    
+    Sometimes outliers cannot be seen in a plot, but can be inferred from the range of the $x$ axis. For example, many of the plots in this tutorial seemed to extend well past the end of the data. Why? Because the range was stretched to include outliers. When your data set is large, like `diamonds`, the bar that describes an outlier may be invisible (i.e. less than one pixel high).
+    
+* **Look for clusters.**
+
+* **Look for shape.** The shape of a histogram can often indicate whether or not a variable behaves according to a known probability distribution.
+
+The most important thing to remember about histograms, frequency polygons, and dotplots is to explore different binwidths. The binwidth of a histogram determines what information the histogram displays. You cannot predict ahead of time which binwidth will reveal unexpected information.
+
+
+
+
+## Boxplots
+
+
+**Boxplots** display the relationship between a continuous variable and a categorical variable. **Count** plots display the relationship between two categorical variables. In this tutorial, you will learn how to use both. You will learn how to:
+
+* Make and interpret boxplots
+* Rotate boxplots by flipping the coordinate system of your plot
+* Use *violin* plots and *dotplots*, two geoms that are similar to boxplots
+* Make and interpret count plots
+
+The tutorial is adapted from _R for Data Science_ by Hadley Wickham and Garrett Grolemund, published by O’Reilly Media, Inc., 2016, ISBN: 9781491910399. You can purchase the book at [shop.oreilly.com](http://shop.oreilly.com/product/0636920034407.do).
+
+The tutorial uses the ggplot2 and dplyr packages, which have been pre-loaded for your convenience.
+
+![](https://vimeo.com/222358034)
+
+### Exercise 1 - Boxplots
+
+```{r echo = FALSE, out.width="80%"}
+knitr::include_graphics("img/box-png.png")
+```
+
+
+```{r bp-r1, echo = FALSE}
+question("Which of the sub-plots accurately describes the data above with a boxplot?",
+         answer("A", message = "Good try, but this is tricky. The middle of this box is near the middle of the range of the data, but it is not the median. The median depends on how many observations are on each side of the value."  ),
+         answer("B", message = "This box extends the entire range of the data. This could be a useful plot, ggplot2 calls it a crossbar, but it is not a boxplot"),
+         answer("C", correct = TRUE),
+         allow_retry = TRUE
+)
+```
+
+### How to make a boxplot
+
+To make a boxplot with ggplot2, add `geom_boxplot()` to the [ggplot2 template](https://tutorials.shinyapps.io/02-Vis-Basics/). For example, the code below uses boxplots to display the relationship between the `class` and `hwy` variables in the `mpg` dataset, which comes with ggplot2. 
+
+```{r boxplot, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy))
+```
+
+### Categorical and continuous
+
+`geom_boxplot()` expects the $y$ axis to be continuous, but accepts categorical variables on the $x$ axis. For example, here `class` is categorical. `geom_boxplot()` will automatically plot a separate boxplot for each value of $x$. This makes it easy to compare the distributions of points with different values of $x$.
+
+```{r  out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy))
+```
+
+### Exercise 2 - Interpretation
+
+```{r  out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy))
+```
+
+```{r bp-r2, echo = FALSE}
+question("Which class of car has the lowest median highway fuel efficiency (`hwy` value)?",
+         answer("2seater"),
+         answer("compact"),
+         answer("midsize"),
+         answer("minivan"),
+         answer("pickup", correct = TRUE),
+         answer("subcompact"),
+         answer("suv", message = "Close. But look closer."),
+         allow_retry = TRUE
+)
+```
+
+### Exercise 3 - Make a Boxplot
+
+Recreate the boxplot below with the diamonds data set.
+
+```{r  out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = cut, y = price))
+```
+
+```{r bp-r3, exercise = TRUE}
+
+```
+
+```{r bp-r3-solution}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = cut, y = price))
+```
+
+```{r bp-r3-check}
+"Do you notice how many outliers appear in the plot? The boxplot algorithm can identify many outliers if your data is big, perhaps too many. Let's look at ways to suppress the appearance of outliers in your plot."
+```
+
+### Outliers
+
+You can change how outliers look in your boxplot with the parameters `outlier.color`, `outlier.fill`, `outlier.shape`, `outlier.size`, `outlier.stroke`, and `outlier.alpha` (`outlier.shape` takes a number from 1 to 25). 
+
+Unfortunately, you can't tell `geom_boxplot()` to ignore outliers completely, but you can make outliers disappear by setting `outlier.alpha = 0`. Try it in the plot below.
+
+```{r bp-outliers, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = cut, y = price), outlier.shape  = 24, 
+               outlier.fill = "white", outlier.stroke = 0.25)
+```
+
+```{r bp-outliers-solution}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = cut, y = price), outlier.alpha = 0)
+```
+
+<!--
+
+### notch and varwidth
+
+You can further customize your boxplots with the parameters `notch` and `varwidth`. `notch` adds a notch near the median of each box. `varwidth` maps the width of the boxplots on the $x$ axis to the number of points described by the boxplot. This makes it easy to see which distributions have the most points.
+
+Add `varwidth` to the plot below.
+
+```{r varwidth, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = cut, y = price), notch = TRUE)
+```
+
+```{r varwidth-solution}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = cut, y = price), notch = TRUE, varwidth = TRUE)
+```
+
+```{r varwidth-check}
+"Good job! You can also customize boxplots with traditional ggplot2 aesthetics. Let's take a look."
+```
+
+-->
+
+### Aesthetics
+
+Boxplots recognize the following aesthetics: _alpha_, _color_, _fill_, _group_, _linetype_, _shape_, _size_, and _weight_.
+
+Of these _group_ can be the most useful. Consider the plot below. It uses a continuous variable on the $x$ axis. As a result, `geom_boxplot()` is not sure how to split the data into categories: it lumps all of the data into a single boxplot. The result reveals little about the relationship between carat and price.
+
+```{r  out.width = "80%", echo = FALSE, message = FALSE, warning = FALSE}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = carat, y = price))
+```
+
+In the next sections, we'll use _group_ to make a more informative plot.
+
+### How to "cut" a continuous variable
+
+ggplot2 provides three helper functions that you can use to split a continuous variable into categories. Each takes a continuous vector and returns a categorical vector that assigns each value to a group. For example, `cut_interval()` bins a vector into `n` equal length bins.
+
+```{r}
+continuous_vector <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+continuous_vector
+```
+
+```{r}
+cut_interval(continuous_vector, n = 3)
+```
+
+### The cut functions
+
+The three cut functions are
+
+* `cut_interval()` which makes `n` groups with equal range
+* `cut_number()` which makes `n` groups with (approximately) equal numbers of observations
+* `cut_width()` which makes groups with width `width`
+
+Use one of three functions below to bin `continuous_vector` into groups of `width = 2`.
+
+```{r cut-setup}
+continuous_vector <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+continuous_vector
+```
+
+```{r cut, exercise = TRUE, exercise.eval = TRUE}
+continuous_vector
+```
+
+```{r cut-solution}
+cut_width(continuous_vector, width = 2)
+```
+
+```{r cut-check}
+"Good job! Now let's apply the cut functions to our graph."
+```
+
+### Exercise 4 - Apply a cut function
+
+When you set the $group$ aesthetic of a boxplot, `geom_boxplot()` will draw a separate boxplot for each collection of observations that have the same value of whichever vector you map to $group$. 
+
+This means we can split our `carat` plot by mapping $group$ to the output of a cut function, as in the code below. Study the code, then modify it to create a separate boxplot for each 0.25 wide interval of `carat`.
+
+```{r bp-r4, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = carat, y = price, group = cut_interval(carat, n = 2)))
+```
+
+```{r bp-r4-solution}
+ggplot(data = diamonds) +
+  geom_boxplot(mapping = aes(x = carat, y = price, group = cut_width(carat, width = 0.25)))
+```
+
+```{r r4-check}
+"Good job! You can now see a relationship between price and carat. You could also make a scatterplot of these variables, but in this case, it would be a black mass of 54,000 data points."
+```
+
+### coord_flip()
+
+`geom_boxplot()` always expects the categorical variable to appear on the $x$ axis, which create horizontal boxplots. But what if you'd like to make horizontal boxplots, like in the plot below?
+
+```{r  out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy)) +
+  coord_flip()
+```
+
+You can do this by adding `+ coord_flip()` to your plot call. 
+
+### Exercise 5 - Horizontal boxplots
+
+Extend the code below to orient the boxplots horizontally.
+
+```{r bp-r5, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy))
+```
+
+```{r bp-r5-solution}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy)) +
+  coord_flip()
+```
+
+```{r bp-r5-check}
+"Good job! `coord_flip()` is an example of a new coordinate system. You'll learn much more about ggplot2 coordinate systems in a later tutorial."
+```
+
+
+
+
+### Similar Geoms: geom_dotplot()
+
+Boxplots provide a quick way to represent a distribution, but they leave behind a lot of information. ggplot2 supplements boxplots with two geoms that show more information.
+
+The first is `geom_dotplot()`. If you set the `binaxis` parameter of `geom_dotplot()` to `"y"`, `geom_dotplot()` behaves like `geom_boxplot()`, display a separate distribution for each group of data.
+
+Here each group functions like a vertical histogram. Add the parameter `stackdir = "center"` then re-run the code. Can you interpret the results?
+
+```{r bp-r6, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = mpg) +
+  geom_dotplot(mapping = aes(x = class, y = hwy), binaxis = "y", 
+               dotsize = 0.5, binwidth = 1)
+```
+
+```{r bp-r6-solution}
+ggplot(data = mpg) +
+  geom_dotplot(mapping = aes(x = class, y = hwy), binaxis = "y", 
+               dotsize = 0.5, binwidth = 1, stackdir = "center")
+```
+
+```{r bp-r6-check}
+'Good job! When you set `stackdir = "center"`, `geom_dotplot()` arranges each row of dots symmetrically around the $x$ value. This layout will help you understand the next geom.
+
+As in the histogram tutorial, it takes a lot of tweaking to make a dotplot look right. As a result, I tend to only use them when I want to make a point.'
+```
+
+### geom_violin()
+
+`geom_violin()` provides a second alternative to `geom_boxplot()`. A violin plot uses densities to draw a smoothed version of the centered dotplot you just made.
+
+You can think of a violin plot as an outline drawn around the edges of a centered dotplot. Each "violin" spans the range of the data. The violin is thick where there are many values, and thin where there are few.
+
+Convert the plot below from a boxplot to a violin plot. Note that violin plots do not use the parameters you saw for dotplots.
+
+```{r bp-r7, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy))
+```
+
+```{r bp-r7-solution}
+ggplot(data = mpg) +
+  geom_violin(mapping = aes(x = class, y = hwy))
+```
+
+```{r bp-r7-check}
+'Good job! Another way to interpret a violin plot is to mentally "push" the width of each violin all to one side (so the other side is a straight line). The result would be a density (e.g. `geom_density()`) turned on its side for each distribution).'
+```
+
+### Exercise 7 - Violin plots
+
+You can further enhance violin plots by adding the parameter `draw_quantiles = c(0.25, 0.5, 0.75)`. This will cause ggplot2 to draw horizontal lines across the violins at the 25th, 50th, and 75th percentiles. These are the same three horizontal lines that are displayed in a boxplot (the 25th and 75th percentiles are the bounds of the box, the 50th percentile is the median).
+
+Add these lines to the violin plot below.
+
+```{r bp-r8, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = mpg) +
+  geom_violin(mapping = aes(x = class, y = hwy))
+```
+
+```{r bp-r8-solution}
+ggplot(data = mpg) +
+  geom_violin(mapping = aes(x = class, y = hwy), draw_quantiles = c(0.25, 0.5, 0.75))
+```
+
+```{r bp-r8-check}
+'Good job! Can you predict how you would use `draw_quantiles` to draw a horizontal line at a different percentile, like the 60th percentile?.'
+```
+
+
+
+### Counts: geom_count()
+
+Boxplots provide an efficient way to explore the interaction of a continuous variable and a categorical variable. But what if you have two categorical variables?
+
+You can see how observations are distributed across two categorical variables with `geom_count()`. `geom_count()` draws a point at each combination of values from the two variables. The size of the point is mapped to the number of observations with this combination of values. Rare combinations will have small points, frequent combinations will have large points.
+
+```{r  out.width = "80%", echo = FALSE, message = FALSE}
+ggplot(data = diamonds) +
+  geom_count(mapping = aes(x = color, y = clarity))
+```
+
+### Exercise 8 - Count plots
+
+Use `geom_count()` to plot the interaction of the `cut` and `clarity` variables in the `diamonds` data set.
+
+```{r bp-r9, exercise = TRUE}
+
+```
+
+```{r bp-r9-solution}
+ggplot(data = diamonds) +
+  geom_count(mapping = aes(x = cut, y = clarity))
+```
+
+### count
+
+You can use the `count()` function in the **dplyr** package to compute the count values displayed by `geom_count()`. To use `count()`, pass it a data frame and then the names of zero or more variables in the data frame. `count()` will return a new table that lists how many observations occur with each possible combination of the listed variables.
+
+So for example, the code below returns the counts that you visualized in Exercise 8.
+
+```{r}
+ diamonds %>% 
+   count(cut, clarity)
+```
+
+### Heat maps
+
+Heat maps provide a second way to visualize the relationship between two categorical variables. They work like count plots, but use a fill color instead of a point size, to display the number of observations in each combination.
+
+### How to make a heat map
+
+ggplot2 does not provide a geom function for heat maps, but you can construct a heat map by plotting the results of `count()` with `geom_tile()`. 
+
+To do this, set the x and y aesthetics of `geom_tile()` to the variables that you pass to `count()`. Then map the fill aesthetic to the `n` variable computed by `count()`. The plot below displays the same counts as the plot in Exercise 8.
+
+```{r}
+ diamonds %>% 
+   count(cut, clarity) %>% 
+   ggplot() +
+     geom_tile(mapping = aes(x = cut, y = clarity, fill = n))
+```
+
+### Exercise 9 - Make a heat map
+
+Practice the method above by re-creating the heat map below.
+
+```{r echo = FALSE, out.width = "80%"}
+ diamonds %>% 
+   count(color, cut) %>% 
+   ggplot(mapping = aes(x = color, y = cut)) +
+     geom_tile(mapping = aes(fill = n))
+```
+
+```{r bp-r10, exercise = TRUE}
+
+```
+
+```{r bp-r10-solution}
+ diamonds %>% 
+   count(color, cut) %>% 
+   ggplot(mapping = aes(x = color, y = cut)) +
+     geom_tile(mapping = aes(fill = n))
+```
+
+```{r bp-r10-check}
+"Good job!"
+```
+
+
+### Recap
+
+Boxplots, dotplots and violin plots provide an easy way to look for relationships between a continuous variable and a categorical variable. Violin plots convey a lot of information quickly, but boxplots have a head start in popularity --- they were easy to use when statisticians had to draw graphs by hand.
+
+In any of these graphs, look for distributions, ranges, medians, skewness or anything else that catches your eye to change in an unusual way from distribution to distribution. Often, you can make patterns even more revealing with the `fct_reorder()` function from the forcats package (we'll wait to learn about forcats until after you study factors).
+
+Count plots and heat maps help you see how observations are distributed across the interactions of two categorical variables.
 
 ## Congratulations!
 
-You have successfully completed Lesson 1 in Tutorial 7: Visualisation.
+You have successfully completed Tutorial 7: Visualisation.
 If you need to generate a hash for submission, click "Next Topic".
-
-What's next?
-
-
-
-`r emo::ji("ledger")` [Full list of tutorials](https://oferengel.github.io/ims-tutorials-4-umcg/)
-
-`r emo::ji("spiral_notepad")` [Tutorial 2: Exploring data](https://oferengel.github.io/ims-tutorials-4-umcg/02-explore/)
-
-`r emo::ji("one")` [2.1: Visualizing categorical data](https://oferengel-posit.shinyapps.io/02-01-lesson/)
-
-`r emo::ji("two")` [2.2: Visualizing numerical data](https://oferengel-posit.shinyapps.io/02-02-lesson/)
-
-`r emo::ji("three")` [2.3: Summarizing with statistics](https://oferengel-posit.shinyapps.io/02-03-lesson/)
-
-`r emo::ji("four")` [2.4: Case study](https://oferengel-posit.shinyapps.io/02-04-lesson/)
-
-`r emo::ji("open_book")` [Learn more at Introduction to Modern Statistics](http://openintro-ims.netlify.app/)
 
 
 ## Submit

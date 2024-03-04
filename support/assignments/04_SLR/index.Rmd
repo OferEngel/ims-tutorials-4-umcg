@@ -81,8 +81,8 @@ write_rds(penguins, "data/penguins.rds")
 
 
 
-<span style="color: red;font-size: 14px;font-weight: bold;">DEADLINE FOR COMPLETING THIS LAB: Friday, 3rd November 
-<br/>GROUP WORK. One member of your group submits your final report [using this form](https://forms.gle/JB5c9apmkx3wD8WG7). </span>
+<span style="color: red;font-size: 14px;font-weight: bold;">DEADLINE FOR COMPLETING THIS LAB: Wednesday, 13rd March (midnight) 
+<br/>GROUP WORK. One member of your group submits your final report [using this form](https://forms.gle/59RskJpiznEtc9US8). </span>
 
 
 
@@ -411,4 +411,52 @@ Anova(M2, type = 3)
 ## Modelling the association between bill depth and body mass
 
 11. Now repeat exercises 6 - 10 but this time analyze the association between the bill depth and the body mass: `body_mass_g ~ bill_depth_mm + species`.
+
+```{r ex11, echo=FALSE, eval=FALSE}
+
+
+penguins <- palmerpenguins::penguins
+library(faux)
+penguins_contrasts <- penguins %>% 
+  mutate(species = fct_relevel(species, "Gentoo")) %>% 
+  add_contrast("species", contrast = "treatment", colnames = c("species 1", "species 2")) %>% 
+  select(c(1, 4, 6, 9, 10))  # %>% 
+  # mutate(`species 1` = as.factor(`species 1`), `species 2` = as.factor(`species 2`))
+# penguins_contrasts <- penguins %>% add_contrast("species", contrast = "treatment") %>% 
+#   select(c(1, 4, 6, 9, 10))
+
+M_mass_bill_1 <- lm(body_mass_g ~ bill_depth_mm, data = penguins_contrasts)
+M_mass_bill_2 <- lm(body_mass_g ~ bill_depth_mm + species, data = penguins_contrasts)
+M_mass_bill_3 <- lm(body_mass_g ~ bill_depth_mm + `species 1`, data = penguins_contrasts)
+M_mass_bill_4 <- lm(body_mass_g ~ bill_depth_mm + `species 2`, data = penguins_contrasts)
+M_mass_bill_5 <- lm(body_mass_g ~ bill_depth_mm + `species 1` + `species 2`, data = penguins_contrasts)
+
+# summary(M_mass_bill_1)
+# summary(M_mass_bill_3)
+library(modelsummary)
+config_modelsummary(factory_default = 'kableExtra')
+modelsummary(list(M_mass_bill_1,M_mass_bill_2, M_mass_bill_3, M_mass_bill_4, M_mass_bill_5), stars = TRUE)
+
+modelsummary(list(M1 = M_mass_bill_1, M2 = M_mass_bill_5), estimate = "{estimate} ({std.error}){stars}", statistic = NULL, gof_omit = "F|Log", 
+             fmt = fmt_decimal(digits = 1, pdigits = 3))
+
+?modelsummary
+augment(M_mass_bill_5) %>% 
+  mutate(
+    species =
+      str_c(
+        as.character(`species 1`), 
+        as.character(`species 2`)
+        )
+    ) %>% select(c(2, 3, 4, 5, 6, 12)) %>% 
+ggplot(aes(x = bill_depth_mm, y = body_mass_g, color = species)) +
+     geom_point() + 
+    geom_line(aes(y = .fitted), linewidth = 1) + 
+  scale_y_continuous(name="body mass (g)") + 
+  scale_x_continuous(name="bill depth (mm)") + 
+  theme_clean() + 
+  theme(legend.position = "none")
+
+
+```
 

@@ -167,22 +167,20 @@ In class: [Lab 04 - Multiple linear regression](https://bit.ly/48pbV0D)
 Preparation **Deadline:** 13 March 2024
 
 -   Complete last week's lab IN YOUR TEAM, for a class presentation
--   Please complete this week's tutorials (three tutorials)\
--   Watch the lecture and add your comments
--   Readiness Assurance
+-   Please complete [this week's tutorials](https://oferengel-posit.shinyapps.io/7_1_lesson)
+-   Watch the [lectures](https://app.perusall.com/courses/jsm-medical-statistics/understanding-logarithms?assignmentId=hwCQRmhfrZvvKa8zW&part=1) and add your comments
+-   Readiness Assurance you can find [here](https://forms.gle/oV2uYUBMih4ptRTEA)
 
-In class: Lab 05 - Logistic regression
+In class: Lab 05 - CREATE YOUR OWN!
+
+
 
 ### Week 6
 
 Preparation **Deadline:** 24 March 2024
 
 -   Complete last week's lab IN YOUR TEAM, for a class presentation
--   Please complete this week's tutorials (three tutorials)\
--   Watch the lecture and add your comments
--   Readiness Assurance
 
-In class: Lab 06 - Review and advanced topics
 
 :::
 
