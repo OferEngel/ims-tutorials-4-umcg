@@ -160,8 +160,6 @@ In class: [Lab 04 - Multiple linear regression](https://bit.ly/48pbV0D)
 
 
 
-::: {#greyedtext}
-
 ### Week 5
 
 Preparation **Deadline:** 13 March 2024
@@ -182,7 +180,7 @@ Preparation **Deadline:** 24 March 2024
 -   Complete last week's lab IN YOUR TEAM, for a class presentation
 
 
-:::
+
 
 ### Acknowledgements
 

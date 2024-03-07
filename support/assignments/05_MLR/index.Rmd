@@ -53,7 +53,7 @@ theme_clean <- function() {
 ```
 
 
-<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  10-Nov-23. 
+<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  13-March-24. 
 <br/>Please submit your final report [using this form](https://forms.gle/JB5c9apmkx3wD8WG7). </span>
 
 
