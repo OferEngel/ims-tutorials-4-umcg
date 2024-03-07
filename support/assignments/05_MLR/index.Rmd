@@ -101,7 +101,7 @@ We will be using R Markdown to create reproducible lab reports. In RStudio, you 
 
 ## Descriptive statistics
 
-1. Use the `table1` package to create a table with appropriate descriptive information about the data set. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"} to help you build a table.
+1. Use the `table1` package to create a table with appropriate descriptive information about the data set. Use the examples provided in the [following vignette](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html){target="_blank"} to help you build a table. Feel free to try a different table with other variables. What do you notice from this table? What research questions might it raise? 
 
 ```{r table1, fig.align='center'}
 
@@ -125,7 +125,7 @@ table1(~DBWT +
 <br/>
 <br/>
 
-2. Use the `ggpairs` function to explore the association between the different variables. Try to replicate the figure below, or create your own variation. 
+2. Use the `ggpairs` function to explore the association between the different variables. Try to replicate the figure below, or create your own variation. What do you see in the figure? What new information does it provide? What are the advantages/disadvantages when comparing `table1` to `ggpairs`?
 
 ```{r ggpairs, fig.align='center', fig.height=7}
 
@@ -305,7 +305,7 @@ map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr),
 
 ## Exploring interactions
 
-6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create ONE of the [dumbell plots](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) shown below, illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. **Hint:** We will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots. You need only to create one of the plots, but bonus for creating ALL the plots.   
+6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create ONE of the [dumbell plots](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) shown below, illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. **Hint:** We will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots.  
 
 ```{r dumbellplot-MEDUC, out.width="100%"}
 
