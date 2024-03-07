@@ -207,11 +207,12 @@ ggplot(data = penguins,
 ggplot(data = penguins,
         aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
      geom_point() +
-     facet_wrap(~island, scales = "free", nrow = 2) + 
+     facet_wrap(~island, nrow = 2, scales = "free") + 
   scale_color_manual(
     values = cols
     ) + 
   theme_clean() +
+  theme(legend.position = "bottom") + 
   scale_y_continuous(name="body mass (g)") + 
   scale_x_continuous(name="flipper length (mm)") 
 

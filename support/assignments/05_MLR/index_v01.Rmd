@@ -34,7 +34,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 
 natality <- read_rds("data/natality.rds") 
-
+# natality_full <- read_rds("data/natality.rds") 
 
 
 
@@ -408,11 +408,7 @@ tribble(
 :::
 
 
-
-7. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbell plot. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)
-
-
-
+7. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbell plot. 
 
 ```{r dumbellplot-MRACEHISP, echo = FALSE, out.width="75%"}
 
@@ -423,7 +419,7 @@ M.OPT_int.ctr <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE 
 
 
 newdata <- data.frame(
-    BMI       = rep(c(0, 0.5), 4),  
+    BMI       = rep(c(0, 2), 4),  
     MRACEHISP = rep(c("NH White", "NH Black", "NH Other", "Hispanic"), each = 2) 
     ) |> 
   mutate(
@@ -449,14 +445,14 @@ newdata |>
     size = 5
     ) +
   geom_point(
-    aes(x = "mean(BMI) + sd(BMI)", y = BMI_0.5, color = MRACEHISP), 
+    aes(x = "mean(BMI) + sd(BMI)", y = BMI_2, color = MRACEHISP), 
     size = 5
     ) +
   geom_segment(
     aes(x = "mean(BMI)", 
         y = BMI_0, 
         xend = "mean(BMI) + sd(BMI)", 
-        yend = BMI_0.5, 
+        yend = BMI_2, 
         color = MRACEHISP), 
     linewidth = 2
     ) + 
@@ -469,35 +465,20 @@ newdata |>
 
 ```
 
-:::{#boxedtext}
-**Note:** Since we have scaled the continuous variable `BMI` by **TWO** standard deviations, you will need to estimate the right tip of the dumbbell at **two units** and not at one unit.  
-:::
 
-
-
-8. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)
-
+8. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. 
 
 ```{r dumbellplot-MAGER, eval=TRUE, out.width="75%"}
 
-
-
 M.FULL_int.ctr <- 
   lm(formula = DBWT ~ . + BMI : MAGER, data = natality.ctr)
-
-
-MAGER.szd <- standardize(data.frame(MAGER = c(20, 30, 40)), two.sd = TRUE, reference = natality) |> mutate(MAGER = MAGER/2) |> pull(MAGER) |> as.numeric()
 
 # anova(M.FULL.ctr, M.FULL_int.ctr)
 
 # summary(M.FULL_int.ctr)
 newdata <- data.frame(
-    BMI   = rep(c(0, .25, .5), 3),  
-    MAGER = rep(
-      MAGER.szd,  
-      # c(20, 30, 40), 
-      each = 3
-      ) 
+    BMI   = rep(c(0, 1, 2), 3),  
+    MAGER = rep(c(20, 30, 40), each = 3) 
     ) |> 
   mutate(
     CIG_REC = "No",
@@ -517,24 +498,25 @@ newdata |>
       )
   ) |> select(BMI, MAGER, DBWT) |> 
   pivot_wider(id_cols = MAGER, names_from = BMI, names_prefix = "BMI_", values_from = DBWT) |> 
-  mutate(MAGER = factor(c("20", "30", "40"))) |> 
+  mutate(MAGER = factor(MAGER)) |> 
   ggplot() + 
   geom_point(
     aes(x = "mean(BMI)", y = BMI_0, color = MAGER), 
     size = 5
     ) +
   geom_point(
-    aes(x = "mean(BMI) + sd(BMI)", y = BMI_0.5, color = MAGER), 
+    aes(x = "mean(BMI) + sd(BMI)", y = BMI_2, color = MAGER), 
     size = 5
     ) +
   geom_segment(
     aes(x = "mean(BMI)", 
         y = BMI_0, 
         xend = "mean(BMI) + sd(BMI)", 
-        yend = BMI_0.5, 
+        yend = BMI_2, 
         color = MAGER), 
     linewidth = 2
     ) + 
+ 
   scale_x_discrete(labels = c("mean(BMI)",  "mean(BMI) + sd(BMI)")) + 
   scale_y_continuous(breaks = seq(-3, 0.5, 0.5)) +
   labs(x = NULL, y = "Birth weight (centred, scaled)", color = "Mother’s age") + 
@@ -544,18 +526,4 @@ newdata |>
 
 ```
 
-
-
-
-```{r eval=FALSE}
-library(tidyverse)
-natality_names <- names(read_rds("data/natality.rds"))
-
-
-natality_full <- read_rds(here::here("../natality2018-full.rds")) %>% 
-  select(all_of(natality_names)) %>% 
-  drop_na()
-
-
-```
 

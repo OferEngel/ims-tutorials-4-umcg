@@ -140,9 +140,11 @@ Preparation **Deadline:** 20 February 2024
 -   Watch [these lecture](https://bit.ly/48cta58) and add your comments!
 -   [Readiness Assurance](https://bit.ly/3SK4Cuu)
 
-:::
+
 
 In class: [Lab 03 - Simple linear regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/04_SLR/)
+
+:::
 
 
 ### Week 4
@@ -154,8 +156,7 @@ Preparation **Deadline:** 6 March 2024
 -   Watch [the lecture](https://bit.ly/3OQQkXP) and add your comments
 -   Readiness Assurance you can find [here](https://bit.ly/3SHJbdD)
 
-In class: [Lab 04 - Multiple linear regression](https://bit.ly/48pbV0D)
-
+In class: [Lab 04 - Multiple linear regression](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/05_MLR/)
 
 
 
@@ -164,7 +165,7 @@ In class: [Lab 04 - Multiple linear regression](https://bit.ly/48pbV0D)
 
 Preparation **Deadline:** 13 March 2024
 
--   Complete last week's lab IN YOUR TEAM, for a class presentation
+-   Continue working on last week's lab IN YOUR TEAM
 -   Please complete [this week's tutorials](https://oferengel-posit.shinyapps.io/7_1_lesson)
 -   Watch the [lectures](https://app.perusall.com/courses/jsm-medical-statistics/understanding-logarithms?assignmentId=hwCQRmhfrZvvKa8zW&part=1) and add your comments
 -   Readiness Assurance you can find [here](https://forms.gle/oV2uYUBMih4ptRTEA)
