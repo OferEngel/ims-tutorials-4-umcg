@@ -1,26 +1,39 @@
 ---
-title: "testing"
+title: "Untitled"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ## Quarto
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
 ```{r}
 #| echo: false
-2 * 2
+#| message: false
+#| warning: false
+library(tidyverse)
+
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+I can use R-Base to create a plot: the code looks like this:
+
+```{r}
+# R Base
+# No need to load libraries to plot!
+plot(mtcars$mpg, mtcars$wt)
+```
+
+Here is the `tidyverse` method to do the same thing!
+
+```{r}
+# Notice I first load the package
+library(tidyverse)
+
+# Now I pipe the dataset into ggplot... 
+mtcars %>% 
+  ggplot(mapping = aes(mpg, wt)) + 
+  geom_point()
+```

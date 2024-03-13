@@ -876,15 +876,6 @@ Not every combination of values will have this property. For example, if you pai
 The correct combination of values to use will depend on the relationship that you are trying to discover. 
 
 
-### A note on observations
-
-Observations are one of the trickiest ideas in data science, but they are easy to understand in the light of covariation. As data scientists, we want to discover covariation, or more generally, the relationships between variables. Think of an observation as _a piece of evidence_ about a relationship between variables_. Here's how it works:
-
-An observation is a set of values, but not all sets of values are observations. To be an observation, a set of values needs to supply evidence about a relationship. This can only happen if the set of values has a specific property: _If a relationship exists between the variables that the values describe, then the relationship will also exist between the values themselves_. If this is true, then each observation will give us a glimpse of the relationship. If we visualize many observations, we can see the shape of the relationship---literally.
-
-Not every combination of values will have this property. For example, if you pair the wait time before a geyser eruption that occurs today with the length of a geyser eruption that occurs tomorrow, the combination will tell you little about the relationship between the wait time before an eruption and the length of the eruption.
-
-
 
 ### Recap
 
@@ -998,7 +989,7 @@ To see an example of this, make a histogram of the `carat` variable in the `diam
 
 ```
 
-```{r hist-r2-check}
+```{r hist-r2-check, eval=FALSE}
 "Good job! The most common diamond size is about 0.5 carats. Larger sizes become progressively less frequent as carat size increases. This accords with general knowledge about diamonds, so you may be prompted to stop exploring the distribution of carat size. But should you?"
 ```
 
@@ -1015,7 +1006,7 @@ Recreate your histogram of `carat` but this time use a binwidth of 0.1. Does you
 
 ```
 
-```{r hist-r3-check}
+```{r hist-r3-check, eval=FALSE}
 "Good job! The new binwidth reveals a new phenomena: carat sizes like 0.5, 0.75, 1, 1.5, and 2 are much more common than carat sizes that do not fall near a common fraction. Why might this be?"
 ```
 
@@ -1032,7 +1023,7 @@ Recreate your histogram of `carat` a final time, but this time use a binwidth of
 
 ```
 
-```{r hist-r4-check}
+```{r hist-r4-check, eval=FALSE}
 "Good job! The new binwidth reveals another phenomena: each peak is very right skewed. In other words, diamonds that are 1.01 carats are much more common than diamonds that are .99 carats. Why would that be?"
 ```
 
@@ -1067,7 +1058,7 @@ ggplot(data = diamonds) +
 
 ```
 
-```{r hist-r5-check}
+```{r hist-r5-check, eval=FALSE}
 "Good job! Did you ensure that each binwidth is 1000 and that the first boundary is zero?"
 ```
 
@@ -1119,7 +1110,7 @@ Create the frequency polygon depicted above. It has a binwidth of 0.25 and start
 
 ```
 
-```{r hist-r6-check}
+```{r hist-r6-check, eval=FALSE}
 "Good job! By using a line instead of bars, frequency polygons can sometimes do things that histograms cannot."
 ```
 
@@ -1141,7 +1132,7 @@ ggplot(data = diamonds) +
 
 ```
 
-```{r hist-r7-check}
+```{r hist-r7-check, eval=FALSE}
 "Good job! Since lines do not occlude each other, `geom_freqpoly()` plots each sub-group against the same baseline: y = 0 (i.e. it unstacks the sub-groups). This makes it easier to compare the distributions. You can now see that for almost every price value, there are more Ideal cut diamonds than there are other types of diamonds."
 ```
 
@@ -1192,7 +1183,7 @@ ggplot(data = diamonds) +
 
 ```
 
-```{r hist-r8-check}
+```{r hist-r8-check, eval=FALSE}
 "Good job! You can now compare the most common prices for each sub-group. For example, the plot shows that the most common price for most diamonds is near $1000. However, the most common price for Fair cut diamonds is significantly higher, about $2500. We will come back to this oddity in a later tutorial."
 ```
 
@@ -1227,7 +1218,7 @@ ggplot(data = diamonds) +
   geom_histogram(mapping = aes(x = price, fill = cut), binwidth = 1000, boundary = 0)
 ```
 
-```{r hist-r9-check}
+```{r hist-r9-check, eval=FALSE}
 "Good job! Facets make it easier to compare sub-groups, but at the expense of separating the data. You may decide that frequency polygons and densities allow more direct comparisons."
 ```
 
@@ -1346,7 +1337,7 @@ ggplot(data = diamonds) +
   geom_boxplot(mapping = aes(x = cut, y = price))
 ```
 
-```{r bp-r3-check}
+```{r bp-r3-check, eval=FALSE}
 "Do you notice how many outliers appear in the plot? The boxplot algorithm can identify many outliers if your data is big, perhaps too many. Let's look at ways to suppress the appearance of outliers in your plot."
 ```
 
@@ -1385,7 +1376,7 @@ ggplot(data = diamonds) +
   geom_boxplot(mapping = aes(x = cut, y = price), notch = TRUE, varwidth = TRUE)
 ```
 
-```{r varwidth-check}
+```{r varwidth-check, eval=FALSE}
 "Good job! You can also customize boxplots with traditional ggplot2 aesthetics. Let's take a look."
 ```
 
@@ -1440,7 +1431,7 @@ continuous_vector
 cut_width(continuous_vector, width = 2)
 ```
 
-```{r cut-check}
+```{r cut-check, eval=FALSE}
 "Good job! Now let's apply the cut functions to our graph."
 ```
 
@@ -1460,7 +1451,7 @@ ggplot(data = diamonds) +
   geom_boxplot(mapping = aes(x = carat, y = price, group = cut_width(carat, width = 0.25)))
 ```
 
-```{r r4-check}
+```{r r4-check, eval=FALSE}
 "Good job! You can now see a relationship between price and carat. You could also make a scatterplot of these variables, but in this case, it would be a black mass of 54,000 data points."
 ```
 
@@ -1491,7 +1482,7 @@ ggplot(data = mpg) +
   coord_flip()
 ```
 
-```{r bp-r5-check}
+```{r bp-r5-check, eval=FALSE}
 "Good job! `coord_flip()` is an example of a new coordinate system. You'll learn much more about ggplot2 coordinate systems in a later tutorial."
 ```
 
@@ -1518,7 +1509,7 @@ ggplot(data = mpg) +
                dotsize = 0.5, binwidth = 1, stackdir = "center")
 ```
 
-```{r bp-r6-check}
+```{r bp-r6-check, eval=FALSE}
 'Good job! When you set `stackdir = "center"`, `geom_dotplot()` arranges each row of dots symmetrically around the $x$ value. This layout will help you understand the next geom.
 
 As in the histogram tutorial, it takes a lot of tweaking to make a dotplot look right. As a result, I tend to only use them when I want to make a point.'
@@ -1542,7 +1533,7 @@ ggplot(data = mpg) +
   geom_violin(mapping = aes(x = class, y = hwy))
 ```
 
-```{r bp-r7-check}
+```{r bp-r7-check, eval=FALSE}
 'Good job! Another way to interpret a violin plot is to mentally "push" the width of each violin all to one side (so the other side is a straight line). The result would be a density (e.g. `geom_density()`) turned on its side for each distribution).'
 ```
 
@@ -1562,7 +1553,7 @@ ggplot(data = mpg) +
   geom_violin(mapping = aes(x = class, y = hwy), draw_quantiles = c(0.25, 0.5, 0.75))
 ```
 
-```{r bp-r8-check}
+```{r bp-r8-check, eval=FALSE}
 'Good job! Can you predict how you would use `draw_quantiles` to draw a horizontal line at a different percentile, like the 60th percentile?.'
 ```
 
@@ -1642,7 +1633,7 @@ Practice the method above by re-creating the heat map below.
      geom_tile(mapping = aes(fill = n))
 ```
 
-```{r bp-r10-check}
+```{r bp-r10-check, eval=FALSE}
 "Good job!"
 ```
 
@@ -1694,7 +1685,7 @@ mpg %>%
     geom_point(mapping = aes(x = mean_cty, y = mean_hwy))
 ```
 
-```{r spr1-check}
+```{r spr1-check, eval=FALSE}
 "Good job! It can be tricky to remember when to use %>% and when to use +. Use %>% to add one complete step to a pipe of code. Use + to add one more line to a ggplot2 call."
 ```
 
@@ -1727,7 +1718,7 @@ mpg %>%
     geom_label(mapping = aes(x = mean_cty, y = mean_hwy, label = class))
 ```
 
-```{r spr2-check}
+```{r spr2-check, eval=FALSE}
 "Good job! geom_text() replaces each point with a piece of text supplied by the label aesthetic. geom_label replaces each point with a textbox. Notice that some pieces of text overlap each other, and others run off the page. We'll soon look at a way to fix this."
 ```
 
@@ -1777,7 +1768,7 @@ mpg %>%
     geom_smooth(mapping = aes(x = mean_cty, y = mean_hwy), method = lm)
 ```
 
-```{r spr3-check}
+```{r spr3-check, eval=FALSE}
 "Good job! Now let's look at a way to make geom_smooth() much more useful."
 ```
 
@@ -1800,7 +1791,7 @@ mpg %>%
     geom_smooth(mapping = aes(x = mean_cty, y = mean_hwy), method = lm) 
 ```
 
-```{r spr4-check}
+```{r spr4-check, eval=FALSE}
 "Good job! You can add as many geom functions as you like to a plot; but, in practice, a plot will become hard to interpret if it contains more than two or three geoms."
 ```
 
@@ -1829,7 +1820,7 @@ mpg %>%
     geom_label_repel(mapping = aes(x = mean_cty, y = mean_hwy, label = class))
 ```
 
-```{r spr5-check}
+```{r spr5-check, eval=FALSE}
 "Good job! The ggrepel package also provides geom_text_repel(), which is an analog for geom_text()."
 ```
 
@@ -1896,7 +1887,7 @@ mpg %>%
     geom_label_repel(mapping = aes(label = class))
 ```
 
-```{r spr6-check}
+```{r spr6-check, eval=FALSE}
 "Good job! Remember that not every mapping should be a global mapping. Here, only geom_label_repel uses the label aesthetic. Hence, it should remain a local aesthetic to avoid unintended side effects, warnings, or errors."
 ```
 
@@ -1948,7 +1939,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_point(data = mpg2, color = "red", size = 2)
 ```
 
-```{r spr8-check}
+```{r spr8-check, eval=FALSE}
 "Good Job!"
 ```
 
@@ -1976,7 +1967,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
   geom_label_repel(data = mpg3, mapping = aes(label = class))
 ```
 
-```{r spr9-check}
+```{r spr9-check, eval=FALSE}
 "Good Job!"
 ```
 
@@ -2027,7 +2018,7 @@ ggplot(data = faithful, mapping = aes(x = waiting, y = eruptions)) +
   geom_rug()
 ```
 
-```{r spr10-check}
+```{r spr10-check, eval=FALSE}
 'Good job! Pass geom_rug() the parameter sides = "l" to limit the rug plot to just the left-hand axis (y) or sides = "b" to limit the rug plot to just the bottom axis (x).'
 ```
 
@@ -2048,7 +2039,7 @@ ggplot(data = mpg) +
   geom_jitter(mapping = aes(x = class, y = hwy))
 ```
 
-```{r spr11-check}
+```{r spr11-check, eval=FALSE}
 "Good job! You can also jitter in only a single direction. To turn off jittering in the x direction set width = 0 in geom_jitter(). To turn off jittering in the y direction, set height = 0." 
 ```
 
@@ -2069,7 +2060,7 @@ ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
   geom_jitter(width = 0)
 ```
 
-```{r spr12-check}
+```{r spr12-check, eval=FALSE}
 "Good job! If you like, you can make the boxplots more visible by setting the alpha parameter of geom_jitter() to a low number, e.g. geom_jitter(mapping = aes(x = class, y = hwy), width = 0, alpha = 0.5)"
 ```
 
@@ -2149,7 +2140,7 @@ ggplot(data = diamonds) +
   geom_point(mapping = aes(x = log(carat), y = log(price))) 
 ```
 
-```{r spr13-check}
+```{r spr13-check, eval=FALSE}
 "Good job! Now let's look at how you can do the same transformation, and others as well with a coord function."
 ```
 
