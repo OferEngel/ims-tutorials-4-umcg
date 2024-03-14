@@ -170,9 +170,7 @@ Preparation **Deadline:** 13 March 2024
 -   Watch the [lectures](https://app.perusall.com/courses/jsm-medical-statistics/understanding-logarithms?assignmentId=hwCQRmhfrZvvKa8zW&part=1) and add your comments
 -   Readiness Assurance you can find [here](https://forms.gle/oV2uYUBMih4ptRTEA)
 
-In class: [Lab 05 - CREATE YOUR OWN](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/05_MLR/)
-
-
+In class: [Lab 05 - CREATE YOUR OWN](https://oferengel.github.io/ims-tutorials-4-umcg/support/assignments/11_final_project/)
 
 
 
