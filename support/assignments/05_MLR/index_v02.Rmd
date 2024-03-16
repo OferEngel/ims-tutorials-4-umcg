@@ -196,12 +196,9 @@ modelsummary(
 
 
 
-```{r test-four-models-full-ds, echo=FALSE, eval=FALSE}
-# For testing purposes only
-
+```{r four-models-full-ds, echo=FALSE, eval=FALSE}
 library(here)
-natality_orig <- 
-  read_rds(here("../natality2018-full.rds")) %>% 
+natality <- read_rds(here("../natality2018-full.rds")) %>% 
   select(
     DBWT,
     CIG_REC,   #
@@ -217,7 +214,7 @@ natality_orig <-
 
 
 # Scaling
-natality <- natality_orig |> 
+natality <- natality |> 
   standardize(two_sd = TRUE)
 
 M.NULL <- lm(DBWT ~ 1, natality)
@@ -225,26 +222,20 @@ M.UNADJUSTED <- lm(DBWT ~ CIG_REC, natality)
 # The dot represents all variables except the outcome DBWT
 M.FULL <- lm(DBWT ~ (.)^2, natality)  
 
-
-table(natality$PRIORDEAD)
-
 # Finding the optimal model
-# step(M.NULL,
-#      scope = list(upper = M.FULL),
-#      direction="both",
-#      data=natality)
+step(M.NULL,
+     scope = list(upper = M.FULL),
+     direction="both",
+     data=natality)
 
 
-M.FULL_NO_INT <- lm(formula = DBWT ~ ., data = natality)
-
-anova(M.FULL, M.FULL_NO_INT)
-
+# M.OPT <- lm(formula = DBWT ~ DMAR + MRACEHISP + BMI + risks + PRIORLIVE + CIG_REC + PRIORDEAD, data = natality)
 
 modelsummary(
   list(
     null = M.NULL, 
     unadjusted = M.UNADJUSTED, 
-    optimal = M.FULL_NO_INT, 
+    # optimal = M.OPT, 
     full = M.FULL
     ), 
   stars = TRUE, 
@@ -256,6 +247,7 @@ modelsummary(
 
 predictions(M.FULL, 
             newdata = datagrid(
+              model = M.FULL_int.ctr,
               MRACEHISP = c("NH White", "NH Black", "NH Other", "Hispanic"),
               MEDUC   = c("<HS", "HS", "college", "Bachelor", "Adv Degree"),
               CIG_REC = c("No", "Yes")
@@ -279,76 +271,6 @@ predictions(M.FULL,
   facet_wrap(~MRACEHISP, scales = "free_y") +
   theme_minimal() + 
   theme(legend.position = "bottom", text = element_text(size = 14)) 
-
-
-# MOTHER'S BMI - 
-
-MAGER.szd <- 
-  standardize(
-    data.frame(MAGER = c(20, 30, 40)), 
-    two.sd = TRUE, 
-    reference = natality_orig
-    ) |> 
-  mutate(MAGER = MAGER/2) |> 
-  pull(MAGER) |> 
-  as.numeric()
-
-
-
-
-mosaic::fav_stats(natality_orig$MAGER)
-(c(20, 30, 40) - 28.85485) / (5.767747*2)
-
-mosaic::fav_stats(natality$BMI)
-
-
-predictions(M.FULL, 
-            newdata = datagrid(
-              MRACEHISP = c("NH White", "NH Black", "NH Other", "Hispanic"),
-              BMI   = c(0, .5, 1),
-              MAGER = MAGER.szd
-              )
-            ) |> 
-  select(rowid, estimate, MRACEHISP, BMI, MAGER) |> 
-  as.data.frame() |> 
-  pivot_wider(
-    id_cols = c(MRACEHISP, MAGER), 
-    names_from = BMI, 
-    names_prefix = "BMI_", 
-    values_from = estimate
-    ) %>% mutate(
-      MAGER_unst = case_match(
-        MAGER, 
-        MAGER.szd[1] ~ "20", 
-        MAGER.szd[2] ~ "30", 
-        MAGER.szd[3] ~ "40", 
-        )
-    ) %>% 
-  ggplot() + 
-  geom_point(
-    aes(x = "mean(BMI)", y = BMI_0, color = MAGER_unst), 
-    size = 5
-    ) +
-  geom_point(
-    aes(x = "mean(BMI) + sd(BMI)", y = BMI_0.5, color = MAGER_unst), 
-    size = 5
-    ) +
-  geom_segment(
-    aes(x = "mean(BMI)", 
-        y = BMI_0, 
-        xend = "mean(BMI) + sd(BMI)", 
-        yend = BMI_0.5, 
-        color = MAGER_unst), 
-    linewidth = 2
-    ) + 
-  scale_x_discrete(labels = c("mean(BMI)",  "mean(BMI) + sd(BMI)")) + 
-  scale_y_continuous(breaks = seq(-1, 1, 0.01)) +
-  labs(x = NULL, y = "Birth weight (centred, scaled)", color = "Mother’s age") + 
-  theme_minimal() + 
-  theme(legend.position = "bottom", text = element_text(size = 14)) +
-  facet_wrap(~MRACEHISP, scale = "free")
-
-
 
 
 
