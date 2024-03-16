@@ -5,14 +5,14 @@ library(stringr)
 
 # Errors
 df.err <-  read_csv(
-  "hash.csv",
+  "jsm-hash.csv",
   show_col_types = FALSE
 ) |>
   filter(!str_detect(hash, "Qlp"))
 
 
 df.orig <-  read_csv(
-  "hash.csv",
+  "jsm-hash.csv",
   show_col_types = FALSE
 ) |>
   filter(str_detect(hash, "Qlp"))
@@ -82,7 +82,11 @@ get_correct <- function(df) {
   )
 
 }
+df.orig %>% slice(3) %>% select(hash) %>% get_correct()
 
+pmap(df.orig |> slice(seq(140)) |>
+       select(hash), ~ tibble(hash = ..1) |> get_correct()) |>
+  bind_rows()
 
 
 res <- pmap(df.orig |> slice(seq(nrow(df.orig))) |>
@@ -99,5 +103,13 @@ df.orig |>
     ) |>
   print(n = 300)
 
-
+df.orig |>
+  select(-hash) |>
+  add_column(res) |>
+  summarize(
+    n = n(),
+    correct = max(correct),
+    .by = c(Email, lesson)
+  ) %>%
+  write_csv("jsm-results.csv")
 

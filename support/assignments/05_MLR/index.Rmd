@@ -308,12 +308,20 @@ map(list(M.UNADJUSTED.ctr, M.OPT.ctr, M.FULL.ctr),
 
 ## Exploring interactions
 
-6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create ONE of the [dumbell plots](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) shown below, illustrating the smoking effect at each level of mother’s education and estimate the cigarette smoking effect at each level of mother’s education. **Hint:** We will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots.  
+6. Does the association between cigarette smoking during pregnancy and birth weight depend on mother's education? Modify the FULL model appropriately to be able to answer this question. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, create (at least ONE of) the [dumbell plots](https://r-charts.com/distribution/dumbbell-plot-ggplot2/) shown below, illustrating the smoking effect at each level of mother’s education. **Hint:** See the code below, which will be using the [`marginaleffects` package](https://marginaleffects.com/) to create the plots.  
 
 ```{r dumbellplot-MEDUC, out.width="100%"}
 
-M.FULL_int.ctr <- lm(formula = DBWT ~ . + (CIG_REC:MEDUC + MRACEHISP)^2, data = natality.ctr)
+# M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC, data = natality.ctr)
+# 
+# 
+# M.FULL_int.ctr <- lm(formula = DBWT ~ . + (CIG_REC:MEDUC + MRACEHISP)^2, data = natality.ctr)
 
+
+M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC:MEDUC + CIG_REC:MEDUC:MRACEHISP, data = natality.ctr)
+
+
+# 
 # anova(M.FULL.ctr, M.FULL_int.ctr, test = "LRT")
 
 predictions(M.FULL_int.ctr, 
@@ -351,12 +359,28 @@ predictions(M.FULL_int.ctr,
 
 
 :::{#boxedtext}
-To create the dumbell figure, you will need to predict the birth weight for smoking and non-smoking mums with different education levels. Here is the code for the calculations you need: 
+To create the dumbell figure, you will need to predict the birth weight for smoking and non-smoking mums with different education levels. Here is the code for the calculations you need. Notice that the code below, you need to choose between different types of models
 
 ```{r dumbells-prep, echo=TRUE, eval=FALSE}
 
 library(marginaleffects)
-M.FULL_int.ctr <- lm(formula = DBWT ~ . + CIG_REC * MEDUC, data = natality.ctr)
+
+# You can choose different models for your plots. 
+#
+# For example: 
+# M.FULL_int.ctr <- lm(
+#   formula = DBWT ~ . + 
+#   CIG_REC * MEDUC + 
+#   data = natality.ctr
+#   )
+
+# Another example
+# M.FULL_int.ctr <- lm(
+#   formula = DBWT ~ . + 
+#   CIG_REC * MEDUC + 
+#   CIG_REC * MEDUC * MRACEHISP, 
+#   data = natality.ctr
+#   )
 
 predictions(M.FULL_int.ctr, 
             newdata = datagrid(
@@ -409,7 +433,7 @@ tribble(
 
 
 
-7. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbell plot. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)
+7. Does the association between mother’s BMI and birth-weight differ between mothers of different race/ethnicity? Modify the OPTIMAL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect at each level of mother’s race/ethnicity and plot the BMI effect at each level of mother’s race/ethnicity using a dumbbell plot. Provide a  description, interpretation or reflection about what you see in the plot. What do you notice? what do you wonder? What research questions could your results prompt?
 
 
 
@@ -475,7 +499,7 @@ newdata |>
 
 
 
-8. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. **Bonus:** Provide a brief description, interpretation or reflection about what you see in the plot (e.g., what do you notice? what do you wonder?)
+8. Does the association between mother’s BMI and birth-weight depend on mother’s age? Modify the FULL model appropriately to be able to answer this question, using the dataset with the centered variables. Use `anova` to test whether the model with the interaction is significantly better than the one without it. Regardless of statistical significance, estimate the BMI effect for mothers age 20, 30, and 40 years and make a plot illustrating the BMI effect at each of these ages. What do you notice? what do you wonder? What research questions could your results prompt?
 
 
 ```{r dumbellplot-MAGER, eval=TRUE, out.width="75%"}

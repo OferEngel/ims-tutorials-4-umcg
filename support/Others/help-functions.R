@@ -8,3 +8,7 @@ get_ds <- function(n, x_bar, s) {
 }
 
 
+
+
+install.packages("probably", dependencies = TRUE)
+library(probably)
