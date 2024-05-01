@@ -1,0 +1,147 @@
+---
+title: "Causal Inference Lab 1: Individual assignment"
+subtitle: "Rubins potential outcomes framework"
+date: "Due: March 7 at 23:59"
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    css: ../lab.css
+    toc: true
+    toc_float: true
+---
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+library(magrittr)
+library(knitr)
+library(kableExtra)
+library(emo)
+library(gridExtra)
+library(tidyverse)
+library(janitor)
+
+# Custom ggplot theme to make pretty plots
+# Get Barlow Semi Condensed at https://fonts.google.com/specimen/Barlow+Semi+Condensed
+theme_clean <- function() {
+  theme_minimal(base_family = "Barlow Semi Condensed") +
+    theme(panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white", color = NA),
+          plot.title = element_text(face = "bold"),
+          axis.title = element_text(face = "bold"),
+          strip.text = element_text(face = "bold", size = rel(0.8), hjust = 0),
+          strip.background = element_rect(fill = "grey80", color = NA),
+          legend.title = element_text(face = "bold"))
+}
+theme_set(theme_clean())
+
+
+```
+
+
+
+<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  7-May-2024 at 23:59. 
+<br/>Please submit your final report [using this form](https://forms.gle/pxb8VyVzaUivdMbi8). </span>
+
+
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r img-depth, echo=FALSE, fig.align="right", out.width=300}
+knitr::include_graphics("images/covid.jpg")
+```
+</div>
+
+
+
+The goal of this lab is to introduce you to the Neyman-Rubin's potential outcome framework. 
+
+
+### The perfect doctor
+
+
+Table 1 below displays a small data set that is used for practice purposes only. Two unobserved (and imagined)  potential outcomes are recorded for each patient, denoting years of post-treatment survival under each of two treatments. Suppose the "perfect doctor" knows each patient’s potential outcomes and as a result chooses the best treatment for each patient. She admisters `bedrest` to patients who would benefit from it most ($D = 0$) and `ventilators` to those who would benefit from it more ($D = 1$). 
+
+```{r setup1, include=FALSE, eval=FALSE}
+df <- read.csv("data/po.csv")
+df$delta <- df$Y1 - df$Y0 
+df$D <- ifelse(df$Y1>df$Y0,1,0)
+df$Y <- ifelse(df$D==1,df$Y1,df$Y0)
+
+ATE <- mean(df$delta)
+ATT <- mean(df[df$D==1,"delta"])
+ATU <- mean(df[df$D==0,"delta"])
+
+
+```
+
+
+a. Recreate `table 1` shown below, inserting values appropriately for the three empty colums: (i) The column labeled $\delta_i$: please enter each patient’s treatment effect  (ii) The column labeled $D$: the optimal treatment for this patient (iii) The column labeled $Y$: the observed outcomes. Calculate the average treatment effect (ATE) and the average treatment effect for the treated (ATT) when comparing the outcome of the `ventilators` treatment with that of the `bedrest` treatment and comment as to which type of intervention is more effective on average. Finally, explain under which conditions might [SUTVA](https://www.youtube.com/watch?v=wFpUKGNgb0Y) be violated for treatments of covid-19 in the scenario described above. 
+ 
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r img-rubin, echo=FALSE, fig.align="right", out.width=400}
+knitr::include_graphics("images/rubin.png")
+```
+</div>
+
+```{r the-table, fig.align='center'}
+
+
+tribble(
+  ~patient, ~`$Y^{(0)}$`, ~`$Y^{(1)}$`, ~Age, ~`   $\\delta$   `, ~`   D   `, ~`   Y   `,
+  1, 10, 1,  29, "      ", "      ", "      ",
+  2,  5, 1,  35, "", "", "",
+  3,  4, 1,  19, "", "", "",
+  4,  6, 5,  45, "", "", "",
+  5,  1, 5,  65, "", "", "",
+  6,  7, 6,  50, "", "", "", 
+  7,  8, 7,  77, "", "", "", 
+  8, 10, 7,  18, "", "", "", 
+  9,  2, 8,  85, "", "", "",
+  10, 6, 9,  96, "", "", "",
+  11, 7, 10, 77, "", "", "") %>% kbl( caption = "Patients' potential outcomes", escape = FALSE) %>% kable_classic( full_width = FALSE,position="left")
+
+
+```
+Table 1.  consists of data about eleven patients,  each of whom is infected with coronavirus. There are two treatments: ventilators would lead to the potential outcome  $Y^{(1)}$ and bedrest would lead to the potential outcome  $Y^{(0)}$ . 
+
+
+
+
+b. Calculate the simple difference in outcomes (`SDO`), showing the details of your calculation.  Is the `SDO` a good estimation for the ATE? Finally, check whether the `SDO` is equal to the sum of the `ATT` and the selection bias, $E[Y(0)|T=1] - E[Y(0)|T=0]$.
+
+
+c. Compare the treatment effect for both groups: for those treated with a ventilator and for those  treated with bedrest. What explains the difference in the average effect? Now compare all four measures of effects. What are the advantages and disadvantages of each? Is the ATE equal to the mean of the ATU and the ATT? Why or why not?  
+
+### Using regression to estimate effects
+
+The following exercises demonstrate that regression is a useful tool to estimate average outcomes and treatment effects in the different groups. Notice that in contrast to the role that regressions play in traditional statistics, here standard errors and significance are not of primary concern. Instead, we are interested in using regression to calculate average effects proper.
+
+
+d. Calculate the outcome, conditional on getting the `bedrest` treatment $\mathbb{E}[Y|D=0]$. Now estimate the following regression, comparing the coefficients $\alpha$ and $\delta$ to the statistics you’ve previously calculated. What did you find? How would you explain these finding? 
+
+$$
+Y_i=\alpha~+~\delta\cdot D_i~+~\epsilon_i
+$$
+
+e. Now estimate the same regression, but this time, controlling for age, again comparing, the coefficient $\delta$  to the statistics you’ve previously calculated. What did you find? How do you explain these results?
+
+$$
+Y_i=\alpha+\delta\cdot D_i+\beta\cdot X_{age}+\epsilon_i
+$$
+
+
+
+f. Estimate the following three regression models. The first model is the same as the one above. The second equation is the auxiliary regression of $D$ onto $X_{age}$. The third equation regresses $Y$ onto $\tilde{D}$ which is the residual from the second equation.  Compare the coefficient on $D$ from the first equation to the coefficient on $\tilde{D}$  in the third equation.  What does this tell you about how to interpret multivariate regressions?
+
+\begin{equation}
+    Y_i=\alpha_0+\delta_0\cdot D_i+\beta_0\cdot X_{age}+\epsilon_{0i}  \\
+    D_i=\alpha_1+\beta_1\cdot X_{age} +\epsilon_{1i}  \\
+    Y_i=\alpha_2+\delta_2\cdot \tilde{D}_i +\epsilon_{2i}  \\
+
+\end{equation}
+
+
