@@ -56,7 +56,7 @@ knitr::include_graphics("images/covid.jpg")
 
 
 
-The goal of this lab is to introduce you to the Neyman-Rubin's potential outcome framework. 
+The goal of this lab is to introduce you to the Neyman-Rubin's potential outcome framework. You can find the template for your report on [posit cloud](https://posit.cloud/spaces/466920/join?access_code=Z-Ie-bJaVYp3p7Cd9nI25hzYoHVsLUG8MxgRmV6y)
 
 
 ### The perfect doctor
