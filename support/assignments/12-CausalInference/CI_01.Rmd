@@ -43,8 +43,8 @@ theme_set(theme_clean())
 
 
 
-<span style="color: red;font-size: 14px;font-weight: bold;">GROUP WORK - DEADLINE  7-May-2024 at 23:59. 
-<br/>Please submit your final report [using this form](https://forms.gle/pxb8VyVzaUivdMbi8). </span>
+<span style="color: red;font-size: 14px;font-weight: bold;">INDIVIDUAL ASSIGNMENT - DEADLINE  10-May-2024 at 23:59. 
+<br/>Please bring a draft to our session next week 8-May-2024 and submit your final report [using this form](https://forms.gle/pxb8VyVzaUivdMbi8). </span>
 
 
 
