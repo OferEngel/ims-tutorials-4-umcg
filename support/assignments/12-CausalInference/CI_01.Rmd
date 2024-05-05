@@ -1,7 +1,7 @@
 ---
 title: "Causal Inference Lab 1: Individual assignment"
 subtitle: "Rubins potential outcomes framework"
-date: "Due: March 7 at 23:59"
+date: "Due: March 10 at 23:59"
 output:
   html_document:
     theme: cerulean
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE)
 library(magrittr)
 library(knitr)
 library(kableExtra)
-library(emo)
+# library(emo)
 library(gridExtra)
 library(tidyverse)
 library(janitor)
