@@ -1,0 +1,1123 @@
+State,Sex,age_group,deaths,pop_state,population
+Alabama,Female,0-.99 years,0,27808,1809703
+Alabama,Female,01-04 years,0,117523,7620035
+Alabama,Female,05-14 years,0,312194,20518881
+Alabama,Female,15-24 years,6,327964,20981911
+Alabama,Female,25-34 years,17,331118,22449525
+Alabama,Female,35-44 years,54,315683,21276445
+Alabama,Female,45-54 years,168,319255,20563411
+Alabama,Female,55-64 years,369,348430,21973114
+Alabama,Female,65-74 years,676,280443,17208126
+Alabama,Female,75-84 years,859,146371,8832725
+Alabama,Female,85 years and over,996,2640933,171003046
+Alabama,Male,0-.99 years,0,29226,1893263
+Alabama,Male,01-04 years,0,122764,7968874
+Alabama,Male,05-14 years,0,324987,21520591
+Alabama,Male,15-24 years,7,330155,21603341
+Alabama,Male,25-34 years,30,318853,22791780
+Alabama,Male,35-44 years,73,297320,21420401
+Alabama,Male,45-54 years,211,306071,20492996
+Alabama,Male,55-64 years,530,324680,21075426
+Alabama,Male,65-74 years,993,242723,15361155
+Alabama,Male,75-84 years,1041,110116,6989539
+Alabama,Male,85 years and over,679,2465495,165470228
+Alaska,Female,0-.99 years,0,4712,1809703
+Alaska,Female,01-04 years,0,19172,7620035
+Alaska,Female,05-14 years,0,49489,20518881
+Alaska,Female,15-24 years,0,41831,20981911
+Alaska,Female,25-34 years,1,52332,22449525
+Alaska,Female,35-44 years,1,46499,21276445
+Alaska,Female,45-54 years,4,39679,20563411
+Alaska,Female,55-64 years,16,44111,21973114
+Alaska,Female,65-74 years,21,30857,17208126
+Alaska,Female,75-84 years,27,11980,8832725
+Alaska,Female,85 years and over,33,348778,171003046
+Alaska,Male,0-.99 years,0,4880,1893263
+Alaska,Male,01-04 years,0,20437,7968874
+Alaska,Male,05-14 years,0,52554,21520591
+Alaska,Male,15-24 years,0,45083,21603341
+Alaska,Male,25-34 years,0,53736,22791780
+Alaska,Male,35-44 years,3,49838,21420401
+Alaska,Male,45-54 years,9,44844,20492996
+Alaska,Male,55-64 years,16,48580,21075426
+Alaska,Male,65-74 years,45,32980,15361155
+Alaska,Male,75-84 years,46,11416,6989539
+Alaska,Male,85 years and over,26,369454,165470228
+Arizona,Female,0-.99 years,0,37423,1809703
+Arizona,Female,01-04 years,0,160033,7620035
+Arizona,Female,05-14 years,0,447662,20518881
+Arizona,Female,15-24 years,7,462032,20981911
+Arizona,Female,25-34 years,45,472043,22449525
+Arizona,Female,35-44 years,100,436562,21276445
+Arizona,Female,45-54 years,188,420196,20563411
+Arizona,Female,55-64 years,487,453623,21973114
+Arizona,Female,65-74 years,838,405836,17208126
+Arizona,Female,75-84 years,1033,217431,8832725
+Arizona,Female,85 years and over,1115,3672895,171003046
+Arizona,Male,0-.99 years,0,38969,1893263
+Arizona,Male,01-04 years,0,167071,7968874
+Arizona,Male,05-14 years,0,467721,21520591
+Arizona,Male,15-24 years,22,485168,21603341
+Arizona,Male,25-34 years,78,501359,22791780
+Arizona,Male,35-44 years,179,454840,21420401
+Arizona,Male,45-54 years,405,422933,20492996
+Arizona,Male,55-64 years,867,427103,21075426
+Arizona,Male,65-74 years,1305,360556,15361155
+Arizona,Male,75-84 years,1547,190918,6989539
+Arizona,Male,85 years and over,1098,3630220,165470228
+Arkansas,Female,0-.99 years,0,17201,1809703
+Arkansas,Female,01-04 years,0,72833,7620035
+Arkansas,Female,05-14 years,0,194631,20518881
+Arkansas,Female,15-24 years,3,195384,20981911
+Arkansas,Female,25-34 years,12,195204,22449525
+Arkansas,Female,35-44 years,25,187190,21276445
+Arkansas,Female,45-54 years,61,180603,20563411
+Arkansas,Female,55-64 years,195,197506,21973114
+Arkansas,Female,65-74 years,355,162208,17208126
+Arkansas,Female,75-84 years,548,86884,8832725
+Arkansas,Female,85 years and over,783,1560200,171003046
+Arkansas,Male,0-.99 years,0,18147,1893263
+Arkansas,Male,01-04 years,0,76297,7968874
+Arkansas,Male,05-14 years,0,205262,21520591
+Arkansas,Male,15-24 years,4,202673,21603341
+Arkansas,Male,25-34 years,17,195214,22791780
+Arkansas,Male,35-44 years,34,187491,21420401
+Arkansas,Male,45-54 years,108,179153,20492996
+Arkansas,Male,55-64 years,263,188400,21075426
+Arkansas,Male,65-74 years,475,143924,15361155
+Arkansas,Male,75-84 years,642,69108,6989539
+Arkansas,Male,85 years and over,505,1505309,165470228
+California,Female,0-.99 years,0,212773,1809703
+California,Female,01-04 years,0,906062,7620035
+California,Female,05-14 years,0,2469899,20518881
+California,Female,15-24 years,38,2508562,20981911
+California,Female,25-34 years,123,2873678,22449525
+California,Female,35-44 years,287,2630034,21276445
+California,Female,45-54 years,651,2474475,20563411
+California,Female,55-64 years,1487,2442026,21973114
+California,Female,65-74 years,2538,1837094,17208126
+California,Female,75-84 years,3557,940987,8832725
+California,Female,85 years and over,5208,20159164,171003046
+California,Male,0-.99 years,0,223182,1893263
+California,Male,01-04 years,0,948895,7968874
+California,Male,05-14 years,0,2596923,21520591
+California,Male,15-24 years,58,2582187,21603341
+California,Male,25-34 years,241,3011355,22791780
+California,Male,35-44 years,639,2728914,21420401
+California,Male,45-54 years,1708,2513106,20492996
+California,Male,55-64 years,3477,2390949,21075426
+California,Male,65-74 years,4749,1634759,15361155
+California,Male,75-84 years,4679,743858,6989539
+California,Male,85 years and over,4127,19886144,165470228
+Colorado,Female,0-.99 years,0,30338,1809703
+Colorado,Female,01-04 years,0,126812,7620035
+Colorado,Female,05-14 years,0,348605,20518881
+Colorado,Female,15-24 years,4,358997,20981911
+Colorado,Female,25-34 years,10,429048,22449525
+Colorado,Female,35-44 years,23,393754,21276445
+Colorado,Female,45-54 years,60,344031,20563411
+Colorado,Female,55-64 years,142,359673,21973114
+Colorado,Female,65-74 years,361,278954,17208126
+Colorado,Female,75-84 years,618,126085,8832725
+Colorado,Female,85 years and over,1042,2901809,171003046
+Colorado,Male,0-.99 years,0,31892,1893263
+Colorado,Male,01-04 years,0,131782,7968874
+Colorado,Male,05-14 years,0,366807,21520591
+Colorado,Male,15-24 years,6,379598,21603341
+Colorado,Male,25-34 years,17,458296,22791780
+Colorado,Male,35-44 years,41,420206,21420401
+Colorado,Male,45-54 years,160,364080,20492996
+Colorado,Male,55-64 years,325,351638,21075426
+Colorado,Male,65-74 years,636,259353,15361155
+Colorado,Male,75-84 years,831,104755,6989539
+Colorado,Male,85 years and over,791,2929233,165470228
+Connecticut,Female,0-.99 years,0,16833,1809703
+Connecticut,Female,01-04 years,0,71654,7620035
+Connecticut,Female,05-14 years,0,204664,20518881
+Connecticut,Female,15-24 years,6,226235,20981911
+Connecticut,Female,25-34 years,19,219489,22449525
+Connecticut,Female,35-44 years,14,222853,21276445
+Connecticut,Female,45-54 years,44,241048,20563411
+Connecticut,Female,55-64 years,190,268120,21973114
+Connecticut,Female,65-74 years,429,193906,17208126
+Connecticut,Female,75-84 years,798,103749,8832725
+Connecticut,Female,85 years and over,1756,1873203,171003046
+Connecticut,Male,0-.99 years,0,17623,1893263
+Connecticut,Male,01-04 years,0,74805,7968874
+Connecticut,Male,05-14 years,0,213254,21520591
+Connecticut,Male,15-24 years,6,235290,21603341
+Connecticut,Male,25-34 years,13,225306,22791780
+Connecticut,Male,35-44 years,28,218454,21420401
+Connecticut,Male,45-54 years,115,230900,20492996
+Connecticut,Male,55-64 years,346,256081,21075426
+Connecticut,Male,65-74 years,653,172369,15361155
+Connecticut,Male,75-84 years,856,80312,6989539
+Connecticut,Male,85 years and over,1046,1779342,165470228
+Delaware,Female,0-.99 years,0,5177,1809703
+Delaware,Female,01-04 years,0,21681,7620035
+Delaware,Female,05-14 years,0,58439,20518881
+Delaware,Female,15-24 years,1,59269,20981911
+Delaware,Female,25-34 years,3,64387,22449525
+Delaware,Female,35-44 years,7,59800,21276445
+Delaware,Female,45-54 years,24,61280,20563411
+Delaware,Female,55-64 years,47,74326,21973114
+Delaware,Female,65-74 years,82,63124,17208126
+Delaware,Female,75-84 years,142,30696,8832725
+Delaware,Female,85 years and over,247,521239,171003046
+Delaware,Male,0-.99 years,0,5360,1893263
+Delaware,Male,01-04 years,0,22593,7968874
+Delaware,Male,05-14 years,0,60301,21520591
+Delaware,Male,15-24 years,1,58839,21603341
+Delaware,Male,25-34 years,5,62579,22791780
+Delaware,Male,35-44 years,12,57635,21420401
+Delaware,Male,45-54 years,21,57185,20492996
+Delaware,Male,55-64 years,72,67056,21075426
+Delaware,Male,65-74 years,137,54776,15361155
+Delaware,Male,75-84 years,168,25226,6989539
+Delaware,Male,85 years and over,135,485338,165470228
+District of Columbia,Female,0-.99 years,0,4285,1809703
+District of Columbia,Female,01-04 years,0,16384,7620035
+District of Columbia,Female,05-14 years,0,33873,20518881
+District of Columbia,Female,15-24 years,1,36611,20981911
+District of Columbia,Female,25-34 years,2,82505,22449525
+District of Columbia,Female,35-44 years,5,55706,21276445
+District of Columbia,Female,45-54 years,25,35871,20563411
+District of Columbia,Female,55-64 years,73,34914,21973114
+District of Columbia,Female,65-74 years,102,27956,17208126
+District of Columbia,Female,75-84 years,81,14271,8832725
+District of Columbia,Female,85 years and over,120,356236,171003046
+District of Columbia,Male,0-.99 years,0,4486,1893263
+District of Columbia,Male,01-04 years,0,17344,7968874
+District of Columbia,Male,05-14 years,0,34580,21520591
+District of Columbia,Male,15-24 years,0,31808,21603341
+District of Columbia,Male,25-34 years,5,72081,22791780
+District of Columbia,Male,35-44 years,27,53613,21420401
+District of Columbia,Male,45-54 years,66,36409,20492996
+District of Columbia,Male,55-64 years,118,33194,21075426
+District of Columbia,Male,65-74 years,169,21580,15361155
+District of Columbia,Male,75-84 years,122,9664,6989539
+District of Columbia,Male,85 years and over,81,321803,165470228
+Florida,Female,0-.99 years,0,104211,1809703
+Florida,Female,01-04 years,0,442371,7620035
+Florida,Female,05-14 years,0,1182462,20518881
+Florida,Female,15-24 years,14,1215292,20981911
+Florida,Female,25-34 years,51,1356582,22449525
+Florida,Female,35-44 years,130,1326397,21276445
+Florida,Female,45-54 years,308,1365062,20563411
+Florida,Female,55-64 years,859,1529349,21973114
+Florida,Female,65-74 years,1774,1342699,17208126
+Florida,Female,75-84 years,2730,780537,8832725
+Florida,Female,85 years and over,3562,11301890,171003046
+Florida,Male,0-.99 years,0,109028,1893263
+Florida,Male,01-04 years,0,461291,7968874
+Florida,Male,05-14 years,0,1237093,21520591
+Florida,Male,15-24 years,22,1248838,21603341
+Florida,Male,25-34 years,79,1377997,22791780
+Florida,Male,35-44 years,234,1321979,21420401
+Florida,Male,45-54 years,603,1339800,20492996
+Florida,Male,55-64 years,1626,1422018,21075426
+Florida,Male,65-74 years,2964,1168142,15361155
+Florida,Male,75-84 years,3780,652601,6989539
+Florida,Male,85 years and over,3086,10775423,165470228
+Georgia,Female,0-.99 years,0,60422,1809703
+Georgia,Female,01-04 years,0,256171,7620035
+Georgia,Female,05-14 years,0,710498,20518881
+Georgia,Female,15-24 years,14,716137,20981911
+Georgia,Female,25-34 years,46,747447,22449525
+Georgia,Female,35-44 years,92,725270,21276445
+Georgia,Female,45-54 years,226,717798,20563411
+Georgia,Female,55-64 years,598,689954,21973114
+Georgia,Female,65-74 years,1085,515765,17208126
+Georgia,Female,75-84 years,1336,249311,8832725
+Georgia,Female,85 years and over,1483,5574375,171003046
+Georgia,Male,0-.99 years,0,63206,1893263
+Georgia,Male,01-04 years,0,266527,7968874
+Georgia,Male,05-14 years,0,738929,21520591
+Georgia,Male,15-24 years,14,720147,21603341
+Georgia,Male,25-34 years,49,714451,22791780
+Georgia,Male,35-44 years,126,678754,21420401
+Georgia,Male,45-54 years,373,687406,20492996
+Georgia,Male,55-64 years,873,643492,21075426
+Georgia,Male,65-74 years,1534,437179,15361155
+Georgia,Male,75-84 years,1615,190132,6989539
+Georgia,Male,85 years and over,983,5236723,165470228
+Hawaii,Female,0-.99 years,0,7912,1809703
+Hawaii,Female,01-04 years,0,33166,7620035
+Hawaii,Female,05-14 years,0,83899,20518881
+Hawaii,Female,15-24 years,0,73162,20981911
+Hawaii,Female,25-34 years,1,92390,22449525
+Hawaii,Female,35-44 years,2,91726,21276445
+Hawaii,Female,45-54 years,5,85592,20563411
+Hawaii,Female,55-64 years,20,93482,21973114
+Hawaii,Female,65-74 years,23,82743,17208126
+Hawaii,Female,75-84 years,28,42858,8832725
+Hawaii,Female,85 years and over,53,738164,171003046
+Hawaii,Male,0-.99 years,0,8372,1893263
+Hawaii,Male,01-04 years,0,35513,7968874
+Hawaii,Male,05-14 years,0,89158,21520591
+Hawaii,Male,15-24 years,0,76311,21603341
+Hawaii,Male,25-34 years,2,90283,22791780
+Hawaii,Male,35-44 years,5,90482,21420401
+Hawaii,Male,45-54 years,17,85695,20492996
+Hawaii,Male,55-64 years,37,92235,21075426
+Hawaii,Male,65-74 years,63,78167,15361155
+Hawaii,Male,75-84 years,53,35697,6989539
+Hawaii,Male,85 years and over,48,710831,165470228
+Idaho,Female,0-.99 years,0,10525,1809703
+Idaho,Female,01-04 years,0,44778,7620035
+Idaho,Female,05-14 years,0,128283,20518881
+Idaho,Female,15-24 years,0,130012,20981911
+Idaho,Female,25-34 years,0,116894,22449525
+Idaho,Female,35-44 years,9,116279,21276445
+Idaho,Female,45-54 years,21,101702,20563411
+Idaho,Female,55-64 years,46,113295,21973114
+Idaho,Female,65-74 years,124,94443,17208126
+Idaho,Female,75-84 years,165,45709,8832725
+Idaho,Female,85 years and over,288,937092,171003046
+Idaho,Male,0-.99 years,0,11028,1893263
+Idaho,Male,01-04 years,0,47211,7968874
+Idaho,Male,05-14 years,0,134827,21520591
+Idaho,Male,15-24 years,2,131105,21603341
+Idaho,Male,25-34 years,7,120569,22791780
+Idaho,Male,35-44 years,20,120311,21420401
+Idaho,Male,45-54 years,28,106615,20492996
+Idaho,Male,55-64 years,78,110271,21075426
+Idaho,Male,65-74 years,208,91537,15361155
+Idaho,Male,75-84 years,301,41284,6989539
+Idaho,Male,85 years and over,263,937532,165470228
+Illinois,Female,0-.99 years,0,68423,1809703
+Illinois,Female,01-04 years,0,291314,7620035
+Illinois,Female,05-14 years,0,791662,20518881
+Illinois,Female,15-24 years,10,812000,20981911
+Illinois,Female,25-34 years,41,864960,22449525
+Illinois,Female,35-44 years,85,834790,21276445
+Illinois,Female,45-54 years,234,804634,20563411
+Illinois,Female,55-64 years,652,853027,21973114
+Illinois,Female,65-74 years,1294,646886,17208126
+Illinois,Female,75-84 years,1945,335918,8832725
+Illinois,Female,85 years and over,3435,6621120,171003046
+Illinois,Male,0-.99 years,0,71503,1893263
+Illinois,Male,01-04 years,0,304127,7968874
+Illinois,Male,05-14 years,0,828077,21520591
+Illinois,Male,15-24 years,16,839386,21603341
+Illinois,Male,25-34 years,74,876775,22791780
+Illinois,Male,35-44 years,204,846601,21420401
+Illinois,Male,45-54 years,527,804939,20492996
+Illinois,Male,55-64 years,1195,824817,21075426
+Illinois,Male,65-74 years,2168,575281,15361155
+Illinois,Male,75-84 years,2482,254402,6989539
+Illinois,Male,85 years and over,2355,6391198,165470228
+Indiana,Female,0-.99 years,0,39131,1809703
+Indiana,Female,01-04 years,0,164003,7620035
+Indiana,Female,05-14 years,0,442186,20518881
+Indiana,Female,15-24 years,8,454713,20981911
+Indiana,Female,25-34 years,28,440344,22449525
+Indiana,Female,35-44 years,40,422860,21276445
+Indiana,Female,45-54 years,113,410462,20563411
+Indiana,Female,55-64 years,350,446770,21973114
+Indiana,Female,65-74 years,784,345433,17208126
+Indiana,Female,75-84 years,1307,176515,8832725
+Indiana,Female,85 years and over,2178,3501305,171003046
+Indiana,Male,0-.99 years,0,41032,1893263
+Indiana,Male,01-04 years,0,172637,7968874
+Indiana,Male,05-14 years,0,464282,21520591
+Indiana,Male,15-24 years,10,476804,21603341
+Indiana,Male,25-34 years,20,446483,22791780
+Indiana,Male,35-44 years,61,426605,21420401
+Indiana,Male,45-54 years,162,415612,20492996
+Indiana,Male,55-64 years,561,434301,21075426
+Indiana,Male,65-74 years,1137,312011,15361155
+Indiana,Male,75-84 years,1592,135740,6989539
+Indiana,Male,85 years and over,1451,3406849,165470228
+Iowa,Female,0-.99 years,0,18038,1809703
+Iowa,Female,01-04 years,0,76525,7620035
+Iowa,Female,05-14 years,0,205018,20518881
+Iowa,Female,15-24 years,4,216350,20981911
+Iowa,Female,25-34 years,11,192689,22449525
+Iowa,Female,35-44 years,10,193496,21276445
+Iowa,Female,45-54 years,43,178274,20563411
+Iowa,Female,55-64 years,132,209033,21973114
+Iowa,Female,65-74 years,319,165974,17208126
+Iowa,Female,75-84 years,602,88606,8832725
+Iowa,Female,85 years and over,1168,1640681,171003046
+Iowa,Male,0-.99 years,0,18951,1893263
+Iowa,Male,01-04 years,0,79758,7968874
+Iowa,Male,05-14 years,0,215626,21520591
+Iowa,Male,15-24 years,0,228263,21603341
+Iowa,Male,25-34 years,20,203039,22791780
+Iowa,Male,35-44 years,30,204349,21420401
+Iowa,Male,45-54 years,83,185905,20492996
+Iowa,Male,55-64 years,253,208688,21075426
+Iowa,Male,65-74 years,474,158126,15361155
+Iowa,Male,75-84 years,739,70899,6989539
+Iowa,Male,85 years and over,893,1622938,165470228
+Kansas,Female,0-.99 years,0,17102,1809703
+Kansas,Female,01-04 years,0,72261,7620035
+Kansas,Female,05-14 years,0,197990,20518881
+Kansas,Female,15-24 years,3,199734,20981911
+Kansas,Female,25-34 years,9,182741,22449525
+Kansas,Female,35-44 years,15,181957,21276445
+Kansas,Female,45-54 years,47,162427,20563411
+Kansas,Female,55-64 years,106,187766,21973114
+Kansas,Female,65-74 years,264,145492,17208126
+Kansas,Female,75-84 years,417,74899,8832725
+Kansas,Female,85 years and over,759,1498715,171003046
+Kansas,Male,0-.99 years,0,18059,1893263
+Kansas,Male,01-04 years,0,76264,7968874
+Kansas,Male,05-14 years,0,207646,21520591
+Kansas,Male,15-24 years,4,210957,21603341
+Kansas,Male,25-34 years,13,189199,22791780
+Kansas,Male,35-44 years,27,186282,21420401
+Kansas,Male,45-54 years,80,167011,20492996
+Kansas,Male,55-64 years,203,183442,21075426
+Kansas,Male,65-74 years,367,136377,15361155
+Kansas,Male,75-84 years,613,59734,6989539
+Kansas,Male,85 years and over,581,1477067,165470228
+Kentucky,Female,0-.99 years,0,25505,1809703
+Kentucky,Female,01-04 years,0,106777,7620035
+Kentucky,Female,05-14 years,0,281031,20518881
+Kentucky,Female,15-24 years,0,283729,20981911
+Kentucky,Female,25-34 years,14,287728,22449525
+Kentucky,Female,35-44 years,16,279424,21276445
+Kentucky,Female,45-54 years,65,281574,20563411
+Kentucky,Female,55-64 years,206,309311,21973114
+Kentucky,Female,65-74 years,420,243613,17208126
+Kentucky,Female,75-84 years,654,122064,8832725
+Kentucky,Female,85 years and over,995,2318760,171003046
+Kentucky,Male,0-.99 years,0,26865,1893263
+Kentucky,Male,01-04 years,0,112365,7968874
+Kentucky,Male,05-14 years,0,297006,21520591
+Kentucky,Male,15-24 years,0,295198,21603341
+Kentucky,Male,25-34 years,19,294196,22791780
+Kentucky,Male,35-44 years,33,280522,21420401
+Kentucky,Male,45-54 years,83,282946,20492996
+Kentucky,Male,55-64 years,266,294456,21075426
+Kentucky,Male,65-74 years,601,218324,15361155
+Kentucky,Male,75-84 years,683,94646,6989539
+Kentucky,Male,85 years and over,584,2247704,165470228
+Louisiana,Female,0-.99 years,0,27747,1809703
+Louisiana,Female,01-04 years,0,117890,7620035
+Louisiana,Female,05-14 years,0,305160,20518881
+Louisiana,Female,15-24 years,6,298085,20981911
+Louisiana,Female,25-34 years,22,320381,22449525
+Louisiana,Female,35-44 years,63,304749,21276445
+Louisiana,Female,45-54 years,140,275256,20563411
+Louisiana,Female,55-64 years,425,311379,21973114
+Louisiana,Female,65-74 years,675,241183,17208126
+Louisiana,Female,75-84 years,971,119732,8832725
+Louisiana,Female,85 years and over,980,2417454,171003046
+Louisiana,Male,0-.99 years,0,29018,1893263
+Louisiana,Male,01-04 years,0,122576,7968874
+Louisiana,Male,05-14 years,0,317914,21520591
+Louisiana,Male,15-24 years,10,301111,21603341
+Louisiana,Male,25-34 years,25,312801,22791780
+Louisiana,Male,35-44 years,82,297302,21420401
+Louisiana,Male,45-54 years,228,266657,20492996
+Louisiana,Male,55-64 years,546,290726,21075426
+Louisiana,Male,65-74 years,1025,212145,15361155
+Louisiana,Male,75-84 years,1111,90709,6989539
+Louisiana,Male,85 years and over,752,2292637,165470228
+Maine,Female,0-.99 years,0,5954,1809703
+Maine,Female,01-04 years,0,25047,7620035
+Maine,Female,05-14 years,0,69839,20518881
+Maine,Female,15-24 years,0,74626,20981911
+Maine,Female,25-34 years,0,81484,22449525
+Maine,Female,35-44 years,3,80579,21276445
+Maine,Female,45-54 years,9,87937,20563411
+Maine,Female,55-64 years,25,109779,21973114
+Maine,Female,65-74 years,26,91226,17208126
+Maine,Female,75-84 years,78,45091,8832725
+Maine,Female,85 years and over,124,712076,171003046
+Maine,Male,0-.99 years,0,6375,1893263
+Maine,Male,01-04 years,0,26299,7968874
+Maine,Male,05-14 years,0,73674,21520591
+Maine,Male,15-24 years,0,78759,21603341
+Maine,Male,25-34 years,2,82049,22791780
+Maine,Male,35-44 years,5,79679,21420401
+Maine,Male,45-54 years,14,86127,20492996
+Maine,Male,55-64 years,20,104805,21075426
+Maine,Male,65-74 years,47,85356,15361155
+Maine,Male,75-84 years,82,37507,6989539
+Maine,Male,85 years and over,68,683060,165470228
+Maryland,Female,0-.99 years,0,34805,1809703
+Maryland,Female,01-04 years,0,145233,7620035
+Maryland,Female,05-14 years,0,382633,20518881
+Maryland,Female,15-24 years,6,373780,20981911
+Maryland,Female,25-34 years,13,415533,22449525
+Maryland,Female,35-44 years,42,414363,21276445
+Maryland,Female,45-54 years,110,411502,20563411
+Maryland,Female,55-64 years,280,435733,21973114
+Maryland,Female,65-74 years,595,316213,17208126
+Maryland,Female,75-84 years,879,159786,8832725
+Maryland,Female,85 years and over,1333,3233173,171003046
+Maryland,Male,0-.99 years,0,36007,1893263
+Maryland,Male,01-04 years,0,150907,7968874
+Maryland,Male,05-14 years,0,401382,21520591
+Maryland,Male,15-24 years,7,377200,21603341
+Maryland,Male,25-34 years,38,403327,22791780
+Maryland,Male,35-44 years,86,395175,21420401
+Maryland,Male,45-54 years,215,386501,20492996
+Maryland,Male,55-64 years,489,404315,21075426
+Maryland,Male,65-74 years,754,268364,15361155
+Maryland,Male,75-84 years,1001,119477,6989539
+Maryland,Male,85 years and over,877,3018383,165470228
+Massachusetts,Female,0-.99 years,0,33921,1809703
+Massachusetts,Female,01-04 years,0,140159,7620035
+Massachusetts,Female,05-14 years,0,379662,20518881
+Massachusetts,Female,15-24 years,9,458999,20981911
+Massachusetts,Female,25-34 years,10,496939,22449525
+Massachusetts,Female,35-44 years,20,446337,21276445
+Massachusetts,Female,45-54 years,82,458070,20563411
+Massachusetts,Female,55-64 years,247,498493,21973114
+Massachusetts,Female,65-74 years,630,375554,17208126
+Massachusetts,Female,75-84 years,1312,192593,8832725
+Massachusetts,Female,85 years and over,3003,3671423,171003046
+Massachusetts,Male,0-.99 years,0,35639,1893263
+Massachusetts,Male,01-04 years,0,147056,7968874
+Massachusetts,Male,05-14 years,0,398221,21520591
+Massachusetts,Male,15-24 years,10,459661,21603341
+Massachusetts,Male,25-34 years,19,499824,22791780
+Massachusetts,Male,35-44 years,44,439144,21420401
+Massachusetts,Male,45-54 years,130,440581,20492996
+Massachusetts,Male,55-64 years,459,474397,21075426
+Massachusetts,Male,65-74 years,966,329985,15361155
+Massachusetts,Male,75-84 years,1460,144845,6989539
+Massachusetts,Male,85 years and over,1830,3466165,165470228
+Michigan,Female,0-.99 years,0,52728,1809703
+Michigan,Female,01-04 years,0,221675,7620035
+Michigan,Female,05-14 years,0,597464,20518881
+Michigan,Female,15-24 years,10,651468,20981911
+Michigan,Female,25-34 years,27,644516,22449525
+Michigan,Female,35-44 years,55,596167,21276445
+Michigan,Female,45-54 years,181,626604,20563411
+Michigan,Female,55-64 years,504,716233,21973114
+Michigan,Female,65-74 years,1098,565168,17208126
+Michigan,Female,75-84 years,1517,281341,8832725
+Michigan,Female,85 years and over,2306,5201112,171003046
+Michigan,Male,0-.99 years,0,55303,1893263
+Michigan,Male,01-04 years,0,232133,7968874
+Michigan,Male,05-14 years,0,629649,21520591
+Michigan,Male,15-24 years,14,678733,21603341
+Michigan,Male,25-34 years,41,667814,22791780
+Michigan,Male,35-44 years,98,601354,21420401
+Michigan,Male,45-54 years,337,624195,20492996
+Michigan,Male,55-64 years,834,695426,21075426
+Michigan,Male,65-74 years,1708,514197,15361155
+Michigan,Male,75-84 years,2004,225209,6989539
+Michigan,Male,85 years and over,1616,5058455,165470228
+Minnesota,Female,0-.99 years,0,32612,1809703
+Minnesota,Female,01-04 years,0,137150,7620035
+Minnesota,Female,05-14 years,0,368153,20518881
+Minnesota,Female,15-24 years,5,357707,20981911
+Minnesota,Female,25-34 years,16,369435,22449525
+Minnesota,Female,35-44 years,19,368512,21276445
+Minnesota,Female,45-54 years,48,330663,20563411
+Minnesota,Female,55-64 years,134,381055,21973114
+Minnesota,Female,65-74 years,378,283769,17208126
+Minnesota,Female,75-84 years,690,144839,8832725
+Minnesota,Female,85 years and over,1537,2920597,171003046
+Minnesota,Male,0-.99 years,0,34016,1893263
+Minnesota,Male,01-04 years,0,143553,7968874
+Minnesota,Male,05-14 years,0,385901,21520591
+Minnesota,Male,15-24 years,6,369146,21603341
+Minnesota,Male,25-34 years,11,386626,22791780
+Minnesota,Male,35-44 years,29,386366,21420401
+Minnesota,Male,45-54 years,100,344173,20492996
+Minnesota,Male,55-64 years,267,383477,21075426
+Minnesota,Male,65-74 years,559,269806,15361155
+Minnesota,Male,75-84 years,925,119246,6989539
+Minnesota,Male,85 years and over,1123,2902964,165470228
+Mississippi,Female,0-.99 years,0,17112,1809703
+Mississippi,Female,01-04 years,0,71383,7620035
+Mississippi,Female,05-14 years,0,194750,20518881
+Mississippi,Female,15-24 years,4,199306,20981911
+Mississippi,Female,25-34 years,26,192119,22449525
+Mississippi,Female,35-44 years,58,187982,21276445
+Mississippi,Female,45-54 years,145,183773,20563411
+Mississippi,Female,55-64 years,353,199424,21973114
+Mississippi,Female,65-74 years,530,157979,17208126
+Mississippi,Female,75-84 years,645,81329,8832725
+Mississippi,Female,85 years and over,739,1550999,171003046
+Mississippi,Male,0-.99 years,0,17750,1893263
+Mississippi,Male,01-04 years,0,73505,7968874
+Mississippi,Male,05-14 years,0,202422,21520591
+Mississippi,Male,15-24 years,6,201153,21603341
+Mississippi,Male,25-34 years,22,183821,22791780
+Mississippi,Male,35-44 years,65,176594,21420401
+Mississippi,Male,45-54 years,155,173527,20492996
+Mississippi,Male,55-64 years,383,184562,21075426
+Mississippi,Male,65-74 years,732,137379,15361155
+Mississippi,Male,75-84 years,800,60394,6989539
+Mississippi,Male,85 years and over,495,1443237,165470228
+Missouri,Female,0-.99 years,0,34683,1809703
+Missouri,Female,01-04 years,0,143830,7620035
+Missouri,Female,05-14 years,0,382979,20518881
+Missouri,Female,15-24 years,7,390470,20981911
+Missouri,Female,25-34 years,12,405023,22449525
+Missouri,Female,35-44 years,33,384823,21276445
+Missouri,Female,45-54 years,76,365086,20563411
+Missouri,Female,55-64 years,310,423644,21973114
+Missouri,Female,65-74 years,704,330523,17208126
+Missouri,Female,75-84 years,1000,173004,8832725
+Missouri,Female,85 years and over,1730,3190535,171003046
+Missouri,Male,0-.99 years,0,36368,1893263
+Missouri,Male,01-04 years,0,151431,7968874
+Missouri,Male,05-14 years,0,403100,21520591
+Missouri,Male,15-24 years,9,402190,21603341
+Missouri,Male,25-34 years,14,403955,22791780
+Missouri,Male,35-44 years,52,385675,21420401
+Missouri,Male,45-54 years,147,362736,20492996
+Missouri,Male,55-64 years,479,407007,21075426
+Missouri,Male,65-74 years,963,294582,15361155
+Missouri,Male,75-84 years,1324,136146,6989539
+Missouri,Male,85 years and over,1204,3067686,165470228
+Montana,Female,0-.99 years,0,5587,1809703
+Montana,Female,01-04 years,0,23693,7620035
+Montana,Female,05-14 years,0,64869,20518881
+Montana,Female,15-24 years,0,65249,20981911
+Montana,Female,25-34 years,3,67408,22449525
+Montana,Female,35-44 years,12,65747,21276445
+Montana,Female,45-54 years,16,58272,20563411
+Montana,Female,55-64 years,56,76025,21973114
+Montana,Female,65-74 years,98,65103,17208126
+Montana,Female,75-84 years,148,30428,8832725
+Montana,Female,85 years and over,225,548329,171003046
+Montana,Male,0-.99 years,0,5804,1893263
+Montana,Male,01-04 years,0,24938,7968874
+Montana,Male,05-14 years,0,69069,21520591
+Montana,Male,15-24 years,0,71164,21603341
+Montana,Male,25-34 years,6,70760,22791780
+Montana,Male,35-44 years,12,69663,21420401
+Montana,Male,45-54 years,33,60998,20492996
+Montana,Male,55-64 years,80,74371,21075426
+Montana,Male,65-74 years,174,64852,15361155
+Montana,Male,75-84 years,221,28418,6989539
+Montana,Male,85 years and over,186,556681,165470228
+Nebraska,Female,0-.99 years,0,12205,1809703
+Nebraska,Female,01-04 years,0,51231,7620035
+Nebraska,Female,05-14 years,0,133849,20518881
+Nebraska,Female,15-24 years,2,132519,20981911
+Nebraska,Female,25-34 years,6,123560,22449525
+Nebraska,Female,35-44 years,13,122513,21276445
+Nebraska,Female,45-54 years,26,106865,20563411
+Nebraska,Female,55-64 years,79,121951,21973114
+Nebraska,Female,65-74 years,145,96237,17208126
+Nebraska,Female,75-84 years,247,49163,8832725
+Nebraska,Female,85 years and over,465,1000417,171003046
+Nebraska,Male,0-.99 years,0,12776,1893263
+Nebraska,Male,01-04 years,0,53635,7968874
+Nebraska,Male,05-14 years,0,141883,21520591
+Nebraska,Male,15-24 years,3,137852,21603341
+Nebraska,Male,25-34 years,12,128495,22791780
+Nebraska,Male,35-44 years,14,128545,21420401
+Nebraska,Male,45-54 years,60,112140,20492996
+Nebraska,Male,55-64 years,130,122563,21075426
+Nebraska,Male,65-74 years,292,90021,15361155
+Nebraska,Male,75-84 years,387,39731,6989539
+Nebraska,Male,85 years and over,380,995729,165470228
+Nevada,Female,0-.99 years,0,16843,1809703
+Nevada,Female,01-04 years,0,71414,7620035
+Nevada,Female,05-14 years,0,194173,20518881
+Nevada,Female,15-24 years,2,178534,20981911
+Nevada,Female,25-34 years,10,219873,22449525
+Nevada,Female,35-44 years,21,206055,21276445
+Nevada,Female,45-54 years,65,194576,20563411
+Nevada,Female,55-64 years,169,195442,21973114
+Nevada,Female,65-74 years,306,163003,17208126
+Nevada,Female,75-84 years,409,78385,8832725
+Nevada,Female,85 years and over,323,1567258,171003046
+Nevada,Male,0-.99 years,0,17614,1893263
+Nevada,Male,01-04 years,0,74713,7968874
+Nevada,Male,05-14 years,0,203778,21520591
+Nevada,Male,15-24 years,5,186329,21603341
+Nevada,Male,25-34 years,15,225483,22791780
+Nevada,Male,35-44 years,70,213262,21420401
+Nevada,Male,45-54 years,200,202775,20492996
+Nevada,Male,55-64 years,342,196465,21075426
+Nevada,Male,65-74 years,598,151760,15361155
+Nevada,Male,75-84 years,638,71361,6989539
+Nevada,Male,85 years and over,352,1578804,165470228
+New Hampshire,Female,0-.99 years,0,5968,1809703
+New Hampshire,Female,01-04 years,0,25094,7620035
+New Hampshire,Female,05-14 years,0,71196,20518881
+New Hampshire,Female,15-24 years,0,84857,20981911
+New Hampshire,Female,25-34 years,0,84178,22449525
+New Hampshire,Female,35-44 years,0,80378,21276445
+New Hampshire,Female,45-54 years,16,90489,20563411
+New Hampshire,Female,55-64 years,43,110303,21973114
+New Hampshire,Female,65-74 years,51,81838,17208126
+New Hampshire,Female,75-84 years,105,38701,8832725
+New Hampshire,Female,85 years and over,244,709446,171003046
+New Hampshire,Male,0-.99 years,0,6182,1893263
+New Hampshire,Male,01-04 years,0,26101,7968874
+New Hampshire,Male,05-14 years,0,75228,21520591
+New Hampshire,Male,15-24 years,1,87779,21603341
+New Hampshire,Male,25-34 years,3,89824,22791780
+New Hampshire,Male,35-44 years,9,82254,21420401
+New Hampshire,Male,45-54 years,12,90736,20492996
+New Hampshire,Male,55-64 years,25,108609,21075426
+New Hampshire,Male,65-74 years,76,77781,15361155
+New Hampshire,Male,75-84 years,138,32570,6989539
+New Hampshire,Male,85 years and over,162,696870,165470228
+New Jersey,Female,0-.99 years,0,50151,1809703
+New Jersey,Female,01-04 years,0,210324,7620035
+New Jersey,Female,05-14 years,0,563990,20518881
+New Jersey,Female,15-24 years,15,559809,20981911
+New Jersey,Female,25-34 years,42,587399,22449525
+New Jersey,Female,35-44 years,87,602591,21276445
+New Jersey,Female,45-54 years,247,626539,20563411
+New Jersey,Female,55-64 years,743,657357,21973114
+New Jersey,Female,65-74 years,1302,475028,17208126
+New Jersey,Female,75-84 years,2183,255021,8832725
+New Jersey,Female,85 years and over,3670,4830045,171003046
+New Jersey,Male,0-.99 years,0,52566,1893263
+New Jersey,Male,01-04 years,0,220844,7968874
+New Jersey,Male,05-14 years,0,589460,21520591
+New Jersey,Male,15-24 years,14,579942,21603341
+New Jersey,Male,25-34 years,91,601002,22791780
+New Jersey,Male,35-44 years,246,604697,21420401
+New Jersey,Male,45-54 years,697,613101,20492996
+New Jersey,Male,55-64 years,1577,628274,21075426
+New Jersey,Male,65-74 years,2305,413892,15361155
+New Jersey,Male,75-84 years,2591,188842,6989539
+New Jersey,Male,85 years and over,2359,4618312,165470228
+New Mexico,Female,0-.99 years,0,10855,1809703
+New Mexico,Female,01-04 years,0,46677,7620035
+New Mexico,Female,05-14 years,0,134347,20518881
+New Mexico,Female,15-24 years,2,135274,20981911
+New Mexico,Female,25-34 years,21,135216,22449525
+New Mexico,Female,35-44 years,41,128904,21276445
+New Mexico,Female,45-54 years,83,119442,20563411
+New Mexico,Female,55-64 years,166,142665,21973114
+New Mexico,Female,65-74 years,261,124103,17208126
+New Mexico,Female,75-84 years,325,61296,8832725
+New Mexico,Female,85 years and over,384,1086271,171003046
+New Mexico,Male,0-.99 years,0,11304,1893263
+New Mexico,Male,01-04 years,0,48239,7968874
+New Mexico,Male,05-14 years,0,139983,21520591
+New Mexico,Male,15-24 years,3,141402,21603341
+New Mexico,Male,25-34 years,40,140185,22791780
+New Mexico,Male,35-44 years,73,132010,21420401
+New Mexico,Male,45-54 years,129,117482,20492996
+New Mexico,Male,55-64 years,261,133597,21075426
+New Mexico,Male,65-74 years,395,111679,15361155
+New Mexico,Male,75-84 years,401,52099,6989539
+New Mexico,Male,85 years and over,298,1058100,165470228
+New York,Female,0-.99 years,0,110593,1809703
+New York,Female,01-04 years,0,451170,7620035
+New York,Female,05-14 years,0,1142377,20518881
+New York,Female,15-24 years,14,1237232,20981911
+New York,Female,25-34 years,27,1464962,22449525
+New York,Female,35-44 years,68,1291316,21276445
+New York,Female,45-54 years,170,1289313,20563411
+New York,Female,55-64 years,574,1397740,21973114
+New York,Female,65-74 years,1168,1056197,17208126
+New York,Female,75-84 years,1933,567116,8832725
+New York,Female,85 years and over,3777,10558362,171003046
+New York,Male,0-.99 years,0,115294,1893263
+New York,Male,01-04 years,0,472317,7968874
+New York,Male,05-14 years,0,1200716,21520591
+New York,Male,15-24 years,15,1246782,21603341
+New York,Male,25-34 years,63,1447714,22791780
+New York,Male,35-44 years,152,1275627,21420401
+New York,Male,45-54 years,460,1247585,20492996
+New York,Male,55-64 years,1150,1317389,21075426
+New York,Male,65-74 years,1966,918900,15361155
+New York,Male,75-84 years,2315,414966,6989539
+New York,Male,85 years and over,2349,9945484,165470228
+North Carolina,Female,0-.99 years,0,57037,1809703
+North Carolina,Female,01-04 years,0,235805,7620035
+North Carolina,Female,05-14 years,0,642459,20518881
+North Carolina,Female,15-24 years,8,664753,20981911
+North Carolina,Female,25-34 years,20,698426,22449525
+North Carolina,Female,35-44 years,41,668752,21276445
+North Carolina,Female,45-54 years,148,685694,20563411
+North Carolina,Female,55-64 years,356,704759,21973114
+North Carolina,Female,65-74 years,842,567510,17208126
+North Carolina,Female,75-84 years,1180,282917,8832725
+North Carolina,Female,85 years and over,1705,5434144,171003046
+North Carolina,Male,0-.99 years,0,59285,1893263
+North Carolina,Male,01-04 years,0,246197,7968874
+North Carolina,Male,05-14 years,0,670738,21520591
+North Carolina,Male,15-24 years,9,666203,21603341
+North Carolina,Male,25-34 years,30,664411,22791780
+North Carolina,Male,35-44 years,92,634330,21420401
+North Carolina,Male,45-54 years,246,665005,20492996
+North Carolina,Male,55-64 years,586,655123,21075426
+North Carolina,Male,65-74 years,1137,488214,15361155
+North Carolina,Male,75-84 years,1364,218532,6989539
+North Carolina,Male,85 years and over,1032,5086780,165470228
+North Dakota,Female,0-.99 years,0,5126,1809703
+North Dakota,Female,01-04 years,0,20801,7620035
+North Dakota,Female,05-14 years,0,51105,20518881
+North Dakota,Female,15-24 years,1,53122,20981911
+North Dakota,Female,25-34 years,4,52165,22449525
+North Dakota,Female,35-44 years,9,45245,21276445
+North Dakota,Female,45-54 years,12,37799,20563411
+North Dakota,Female,55-64 years,35,46348,21973114
+North Dakota,Female,65-74 years,84,35100,17208126
+North Dakota,Female,75-84 years,183,18719,8832725
+North Dakota,Female,85 years and over,355,389066,171003046
+North Dakota,Male,0-.99 years,0,5342,1893263
+North Dakota,Male,01-04 years,0,22261,7968874
+North Dakota,Male,05-14 years,0,53268,21520591
+North Dakota,Male,15-24 years,2,56390,21603341
+North Dakota,Male,25-34 years,7,58572,22791780
+North Dakota,Male,35-44 years,15,51466,21420401
+North Dakota,Male,45-54 years,27,41616,20492996
+North Dakota,Male,55-64 years,88,48326,21075426
+North Dakota,Male,65-74 years,159,35726,15361155
+North Dakota,Male,75-84 years,225,15581,6989539
+North Dakota,Male,85 years and over,316,400756,165470228
+Ohio,Female,0-.99 years,0,64724,1809703
+Ohio,Female,01-04 years,0,271706,7620035
+Ohio,Female,05-14 years,0,723342,20518881
+Ohio,Female,15-24 years,13,741681,20981911
+Ohio,Female,25-34 years,20,770250,22449525
+Ohio,Female,35-44 years,54,719153,21276445
+Ohio,Female,45-54 years,136,723898,20563411
+Ohio,Female,55-64 years,486,823469,21973114
+Ohio,Female,65-74 years,1116,652606,17208126
+Ohio,Female,75-84 years,2117,333819,8832725
+Ohio,Female,85 years and over,3361,6128154,171003046
+Ohio,Male,0-.99 years,0,67633,1893263
+Ohio,Male,01-04 years,0,283503,7968874
+Ohio,Male,05-14 years,0,759222,21520591
+Ohio,Male,15-24 years,16,771039,21603341
+Ohio,Male,25-34 years,30,780075,22791780
+Ohio,Male,35-44 years,77,719310,21420401
+Ohio,Male,45-54 years,249,723571,20492996
+Ohio,Male,55-64 years,809,791329,21075426
+Ohio,Male,65-74 years,1846,585499,15361155
+Ohio,Male,75-84 years,2483,253532,6989539
+Ohio,Male,85 years and over,2300,5894903,165470228
+Oklahoma,Female,0-.99 years,0,23401,1809703
+Oklahoma,Female,01-04 years,0,98928,7620035
+Oklahoma,Female,05-14 years,0,267677,20518881
+Oklahoma,Female,15-24 years,4,263547,20981911
+Oklahoma,Female,25-34 years,12,262127,22449525
+Oklahoma,Female,35-44 years,36,250803,21276445
+Oklahoma,Female,45-54 years,93,224605,20563411
+Oklahoma,Female,55-64 years,248,249768,21973114
+Oklahoma,Female,65-74 years,525,197695,17208126
+Oklahoma,Female,75-84 years,672,104533,8832725
+Oklahoma,Female,85 years and over,817,2028626,171003046
+Oklahoma,Male,0-.99 years,0,24439,1893263
+Oklahoma,Male,01-04 years,0,104107,7968874
+Oklahoma,Male,05-14 years,0,280848,21520591
+Oklahoma,Male,15-24 years,6,275806,21603341
+Oklahoma,Male,25-34 years,21,266153,22791780
+Oklahoma,Male,35-44 years,51,256030,21420401
+Oklahoma,Male,45-54 years,146,228403,20492996
+Oklahoma,Male,55-64 years,369,239899,21075426
+Oklahoma,Male,65-74 years,710,177006,15361155
+Oklahoma,Male,75-84 years,835,82505,6989539
+Oklahoma,Male,85 years and over,703,1984334,165470228
+Oregon,Female,0-.99 years,0,20359,1809703
+Oregon,Female,01-04 years,0,86870,7620035
+Oregon,Female,05-14 years,0,243751,20518881
+Oregon,Female,15-24 years,0,250973,20981911
+Oregon,Female,25-34 years,4,294612,22449525
+Oregon,Female,35-44 years,10,287547,21276445
+Oregon,Female,45-54 years,15,254198,20563411
+Oregon,Female,55-64 years,52,274701,21973114
+Oregon,Female,65-74 years,127,248910,17208126
+Oregon,Female,75-84 years,208,117054,8832725
+Oregon,Female,85 years and over,345,2175471,171003046
+Oregon,Male,0-.99 years,0,21317,1893263
+Oregon,Male,01-04 years,0,91327,7968874
+Oregon,Male,05-14 years,0,256966,21520591
+Oregon,Male,15-24 years,2,261690,21603341
+Oregon,Male,25-34 years,7,304404,22791780
+Oregon,Male,35-44 years,12,297396,21420401
+Oregon,Male,45-54 years,41,264155,20492996
+Oregon,Male,55-64 years,121,262760,21075426
+Oregon,Male,65-74 years,154,227036,15361155
+Oregon,Male,75-84 years,273,100153,6989539
+Oregon,Male,85 years and over,245,2145512,165470228
+Pennsylvania,Female,0-.99 years,0,65637,1809703
+Pennsylvania,Female,01-04 years,0,274563,7620035
+Pennsylvania,Female,05-14 years,0,743868,20518881
+Pennsylvania,Female,15-24 years,16,798021,20981911
+Pennsylvania,Female,25-34 years,13,841778,22449525
+Pennsylvania,Female,35-44 years,43,783772,21276445
+Pennsylvania,Female,45-54 years,170,803371,20563411
+Pennsylvania,Female,55-64 years,547,936383,21973114
+Pennsylvania,Female,65-74 years,1342,745762,17208126
+Pennsylvania,Female,75-84 years,2309,396134,8832725
+Pennsylvania,Female,85 years and over,4857,6786989,171003046
+Pennsylvania,Male,0-.99 years,0,68563,1893263
+Pennsylvania,Male,01-04 years,0,288290,7968874
+Pennsylvania,Male,05-14 years,0,782113,21520591
+Pennsylvania,Male,15-24 years,12,821812,21603341
+Pennsylvania,Male,25-34 years,47,866921,22791780
+Pennsylvania,Male,35-44 years,92,793740,21420401
+Pennsylvania,Male,45-54 years,305,802220,20492996
+Pennsylvania,Male,55-64 years,977,902075,21075426
+Pennsylvania,Male,65-74 years,1977,674687,15361155
+Pennsylvania,Male,75-84 years,2732,302379,6989539
+Pennsylvania,Male,85 years and over,2977,6506292,165470228
+Rhode Island,Female,0-.99 years,0,5183,1809703
+Rhode Island,Female,01-04 years,0,21798,7620035
+Rhode Island,Female,05-14 years,0,57454,20518881
+Rhode Island,Female,15-24 years,0,74912,20981911
+Rhode Island,Female,25-34 years,6,74138,22449525
+Rhode Island,Female,35-44 years,13,65898,21276445
+Rhode Island,Female,45-54 years,16,69997,20563411
+Rhode Island,Female,55-64 years,41,80667,21973114
+Rhode Island,Female,65-74 years,140,60066,17208126
+Rhode Island,Female,75-84 years,233,31151,8832725
+Rhode Island,Female,85 years and over,552,575724,171003046
+Rhode Island,Male,0-.99 years,0,5378,1893263
+Rhode Island,Male,01-04 years,0,22757,7968874
+Rhode Island,Male,05-14 years,0,60518,21520591
+Rhode Island,Male,15-24 years,0,74760,21603341
+Rhode Island,Male,25-34 years,8,76264,22791780
+Rhode Island,Male,35-44 years,14,66702,21420401
+Rhode Island,Male,45-54 years,21,67388,20492996
+Rhode Island,Male,55-64 years,92,75517,21075426
+Rhode Island,Male,65-74 years,204,53810,15361155
+Rhode Island,Male,75-84 years,262,23642,6989539
+Rhode Island,Male,85 years and over,333,543052,165470228
+South Carolina,Female,0-.99 years,0,26953,1809703
+South Carolina,Female,01-04 years,0,112955,7620035
+South Carolina,Female,05-14 years,0,313952,20518881
+South Carolina,Female,15-24 years,5,317850,20981911
+South Carolina,Female,25-34 years,14,337185,22449525
+South Carolina,Female,35-44 years,35,319776,21276445
+South Carolina,Female,45-54 years,86,324018,20563411
+South Carolina,Female,55-64 years,310,360292,21973114
+South Carolina,Female,65-74 years,599,308935,17208126
+South Carolina,Female,75-84 years,762,149458,8832725
+South Carolina,Female,85 years and over,917,2680212,171003046
+South Carolina,Male,0-.99 years,0,28221,1893263
+South Carolina,Male,01-04 years,0,118073,7968874
+South Carolina,Male,05-14 years,0,325774,21520591
+South Carolina,Male,15-24 years,6,322315,21603341
+South Carolina,Male,25-34 years,15,317288,22791780
+South Carolina,Male,35-44 years,68,303151,21420401
+South Carolina,Male,45-54 years,128,308552,20492996
+South Carolina,Male,55-64 years,395,327393,21075426
+South Carolina,Male,65-74 years,764,266741,15361155
+South Carolina,Male,75-84 years,984,120837,6989539
+South Carolina,Male,85 years and over,616,2498103,165470228
+South Dakota,Female,0-.99 years,0,5686,1809703
+South Dakota,Female,01-04 years,0,23521,7620035
+South Dakota,Female,05-14 years,0,60234,20518881
+South Dakota,Female,15-24 years,1,55861,20981911
+South Dakota,Female,25-34 years,5,53834,22449525
+South Dakota,Female,35-44 years,11,52022,21276445
+South Dakota,Female,45-54 years,29,45659,20563411
+South Dakota,Female,55-64 years,54,58269,21973114
+South Dakota,Female,65-74 years,144,46198,17208126
+South Dakota,Female,75-84 years,176,22034,8832725
+South Dakota,Female,85 years and over,386,449006,171003046
+South Dakota,Male,0-.99 years,0,5908,1893263
+South Dakota,Male,01-04 years,0,24441,7968874
+South Dakota,Male,05-14 years,0,63650,21520591
+South Dakota,Male,15-24 years,2,59555,21603341
+South Dakota,Male,25-34 years,8,57632,22791780
+South Dakota,Male,35-44 years,20,56579,21420401
+South Dakota,Male,45-54 years,29,48837,20492996
+South Dakota,Male,55-64 years,98,59220,21075426
+South Dakota,Male,65-74 years,181,47094,15361155
+South Dakota,Male,75-84 years,268,18623,6989539
+South Dakota,Male,85 years and over,323,454819,165470228
+Tennessee,Female,0-.99 years,0,39128,1809703
+Tennessee,Female,01-04 years,0,161691,7620035
+Tennessee,Female,05-14 years,0,427660,20518881
+Tennessee,Female,15-24 years,6,435319,20981911
+Tennessee,Female,25-34 years,18,478547,22449525
+Tennessee,Female,35-44 years,45,438504,21276445
+Tennessee,Female,45-54 years,149,441312,20563411
+Tennessee,Female,55-64 years,404,468543,21973114
+Tennessee,Female,65-74 years,741,371761,17208126
+Tennessee,Female,75-84 years,1032,186976,8832725
+Tennessee,Female,85 years and over,1167,3594959,171003046
+Tennessee,Male,0-.99 years,0,40682,1893263
+Tennessee,Male,01-04 years,0,169096,7968874
+Tennessee,Male,05-14 years,0,448022,21520591
+Tennessee,Male,15-24 years,9,442826,21603341
+Tennessee,Male,25-34 years,32,467166,22791780
+Tennessee,Male,35-44 years,82,430019,21420401
+Tennessee,Male,45-54 years,229,434026,20492996
+Tennessee,Male,55-64 years,599,438494,21075426
+Tennessee,Male,65-74 years,1141,327449,15361155
+Tennessee,Male,75-84 years,1369,147348,6989539
+Tennessee,Male,85 years and over,897,3421934,165470228
+Texas,Female,0-.99 years,0,179307,1809703
+Texas,Female,01-04 years,0,768323,7620035
+Texas,Female,05-14 years,0,2076018,20518881
+Texas,Female,15-24 years,31,1985149,20981911
+Texas,Female,25-34 years,126,2071096,22449525
+Texas,Female,35-44 years,347,1990957,21276445
+Texas,Female,45-54 years,822,1792476,20563411
+Texas,Female,55-64 years,1925,1684290,21973114
+Texas,Female,65-74 years,3203,1230807,17208126
+Texas,Female,75-84 years,3660,598956,8832725
+Texas,Female,85 years and over,4023,14856769,171003046
+Texas,Male,0-.99 years,0,187244,1893263
+Texas,Male,01-04 years,0,799643,7968874
+Texas,Male,05-14 years,0,2169393,21520591
+Texas,Male,15-24 years,46,2058443,21603341
+Texas,Male,25-34 years,227,2113996,22791780
+Texas,Male,35-44 years,618,2028064,21420401
+Texas,Male,45-54 years,1688,1802755,20492996
+Texas,Male,55-64 years,3429,1634652,21075426
+Texas,Male,65-74 years,5048,1095333,15361155
+Texas,Male,75-84 years,5002,473084,6989539
+Texas,Male,85 years and over,3325,14637111,165470228
+Utah,Female,0-.99 years,0,23092,1809703
+Utah,Female,01-04 years,0,95254,7620035
+Utah,Female,05-14 years,0,262955,20518881
+Utah,Female,15-24 years,1,263100,20981911
+Utah,Female,25-34 years,4,233091,22449525
+Utah,Female,35-44 years,19,223607,21276445
+Utah,Female,45-54 years,33,167450,20563411
+Utah,Female,55-64 years,61,154934,21973114
+Utah,Female,65-74 years,136,118008,17208126
+Utah,Female,75-84 years,172,57759,8832725
+Utah,Female,85 years and over,237,1641360,171003046
+Utah,Male,0-.99 years,0,24439,1893263
+Utah,Male,01-04 years,0,99920,7968874
+Utah,Male,05-14 years,0,279320,21520591
+Utah,Male,15-24 years,2,273370,21603341
+Utah,Male,25-34 years,13,241805,22791780
+Utah,Male,35-44 years,29,234090,21420401
+Utah,Male,45-54 years,65,176825,20492996
+Utah,Male,55-64 years,125,153639,21075426
+Utah,Male,65-74 years,237,111393,15361155
+Utah,Male,75-84 years,284,49407,6989539
+Utah,Male,85 years and over,232,1673666,165470228
+Vermont,Female,0-.99 years,0,2665,1809703
+Vermont,Female,01-04 years,0,11552,7620035
+Vermont,Female,05-14 years,0,32480,20518881
+Vermont,Female,15-24 years,0,42262,20981911
+Vermont,Female,25-34 years,0,37689,22449525
+Vermont,Female,35-44 years,1,38018,21276445
+Vermont,Female,45-54 years,3,39639,20563411
+Vermont,Female,55-64 years,9,49722,21973114
+Vermont,Female,65-74 years,17,40896,17208126
+Vermont,Female,75-84 years,21,19559,8832725
+Vermont,Female,85 years and over,42,331840,171003046
+Vermont,Male,0-.99 years,0,2802,1893263
+Vermont,Male,01-04 years,0,12001,7968874
+Vermont,Male,05-14 years,0,35063,21520591
+Vermont,Male,15-24 years,0,44439,21603341
+Vermont,Male,25-34 years,0,39047,22791780
+Vermont,Male,35-44 years,2,37711,21420401
+Vermont,Male,45-54 years,5,39742,20492996
+Vermont,Male,55-64 years,11,48185,21075426
+Vermont,Male,65-74 years,15,39066,15361155
+Vermont,Male,75-84 years,26,16748,6989539
+Vermont,Male,85 years and over,22,324376,165470228
+Virginia,Female,0-.99 years,0,47466,1809703
+Virginia,Female,01-04 years,0,199153,7620035
+Virginia,Female,05-14 years,0,523470,20518881
+Virginia,Female,15-24 years,5,542731,20981911
+Virginia,Female,25-34 years,17,575776,22449525
+Virginia,Female,35-44 years,33,567393,21276445
+Virginia,Female,45-54 years,86,552802,20563411
+Virginia,Female,55-64 years,220,579135,21973114
+Virginia,Female,65-74 years,516,438837,17208126
+Virginia,Female,75-84 years,796,224366,8832725
+Virginia,Female,85 years and over,1320,4436651,171003046
+Virginia,Male,0-.99 years,0,49873,1893263
+Virginia,Male,01-04 years,0,208143,7968874
+Virginia,Male,05-14 years,0,551336,21520591
+Virginia,Male,15-24 years,7,554778,21603341
+Virginia,Male,25-34 years,16,566460,22791780
+Virginia,Male,35-44 years,46,553959,21420401
+Virginia,Male,45-54 years,157,542169,20492996
+Virginia,Male,55-64 years,423,551137,21075426
+Virginia,Male,65-74 years,748,387413,15361155
+Virginia,Male,75-84 years,924,176237,6989539
+Virginia,Male,85 years and over,853,4242891,165470228
+Washington,Female,0-.99 years,0,41961,1809703
+Washington,Female,01-04 years,0,177159,7620035
+Washington,Female,05-14 years,0,470211,20518881
+Washington,Female,15-24 years,3,452394,20981911
+Washington,Female,25-34 years,10,561428,22449525
+Washington,Female,35-44 years,19,520384,21276445
+Washington,Female,45-54 years,46,458302,20563411
+Washington,Female,55-64 years,133,485575,21973114
+Washington,Female,65-74 years,303,394900,17208126
+Washington,Female,75-84 years,461,184208,8832725
+Washington,Female,85 years and over,733,3903238,171003046
+Washington,Male,0-.99 years,0,44025,1893263
+Washington,Male,01-04 years,0,186173,7968874
+Washington,Male,05-14 years,0,495239,21520591
+Washington,Male,15-24 years,4,473700,21603341
+Washington,Male,25-34 years,11,591268,22791780
+Washington,Male,35-44 years,38,542887,21420401
+Washington,Male,45-54 years,99,475304,20492996
+Washington,Male,55-64 years,238,479102,21075426
+Washington,Male,65-74 years,453,360977,15361155
+Washington,Male,75-84 years,562,155708,6989539
+Washington,Male,85 years and over,595,3895729,165470228
+West Virginia,Female,0-.99 years,0,8531,1809703
+West Virginia,Female,01-04 years,0,35815,7620035
+West Virginia,Female,05-14 years,0,100491,20518881
+West Virginia,Female,15-24 years,0,105789,20981911
+West Virginia,Female,25-34 years,5,103148,22449525
+West Virginia,Female,35-44 years,10,105831,21276445
+West Virginia,Female,45-54 years,18,112259,20563411
+West Virginia,Female,55-64 years,57,128317,21973114
+West Virginia,Female,65-74 years,161,114721,17208126
+West Virginia,Female,75-84 years,222,58246,8832725
+West Virginia,Female,85 years and over,308,920390,171003046
+West Virginia,Male,0-.99 years,0,8880,1893263
+West Virginia,Male,01-04 years,0,37769,7968874
+West Virginia,Male,05-14 years,0,106207,21520591
+West Virginia,Male,15-24 years,2,113407,21603341
+West Virginia,Male,25-34 years,7,110276,22791780
+West Virginia,Male,35-44 years,18,109527,21420401
+West Virginia,Male,45-54 years,34,116217,20492996
+West Virginia,Male,55-64 years,72,124424,21075426
+West Virginia,Male,65-74 years,208,106629,15361155
+West Virginia,Male,75-84 years,274,48149,6989539
+West Virginia,Male,85 years and over,195,907769,165470228
+Wisconsin,Female,0-.99 years,0,30769,1809703
+Wisconsin,Female,01-04 years,0,129489,7620035
+Wisconsin,Female,05-14 years,0,356333,20518881
+Wisconsin,Female,15-24 years,5,383361,20981911
+Wisconsin,Female,25-34 years,13,359090,22449525
+Wisconsin,Female,35-44 years,22,361298,21276445
+Wisconsin,Female,45-54 years,67,350926,20563411
+Wisconsin,Female,55-64 years,193,417727,21973114
+Wisconsin,Female,65-74 years,430,317838,17208126
+Wisconsin,Female,75-84 years,796,159740,8832725
+Wisconsin,Female,85 years and over,1409,3018939,171003046
+Wisconsin,Male,0-.99 years,0,32237,1893263
+Wisconsin,Male,01-04 years,0,135327,7968874
+Wisconsin,Male,05-14 years,0,375579,21520591
+Wisconsin,Male,15-24 years,7,397577,21603341
+Wisconsin,Male,25-34 years,17,376929,22791780
+Wisconsin,Male,35-44 years,35,374839,21420401
+Wisconsin,Male,45-54 years,120,362914,20492996
+Wisconsin,Male,55-64 years,322,417625,21075426
+Wisconsin,Male,65-74 years,741,306056,15361155
+Wisconsin,Male,75-84 years,1006,131905,6989539
+Wisconsin,Male,85 years and over,1106,2993702,165470228
+Wyoming,Female,0-.99 years,0,3095,1809703
+Wyoming,Female,01-04 years,0,13162,7620035
+Wyoming,Female,05-14 years,0,37495,20518881
+Wyoming,Female,15-24 years,0,35157,20981911
+Wyoming,Female,25-34 years,1,35540,22449525
+Wyoming,Female,35-44 years,3,36189,21276445
+Wyoming,Female,45-54 years,8,30656,20563411
+Wyoming,Female,55-64 years,17,38276,21973114
+Wyoming,Female,65-74 years,42,31026,17208126
+Wyoming,Female,75-84 years,68,14400,8832725
+Wyoming,Female,85 years and over,87,287452,171003046
+Wyoming,Male,0-.99 years,0,3170,1893263
+Wyoming,Male,01-04 years,0,13918,7968874
+Wyoming,Male,05-14 years,0,39922,21520591
+Wyoming,Male,15-24 years,0,38218,21603341
+Wyoming,Male,25-34 years,2,37662,22791780
+Wyoming,Male,35-44 years,5,39058,21420401
+Wyoming,Male,45-54 years,11,33373,20492996
+Wyoming,Male,55-64 years,30,39142,21075426
+Wyoming,Male,65-74 years,55,32163,15361155
+Wyoming,Male,75-84 years,71,13141,6989539
+Wyoming,Male,85 years and over,61,297329,165470228
