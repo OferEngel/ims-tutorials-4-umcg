@@ -9,5 +9,5 @@ nogit_*
 *lesson.html
 *lesson_files/
 rsconnect/
-*old_files/
+# *old_files/
 *.docx
